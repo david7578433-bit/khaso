@@ -10,17 +10,10 @@
   .gallery-boxes { display: grid; grid-template-columns: repeat(3, 1fr); gap: 14px; margin: 20px 0 8px; }
   .gallery-box {
     display: flex; align-items: center; justify-content: center;
-    min-height: 74px; padding: 10px; border-radius: 10px;
+    min-height: 90px; padding: 14px; border-radius: 10px;
     background: linear-gradient(135deg, #2c5f78, #2c9484 150%);
     color: white; font-weight: 700; text-decoration: none; text-align: center;
   }
-  .gallery-section { padding: 26px 0; border-top: 1px solid var(--border); scroll-margin-top: 70px; }
-  .gallery-section:first-of-type { border-top: 0; }
-  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 14px; }
-  .photo-grid figure { margin: 0; }
-  .photo-grid img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; display: block; }
-  .photo-grid figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
-  .empty-note { color: var(--muted); font-size: 14px; }
   @media (max-width: 620px) { .gallery-boxes { grid-template-columns: repeat(2, 1fr); } }
 </style>
 </head>
@@ -46,93 +39,13 @@
   <p data-lang="yi" hidden>יעדער קען זען די בילדער — קיין לאגין ניט נויטיג.</p>
 
   <div class="gallery-boxes">
-    <a class="gallery-box" href="#rabbi">Rabbi</a>
-    <a class="gallery-box" href="#yeshiva_gedola">Yeshiva Gedola</a>
-    <a class="gallery-box" href="#yeshiva_ktana">Yeshiva Ktana</a>
-    <a class="gallery-box" href="#monroe">Monroe</a>
-    <a class="gallery-box" href="#monsey">Monsey</a>
-    <a class="gallery-box" href="#maamodim">מעמדים</a>
-  </div>
-
-  <div class="gallery-section" id="rabbi">
-    <h2>Rabbi</h2>
-    <div class="photo-grid" data-category="rabbi"></div>
-  </div>
-
-  <div class="gallery-section" id="yeshiva_gedola">
-    <h2>Yeshiva Gedola</h2>
-    <div class="photo-grid" data-category="yeshiva_gedola"></div>
-  </div>
-
-  <div class="gallery-section" id="yeshiva_ktana">
-    <h2>Yeshiva Ktana</h2>
-    <div class="photo-grid" data-category="yeshiva_ktana"></div>
-  </div>
-
-  <div class="gallery-section" id="monroe">
-    <h2>Monroe</h2>
-    <div class="photo-grid" data-category="monroe"></div>
-  </div>
-
-  <div class="gallery-section" id="monsey">
-    <h2>Monsey</h2>
-    <div class="photo-grid" data-category="monsey"></div>
-  </div>
-
-  <div class="gallery-section" id="maamodim">
-    <h2>מעמדים</h2>
-    <div class="photo-grid" data-category="maamodim"></div>
+    <a class="gallery-box" href="gallery.html?cat=rabbi">Rabbi</a>
+    <a class="gallery-box" href="gallery.html?cat=yeshiva_gedola">Yeshiva Gedola</a>
+    <a class="gallery-box" href="gallery.html?cat=yeshiva_ktana">Yeshiva Ktana</a>
+    <a class="gallery-box" href="gallery.html?cat=kiryas_joel">Kiryas Joel</a>
+    <a class="gallery-box" href="gallery.html?cat=monsey">Monsey</a>
+    <a class="gallery-box" href="gallery.html?cat=maamodim">מעמדים</a>
   </div>
 </section></main>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<script>
-  const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
-  const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
-  const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
-
-  async function loadGallery() {
-    const { data, error } = await supabaseClient
-      .from('gallery_photos')
-      .select('category, storage_path, caption, created_at')
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      console.error('Could not load pictures:', error.message);
-      return;
-    }
-
-    document.querySelectorAll('.photo-grid').forEach((grid) => {
-      const category = grid.dataset.category;
-      const photos = (data || []).filter((p) => p.category === category);
-
-      if (photos.length === 0) {
-        const note = document.createElement('p');
-        note.className = 'empty-note';
-        note.textContent = 'No pictures yet.';
-        grid.appendChild(note);
-        return;
-      }
-
-      photos.forEach((photo) => {
-        const { data: urlData } = supabaseClient.storage.from('gallery-photos').getPublicUrl(photo.storage_path);
-        const figure = document.createElement('figure');
-        const img = document.createElement('img');
-        img.src = urlData.publicUrl;
-        img.alt = photo.caption || '';
-        img.loading = 'lazy';
-        figure.appendChild(img);
-        if (photo.caption) {
-          const caption = document.createElement('figcaption');
-          caption.textContent = photo.caption;
-          figure.appendChild(caption);
-        }
-        grid.appendChild(figure);
-      });
-    });
-  }
-
-  loadGallery();
-</script>
 </body>
 </html>
