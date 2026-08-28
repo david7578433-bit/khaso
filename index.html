@@ -4,18 +4,263 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Community Home | ברכת שמים קאשוי</title>
-<link rel="stylesheet" href="style.css">
-<script src="site.js" defer></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy-deep: #16293b;
+    --ink: #2a3540;
+    --teal: #1c9c8a;
+    --paper: #ffffff;
+    --background-a: #fdf6ec;
+    --background-b: #eaf3f0;
+    --border: #dde8e3;
+    --box-a: #2c5f78;
+    --box-b: #2c9484;
+  }
+
+  * { box-sizing: border-box; }
+
+  body {
+    margin: 0;
+    font-family: "Assistant", "Segoe UI", Arial, sans-serif;
+    background: linear-gradient(160deg, var(--background-a), var(--background-b) 60%, #e7f1f6);
+    color: var(--ink);
+  }
+
+  [data-lang][hidden] { display: none !important; }
+
+  .hebrew, .name-block, .lang-button {
+    font-family: "Frank Ruhl Libre", "Assistant", serif;
+  }
+
+  .layout {
+    display: flex;
+    min-height: 88vh;
+  }
+
+  .sidebar {
+    width: 340px;
+    flex-shrink: 0;
+    background: linear-gradient(180deg, var(--navy-deep), var(--teal) 160%);
+    color: white;
+    padding: 36px 22px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+  }
+
+  .sidebar img {
+    width: 240px;
+    height: auto;
+    filter: brightness(1.9) contrast(1.05) drop-shadow(0 3px 8px rgba(0,0,0,.25));
+    margin-bottom: 14px;
+  }
+
+  .name-block { direction: rtl; display: flex; flex-direction: column; align-items: center; }
+  .name-block div { line-height: 1; margin: 0; padding: 0; }
+  .n2 { font-size: 23px; font-weight: 500; opacity: .92; }
+  .n3 { font-size: 19px; font-weight: 400; opacity: .85; margin-top: 2px; }
+  .n1 { font-size: 76px; font-weight: 700; margin-top: -20px; }
+  .n4 { font-size: 13px; font-weight: 400; opacity: .72; margin-top: 10px; }
+
+  .sidebar-spacer { flex: 1; min-height: 20px; max-height: 160px; }
+
+  .lang-button {
+    padding: 14px 34px;
+    border: 0;
+    border-radius: 999px;
+    background: var(--teal);
+    color: white;
+    font-size: 23px;
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .main {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .topbar {
+    display: flex;
+    justify-content: flex-end;
+    padding: 18px 26px;
+  }
+
+  .login-btn {
+    padding: 10px 22px;
+    border-radius: 8px;
+    background: var(--teal);
+    color: white;
+    font-weight: 700;
+    text-decoration: none;
+    font-size: 14px;
+  }
+
+  .boxes-wrap {
+    padding: 16px 90px 0;
+  }
+
+  .boxes {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    column-gap: 100px;
+    row-gap: 52px;
+    max-width: 600px;
+    margin: 0 auto;
+  }
+
+  .box {
+    border: 0;
+    border-radius: 14px;
+    background: linear-gradient(135deg, var(--box-a), var(--box-b) 150%);
+    box-shadow: 0 8px 20px rgba(20, 60, 70, .18);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    min-height: 88px;
+    font-size: 18px;
+    font-weight: 700;
+    color: white;
+    text-decoration: none;
+    text-align: center;
+    padding: 14px;
+    transition: transform .12s, box-shadow .12s;
+  }
+
+  .box:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 12px 26px rgba(20, 60, 70, .26);
+  }
+
+  .hero {
+    margin: 34px 40px 40px;
+    padding: 44px 32px;
+    max-width: 440px;
+    min-height: 220px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    margin-left: auto;
+    margin-right: auto;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 16px;
+    box-shadow: 0 8px 22px rgba(30, 50, 68, .07);
+    text-align: center;
+  }
+
+  .hero h2 {
+    margin: 0 0 8px;
+    font-size: 17px;
+    color: var(--navy-deep);
+  }
+
+  .hero p {
+    margin: 0;
+    color: var(--ink);
+    font-size: 15px;
+  }
+
+  footer {
+    background: var(--navy-deep);
+    color: rgba(255,255,255,.85);
+    padding: 22px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    gap: 22px;
+    flex-wrap: wrap;
+    font-size: 14px;
+  }
+
+  footer a {
+    color: rgba(255,255,255,.85);
+    text-decoration: none;
+    font-weight: 600;
+  }
+
+  footer a:hover { color: white; text-decoration: underline; }
+
+  footer .lang-button {
+    background: none;
+    border: 0;
+    padding: 0;
+    border-radius: 0;
+    color: rgba(255,255,255,.85);
+    font-family: "Frank Ruhl Libre", "Assistant", serif;
+    font-size: 17px;
+    font-weight: 600;
+  }
+
+  footer .lang-button:hover { color: white; text-decoration: underline; }
+
+  .admin-link {
+    display: block;
+    width: max-content;
+    margin: 0 auto 20px;
+    color: var(--muted, #6b7c8c);
+    font-size: 12px;
+    text-decoration: none;
+  }
+
+  @media (max-width: 780px) {
+    .layout { flex-direction: column; }
+    .sidebar { width: 100%; }
+    .boxes { grid-template-columns: repeat(2, 1fr); }
+  }
+</style>
 </head>
 <body>
 
-<header>
-  <img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי">
-  <h1 data-lang="en">Community Home</h1>
-  <h1 data-lang="yi" hidden>קהילה היים</h1>
-</header>
+<div class="layout">
+  <aside class="sidebar">
+    <img src="logo.png" alt="ברכת שמים קאשוי">
+    <div class="name-block">
+      <div class="n2">התאחדות אברכים</div>
+      <div class="n3">ברכת שמים</div>
+      <div class="n1">קאשוי</div>
+      <div class="n4">בנשיאות כ"ק מרן אדמו"ר שליט"א</div>
+    </div>
+    <div class="sidebar-spacer"></div>
+    <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+  </aside>
 
-<nav>
+  <div class="main">
+    <div class="topbar">
+      <a class="login-btn" href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
+    </div>
+    <div class="boxes-wrap">
+      <div class="boxes">
+        <a class="box" href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+        <a class="box" href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
+        <a class="box" href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
+        <a class="box" href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+        <a class="box" href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
+        <a class="box" href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
+      </div>
+    </div>
+    <div class="hero" id="heroBox">
+      <div id="welcomeBlock">
+        <h2 data-lang="en">Welcome</h2>
+        <h2 data-lang="yi" hidden>ברוכים הבאים</h2>
+        <p data-lang="en">Welcome to ברכת שמים קאשוי.</p>
+        <p data-lang="yi" hidden>ברוכים הבאים צו ברכת שמים קאשוי.</p>
+      </div>
+      <div id="announcement" hidden aria-live="polite" dir="auto">
+        <h2 id="announcementTitle"></h2>
+        <p id="announcementContent"></p>
+      </div>
+    </div>
+    <a class="admin-link" href="admin.html">Admin</a>
+  </div>
+</div>
+
+<footer>
   <a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
@@ -23,49 +268,37 @@
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
-  <button class="lang-button" type="button" onclick="toggleLang()">יידיש</button>
-</nav>
+  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+</footer>
 
-<main>
-  <section class="card">
-    <p data-lang="en">Welcome to ברכת שמים קאשוי.</p>
-    <p data-lang="yi" hidden>ברוכים הבאים צו ברכת שמים קאשוי.</p>
-  </section>
-
-  <section id="announcement" class="card announcement" hidden aria-live="polite" dir="auto">
-    <h2 id="announcementTitle"></h2>
-    <p id="announcementContent"></p>
-  </section>
-
+<script src="site.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
   const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
-async function loadAnnouncement() {
-  const { data, error } = await supabaseClient
-    .from('announcements')
-    .select('title, content, created_at')
-    .order('created_at', { ascending: false })
-    .limit(1);
+  async function loadAnnouncement() {
+    const { data, error } = await supabaseClient
+      .from('announcements')
+      .select('title, content, created_at')
+      .order('created_at', { ascending: false })
+      .limit(1);
 
-  if (error) {
-    console.error('Could not load announcement:', error.message);
-    return;
-  }
+    if (error) {
+      console.error('Could not load announcement:', error.message);
+      return;
+    }
 
-  if (data && data.length > 0) {
-    document.getElementById('announcementTitle').textContent = data[0].title || '';
-    document.getElementById('announcementContent').textContent = data[0].content || '';
-    document.getElementById('announcement').hidden = false;
+    if (data && data.length > 0) {
+      document.getElementById('announcementTitle').textContent = data[0].title || '';
+      document.getElementById('announcementContent').textContent = data[0].content || '';
+      document.getElementById('announcement').hidden = false;
+      document.getElementById('welcomeBlock').hidden = true;
+    }
   }
-}
 
   loadAnnouncement();
 </script>
-
-  <a class="admin-link" href="admin.html">Admin</a>
-</main>
 </body>
 </html>
