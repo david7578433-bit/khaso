@@ -191,7 +191,7 @@
     const { data: { session } } = await memberClient.auth.getSession();
     statusEl.textContent = 'Uploading…';
 
-    const path = session.user.id + '/' + Date.now() + '-' + file.name;
+    const path = session.user.id + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
     const { error: uploadError } = await memberClient.storage.from('community-photos').upload(path, file);
     if (uploadError) {
       statusEl.textContent = 'Could not upload: ' + uploadError.message;
