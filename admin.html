@@ -10,6 +10,23 @@
     .admin-card h2 { text-align: center; }
     .home-link { margin-top: 16px; }
     #editor { display: none; }
+    #pendingList { list-style: none; padding: 0; margin: 10px 0 0; }
+    #pendingList li {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 10px;
+      padding: 10px 0;
+      border-top: 1px solid var(--border);
+    }
+    #pendingList li:first-child { border-top: 0; }
+    #pendingList button { padding: 6px 12px; }
+    #pendingPhotos { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+    .pending-photo { padding: 12px; border: 1px solid var(--border); border-radius: 8px; }
+    .pending-photo img { width: 100%; max-width: 260px; border-radius: 6px; display: block; }
+    .pending-photo p { margin: 8px 0; }
+    .pending-photo-actions { display: flex; gap: 8px; }
+    .pending-photo-actions button { padding: 6px 12px; }
   </style>
 </head>
 <body>
@@ -40,6 +57,12 @@
         <textarea id="announcementContent" required></textarea>
         <button id="saveButton" type="submit">Save Announcement</button>
       </form>
+
+      <h2>Pending Members</h2>
+      <ul id="pendingList"></ul>
+
+      <h2>Pending Photos</h2>
+      <div id="pendingPhotos"></div>
     </section>
 
     <p id="status" role="status" aria-live="polite"></p>
@@ -62,9 +85,7 @@
       statusEl.style.color = isError ? '#c0392b' : '#16856f';
     }
 
-    async function showEditor() {
-      loginForm.style.display = 'none';
-      editor.style.display = 'block';
+    async function loadAnnouncementIntoForm() {
       const { data, error } = await supabaseClient
         .from('announcements')
         .select('id, title, content, created_at')
@@ -81,6 +102,157 @@
         document.getElementById('announcementTitle').value = data[0].title || '';
         document.getElementById('announcementContent').value = data[0].content || '';
       }
+    }
+
+    async function loadPendingMembers() {
+      const list = document.getElementById('pendingList');
+      list.innerHTML = '<li>Loading…</li>';
+
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('id, email, display_name, created_at')
+        .eq('approved', false)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        list.innerHTML = '';
+        const item = document.createElement('li');
+        item.textContent = 'Could not load pending members: ' + error.message;
+        list.appendChild(item);
+        return;
+      }
+
+      list.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        const item = document.createElement('li');
+        item.textContent = 'No pending members.';
+        list.appendChild(item);
+        return;
+      }
+
+      data.forEach((member) => {
+        const item = document.createElement('li');
+
+        const label = document.createElement('span');
+        label.textContent = member.display_name || member.email || member.id;
+        item.appendChild(label);
+
+        const approveButton = document.createElement('button');
+        approveButton.type = 'button';
+        approveButton.textContent = 'Approve';
+        approveButton.addEventListener('click', async () => {
+          approveButton.disabled = true;
+          const { error: approveError } = await supabaseClient
+            .from('profiles')
+            .update({ approved: true })
+            .eq('id', member.id);
+
+          if (approveError) {
+            setStatus('Could not approve: ' + approveError.message, true);
+            approveButton.disabled = false;
+            return;
+          }
+
+          item.remove();
+        });
+        item.appendChild(approveButton);
+
+        list.appendChild(item);
+      });
+    }
+
+    async function loadPendingPhotos() {
+      const list = document.getElementById('pendingPhotos');
+      list.innerHTML = '<p>Loading…</p>';
+
+      const { data, error } = await supabaseClient
+        .from('photo_uploads')
+        .select('id, storage_path, caption')
+        .eq('status', 'pending')
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        list.innerHTML = '<p>Could not load pending photos: ' + error.message + '</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p>No pending photos.</p>';
+        return;
+      }
+
+      data.forEach((photo) => {
+        const { data: urlData } = supabaseClient.storage.from('community-photos').getPublicUrl(photo.storage_path);
+
+        const card = document.createElement('div');
+        card.className = 'pending-photo';
+
+        const img = document.createElement('img');
+        img.src = urlData.publicUrl;
+        img.alt = photo.caption || '';
+        card.appendChild(img);
+
+        if (photo.caption) {
+          const caption = document.createElement('p');
+          caption.textContent = photo.caption;
+          card.appendChild(caption);
+        }
+
+        const actions = document.createElement('div');
+        actions.className = 'pending-photo-actions';
+
+        const approveButton = document.createElement('button');
+        approveButton.type = 'button';
+        approveButton.textContent = 'Approve';
+        approveButton.addEventListener('click', async () => {
+          approveButton.disabled = true;
+          const { error: updateError } = await supabaseClient
+            .from('photo_uploads')
+            .update({ status: 'approved' })
+            .eq('id', photo.id);
+          if (updateError) {
+            setStatus('Could not approve photo: ' + updateError.message, true);
+            approveButton.disabled = false;
+            return;
+          }
+          card.remove();
+        });
+
+        const rejectButton = document.createElement('button');
+        rejectButton.type = 'button';
+        rejectButton.className = 'secondary';
+        rejectButton.textContent = 'Reject';
+        rejectButton.addEventListener('click', async () => {
+          rejectButton.disabled = true;
+          const { error: updateError } = await supabaseClient
+            .from('photo_uploads')
+            .update({ status: 'rejected' })
+            .eq('id', photo.id);
+          if (updateError) {
+            setStatus('Could not reject photo: ' + updateError.message, true);
+            rejectButton.disabled = false;
+            return;
+          }
+          card.remove();
+        });
+
+        actions.appendChild(approveButton);
+        actions.appendChild(rejectButton);
+        card.appendChild(actions);
+
+        list.appendChild(card);
+      });
+    }
+
+    async function showEditor() {
+      loginForm.style.display = 'none';
+      editor.style.display = 'block';
+      await loadAnnouncementIntoForm();
+      await loadPendingMembers();
+      await loadPendingPhotos();
     }
 
     loginForm.addEventListener('submit', async (event) => {
