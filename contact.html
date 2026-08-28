@@ -4,55 +4,34 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Contact | ברכת שמים קאשוי</title>
-<style>
-  body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; color: #2c3e50; }
-  header { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 60px 20px; text-align: center; }
-  header h1 { margin: 0; font-size: 2.5em; }
-  nav { background: white; display: flex; justify-content: center; align-items: center; gap: 30px; padding: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex-wrap: wrap; }
-  nav a { color: #34495e; text-decoration: none; font-weight: 600; font-size: 15px; }
-  nav a:hover { color: #1abc9c; }
-  #langBtn { margin-left: 20px; padding: 6px 14px; background: #1abc9c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
-  .content { max-width: 700px; margin: 50px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; }
-  .branch { display: inline-block; margin: 15px; padding: 20px 30px; background: #f4f6f8; border-radius: 8px; text-decoration: none; color: #2c3e50; font-weight: 600; }
-  .branch:hover { background: #1abc9c; color: white; }
-</style>
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
 </head>
 <body>
 
 <header>
-  <h1 id="title-en">Contact Us</h1>
-  <h1 id="title-yi" style="display:none;" dir="rtl">קאנטאקט אונדז</h1>
+  <img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי">
+  <h1 data-lang="en">Contact Us</h1>
+  <h1 data-lang="yi" hidden>קאנטאקט אונדז</h1>
 </header>
 
 <nav>
-  <a href="index.html">Home</a>
-  <a href="about.html">About</a>
-  <a href="yeshiva.html">Yeshiva</a>
-  <a href="botei-medrash.html">Botei Medrash</a>
-  <a href="contact.html">Contact</a>
-  <button id="langBtn" onclick="toggleLang()">יידיש</button>
+  <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
+  <a href="contact.html" aria-current="page"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
+  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
+  <button class="lang-button" type="button" onclick="toggleLang()">יידיש</button>
 </nav>
 
-<div class="content">
-  <p id="text-en">Main Yeshiva phone and email will go here.</p>
-  <p id="text-yi" style="display:none;" dir="rtl">פלייסהאלדער טעקסט וועגן קאנטאקט.</p>
+<main><section class="card">
+  <p data-lang="en">Choose a location for contact information.</p>
+  <p data-lang="yi" hidden>קלויבט אויס א לאקאציע פאר קאנטאקט אינפארמאציע.</p>
 
-  <div>
+  <div class="branch-grid">
     <a class="branch" href="contact-monsey.html">Monsey</a>
     <a class="branch" href="contact-kiryas-joel.html">Kiryas Joel</a>
   </div>
-</div>
-
-<script>
-  let isYiddish = false;
-  function toggleLang() {
-    isYiddish = !isYiddish;
-    document.getElementById("title-en").style.display = isYiddish ? "none" : "block";
-    document.getElementById("title-yi").style.display = isYiddish ? "block" : "none";
-    document.getElementById("text-en").style.display = isYiddish ? "none" : "block";
-    document.getElementById("text-yi").style.display = isYiddish ? "block" : "none";
-    document.getElementById("langBtn").innerText = isYiddish ? "English" : "יידיש";
-  }
-</script>
+</section></main>
 </body>
 </html>

@@ -4,26 +4,21 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Admin | ברכת שמים קאשוי</title>
+  <link rel="stylesheet" href="style.css">
   <style>
-    body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; color: #2c3e50; }
-    header { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 45px 20px; text-align: center; }
-    header h1 { margin: 0; font-size: 2.2em; }
-    .content { max-width: 560px; margin: 40px auto; background: white; padding: 35px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
-    label { display: block; margin-top: 14px; font-weight: 600; }
-    input, textarea { width: 100%; padding: 10px; margin-top: 6px; border-radius: 4px; border: 1px solid #b8c2cc; box-sizing: border-box; font: inherit; }
-    textarea { min-height: 150px; resize: vertical; }
-    button, .home-link { display: inline-block; padding: 10px 20px; background: #1abc9c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; margin-top: 16px; text-decoration: none; }
-    button.secondary { background: #607d9a; float: right; }
-    button:disabled { opacity: .6; cursor: wait; }
-    #status { min-height: 20px; margin-top: 15px; }
+    .admin-card { max-width: 560px; text-align: left; }
+    .admin-card h2 { text-align: center; }
+    .home-link { margin-top: 16px; }
     #editor { display: none; }
-    @media (max-width: 650px) { .content { margin: 20px 12px; padding: 24px; } }
   </style>
 </head>
 <body>
-  <header><h1>Admin</h1></header>
+  <header>
+    <img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי">
+    <h1>Admin</h1>
+  </header>
 
-  <main class="content">
+  <main><section class="card admin-card">
     <form id="loginForm">
       <h2>Log in</h2>
       <label for="email">Email</label>
@@ -34,8 +29,10 @@
     </form>
 
     <section id="editor">
-      <button id="logoutButton" class="secondary" type="button">Log Out</button>
-      <h2>Edit announcement</h2>
+      <div class="admin-actions">
+        <h2>Edit announcement</h2>
+        <button id="logoutButton" class="secondary" type="button">Log Out</button>
+      </div>
       <form id="announcementForm">
         <label for="announcementTitle">Title</label>
         <input type="text" id="announcementTitle" maxlength="200" required>
@@ -46,8 +43,8 @@
     </section>
 
     <p id="status" role="status" aria-live="polite"></p>
-    <a class="home-link" href="index.html">Back to website</a>
-  </main>
+    <a class="button home-link" href="index.html">Back to website</a>
+  </section></main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
   <script>
