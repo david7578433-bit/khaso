@@ -9,8 +9,8 @@
     });
 
     document.querySelectorAll('.lang-button').forEach((button) => {
-      button.textContent = isYiddish ? 'English' : 'יידיש';
-      button.setAttribute('aria-label', isYiddish ? 'Switch to English' : 'טוישן אויף יידיש');
+      button.textContent = isYiddish ? 'English' : 'אידיש';
+      button.setAttribute('aria-label', isYiddish ? 'Switch to English' : 'טוישן אויף אידיש');
     });
 
     try { localStorage.setItem('siteLanguage', language); } catch (_) {}
