@@ -93,7 +93,7 @@ button,
 button:hover,
 .button:hover { background: var(--accent-dark); }
 
-main { padding: 44px 18px 60px; }
+main { padding: 44px 18px 130px; }
 
 .card {
   width: min(760px, 100%);
@@ -224,7 +224,46 @@ button:disabled { opacity: .6; cursor: wait; }
   nav { gap: 4px 14px; padding: 9px 10px; }
   nav a { font-size: 14px; }
   .lang-button { padding: 7px 12px; }
-  main { padding: 26px 12px 42px; }
+  main { padding: 26px 12px 150px; }
   .card { padding: 24px 18px; }
   .branch-grid { grid-template-columns: 1fr; }
 }
+
+footer {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 20;
+  background: var(--navy-deep);
+  color: rgba(255,255,255,.85);
+  padding: 12px 16px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 8px 20px;
+  flex-wrap: wrap;
+  font-size: 14px;
+  box-shadow: 0 -2px 8px rgba(0,0,0,.12);
+}
+
+footer a {
+  color: rgba(255,255,255,.85);
+  text-decoration: none;
+  font-weight: 600;
+}
+
+footer a:hover,
+footer a:focus-visible { color: white; text-decoration: underline; }
+
+footer .lang-button {
+  background: none;
+  border: 0;
+  padding: 0;
+  border-radius: 0;
+  color: rgba(255,255,255,.85);
+  font: inherit;
+  font-weight: 600;
+}
+
+footer .lang-button:hover { color: white; text-decoration: underline; }
