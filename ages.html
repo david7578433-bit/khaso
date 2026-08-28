@@ -67,6 +67,17 @@
     </form>
     <p id="uploadStatus" role="status" aria-live="polite"></p>
   </section>
+
+  <section class="card" id="messageAdminCard" hidden>
+    <h2>Message the Admin</h2>
+    <p>Send a private message directly to the admin — not visible to other members.</p>
+    <form id="adminMessageForm">
+      <label for="adminMessageBody">Your message</label>
+      <textarea id="adminMessageBody" required></textarea>
+      <button type="submit">Send</button>
+    </form>
+    <p id="adminMessageStatus" role="status" aria-live="polite"></p>
+  </section>
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -222,6 +233,28 @@
     statusEl.textContent = 'Uploaded — waiting for admin approval.';
   });
 
+  document.getElementById('adminMessageForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const statusEl = document.getElementById('adminMessageStatus');
+    const bodyField = document.getElementById('adminMessageBody');
+    const { data: { session } } = await memberClient.auth.getSession();
+    if (!session) { statusEl.textContent = 'You are not signed in.'; return; }
+
+    statusEl.textContent = 'Sending…';
+    const { error } = await memberClient.from('admin_messages').insert({
+      sender_id: session.user.id,
+      body: bodyField.value.trim()
+    });
+
+    if (error) {
+      statusEl.textContent = 'Could not send: ' + error.message;
+      return;
+    }
+
+    bodyField.value = '';
+    statusEl.textContent = 'Sent — thank you.';
+  });
+
   (async () => {
     const { session, profile } = await getMemberStatus();
     const gateCard = document.getElementById('gateCard');
@@ -244,6 +277,7 @@
     gateCard.hidden = true;
     boardCard.hidden = false;
     photoCard.hidden = false;
+    document.getElementById('messageAdminCard').hidden = false;
     await loadTopics(profile);
     await loadPhotos();
   })();
