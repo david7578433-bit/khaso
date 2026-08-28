@@ -6,6 +6,13 @@
 <title>Log In | ברכת שמים קאשוי</title>
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
+<style>
+  .auth-toggle { margin-top: 14px; }
+  .city-other { margin-top: 6px; }
+  #pfEmailWrap label[for="pfEmail"] { display: inline; }
+  .checkbox-row { display: flex; align-items: center; gap: 8px; font-weight: 400; margin-top: 10px; text-align: left; }
+  .checkbox-row input { width: auto; margin: 0; }
+</style>
 </head>
 <body>
 
@@ -19,7 +26,7 @@
   <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
-  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ٙשיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
   <a href="login.html" aria-current="page"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
@@ -27,38 +34,247 @@
 </nav>
 
 <main>
-  <section class="card">
-    <div id="signedOutView">
+  <section class="card" id="signedOutCard">
+    <div id="googleView">
       <p>Sign in to take part in member discussions and share pictures.</p>
       <button type="button" onclick="signInWithGoogle('login.html')">Sign in with Google</button>
+      <p class="auth-toggle"><button type="button" class="secondary" onclick="showUsernameOptions()">I don't have an email</button></p>
     </div>
 
-    <div id="pendingView" hidden>
-      <p>You're signed in. Your account is waiting to be approved — check back soon.</p>
-      <button type="button" class="secondary" onclick="signOutMember()">Log Out</button>
+    <div id="usernameView" hidden>
+      <div id="usernameSignInBox">
+        <h2>Log In</h2>
+        <label for="unameLoginUser">Username</label>
+        <input id="unameLoginUser" autocomplete="username">
+        <label for="unameLoginPass">Password</label>
+        <input id="unameLoginPass" type="password" autocomplete="current-password">
+        <button type="button" onclick="doUsernameLogin()">Log In</button>
+        <p class="auth-toggle"><button type="button" class="secondary" onclick="toggleUsernameMode()">New here? Create a username</button></p>
+      </div>
+      <div id="usernameSignUpBox" hidden>
+        <h2>Create Account</h2>
+        <label for="unameSignupUser">Choose a username</label>
+        <input id="unameSignupUser" autocomplete="username">
+        <label for="unameSignupPass">Choose a password</label>
+        <input id="unameSignupPass" type="password" autocomplete="new-password">
+        <label for="unameSignupPass2">Confirm password</label>
+        <input id="unameSignupPass2" type="password" autocomplete="new-password">
+        <button type="button" onclick="doUsernameSignup()">Create Account</button>
+        <p class="auth-toggle"><button type="button" class="secondary" onclick="toggleUsernameMode()">Already have a username? Log in</button></p>
+      </div>
+      <p class="auth-toggle"><button type="button" class="secondary" onclick="hideUsernameOptions()">Back to Google sign-in</button></p>
     </div>
 
-    <div id="approvedView" hidden>
-      <p>You're signed in and approved.</p>
-      <button type="button" class="secondary" onclick="signOutMember()">Log Out</button>
-    </div>
+    <p id="authStatus" role="status" aria-live="polite"></p>
+  </section>
 
-    <p id="status" role="status" aria-live="polite"></p>
+  <section class="card" id="profileFormCard" hidden>
+    <h2>Complete Your Profile</h2>
+    <p>We need a few details before you can join the discussions.</p>
+    <form id="profileForm">
+      <label for="pfFirstName">First Name *</label>
+      <input id="pfFirstName" required>
+
+      <label for="pfLastName">Last Name *</label>
+      <input id="pfLastName" required>
+
+      <label for="pfPhone">Phone Number *</label>
+      <input id="pfPhone" type="tel" required>
+
+      <div id="pfEmailWrap">
+        <label for="pfEmail">Email <span id="pfEmailStar">*</span></label>
+        <input id="pfEmail" type="email">
+        <div class="checkbox-row">
+          <input type="checkbox" id="pfNoEmail">
+          <label for="pfNoEmail" style="margin:0; font-weight:400;">I don't have an email</label>
+        </div>
+      </div>
+
+      <label for="pfCity">City *</label>
+      <select id="pfCity" required>
+        <option value="">Choose…</option>
+        <option value="Williamsburg">Williamsburg</option>
+        <option value="Boro Park">Boro Park</option>
+        <option value="Kiryas Joel">Kiryas Joel</option>
+        <option value="other">Someplace else</option>
+      </select>
+      <div id="pfCityOtherWrap" class="city-other" hidden>
+        <label for="pfCityOther">Please type your city *</label>
+        <input id="pfCityOther">
+      </div>
+
+      <button type="submit">Save</button>
+    </form>
+    <p id="profileStatus" role="status" aria-live="polite"></p>
+  </section>
+
+  <section class="card" id="pendingView" hidden>
+    <p>You're signed in. Your account is waiting to be approved — check back soon.</p>
+    <button type="button" class="secondary" onclick="signOutMember()">Log Out</button>
+  </section>
+
+  <section class="card" id="approvedView" hidden>
+    <p>You're signed in and approved.</p>
+    <button type="button" class="secondary" onclick="signOutMember()">Log Out</button>
   </section>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
 <script>
+  function showUsernameOptions() {
+    document.getElementById('googleView').hidden = true;
+    document.getElementById('usernameView').hidden = false;
+  }
+
+  function hideUsernameOptions() {
+    document.getElementById('googleView').hidden = false;
+    document.getElementById('usernameView').hidden = true;
+  }
+
+  function toggleUsernameMode() {
+    const signIn = document.getElementById('usernameSignInBox');
+    const signUp = document.getElementById('usernameSignUpBox');
+    signIn.hidden = !signIn.hidden;
+    signUp.hidden = !signUp.hidden;
+  }
+
+  async function doUsernameLogin() {
+    const statusEl = document.getElementById('authStatus');
+    const username = document.getElementById('unameLoginUser').value.trim();
+    const password = document.getElementById('unameLoginPass').value;
+    if (!username || !password) { statusEl.textContent = 'Enter your username and password.'; return; }
+
+    statusEl.textContent = 'Logging in…';
+    const { error } = await signInWithUsername(username, password);
+    if (error) {
+      statusEl.textContent = 'Could not log in: ' + error.message;
+      return;
+    }
+    window.location.reload();
+  }
+
+  async function doUsernameSignup() {
+    const statusEl = document.getElementById('authStatus');
+    const username = document.getElementById('unameSignupUser').value.trim();
+    const password = document.getElementById('unameSignupPass').value;
+    const password2 = document.getElementById('unameSignupPass2').value;
+
+    if (!username || username.length < 3) { statusEl.textContent = 'Choose a username with at least 3 characters.'; return; }
+    if (!password || password.length < 6) { statusEl.textContent = 'Choose a password with at least 6 characters.'; return; }
+    if (password !== password2) { statusEl.textContent = 'Passwords do not match.'; return; }
+
+    statusEl.textContent = 'Creating account…';
+    const { data, error } = await signUpWithUsername(username, password);
+    if (error) {
+      statusEl.textContent = 'Could not create account: ' + error.message;
+      return;
+    }
+
+    if (!data.session) {
+      // Project has email confirmation turned on — this fake address can never
+      // receive that email, so sign-in will fail until an admin fixes the
+      // Supabase setting (see profiles-extend.sql).
+      statusEl.textContent = "Account created, but couldn't sign you in automatically. Please tell the admin — sign-in confirmation may need to be turned off.";
+      return;
+    }
+
+    const { error: profileError } = await memberClient
+      .from('profiles')
+      .update({ username })
+      .eq('id', data.session.user.id);
+
+    if (profileError) {
+      statusEl.textContent = 'Account created, but that username may already be taken: ' + profileError.message;
+      return;
+    }
+
+    window.location.reload();
+  }
+
+  document.getElementById('pfCity').addEventListener('change', (event) => {
+    document.getElementById('pfCityOtherWrap').hidden = event.target.value !== 'other';
+  });
+
+  document.getElementById('pfNoEmail').addEventListener('change', (event) => {
+    const emailInput = document.getElementById('pfEmail');
+    const star = document.getElementById('pfEmailStar');
+    emailInput.disabled = event.target.checked;
+    if (event.target.checked) emailInput.value = '';
+    star.hidden = event.target.checked;
+  });
+
+  document.getElementById('profileForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const statusEl = document.getElementById('profileStatus');
+    const { data: { session } } = await memberClient.auth.getSession();
+    if (!session) { statusEl.textContent = 'You are not signed in.'; return; }
+
+    const firstName = document.getElementById('pfFirstName').value.trim();
+    const lastName = document.getElementById('pfLastName').value.trim();
+    const phone = document.getElementById('pfPhone').value.trim();
+    const noEmail = document.getElementById('pfNoEmail').checked;
+    const emailInput = document.getElementById('pfEmail').value.trim();
+    const usingGoogle = !isUsernameAccount(session);
+    const cityChoice = document.getElementById('pfCity').value;
+    const cityOther = document.getElementById('pfCityOther').value.trim();
+    const finalCity = cityChoice === 'other' ? cityOther : cityChoice;
+
+    if (!firstName || !lastName || !phone || !finalCity) {
+      statusEl.textContent = 'Please fill in all required fields.';
+      return;
+    }
+    if (!usingGoogle && !noEmail && !emailInput) {
+      statusEl.textContent = "Please enter an email, or check \"I don't have an email\".";
+      return;
+    }
+
+    const payload = {
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phone,
+      city: finalCity
+    };
+    if (usingGoogle) {
+      payload.email = session.user.email;
+    } else if (!noEmail) {
+      payload.email = emailInput;
+    }
+
+    statusEl.textContent = 'Saving…';
+    const { error } = await memberClient.from('profiles').update(payload).eq('id', session.user.id);
+    if (error) {
+      statusEl.textContent = 'Could not save: ' + error.message;
+      return;
+    }
+
+    window.location.reload();
+  });
+
   (async () => {
-    const statusEl = document.getElementById('status');
+    const statusEl = document.getElementById('authStatus');
     statusEl.textContent = 'Checking sign-in status…';
 
     const { session, profile } = await getMemberStatus();
 
-    document.getElementById('signedOutView').hidden = !!session;
-    document.getElementById('pendingView').hidden = !(session && profile && !profile.approved);
-    document.getElementById('approvedView').hidden = !(session && profile && profile.approved);
+    document.getElementById('signedOutCard').hidden = !!session;
     statusEl.textContent = '';
+
+    if (!session) return;
+
+    if (!isProfileComplete(profile)) {
+      document.getElementById('profileFormCard').hidden = false;
+      const usingGoogle = !isUsernameAccount(session);
+      document.getElementById('pfEmailWrap').hidden = usingGoogle;
+      if (profile) {
+        document.getElementById('pfFirstName').value = profile.first_name || '';
+        document.getElementById('pfLastName').value = profile.last_name || '';
+        document.getElementById('pfPhone').value = profile.phone_number || '';
+      }
+      return;
+    }
+
+    document.getElementById('pendingView').hidden = !!(profile && profile.approved);
+    document.getElementById('approvedView').hidden = !(profile && profile.approved);
   })();
 </script>
 </main>
