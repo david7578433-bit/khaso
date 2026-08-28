@@ -27,6 +27,7 @@
     font-family: "Assistant", "Segoe UI", Arial, sans-serif;
     background: linear-gradient(160deg, var(--background-a), var(--background-b) 60%, #e7f1f6);
     color: var(--ink);
+    padding-bottom: 100px;
   }
 
   [data-lang][hidden] { display: none !important; }
@@ -167,15 +168,21 @@
   }
 
   footer {
+    position: fixed;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 20;
     background: var(--navy-deep);
     color: rgba(255,255,255,.85);
-    padding: 22px;
+    padding: 14px;
     display: flex;
     justify-content: center;
     align-items: center;
-    gap: 22px;
+    gap: 8px 20px;
     flex-wrap: wrap;
     font-size: 14px;
+    box-shadow: 0 -2px 8px rgba(0,0,0,.15);
   }
 
   footer a {
