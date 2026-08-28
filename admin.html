@@ -68,6 +68,24 @@
       <h2>Pending Members</h2>
       <ul id="pendingList"></ul>
 
+      <h2>All Members</h2>
+      <div style="overflow-x:auto;">
+      <table id="membersTable" style="width:100%; border-collapse: collapse; font-size: 13px;">
+        <thead>
+          <tr>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Name</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Phone</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Email</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">City</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Username</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Year Room</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Approved</th>
+          </tr>
+        </thead>
+        <tbody id="membersTableBody"></tbody>
+      </table>
+      </div>
+
       <h2>Pending Photos</h2>
       <div id="pendingPhotos"></div>
 
@@ -188,6 +206,95 @@
         item.appendChild(approveButton);
 
         list.appendChild(item);
+      });
+    }
+
+    const YEAR_OPTIONS = [
+      'תשס"ה (5765)','תשס"ו (5766)','תשס"ז (5767)','תשס"ח (5768)','תשס"ט (5769)',
+      'תש"ע (5770)','תשע"א (5771)','תשע"ב (5772)','תשע"ג (5773)','תשע"ד (5774)',
+      'תשע"ה (5775)','תשע"ו (5776)','תשע"ז (5777)','תשע"ח (5778)','תשע"ט (5779)',
+      'תש"פ (5780)','תשפ"א (5781)','תשפ"ב (5782)','תשפ"ג (5783)','תשפ"ד (5784)',
+      'תשפ"ה (5785)','תשפ"ו (5786)','תשפ"ז (5787)','תשפ"ח (5788)','תשפ"ט (5789)',
+      'תש"צ (5790)'
+    ];
+
+    async function loadAllMembers() {
+      const body = document.getElementById('membersTableBody');
+      body.innerHTML = '<tr><td>Loading…</td></tr>';
+
+      const { data, error } = await supabaseClient
+        .from('profiles')
+        .select('id, first_name, last_name, phone_number, email, city, username, jewish_year, approved')
+        .order('last_name', { ascending: true });
+
+      if (error) {
+        body.innerHTML = '';
+        const row = document.createElement('tr');
+        const cell = document.createElement('td');
+        cell.textContent = 'Could not load members: ' + error.message;
+        row.appendChild(cell);
+        body.appendChild(row);
+        return;
+      }
+
+      body.innerHTML = '';
+      if (!data || data.length === 0) {
+        body.innerHTML = '<tr><td>No members yet.</td></tr>';
+        return;
+      }
+
+      data.forEach((member) => {
+        const row = document.createElement('tr');
+
+        const nameCell = document.createElement('td');
+        nameCell.style.padding = '6px 8px';
+        nameCell.style.borderBottom = '1px solid var(--border)';
+        nameCell.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || '—';
+        row.appendChild(nameCell);
+
+        [member.phone_number, member.email, member.city, member.username].forEach((value) => {
+          const cell = document.createElement('td');
+          cell.style.padding = '6px 8px';
+          cell.style.borderBottom = '1px solid var(--border)';
+          cell.textContent = value || '—';
+          row.appendChild(cell);
+        });
+
+        const yearCell = document.createElement('td');
+        yearCell.style.padding = '6px 8px';
+        yearCell.style.borderBottom = '1px solid var(--border)';
+        const yearSelect = document.createElement('select');
+        yearSelect.style.margin = '0';
+        const blankOption = document.createElement('option');
+        blankOption.value = '';
+        blankOption.textContent = 'Not assigned';
+        yearSelect.appendChild(blankOption);
+        YEAR_OPTIONS.forEach((year) => {
+          const option = document.createElement('option');
+          option.value = year;
+          option.textContent = year;
+          if (member.jewish_year === year) option.selected = true;
+          yearSelect.appendChild(option);
+        });
+        yearSelect.addEventListener('change', async () => {
+          yearSelect.disabled = true;
+          const { error: yearError } = await supabaseClient
+            .from('profiles')
+            .update({ jewish_year: yearSelect.value || null })
+            .eq('id', member.id);
+          yearSelect.disabled = false;
+          if (yearError) setStatus('Could not save year: ' + yearError.message, true);
+        });
+        yearCell.appendChild(yearSelect);
+        row.appendChild(yearCell);
+
+        const approvedCell = document.createElement('td');
+        approvedCell.style.padding = '6px 8px';
+        approvedCell.style.borderBottom = '1px solid var(--border)';
+        approvedCell.textContent = member.approved ? 'Yes' : 'No';
+        row.appendChild(approvedCell);
+
+        body.appendChild(row);
       });
     }
 
@@ -399,6 +506,7 @@
       editor.style.display = 'block';
       await loadAnnouncementIntoForm();
       await loadPendingMembers();
+      await loadAllMembers();
       await loadPendingPhotos();
       await loadGalleryManage();
     }
