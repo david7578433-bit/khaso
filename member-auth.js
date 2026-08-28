@@ -11,7 +11,7 @@ window.memberClient = window.supabase.createClient(MEMBER_SUPABASE_URL, MEMBER_S
 
 // Sends the visitor to Google, then back to redirectPath on this site once signed in.
 window.signInWithGoogle = async function (redirectPath) {
-  const redirectTo = new URL(redirectPath || window.location.pathname, window.location.origin).href;
+  const redirectTo = new URL(redirectPath || window.location.pathname, window.location.href).href;
   await window.memberClient.auth.signInWithOAuth({
     provider: 'google',
     options: { redirectTo }
