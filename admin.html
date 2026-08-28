@@ -27,6 +27,13 @@
     .pending-photo p { margin: 8px 0; }
     .pending-photo-actions { display: flex; gap: 8px; }
     .pending-photo-actions button { padding: 6px 12px; }
+    #galleryList { display: flex; flex-direction: column; gap: 14px; margin-top: 10px; }
+    .gallery-manage-item { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; align-items: center; }
+    .gallery-manage-item img { width: 90px; height: 90px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .gallery-manage-item .gm-info { flex: 1; }
+    .gallery-manage-item .gm-category { font-weight: 700; }
+    .gallery-manage-item .gm-caption { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
+    .gallery-manage-item button { padding: 6px 12px; }
   </style>
 </head>
 <body>
@@ -63,6 +70,28 @@
 
       <h2>Pending Photos</h2>
       <div id="pendingPhotos"></div>
+
+      <h2>Add a Picture</h2>
+      <form id="galleryUploadForm">
+        <label for="galleryCategory">Category</label>
+        <select id="galleryCategory" required>
+          <option value="rabbi">Rabbi</option>
+          <option value="yeshiva_gedola">Yeshiva Gedola</option>
+          <option value="yeshiva_ktana">Yeshiva Ktana</option>
+          <option value="monroe">Monroe</option>
+          <option value="monsey">Monsey</option>
+          <option value="maamodim">מעמדים</option>
+        </select>
+        <label for="galleryFile">Picture</label>
+        <input type="file" id="galleryFile" accept="image/*" required>
+        <label for="galleryCaption">Caption (optional)</label>
+        <input type="text" id="galleryCaption" maxlength="200">
+        <button id="galleryUploadButton" type="submit">Add Picture</button>
+      </form>
+      <p id="galleryStatus" role="status" aria-live="polite"></p>
+
+      <h2>Manage Pictures</h2>
+      <div id="galleryList"></div>
     </section>
 
     <p id="status" role="status" aria-live="polite"></p>
@@ -247,12 +276,131 @@
       });
     }
 
+    const CATEGORY_LABELS = {
+      rabbi: 'Rabbi',
+      yeshiva_gedola: 'Yeshiva Gedola',
+      yeshiva_ktana: 'Yeshiva Ktana',
+      monroe: 'Monroe',
+      monsey: 'Monsey',
+      maamodim: 'מעמדים'
+    };
+
+    async function loadGalleryManage() {
+      const list = document.getElementById('galleryList');
+      list.innerHTML = '<p>Loading…</p>';
+
+      const { data, error } = await supabaseClient
+        .from('gallery_photos')
+        .select('id, category, storage_path, caption')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        list.innerHTML = '<p>Could not load pictures: ' + error.message + '</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p>No pictures yet.</p>';
+        return;
+      }
+
+      data.forEach((photo) => {
+        const { data: urlData } = supabaseClient.storage.from('gallery-photos').getPublicUrl(photo.storage_path);
+
+        const item = document.createElement('div');
+        item.className = 'gallery-manage-item';
+
+        const img = document.createElement('img');
+        img.src = urlData.publicUrl;
+        img.alt = photo.caption || '';
+        item.appendChild(img);
+
+        const info = document.createElement('div');
+        info.className = 'gm-info';
+        const category = document.createElement('p');
+        category.className = 'gm-category';
+        category.textContent = CATEGORY_LABELS[photo.category] || photo.category;
+        info.appendChild(category);
+        if (photo.caption) {
+          const caption = document.createElement('p');
+          caption.className = 'gm-caption';
+          caption.textContent = photo.caption;
+          info.appendChild(caption);
+        }
+        item.appendChild(info);
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.className = 'secondary';
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', async () => {
+          deleteButton.disabled = true;
+          const { error: deleteError } = await supabaseClient
+            .from('gallery_photos')
+            .delete()
+            .eq('id', photo.id);
+          if (deleteError) {
+            setStatus('Could not delete picture: ' + deleteError.message, true);
+            deleteButton.disabled = false;
+            return;
+          }
+          await supabaseClient.storage.from('gallery-photos').remove([photo.storage_path]);
+          item.remove();
+        });
+        item.appendChild(deleteButton);
+
+        list.appendChild(item);
+      });
+    }
+
+    document.getElementById('galleryUploadForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const galleryStatusEl = document.getElementById('galleryStatus');
+      const categorySelect = document.getElementById('galleryCategory');
+      const fileInput = document.getElementById('galleryFile');
+      const captionInput = document.getElementById('galleryCaption');
+      const button = document.getElementById('galleryUploadButton');
+      const file = fileInput.files[0];
+      if (!file) return;
+
+      button.disabled = true;
+      galleryStatusEl.textContent = 'Uploading…';
+
+      const path = categorySelect.value + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const { error: uploadError } = await supabaseClient.storage.from('gallery-photos').upload(path, file);
+      if (uploadError) {
+        galleryStatusEl.textContent = 'Could not upload: ' + uploadError.message;
+        button.disabled = false;
+        return;
+      }
+
+      const { error: insertError } = await supabaseClient.from('gallery_photos').insert({
+        category: categorySelect.value,
+        storage_path: path,
+        caption: captionInput.value.trim() || null
+      });
+
+      button.disabled = false;
+      if (insertError) {
+        galleryStatusEl.textContent = 'Could not save: ' + insertError.message;
+        return;
+      }
+
+      fileInput.value = '';
+      captionInput.value = '';
+      galleryStatusEl.textContent = 'Picture added.';
+      await loadGalleryManage();
+    });
+
     async function showEditor() {
       loginForm.style.display = 'none';
       editor.style.display = 'block';
       await loadAnnouncementIntoForm();
       await loadPendingMembers();
       await loadPendingPhotos();
+      await loadGalleryManage();
     }
 
     loginForm.addEventListener('submit', async (event) => {
