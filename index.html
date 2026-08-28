@@ -1,0 +1,88 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Community Home | ברכת שמים קאשוי</title>
+<style>
+  body { margin: 0; font-family: 'Segoe UI', Arial, sans-serif; background-color: #f4f6f8; color: #2c3e50; }
+  header { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; padding: 60px 20px; text-align: center; }
+  header h1 { margin: 0; font-size: 2.5em; }
+  nav { background: white; display: flex; justify-content: center; align-items: center; gap: 30px; padding: 15px; box-shadow: 0 2px 6px rgba(0,0,0,0.08); flex-wrap: wrap; }
+  nav a { color: #34495e; text-decoration: none; font-weight: 600; font-size: 15px; }
+  nav a:hover { color: #1abc9c; }
+  #langBtn { margin-left: 20px; padding: 6px 14px; background: #1abc9c; color: white; border: none; border-radius: 4px; cursor: pointer; font-weight: 600; }
+  .content { max-width: 700px; margin: 50px auto; background: white; padding: 40px; border-radius: 10px; box-shadow: 0 4px 12px rgba(0,0,0,0.06); text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <h1 id="title-en">Community Home</h1>
+  <h1 id="title-yi" style="display:none;" dir="rtl">קהילה היים</h1>
+</header>
+
+<nav>
+  <a href="index.html">Home</a>
+  <a href="about.html">About</a>
+  <a href="contact.html">Contact</a>
+  <a href="yeshiva.html">Yeshiva</a>
+   <a href="botei-medrash.html">Botei Medrash</a>
+  <button id="langBtn" onclick="toggleLang()">יידיש</button>
+</nav>
+
+<div class="content">
+  <p id="text-en">Welcome to our community.</p>
+  <p id="text-yi" style="display:none;" dir="rtl">ברוכים הבאים אין אונדזער קהילה.</p>
+</div>
+
+<script>
+  let isYiddish = false;
+  function toggleLang() {
+    isYiddish = !isYiddish;
+    document.getElementById("title-en").style.display = isYiddish ? "none" : "block";
+    document.getElementById("title-yi").style.display = isYiddish ? "block" : "none";
+    document.getElementById("text-en").style.display = isYiddish ? "none" : "block";
+    document.getElementById("text-yi").style.display = isYiddish ? "block" : "none";
+    document.getElementById("langBtn").innerText = isYiddish ? "English" : "יידיש";
+  }
+</script>
+
+<section id="announcement" hidden style="max-width:700px; margin:30px auto; padding:20px; background:#fff9e6; border-radius:8px; text-align:center;">
+  <h2 id="announcementTitle"></h2>
+  <p id="announcementContent"></p>
+</section>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
+  const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
+  const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+async function loadAnnouncement() {
+  const { data, error } = await supabaseClient
+    .from('announcements')
+    .select('title, content, created_at')
+    .order('created_at', { ascending: false })
+    .limit(1);
+
+  if (error) {
+    console.error('Could not load announcement:', error.message);
+    return;
+  }
+
+  if (data && data.length > 0) {
+    document.getElementById('announcementTitle').textContent = data[0].title || '';
+    document.getElementById('announcementContent').textContent = data[0].content || '';
+    document.getElementById('announcement').hidden = false;
+  }
+}
+
+  loadAnnouncement();
+</script>
+
+<div style="text-align:center; margin: 40px 0 10px;">
+  <a href="admin.html" style="font-size:12px; color:#777; text-decoration:none;">Admin</a>
+</div>
+</body>
+</html>
