@@ -89,6 +89,9 @@
       <h2>Pending Photos</h2>
       <div id="pendingPhotos"></div>
 
+      <h2>Messages to Admin</h2>
+      <div id="adminMessagesList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
+
       <h2>Add a Picture</h2>
       <form id="galleryUploadForm">
         <label for="galleryCategory">Category</label>
@@ -295,6 +298,66 @@
         row.appendChild(approvedCell);
 
         body.appendChild(row);
+      });
+    }
+
+    async function loadAdminMessages() {
+      const list = document.getElementById('adminMessagesList');
+      list.innerHTML = '<p>Loading…</p>';
+
+      const { data, error } = await supabaseClient
+        .from('admin_messages')
+        .select('id, body, created_at, read, profiles(first_name, last_name, phone_number, email, username)')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        list.innerHTML = '<p>Could not load messages: ' + error.message + '</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p>No messages.</p>';
+        return;
+      }
+
+      data.forEach((msg) => {
+        const wrap = document.createElement('div');
+        wrap.style.padding = '12px';
+        wrap.style.border = '1px solid var(--border)';
+        wrap.style.borderRadius = '8px';
+        wrap.style.background = msg.read ? 'transparent' : '#fff8df';
+
+        const sender = msg.profiles ? [msg.profiles.first_name, msg.profiles.last_name].filter(Boolean).join(' ') : 'Unknown member';
+        const contact = msg.profiles ? (msg.profiles.phone_number || msg.profiles.email || msg.profiles.username || '') : '';
+
+        const meta = document.createElement('p');
+        meta.style.margin = '0 0 6px';
+        meta.style.fontWeight = '700';
+        meta.textContent = (sender || 'Unknown member') + (contact ? ' (' + contact + ')' : '') + ' · ' + new Date(msg.created_at).toLocaleString();
+        wrap.appendChild(meta);
+
+        const bodyEl = document.createElement('p');
+        bodyEl.style.margin = '0 0 8px';
+        bodyEl.style.whiteSpace = 'pre-wrap';
+        bodyEl.textContent = msg.body;
+        wrap.appendChild(bodyEl);
+
+        if (!msg.read) {
+          const readButton = document.createElement('button');
+          readButton.type = 'button';
+          readButton.textContent = 'Mark Read';
+          readButton.addEventListener('click', async () => {
+            readButton.disabled = true;
+            const { error: readError } = await supabaseClient.from('admin_messages').update({ read: true }).eq('id', msg.id);
+            if (readError) { setStatus('Could not update: ' + readError.message, true); readButton.disabled = false; return; }
+            wrap.style.background = 'transparent';
+            readButton.remove();
+          });
+          wrap.appendChild(readButton);
+        }
+
+        list.appendChild(wrap);
       });
     }
 
@@ -508,6 +571,7 @@
       await loadPendingMembers();
       await loadAllMembers();
       await loadPendingPhotos();
+      await loadAdminMessages();
       await loadGalleryManage();
     }
 
