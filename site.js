@@ -2,7 +2,7 @@
   function applyLanguage(language) {
     const isYiddish = language === 'yi';
     document.documentElement.lang = isYiddish ? 'yi' : 'en';
-    document.documentElement.dir = isYiddish ? 'rtl' : 'ltr';
+    
 
     document.querySelectorAll('[data-lang]').forEach((element) => {
       element.hidden = element.dataset.lang !== language;
