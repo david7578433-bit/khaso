@@ -74,13 +74,21 @@
 <script>
   let currentTopicId = null;
 
-  async function loadTopics() {
+  async function loadTopics(profile) {
     const { data, error } = await memberClient.from('topics').select('id, title').order('id');
     const list = document.getElementById('topicList');
     list.innerHTML = '';
     if (error || !data || data.length === 0) return;
 
-    data.forEach((topic, index) => {
+    const allowedYear = profile && profile.jewish_year;
+    const visibleTopics = data.filter((topic) => topic.title === 'General (everyone)' || topic.title === allowedYear);
+
+    if (visibleTopics.length === 0) {
+      list.innerHTML = '<p>Waiting for an admin to assign you to a year room.</p>';
+      return;
+    }
+
+    visibleTopics.forEach((topic, index) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.textContent = topic.title;
@@ -236,7 +244,7 @@
     gateCard.hidden = true;
     boardCard.hidden = false;
     photoCard.hidden = false;
-    await loadTopics();
+    await loadTopics(profile);
     await loadPhotos();
   })();
 </script>
