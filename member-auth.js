@@ -28,7 +28,7 @@ window.signOutMember = async function () {
 // a stable fake one from the username. This never needs to be a real inbox.
 window.usernameToAuthEmail = function (username) {
   const clean = (username || '').trim().toLowerCase().replace(/[^a-z0-9_.-]/g, '');
-  return clean + '@khaso-noemail.local';
+  return clean + '@khaso-noemail.com';
 };
 
 window.signUpWithUsername = async function (username, password) {
@@ -44,7 +44,7 @@ window.signInWithUsername = async function (username, password) {
 // True if this signed-in session was created through the username/password
 // option rather than Google (based on the fake email domain we generate above).
 window.isUsernameAccount = function (session) {
-  return !!(session && session.user && session.user.email && session.user.email.endsWith('@khaso-noemail.local'));
+  return !!(session && session.user && session.user.email && session.user.email.endsWith('@khaso-noemail.com'));
 };
 
 // Returns { session, profile }.
