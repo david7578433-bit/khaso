@@ -27,7 +27,6 @@
     font-family: "Assistant", "Segoe UI", Arial, sans-serif;
     background: linear-gradient(160deg, var(--background-a), var(--background-b) 60%, #e7f1f6);
     color: var(--ink);
-    padding-bottom: 100px;
   }
 
   [data-lang][hidden] { display: none !important; }
@@ -38,7 +37,8 @@
 
   .layout {
     display: flex;
-    min-height: 88vh;
+    flex-direction: row-reverse;
+    min-height: 100vh;
   }
 
   .sidebar {
@@ -84,6 +84,31 @@
     flex: 1;
     display: flex;
     flex-direction: column;
+    padding-bottom: 100px;
+  }
+
+  .side-menu {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 100%;
+    margin-top: 22px;
+    padding-top: 18px;
+    border-top: 1px solid rgba(255,255,255,.25);
+  }
+
+  .side-menu a {
+    color: white;
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 600;
+    padding: 10px 8px;
+    border-radius: 8px;
+  }
+
+  .side-menu a:hover,
+  .side-menu a:focus-visible {
+    background: rgba(255,255,255,.14);
   }
 
   .topbar {
@@ -108,11 +133,16 @@
 
   .boxes {
     display: grid;
-    grid-template-columns: 1fr 1fr;
-    column-gap: 100px;
-    row-gap: 52px;
-    max-width: 600px;
+    grid-template-columns: repeat(3, 1fr);
+    column-gap: 40px;
+    row-gap: 40px;
+    max-width: 720px;
     margin: 0 auto;
+  }
+
+  .box.coming-soon {
+    background: linear-gradient(135deg, #96a5ac, #7c8b93 150%);
+    opacity: .85;
   }
 
   .box {
@@ -136,6 +166,10 @@
   .box:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 26px rgba(20, 60, 70, .26);
+  }
+
+  .hero + .hero {
+    margin-top: -10px;
   }
 
   .hero {
@@ -218,7 +252,7 @@
   @media (max-width: 780px) {
     .layout { flex-direction: column; }
     .sidebar { width: 100%; }
-    .boxes { grid-template-columns: repeat(2, 1fr); }
+    .boxes { grid-template-columns: repeat(2, 1fr); max-width: 460px; }
   }
 </style>
 </head>
@@ -233,6 +267,11 @@
       <div class="n1">קאשוי</div>
       <div class="n4">בנשיאות כ"ק מרן אדמו"ר שליט"א</div>
     </div>
+    <nav class="side-menu">
+      <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+      <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+      <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
+    </nav>
     <div class="sidebar-spacer"></div>
     <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
   </aside>
@@ -249,6 +288,9 @@
         <a class="box" href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
         <a class="box" href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
         <a class="box" href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
+        <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
+        <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
+        <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
       </div>
     </div>
     <div class="hero" id="heroBox">
@@ -262,6 +304,10 @@
         <h2 id="announcementTitle"></h2>
         <p id="announcementContent"></p>
       </div>
+    </div>
+    <div class="hero" id="heroBox2" hidden aria-live="polite" dir="auto">
+      <h2 id="announcementTitle2"></h2>
+      <p id="announcementContent2"></p>
     </div>
     <a class="admin-link" href="admin.html">Admin</a>
   </div>
@@ -290,7 +336,7 @@
       .from('announcements')
       .select('title, content, created_at')
       .order('created_at', { ascending: false })
-      .limit(1);
+      .limit(2);
 
     if (error) {
       console.error('Could not load announcement:', error.message);
@@ -302,6 +348,12 @@
       document.getElementById('announcementContent').textContent = data[0].content || '';
       document.getElementById('announcement').hidden = false;
       document.getElementById('welcomeBlock').hidden = true;
+    }
+
+    if (data && data.length > 1) {
+      document.getElementById('announcementTitle2').textContent = data[1].title || '';
+      document.getElementById('announcementContent2').textContent = data[1].content || '';
+      document.getElementById('heroBox2').hidden = false;
     }
   }
 
