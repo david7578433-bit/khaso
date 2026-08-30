@@ -170,10 +170,10 @@
 
   .hero-row {
     display: flex;
-    flex-wrap: wrap;
+    flex-wrap: nowrap;
     justify-content: center;
     align-items: stretch;
-    gap: 32px;
+    gap: 24px;
     max-width: 1040px;
     margin: 44px auto 44px;
   }
@@ -181,6 +181,8 @@
   .hero {
     padding: 52px 40px;
     width: 100%;
+    flex: 1 1 0;
+    min-width: 0;
     max-width: 500px;
     min-height: 260px;
     display: flex;
@@ -269,6 +271,8 @@
     .layout { flex-direction: column; }
     .sidebar { width: 100%; }
     .boxes { grid-template-columns: repeat(2, 1fr); max-width: 460px; }
+    .hero-row { flex-wrap: wrap; }
+    .hero { max-width: 440px; }
   }
 </style>
 </head>
