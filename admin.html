@@ -54,15 +54,24 @@
 
     <section id="editor">
       <div class="admin-actions">
-        <h2>Edit announcement</h2>
+        <h2>Edit Announcements</h2>
         <button id="logoutButton" class="secondary" type="button">Log Out</button>
       </div>
       <form id="announcementForm">
+        <h3>Announcement 1</h3>
         <label for="announcementTitle">Title</label>
         <input type="text" id="announcementTitle" maxlength="200" required>
         <label for="announcementContent">Content</label>
         <textarea id="announcementContent" required></textarea>
-        <button id="saveButton" type="submit">Save Announcement</button>
+
+        <h3>Announcement 2 (optional)</h3>
+        <label for="announcementTitle2">Title</label>
+        <input type="text" id="announcementTitle2" maxlength="200">
+        <label for="announcementContent2">Content</label>
+        <textarea id="announcementContent2"></textarea>
+        <p style="font-size:13px; color:var(--muted); margin-top:6px;">Leave Announcement 2 blank to remove it from the home page.</p>
+
+        <button id="saveButton" type="submit">Save Announcements</button>
       </form>
 
       <h2>Pending Members</h2>
@@ -128,6 +137,7 @@
     const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
     let currentAnnouncementId = null;
+    let currentAnnouncementId2 = null;
 
     const loginForm = document.getElementById('loginForm');
     const editor = document.getElementById('editor');
@@ -143,17 +153,23 @@
         .from('announcements')
         .select('id, title, content, created_at')
         .order('created_at', { ascending: false })
-        .limit(1);
+        .limit(2);
 
       if (error) {
-        setStatus('Could not load the announcement: ' + error.message, true);
+        setStatus('Could not load the announcements: ' + error.message, true);
         return;
       }
 
-      if (data && data.length) {
+      if (data && data.length > 0) {
         currentAnnouncementId = data[0].id;
         document.getElementById('announcementTitle').value = data[0].title || '';
         document.getElementById('announcementContent').value = data[0].content || '';
+      }
+
+      if (data && data.length > 1) {
+        currentAnnouncementId2 = data[1].id;
+        document.getElementById('announcementTitle2').value = data[1].title || '';
+        document.getElementById('announcementContent2').value = data[1].content || '';
       }
     }
 
@@ -686,33 +702,52 @@
     document.getElementById('announcementForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const button = document.getElementById('saveButton');
-      const values = {
-        title: document.getElementById('announcementTitle').value.trim(),
-        content: document.getElementById('announcementContent').value.trim()
-      };
-
       button.disabled = true;
       setStatus('Saving…');
 
-      let result;
+      const values1 = {
+        title: document.getElementById('announcementTitle').value.trim(),
+        content: document.getElementById('announcementContent').value.trim()
+      };
+      const title2 = document.getElementById('announcementTitle2').value.trim();
+      const content2 = document.getElementById('announcementContent2').value.trim();
+
+      let result1;
       if (currentAnnouncementId !== null) {
-        result = await supabaseClient.from('announcements').update(values).eq('id', currentAnnouncementId);
+        result1 = await supabaseClient.from('announcements').update(values1).eq('id', currentAnnouncementId);
       } else {
-        result = await supabaseClient.from('announcements').insert(values).select('id').single();
-        if (!result.error) currentAnnouncementId = result.data.id;
+        result1 = await supabaseClient.from('announcements').insert(values1).select('id').single();
+        if (!result1.error) currentAnnouncementId = result1.data.id;
+      }
+
+      let result2 = { error: null };
+      if (!title2 && !content2) {
+        if (currentAnnouncementId2 !== null) {
+          result2 = await supabaseClient.from('announcements').delete().eq('id', currentAnnouncementId2);
+          if (!result2.error) currentAnnouncementId2 = null;
+        }
+      } else {
+        const values2 = { title: title2, content: content2 };
+        if (currentAnnouncementId2 !== null) {
+          result2 = await supabaseClient.from('announcements').update(values2).eq('id', currentAnnouncementId2);
+        } else {
+          result2 = await supabaseClient.from('announcements').insert(values2).select('id').single();
+          if (!result2.error) currentAnnouncementId2 = result2.data.id;
+        }
       }
 
       button.disabled = false;
-      if (result.error) {
-        setStatus('Could not save: ' + result.error.message, true);
+      if (result1.error || result2.error) {
+        setStatus('Could not save: ' + ((result1.error && result1.error.message) || (result2.error && result2.error.message)), true);
       } else {
-        setStatus('Announcement saved.');
+        setStatus('Announcements saved.');
       }
     });
 
     document.getElementById('logoutButton').addEventListener('click', async () => {
       await supabaseClient.auth.signOut();
       currentAnnouncementId = null;
+      currentAnnouncementId2 = null;
       editor.style.display = 'none';
       loginForm.style.display = 'block';
       loginForm.reset();
