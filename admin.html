@@ -92,6 +92,9 @@
       <h2>Messages to Admin</h2>
       <div id="adminMessagesList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
 
+      <h2>Pending Submissions (News / Simchas)</h2>
+      <div id="submissionsList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
+
       <h2>Add a Picture</h2>
       <form id="galleryUploadForm">
         <label for="galleryCategory">Category</label>
@@ -446,6 +449,89 @@
       });
     }
 
+    async function loadSubmissions() {
+      const list = document.getElementById('submissionsList');
+      list.innerHTML = '<p>Loading…</p>';
+
+      const { data, error } = await supabaseClient
+        .from('submissions')
+        .select('id, category, title, body, submitter_name, submitter_contact, approved, created_at')
+        .eq('approved', false)
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        list.innerHTML = '<p>Could not load submissions: ' + error.message + '</p>';
+        return;
+      }
+
+      list.innerHTML = '';
+      if (!data || data.length === 0) {
+        list.innerHTML = '<p>No pending submissions.</p>';
+        return;
+      }
+
+      data.forEach((sub) => {
+        const card = document.createElement('div');
+        card.style.padding = '12px';
+        card.style.border = '1px solid var(--border)';
+        card.style.borderRadius = '8px';
+
+        const meta = document.createElement('p');
+        meta.style.margin = '0 0 6px';
+        meta.style.fontWeight = '700';
+        meta.textContent = '[' + sub.category + '] ' + sub.title + ' — ' + sub.submitter_name + ' (' + sub.submitter_contact + ')';
+
+        const body = document.createElement('p');
+        body.style.whiteSpace = 'pre-wrap';
+        body.textContent = sub.body;
+
+        const actions = document.createElement('div');
+        actions.className = 'admin-actions';
+
+        const approveButton = document.createElement('button');
+        approveButton.type = 'button';
+        approveButton.textContent = 'Approve & Post';
+        approveButton.addEventListener('click', async () => {
+          approveButton.disabled = true;
+          const { error: updateError } = await supabaseClient
+            .from('submissions')
+            .update({ approved: true })
+            .eq('id', sub.id);
+          if (updateError) {
+            alert('Could not approve: ' + updateError.message);
+            approveButton.disabled = false;
+            return;
+          }
+          loadSubmissions();
+        });
+
+        const rejectButton = document.createElement('button');
+        rejectButton.type = 'button';
+        rejectButton.className = 'secondary';
+        rejectButton.textContent = 'Delete';
+        rejectButton.addEventListener('click', async () => {
+          rejectButton.disabled = true;
+          const { error: deleteError } = await supabaseClient
+            .from('submissions')
+            .delete()
+            .eq('id', sub.id);
+          if (deleteError) {
+            alert('Could not delete: ' + deleteError.message);
+            rejectButton.disabled = false;
+            return;
+          }
+          loadSubmissions();
+        });
+
+        actions.appendChild(approveButton);
+        actions.appendChild(rejectButton);
+        card.appendChild(meta);
+        card.appendChild(body);
+        card.appendChild(actions);
+        list.appendChild(card);
+      });
+    }
+
     const CATEGORY_LABELS = {
       rabbi: 'Rabbi',
       yeshiva_gedola: 'Yeshiva Gedola',
@@ -572,6 +658,7 @@
       await loadAllMembers();
       await loadPendingPhotos();
       await loadAdminMessages();
+      await loadSubmissions();
       await loadGalleryManage();
     }
 
