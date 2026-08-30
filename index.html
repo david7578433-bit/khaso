@@ -168,25 +168,32 @@
     box-shadow: 0 12px 26px rgba(20, 60, 70, .26);
   }
 
-  .hero + .hero {
-    margin-top: -10px;
+  .hero-row {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-items: stretch;
+    gap: 24px;
+    margin: 34px 40px 40px;
   }
 
   .hero {
-    margin: 34px 40px 40px;
     padding: 44px 32px;
+    width: 100%;
     max-width: 440px;
     min-height: 220px;
     display: flex;
     flex-direction: column;
     justify-content: center;
-    margin-left: auto;
-    margin-right: auto;
     background: var(--paper);
     border: 1px solid var(--border);
     border-radius: 16px;
     box-shadow: 0 8px 22px rgba(30, 50, 68, .07);
     text-align: center;
+  }
+
+  .hero[hidden] {
+    display: none;
   }
 
   .hero h2 {
@@ -293,6 +300,7 @@
         <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
       </div>
     </div>
+    <div class="hero-row">
     <div class="hero" id="heroBox">
       <div id="welcomeBlock">
         <h2 data-lang="en">Welcome</h2>
@@ -308,6 +316,7 @@
     <div class="hero" id="heroBox2" hidden aria-live="polite" dir="auto">
       <h2 id="announcementTitle2"></h2>
       <p id="announcementContent2"></p>
+    </div>
     </div>
     <a class="admin-link" href="admin.html">Admin</a>
   </div>
