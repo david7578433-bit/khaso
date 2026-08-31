@@ -71,21 +71,21 @@
   .send-btn { flex-shrink: 0; height: 44px; padding: 0 20px; }
 
   .emoji-panel {
-    display: grid;
-    grid-template-columns: repeat(8, 1fr);
-    gap: 4px;
-    padding: 10px;
+    padding: 0;
     margin-bottom: 10px;
     background: #f7f9fa;
     border: 1px solid var(--border);
     border-radius: 10px;
+    overflow: hidden;
   }
-  .emoji-panel button { background: none; border: 0; font-size: 20px; padding: 6px; border-radius: 8px; cursor: pointer; }
-  .emoji-panel button:hover { background: #e8ecee; }
 
-  .sticker-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-top: 1px solid var(--border); }
-  .sticker-row button { background: none; border: 0; font-size: 26px; padding: 2px 4px; border-radius: 8px; cursor: pointer; }
+  .sticker-row { display: flex; flex-wrap: wrap; gap: 4px; padding: 6px 8px; border-bottom: 1px solid var(--border); }
+  .sticker-row button { background: none; border: 0; font-size: 18px; padding: 3px 5px; border-radius: 6px; cursor: pointer; line-height: 1; }
   .sticker-row button:hover { background: #e8ecee; }
+
+  .emoji-grid { display: grid; grid-template-columns: repeat(8, 1fr); gap: 2px; padding: 6px; }
+  .emoji-grid button { background: none; border: 0; font-size: 16px; padding: 4px; border-radius: 6px; cursor: pointer; line-height: 1; }
+  .emoji-grid button:hover { background: #e8ecee; }
 
   .chat-sticker { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; font-size: 52px; line-height: 1; }
 
@@ -159,8 +159,10 @@
     <h2>Discussion</h2>
     <div class="topic-list" id="topicList"></div>
     <div class="chat-window" id="postList"></div>
-    <div class="sticker-row" id="stickerRow"></div>
-    <div class="emoji-panel" id="emojiPanel" hidden></div>
+    <div class="emoji-panel" id="emojiPanel" hidden>
+      <div class="sticker-row" id="stickerRow"></div>
+      <div class="emoji-grid" id="emojiGrid"></div>
+    </div>
     <div class="staged-attachments" id="stagedAttachments"></div>
     <div class="mention-dropdown" id="mentionDropdownWrap">
       <div class="mention-dropdown-list" id="mentionDropdownList" hidden></div>
@@ -526,6 +528,7 @@
 
   const EMOJIS = ['😀','😂','😊','😍','👍','🙏','🎉','❤️','😢','😮','🔥','👏','🙌','😅','🤔','😉','🥳','👋','✅','❌','🙈','💪','🌟','😴'];
   const emojiPanel = document.getElementById('emojiPanel');
+  const emojiGrid = document.getElementById('emojiGrid');
   EMOJIS.forEach((emoji) => {
     const btn = document.createElement('button');
     btn.type = 'button';
@@ -535,7 +538,7 @@
       field.value += emoji;
       field.focus();
     });
-    emojiPanel.appendChild(btn);
+    emojiGrid.appendChild(btn);
   });
   document.getElementById('emojiToggleBtn').addEventListener('click', () => {
     emojiPanel.hidden = !emojiPanel.hidden;
@@ -550,6 +553,7 @@
     btn.title = 'Send sticker';
     btn.addEventListener('click', () => {
       sendMessage({ text: '', attachments: [], sticker });
+      emojiPanel.hidden = true;
     });
     stickerRow.appendChild(btn);
   });
