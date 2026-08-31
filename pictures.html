@@ -15,6 +15,7 @@
     color: white; font-weight: 700; text-decoration: none; text-align: center;
   }
   @media (max-width: 620px) { .gallery-boxes { grid-template-columns: repeat(2, 1fr); } }
+  .empty-note { color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -38,15 +39,55 @@
   <p data-lang="en">Anyone can view these pictures — no login needed.</p>
   <p data-lang="yi" hidden>יעדער קען זען די בילדער — קיין לאגין ניט נויטיג.</p>
 
-  <div class="gallery-boxes">
-    <a class="gallery-box" href="gallery.html?cat=rabbi">Rabbi</a>
-    <a class="gallery-box" href="gallery.html?cat=yeshiva_gedola">Yeshiva Gedola</a>
-    <a class="gallery-box" href="gallery.html?cat=yeshiva_ktana">Yeshiva Ktana</a>
-    <a class="gallery-box" href="gallery.html?cat=kiryas_joel">Kiryas Joel</a>
-    <a class="gallery-box" href="gallery.html?cat=monsey">Monsey</a>
-    <a class="gallery-box" href="gallery.html?cat=maamodim">מעמדים</a>
+  <div class="gallery-boxes" id="galleryBoxes">
+    <p class="empty-note">Loading albums…</p>
   </div>
 </section></main>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+  const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
+  const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
+  const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+
+  const CATEGORY_LABELS = {
+    rabbi: 'Rabbi',
+    yeshiva_gedola: 'Yeshiva Gedola',
+    yeshiva_ktana: 'Yeshiva Ktana',
+    kiryas_joel: 'Kiryas Joel',
+    monsey: 'Monsey',
+    maamodim: 'מעמדים'
+  };
+
+  async function loadAlbums() {
+    const box = document.getElementById('galleryBoxes');
+    const { data, error } = await supabaseClient.from('gallery_photos').select('category');
+
+    if (error) {
+      box.innerHTML = '<p class="empty-note">Could not load albums: ' + error.message + '</p>';
+      return;
+    }
+
+    const names = new Set();
+    (data || []).forEach((row) => { if (row.category) names.add(row.category); });
+
+    if (names.size === 0) {
+      box.innerHTML = '<p class="empty-note">No pictures yet.</p>';
+      return;
+    }
+
+    box.innerHTML = '';
+    Array.from(names).sort((a, b) => (CATEGORY_LABELS[a] || a).localeCompare(CATEGORY_LABELS[b] || b)).forEach((cat) => {
+      const link = document.createElement('a');
+      link.className = 'gallery-box';
+      link.href = 'gallery.html?cat=' + encodeURIComponent(cat);
+      link.textContent = CATEGORY_LABELS[cat] || cat;
+      box.appendChild(link);
+    });
+  }
+
+  loadAlbums();
+</script>
 <footer>
   <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
