@@ -74,6 +74,17 @@
               flex: 1 1 40%; min-width: 0; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
               font-size: 13px; padding: 8px 6px; }
             #photoEditorOverlay .pe-preset-row button.active { outline: 2px solid #1c9c8a; }
+            @media (max-width: 700px) {
+              #photoEditorOverlay .pe-topbar { padding: 10px 12px; flex-wrap: wrap; gap: 8px; }
+              #photoEditorOverlay .pe-topbar h3 { font-size: 14px; }
+              #photoEditorOverlay .pe-body { flex-direction: column; overflow-y: auto; -webkit-overflow-scrolling: touch; }
+              #photoEditorOverlay .pe-canvas-area { flex: 0 0 auto; padding: 10px; overflow: visible; }
+              #photoEditorOverlay .pe-canvas-wrap canvas { max-width: 90vw; max-height: 42vh; }
+              #photoEditorOverlay .pe-panel { width: 100%; overflow-y: visible; padding: 14px; }
+              #photoEditorOverlay .pe-handle { width: 26px; height: 26px; }
+              #photoEditorOverlay button { padding: 11px 14px; font-size: 15px; }
+              #photoEditorOverlay .pe-preset-row button, #photoEditorOverlay .pe-rotate-row button { padding: 11px 6px; }
+            }
           </style>
           <div class="pe-topbar">
             <h3>Edit Picture</h3>
