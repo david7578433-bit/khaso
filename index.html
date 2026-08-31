@@ -20,7 +20,9 @@
     --box-b: #2c9484;
   }
 
+
   * { box-sizing: border-box; }
+
 
   body {
     margin: 0;
@@ -29,17 +31,21 @@
     color: var(--ink);
   }
 
+
   [data-lang][hidden] { display: none !important; }
+
 
   .hebrew, .name-block, .lang-button {
     font-family: "Frank Ruhl Libre", "Assistant", serif;
   }
+
 
   .layout {
     display: flex;
     flex-direction: row-reverse;
     min-height: 100vh;
   }
+
 
   .sidebar {
     width: 340px;
@@ -53,12 +59,14 @@
     text-align: center;
   }
 
+
   .sidebar img {
     width: 240px;
     height: auto;
     filter: brightness(1.9) contrast(1.05) drop-shadow(0 3px 8px rgba(0,0,0,.25));
     margin-bottom: 14px;
   }
+
 
   .name-block { direction: rtl; display: flex; flex-direction: column; align-items: center; }
   .name-block div { line-height: 1; margin: 0; padding: 0; }
@@ -67,7 +75,9 @@
   .n1 { font-size: 76px; font-weight: 700; margin-top: -20px; }
   .n4 { font-size: 13px; font-weight: 400; opacity: .72; margin-top: 10px; }
 
+
   .sidebar-spacer { flex: 1; min-height: 20px; max-height: 160px; }
+
 
   .lang-button {
     padding: 14px 34px;
@@ -80,6 +90,7 @@
     cursor: pointer;
   }
 
+
   .main {
     flex: 1;
     display: flex;
@@ -87,6 +98,7 @@
     justify-content: center;
     padding-bottom: 64px;
   }
+
 
   .side-menu {
     display: flex;
@@ -98,6 +110,7 @@
     border-top: 1px solid rgba(255,255,255,.25);
   }
 
+
   .side-menu a {
     color: white;
     text-decoration: none;
@@ -107,16 +120,19 @@
     border-radius: 8px;
   }
 
+
   .side-menu a:hover,
   .side-menu a:focus-visible {
     background: rgba(255,255,255,.14);
   }
+
 
   .topbar {
     display: flex;
     justify-content: flex-end;
     padding: 14px 26px 4px;
   }
+
 
   .login-btn {
     padding: 10px 22px;
@@ -128,13 +144,16 @@
     font-size: 14px;
   }
 
+
   .account-menu { position: relative; }
+
 
   .account-toggle {
     border: 0;
     cursor: pointer;
     font-family: inherit;
   }
+
 
   .dropdown-menu {
     position: absolute;
@@ -150,6 +169,7 @@
     z-index: 30;
   }
 
+
   .dropdown-menu button {
     display: block;
     width: 100%;
@@ -164,27 +184,31 @@
     border: 0;
   }
 
+
   .dropdown-menu button:hover {
     background: var(--background-b);
   }
 
+
   .boxes-wrap {
-    padding: 0 60px;
+    padding: 8px 52px 0;
   }
+
 
   .boxes {
     display: grid;
     grid-template-columns: repeat(3, 1fr);
-    column-gap: 30px;
-    row-gap: 28px;
+    gap: 24px;
     max-width: 1040px;
     margin: 0 auto;
   }
+
 
   .box.coming-soon {
     background: linear-gradient(135deg, #96a5ac, #7c8b93 150%);
     opacity: .85;
   }
+
 
   .box {
     border: 0;
@@ -194,7 +218,7 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    min-height: 130px;
+    min-height: 124px;
     font-size: 22px;
     font-weight: 700;
     color: white;
@@ -204,10 +228,12 @@
     transition: transform .12s, box-shadow .12s;
   }
 
+
   .box:hover {
     transform: translateY(-2px);
     box-shadow: 0 12px 26px rgba(20, 60, 70, .26);
   }
+
 
   .hero-row {
     display: flex;
@@ -215,16 +241,18 @@
     justify-content: center;
     align-items: stretch;
     gap: 26px;
+    width: calc(100% - 104px);
     max-width: 1040px;
     margin: 30px auto 0;
   }
+
 
   .hero {
     padding: 34px 32px;
     width: 100%;
     flex: 1 1 0;
     min-width: 0;
-    max-width: 500px;
+    max-width: none;
     min-height: 195px;
     display: flex;
     flex-direction: column;
@@ -238,14 +266,17 @@
     transition: transform .12s, box-shadow .12s;
   }
 
+
   .hero:hover {
     transform: translateY(-2px);
     box-shadow: 0 14px 32px rgba(30, 50, 68, .18);
   }
 
+
   .hero[hidden] {
     display: none;
   }
+
 
   .hero h2 {
     margin: 0 0 10px;
@@ -253,12 +284,14 @@
     color: var(--navy-deep);
   }
 
+
   .hero p {
     margin: 0;
     color: var(--ink);
     font-size: 16px;
     line-height: 1.45;
   }
+
 
   footer {
     position: fixed;
@@ -278,13 +311,16 @@
     box-shadow: 0 -2px 8px rgba(0,0,0,.15);
   }
 
+
   footer a {
     color: rgba(255,255,255,.85);
     text-decoration: none;
     font-weight: 600;
   }
 
+
   footer a:hover { color: white; text-decoration: underline; }
+
 
   footer .lang-button {
     background: none;
@@ -297,7 +333,9 @@
     font-weight: 600;
   }
 
+
   footer .lang-button:hover { color: white; text-decoration: underline; }
+
 
   .admin-link {
     display: block;
@@ -307,6 +345,7 @@
     font-size: 12px;
     text-decoration: none;
   }
+
 
   @media (max-width: 780px) {
     .layout { flex-direction: column; }
@@ -318,6 +357,7 @@
 </style>
 </head>
 <body>
+
 
 <div class="layout">
   <aside class="sidebar">
@@ -336,6 +376,7 @@
     <div class="sidebar-spacer"></div>
     <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
   </aside>
+
 
   <div class="main">
     <div class="topbar">
@@ -378,9 +419,9 @@
       <p id="announcementContent2"></p>
     </div>
     </div>
-    <a class="admin-link" href="admin.html">Admin</a>
   </div>
 </div>
+
 
 <footer>
   <a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
@@ -388,13 +429,15 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגענג</span></a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
-  <a href="news.html">News</a>
-  <a href="simchas.html">Simchas</a>
-  <a href="editorial.html">Editorial</a>
+  <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+  <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
+  <a href="admin.html"><span data-lang="en">Admin</span><span data-lang="yi" hidden>אדמין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
+
 
 <script src="site.js" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
@@ -403,6 +446,7 @@
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
   const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+
   async function loadAnnouncement() {
     const { data, error } = await supabaseClient
       .from('announcements')
@@ -410,10 +454,12 @@
       .order('created_at', { ascending: false })
       .limit(2);
 
+
     if (error) {
       console.error('Could not load announcement:', error.message);
       return;
     }
+
 
     if (data && data.length > 0) {
       document.getElementById('announcementTitle').textContent = data[0].title || '';
@@ -422,6 +468,7 @@
       document.getElementById('welcomeBlock').hidden = true;
     }
 
+
     if (data && data.length > 1) {
       document.getElementById('announcementTitle2').textContent = data[1].title || '';
       document.getElementById('announcementContent2').textContent = data[1].content || '';
@@ -429,7 +476,9 @@
     }
   }
 
+
   loadAnnouncement();
+
 
   (async () => {
     const { data: { session } } = await supabaseClient.auth.getSession();
@@ -437,20 +486,24 @@
     const accountToggle = document.getElementById('accountToggle');
     const dropdownMenu = document.getElementById('dropdownMenu');
 
+
     if (session) {
       loginLink.hidden = true;
       accountToggle.hidden = false;
+
 
       accountToggle.addEventListener('click', (event) => {
         event.stopPropagation();
         dropdownMenu.hidden = !dropdownMenu.hidden;
       });
 
+
       document.addEventListener('click', (event) => {
         if (!document.getElementById('accountMenu').contains(event.target)) {
           dropdownMenu.hidden = true;
         }
       });
+
 
       document.getElementById('signOutBtn').addEventListener('click', async () => {
         await supabaseClient.auth.signOut();
