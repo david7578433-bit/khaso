@@ -6,10 +6,84 @@
   <title>Admin | ברכת שמים קאשוי</title>
   <link rel="stylesheet" href="style.css">
   <style>
-    .admin-card { max-width: 560px; text-align: left; }
+    main { padding-left:24px; padding-right:24px; }
+    .admin-card {
+      width:min(1760px,100%);
+      max-width:none;
+      padding:22px;
+      text-align:left;
+    }
     .admin-card h2 { text-align: center; }
+    #loginForm { max-width:480px; margin:0 auto; }
     .home-link { margin-top: 16px; }
     #editor { display: none; }
+    #editor.is-visible {
+      display:grid;
+      grid-template-columns:230px minmax(0,1fr);
+      gap:18px 22px;
+      align-items:start;
+    }
+    #editor > .admin-actions { grid-column:1 / -1; }
+    .admin-quicknav {
+      grid-column:1;
+      position:sticky;
+      top:14px;
+      display:flex;
+      flex-direction:column;
+      flex-wrap:nowrap;
+      gap:5px;
+      max-height:calc(100vh - 28px);
+      overflow-y:auto;
+      margin:0;
+      padding:12px;
+      border-radius:12px;
+    }
+    .admin-quicknav a {
+      display:block;
+      border-radius:7px;
+      padding:8px 10px;
+    }
+    .admin-nav-label {
+      margin:10px 8px 2px;
+      color:var(--muted);
+      font-size:11px;
+      font-weight:800;
+      letter-spacing:.08em;
+      text-transform:uppercase;
+    }
+    .admin-nav-label:first-child { margin-top:2px; }
+    .admin-content {
+      grid-column:2;
+      min-width:0;
+      display:grid;
+      grid-template-columns:repeat(2,minmax(0,1fr));
+      gap:16px;
+      align-items:start;
+    }
+    .admin-content .section-item {
+      min-width:0;
+      margin:0;
+      padding:18px;
+      background:#fff;
+      border:1px solid var(--border);
+      border-radius:12px;
+      box-shadow:0 4px 14px rgba(30,50,68,.05);
+      scroll-margin-top:16px;
+    }
+    .admin-content .section-item h2 { text-align:left; font-size:21px; }
+    #section-dashboard,
+    #section-community-tools,
+    #section-announcements,
+    #section-all-members,
+    #section-photos,
+    #section-messages,
+    #section-submissions,
+    #section-manage-pictures { grid-column:1 / -1; }
+    .admin-content input,
+    .admin-content select,
+    .admin-content textarea { padding:9px 10px; margin-bottom:8px; }
+    .admin-content textarea { min-height:90px; }
+    .admin-content button { padding:9px 13px; }
     #pendingList { list-style: none; padding: 0; margin: 10px 0 0; }
     #pendingList li {
       display: flex;
@@ -42,7 +116,24 @@
     .admin-list-actions { display:flex; gap:7px; flex-wrap:wrap; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .form-grid .wide { grid-column:1 / -1; }
-    @media (max-width:600px) { .form-grid { grid-template-columns:1fr; } .form-grid .wide { grid-column:auto; } }
+    @media (max-width:900px) {
+      main { padding-left:12px; padding-right:12px; }
+      .admin-card { padding:14px; }
+      #editor.is-visible { display:block; }
+      .admin-quicknav {
+        position:static;
+        max-height:none;
+        display:flex;
+        flex-direction:row;
+        flex-wrap:wrap;
+        margin:12px 0;
+      }
+      .admin-nav-label { width:100%; }
+      .admin-content { display:block; }
+      .admin-content .section-item { margin-top:14px; }
+      .form-grid { grid-template-columns:1fr; }
+      .form-grid .wide { grid-column:auto; }
+    }
   </style>
 </head>
 <body>
@@ -67,23 +158,29 @@
         <button id="logoutButton" class="secondary" type="button">Log Out</button>
       </div>
       <nav class="admin-quicknav" aria-label="Admin sections">
+        <span class="admin-nav-label">Overview</span>
         <a href="#section-dashboard">Dashboard</a>
         <a href="#section-site-settings">Testing Mode</a>
+        <span class="admin-nav-label">Community</span>
         <a href="#section-events">Events</a>
         <a href="#section-yahrzeits">Yahrzeits</a>
         <a href="#section-community-tools">Community Tools</a>
+        <a href="#section-announcements">Announcements</a>
+        <span class="admin-nav-label">People</span>
+        <a href="#section-pending-members">Pending Members</a>
+        <a href="#section-all-members">All Members</a>
+        <span class="admin-nav-label">Moderation</span>
         <a href="#section-suggestions">Suggestions</a>
         <a href="#section-reports">Reports</a>
         <a href="#section-activity">Activity</a>
-        <a href="#section-announcements">Announcements</a>
-        <a href="#section-pending-members">Pending Members</a>
-        <a href="#section-all-members">All Members</a>
         <a href="#section-photos">Photos</a>
         <a href="#section-messages">Messages</a>
         <a href="#section-submissions">Submissions</a>
+        <span class="admin-nav-label">Gallery</span>
         <a href="#section-add-picture">Add Picture</a>
         <a href="#section-manage-pictures">Manage Pictures</a>
       </nav>
+      <div class="admin-content">
       <div class="section-item" id="section-dashboard">
         <h2>Dashboard</h2>
         <div class="stats-grid" id="dashboardStats"><p>Loading…</p></div>
@@ -245,6 +342,7 @@
       <div class="section-item" id="section-manage-pictures">
       <h2>Manage Pictures</h2>
       <div id="galleryList"></div>
+      </div>
       </div>
     </section>
 
@@ -1076,7 +1174,7 @@
 
     async function showEditor() {
       loginForm.style.display = 'none';
-      editor.style.display = 'block';
+      editor.classList.add('is-visible');
       await loadAnnouncementIntoForm();
       await loadPendingMembers();
       await loadAllMembers();
@@ -1162,7 +1260,7 @@
       await supabaseClient.auth.signOut();
       currentAnnouncementId = null;
       currentAnnouncementId2 = null;
-      editor.style.display = 'none';
+      editor.classList.remove('is-visible');
       loginForm.style.display = 'block';
       loginForm.reset();
       setStatus('Logged out.');
