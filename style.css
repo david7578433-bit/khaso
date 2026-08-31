@@ -1,3 +1,5 @@
+@import url('https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;800&family=Assistant:wght@400;600;700;800&display=swap');
+
 :root {
   --navy: #2c4358;
   --navy-deep: #203447;
@@ -17,14 +19,18 @@ html { scroll-behavior: smooth; }
 
 body {
   margin: 0;
-  font-family: "Segoe UI", Arial, sans-serif;
-  background: linear-gradient(180deg, #eef2f5 0%, #f7f9fa 100%);
+  font-family: "Assistant", "Segoe UI", Arial, sans-serif;
+  background: linear-gradient(160deg, #fdf6ec, #eaf3f0 60%, #e7f1f6);
   color: var(--ink);
   line-height: 1.6;
 }
 
+h1, h2, h3, .hebrew, .lang-button {
+  font-family: "Frank Ruhl Libre", "Assistant", "Segoe UI", serif;
+}
+
 header {
-  background: linear-gradient(135deg, var(--navy-deep), var(--navy));
+  background: linear-gradient(135deg, var(--navy-deep), var(--navy) 65%, var(--accent-dark) 145%);
   color: white;
   padding: 32px 20px 38px;
   text-align: center;
@@ -80,13 +86,20 @@ button,
   display: inline-block;
   padding: 9px 16px;
   border: 0;
-  border-radius: 6px;
+  border-radius: 8px;
   background: var(--accent);
   color: white;
   font: inherit;
   font-weight: 700;
   text-decoration: none;
   cursor: pointer;
+  transition: background .12s ease, transform .12s ease;
+}
+
+.lang-button:active,
+button:active,
+.button:active {
+  transform: translateY(1px);
 }
 
 .lang-button:hover,
@@ -101,9 +114,10 @@ main { padding: 44px 18px 130px; }
   padding: clamp(25px, 5vw, 42px);
   background: var(--paper);
   border: 1px solid rgba(220, 228, 234, .75);
-  border-radius: 12px;
+  border-radius: 16px;
   box-shadow: 0 8px 24px rgba(30, 50, 68, .07);
   text-align: center;
+  transition: transform .15s ease, box-shadow .15s ease;
 }
 
 .card + .card { margin-top: 30px; }
@@ -156,6 +170,12 @@ a { color: #087d6c; }
   color: var(--ink);
   font-weight: 700;
   text-decoration: none;
+  transition: transform .12s ease, box-shadow .12s ease, background .12s ease;
+}
+
+.branch:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 18px rgba(20, 60, 70, .18);
 }
 
 .branch:hover,
