@@ -7,11 +7,42 @@
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
 <style>
-  .auth-toggle { margin-top: 14px; }
+  .auth-card { max-width: 480px; }
   .city-other { margin-top: 6px; }
-  #pfEmailWrap label[for="pfEmail"] { display: inline; }
+  #pfEmailWrap label[for="pfEmail"], #caEmailWrap label[for="caEmail"] { display: inline; }
   .checkbox-row { display: flex; align-items: center; gap: 8px; font-weight: 400; margin-top: 10px; text-align: left; }
   .checkbox-row input { width: auto; margin: 0; }
+
+  .google-btn {
+    display: flex; align-items: center; justify-content: center; gap: 10px;
+    width: 100%; background: #fff; color: #3c4043; border: 1px solid #dadce0;
+    border-radius: 8px; padding: 12px 16px; font-weight: 600; font-size: 15px;
+  }
+  .google-btn:hover { background: #f7f8f8; }
+
+  .divider { display: flex; align-items: center; gap: 12px; margin: 20px 0; color: var(--muted); font-size: 13px; }
+  .divider::before, .divider::after { content: ""; flex: 1; height: 1px; background: var(--border); }
+
+  .step-indicator { display: flex; justify-content: center; gap: 8px; margin-bottom: 22px; }
+  .step-dot { width: 9px; height: 9px; border-radius: 50%; background: var(--border); }
+  .step-dot.active { background: var(--accent); }
+
+  .link-row { margin-top: 20px; font-size: 14px; }
+  .link-row button.link {
+    background: none; border: 0; color: var(--accent-dark); font-weight: 700;
+    cursor: pointer; padding: 0; text-decoration: underline; font-size: 14px; font-family: inherit;
+  }
+
+  .field-row { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+  @media (max-width: 520px) { .field-row { grid-template-columns: 1fr; } }
+
+  .notice-box {
+    background: #fff8df; border: 1px solid #f1df9c; border-radius: 8px;
+    padding: 14px 16px; margin-bottom: 18px; font-size: 14px; text-align: left;
+  }
+
+  h2.form-title { margin-top: 0; }
+  p.form-sub { color: var(--muted); margin-top: -8px; }
 </style>
 </head>
 <body>
@@ -26,7 +57,7 @@
   <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
-  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ٙשיבה</span></a>
+  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
   <a href="login.html" aria-current="page"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
@@ -34,44 +65,126 @@
 </nav>
 
 <main>
-  <section class="card" id="signedOutCard">
-    <div id="googleView">
-      <p>Sign in to take part in member discussions and share pictures.</p>
-      <button type="button" onclick="signInWithGoogle('login.html')">Sign in with Google</button>
-      <p class="auth-toggle"><button type="button" class="secondary" onclick="showUsernameOptions()">I don't have an email</button></p>
-    </div>
 
-    <div id="usernameView" hidden>
-      <div id="usernameSignInBox">
-        <h2>Log In</h2>
-        <label for="unameLoginUser">Username</label>
-        <input id="unameLoginUser" autocomplete="username">
-        <label for="unameLoginPass">Password</label>
-        <input id="unameLoginPass" type="password" autocomplete="current-password">
-        <button type="button" onclick="doUsernameLogin()">Log In</button>
-        <p class="auth-toggle"><button type="button" class="secondary" onclick="toggleUsernameMode()">New here? Create a username</button></p>
-      </div>
-      <div id="usernameSignUpBox" hidden>
-        <h2>Create Account</h2>
-        <label for="unameSignupUser">Choose a username</label>
-        <input id="unameSignupUser" autocomplete="username">
-        <label for="unameSignupPass">Choose a password</label>
-        <input id="unameSignupPass" type="password" autocomplete="new-password">
-        <label for="unameSignupPass2">Confirm password</label>
-        <input id="unameSignupPass2" type="password" autocomplete="new-password">
-        <button type="button" onclick="doUsernameSignup()">Create Account</button>
-        <p class="auth-toggle"><button type="button" class="secondary" onclick="toggleUsernameMode()">Already have a username? Log in</button></p>
-      </div>
-      <p class="auth-toggle"><button type="button" class="secondary" onclick="hideUsernameOptions()">Back to Google sign-in</button></p>
+  <!-- LOG IN (existing accounts) -->
+  <section class="card auth-card" id="logInCard">
+    <h2 class="form-title">Log In</h2>
+    <p class="form-sub">Already have an account? Sign in below.</p>
+
+    <button type="button" class="google-btn" onclick="startGoogleLogin()">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/>
+        <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/>
+      </svg>
+      Sign in with Google
+    </button>
+
+    <p class="link-row"><button type="button" class="link" onclick="showUsernameLogin()">I don't have an email</button></p>
+
+    <div id="usernameLoginBox" hidden>
+      <div class="divider">or</div>
+      <label for="unameLoginUser">Username</label>
+      <input id="unameLoginUser" autocomplete="username">
+      <label for="unameLoginPass">Password</label>
+      <input id="unameLoginPass" type="password" autocomplete="current-password">
+      <button type="button" onclick="doUsernameLogin()">Log In</button>
     </div>
 
     <p id="authStatus" role="status" aria-live="polite"></p>
+
+    <p class="link-row">New here? <button type="button" class="link" onclick="goToCreateAccount()">Create Account</button></p>
   </section>
 
-  <section class="card" id="profileFormCard" hidden>
-    <h2>Complete Your Profile</h2>
-    <p>We need a few details before you can join the discussions.</p>
-    <form id="profileForm">
+  <!-- CREATE ACCOUNT: STEP 1 -->
+  <section class="card auth-card" id="caStep1Card" hidden>
+    <div class="step-indicator"><span class="step-dot active"></span><span class="step-dot"></span></div>
+    <h2 class="form-title">Create Account</h2>
+    <p class="form-sub">Tell us a bit about yourself.</p>
+
+    <form id="caStep1Form">
+      <label for="caFirstName">First Name *</label>
+      <input id="caFirstName" required>
+
+      <label for="caLastName">Last Name *</label>
+      <input id="caLastName" required>
+
+      <label for="caPhone">Phone Number *</label>
+      <input id="caPhone" type="tel" required>
+
+      <label for="caYear">What year did you leave yeshiva/school? *</label>
+      <select id="caYear" required></select>
+
+      <div id="caEmailWrap">
+        <label for="caEmail">Email <span id="caEmailStar">*</span></label>
+        <input id="caEmail" type="email">
+        <div class="checkbox-row">
+          <input type="checkbox" id="caNoEmail">
+          <label for="caNoEmail" style="margin:0; font-weight:400;">I don't have an email</label>
+        </div>
+      </div>
+
+      <label for="caCity">City *</label>
+      <select id="caCity" required>
+        <option value="">Choose…</option>
+        <option value="Williamsburg">Williamsburg</option>
+        <option value="Boro Park">Boro Park</option>
+        <option value="Monsey">Monsey</option>
+        <option value="Kiryas Joel">Kiryas Joel</option>
+        <option value="other">Someplace else</option>
+      </select>
+      <div id="caCityOtherWrap" class="city-other" hidden>
+        <label for="caCityOther">Please type your city *</label>
+        <input id="caCityOther">
+      </div>
+
+      <button type="submit">Next</button>
+    </form>
+    <p id="caStep1Status" role="status" aria-live="polite"></p>
+
+    <p class="link-row">Already have an account? <button type="button" class="link" onclick="goToLogIn()">Log In</button></p>
+  </section>
+
+  <!-- CREATE ACCOUNT: STEP 2 -->
+  <section class="card auth-card" id="caStep2Card" hidden>
+    <div class="step-indicator"><span class="step-dot"></span><span class="step-dot active"></span></div>
+    <h2 class="form-title">Choose How You'll Sign In</h2>
+    <p class="form-sub">Last step — pick a way to access your account.</p>
+
+    <button type="button" class="google-btn" onclick="finishWithGoogle()">
+      <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
+        <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/>
+        <path fill="#34A853" d="M9 18c2.43 0 4.47-.8 5.96-2.18l-2.9-2.26c-.8.54-1.84.86-3.06.86-2.35 0-4.34-1.59-5.05-3.72H.98v2.33A9 9 0 0 0 9 18z"/>
+        <path fill="#FBBC05" d="M3.95 10.7A5.4 5.4 0 0 1 3.67 9c0-.59.1-1.16.28-1.7V4.97H.98A9 9 0 0 0 0 9c0 1.45.35 2.83.98 4.03l2.97-2.33z"/>
+        <path fill="#EA4335" d="M9 3.58c1.32 0 2.51.46 3.44 1.35l2.58-2.58C13.46.89 11.43 0 9 0A9 9 0 0 0 .98 4.97l2.97 2.33C4.66 5.17 6.65 3.58 9 3.58z"/>
+      </svg>
+      Sign in with Google
+    </button>
+
+    <div class="divider">or</div>
+
+    <label for="caUsername">Choose a username</label>
+    <input id="caUsername" autocomplete="username">
+    <label for="caPassword">Choose a password</label>
+    <input id="caPassword" type="password" autocomplete="new-password">
+    <label for="caPassword2">Confirm password</label>
+    <input id="caPassword2" type="password" autocomplete="new-password">
+    <button type="button" onclick="finishWithUsername()">Create Account</button>
+
+    <p id="caStep2Status" role="status" aria-live="polite"></p>
+
+    <p class="link-row"><button type="button" class="link" onclick="backToStep1()">&larr; Back</button></p>
+  </section>
+
+  <!-- FINISH SETTING UP (signed in, but profile incomplete and no pending signup data) -->
+  <section class="card auth-card" id="finishProfileCard" hidden>
+    <h2 class="form-title">Almost Done</h2>
+    <div id="noAccountNotice" class="notice-box">
+      Signing in with Google alone isn't enough to access the site — please fill in your details below so we can set up your account.
+    </div>
+    <p class="form-sub">We need a few more details before you can continue.</p>
+    <form id="finishProfileForm">
       <label for="pfFirstName">First Name *</label>
       <input id="pfFirstName" required>
 
@@ -80,6 +193,9 @@
 
       <label for="pfPhone">Phone Number *</label>
       <input id="pfPhone" type="tel" required>
+
+      <label for="pfYear">What year did you leave yeshiva/school? *</label>
+      <select id="pfYear" required></select>
 
       <div id="pfEmailWrap">
         <label for="pfEmail">Email <span id="pfEmailStar">*</span></label>
@@ -95,6 +211,7 @@
         <option value="">Choose…</option>
         <option value="Williamsburg">Williamsburg</option>
         <option value="Boro Park">Boro Park</option>
+        <option value="Monsey">Monsey</option>
         <option value="Kiryas Joel">Kiryas Joel</option>
         <option value="other">Someplace else</option>
       </select>
@@ -121,21 +238,51 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
 <script>
-  function showUsernameOptions() {
-    document.getElementById('googleView').hidden = true;
-    document.getElementById('usernameView').hidden = false;
+  const YEAR_OPTIONS = [
+    'תשס"ה (5765)','תשס"ו (5766)','תשס"ז (5767)','תשס"ח (5768)','תשס"ט (5769)',
+    'תש"ע (5770)','תשע"א (5771)','תשע"ב (5772)','תשע"ג (5773)','תשע"ד (5774)',
+    'תשע"ה (5775)','תשע"ו (5776)','תשע"ז (5777)','תשע"ח (5778)','תשע"ט (5779)',
+    'תש"פ (5780)','תשפ"א (5781)','תשפ"ב (5782)','תשפ"ג (5783)','תשפ"ד (5784)',
+    'תשפ"ה (5785)','תשפ"ו (5786)','תשפ"ז (5787)','תשפ"ח (5788)','תשפ"ט (5789)',
+    'תש"צ (5790)'
+  ];
+
+  function fillYearSelect(select) {
+    select.innerHTML = '';
+    const dontKnow = document.createElement('option');
+    dontKnow.value = '';
+    dontKnow.textContent = "I don't know";
+    dontKnow.selected = true;
+    select.appendChild(dontKnow);
+    YEAR_OPTIONS.forEach((year) => {
+      const option = document.createElement('option');
+      option.value = year;
+      option.textContent = year;
+      select.appendChild(option);
+    });
+  }
+  fillYearSelect(document.getElementById('caYear'));
+  fillYearSelect(document.getElementById('pfYear'));
+
+  const PENDING_KEY = 'khaso_pending_signup';
+
+  function showCard(id) {
+    ['logInCard', 'caStep1Card', 'caStep2Card', 'finishProfileCard', 'pendingView', 'approvedView'].forEach((cardId) => {
+      document.getElementById(cardId).hidden = cardId !== id;
+    });
   }
 
-  function hideUsernameOptions() {
-    document.getElementById('googleView').hidden = false;
-    document.getElementById('usernameView').hidden = true;
+  function goToCreateAccount() { showCard('caStep1Card'); }
+  function goToLogIn() { showCard('logInCard'); }
+  function backToStep1() { showCard('caStep1Card'); }
+
+  function showUsernameLogin() {
+    document.getElementById('usernameLoginBox').hidden = false;
   }
 
-  function toggleUsernameMode() {
-    const signIn = document.getElementById('usernameSignInBox');
-    const signUp = document.getElementById('usernameSignUpBox');
-    signIn.hidden = !signIn.hidden;
-    signUp.hidden = !signUp.hidden;
+  async function startGoogleLogin() {
+    sessionStorage.removeItem(PENDING_KEY);
+    await signInWithGoogle('login.html');
   }
 
   async function doUsernameLogin() {
@@ -153,11 +300,76 @@
     window.location.reload();
   }
 
-  async function doUsernameSignup() {
-    const statusEl = document.getElementById('authStatus');
-    const username = document.getElementById('unameSignupUser').value.trim();
-    const password = document.getElementById('unameSignupPass').value;
-    const password2 = document.getElementById('unameSignupPass2').value;
+  document.getElementById('caCity').addEventListener('change', (event) => {
+    document.getElementById('caCityOtherWrap').hidden = event.target.value !== 'other';
+  });
+  document.getElementById('caNoEmail').addEventListener('change', (event) => {
+    const emailInput = document.getElementById('caEmail');
+    const star = document.getElementById('caEmailStar');
+    emailInput.disabled = event.target.checked;
+    if (event.target.checked) emailInput.value = '';
+    star.hidden = event.target.checked;
+  });
+
+  document.getElementById('caStep1Form').addEventListener('submit', (event) => {
+    event.preventDefault();
+    const statusEl = document.getElementById('caStep1Status');
+    const firstName = document.getElementById('caFirstName').value.trim();
+    const lastName = document.getElementById('caLastName').value.trim();
+    const phone = document.getElementById('caPhone').value.trim();
+    const year = document.getElementById('caYear').value;
+    const noEmail = document.getElementById('caNoEmail').checked;
+    const email = document.getElementById('caEmail').value.trim();
+    const cityChoice = document.getElementById('caCity').value;
+    const cityOther = document.getElementById('caCityOther').value.trim();
+    const finalCity = cityChoice === 'other' ? cityOther : cityChoice;
+
+    if (!firstName || !lastName || !phone || !finalCity) {
+      statusEl.textContent = 'Please fill in all required fields.';
+      return;
+    }
+    if (!noEmail && !email) {
+      statusEl.textContent = "Please enter an email, or check \"I don't have an email\".";
+      return;
+    }
+
+    const pending = {
+      first_name: firstName,
+      last_name: lastName,
+      phone_number: phone,
+      jewish_year: year || null,
+      city: finalCity
+    };
+    if (!noEmail) pending.email = email;
+
+    sessionStorage.setItem(PENDING_KEY, JSON.stringify(pending));
+    document.getElementById('caStep1Status').textContent = '';
+    showCard('caStep2Card');
+  });
+
+  async function finishWithGoogle() {
+    const statusEl = document.getElementById('caStep2Status');
+    if (!sessionStorage.getItem(PENDING_KEY)) {
+      statusEl.textContent = 'Please fill in your details first.';
+      showCard('caStep1Card');
+      return;
+    }
+    await signInWithGoogle('login.html');
+  }
+
+  async function finishWithUsername() {
+    const statusEl = document.getElementById('caStep2Status');
+    const pendingRaw = sessionStorage.getItem(PENDING_KEY);
+    if (!pendingRaw) {
+      statusEl.textContent = 'Please fill in your details first.';
+      showCard('caStep1Card');
+      return;
+    }
+    const pending = JSON.parse(pendingRaw);
+
+    const username = document.getElementById('caUsername').value.trim();
+    const password = document.getElementById('caPassword').value;
+    const password2 = document.getElementById('caPassword2').value;
 
     if (!username || username.length < 3) { statusEl.textContent = 'Choose a username with at least 3 characters.'; return; }
     if (!password || password.length < 6) { statusEl.textContent = 'Choose a password with at least 6 characters.'; return; }
@@ -171,30 +383,24 @@
     }
 
     if (!data.session) {
-      // Project has email confirmation turned on — this fake address can never
-      // receive that email, so sign-in will fail until an admin fixes the
-      // Supabase setting (see profiles-extend.sql).
       statusEl.textContent = "Account created, but couldn't sign you in automatically. Please tell the admin — sign-in confirmation may need to be turned off.";
       return;
     }
 
-    const { error: profileError } = await memberClient
-      .from('profiles')
-      .update({ username })
-      .eq('id', data.session.user.id);
-
+    const payload = Object.assign({ username }, pending);
+    const { error: profileError } = await memberClient.from('profiles').update(payload).eq('id', data.session.user.id);
     if (profileError) {
       statusEl.textContent = 'Account created, but that username may already be taken: ' + profileError.message;
       return;
     }
 
+    sessionStorage.removeItem(PENDING_KEY);
     window.location.reload();
   }
 
   document.getElementById('pfCity').addEventListener('change', (event) => {
     document.getElementById('pfCityOtherWrap').hidden = event.target.value !== 'other';
   });
-
   document.getElementById('pfNoEmail').addEventListener('change', (event) => {
     const emailInput = document.getElementById('pfEmail');
     const star = document.getElementById('pfEmailStar');
@@ -203,7 +409,7 @@
     star.hidden = event.target.checked;
   });
 
-  document.getElementById('profileForm').addEventListener('submit', async (event) => {
+  document.getElementById('finishProfileForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const statusEl = document.getElementById('profileStatus');
     const { data: { session } } = await memberClient.auth.getSession();
@@ -212,6 +418,7 @@
     const firstName = document.getElementById('pfFirstName').value.trim();
     const lastName = document.getElementById('pfLastName').value.trim();
     const phone = document.getElementById('pfPhone').value.trim();
+    const year = document.getElementById('pfYear').value;
     const noEmail = document.getElementById('pfNoEmail').checked;
     const emailInput = document.getElementById('pfEmail').value.trim();
     const usingGoogle = !isUsernameAccount(session);
@@ -232,6 +439,7 @@
       first_name: firstName,
       last_name: lastName,
       phone_number: phone,
+      jewish_year: year || null,
       city: finalCity
     };
     if (usingGoogle) {
@@ -252,29 +460,47 @@
 
   (async () => {
     const statusEl = document.getElementById('authStatus');
-    statusEl.textContent = 'Checking sign-in status…';
-
     const { session, profile } = await getMemberStatus();
 
-    document.getElementById('signedOutCard').hidden = !!session;
-    statusEl.textContent = '';
-
-    if (!session) return;
-
-    if (!isProfileComplete(profile)) {
-      document.getElementById('profileFormCard').hidden = false;
-      const usingGoogle = !isUsernameAccount(session);
-      document.getElementById('pfEmailWrap').hidden = usingGoogle;
-      if (profile) {
-        document.getElementById('pfFirstName').value = profile.first_name || '';
-        document.getElementById('pfLastName').value = profile.last_name || '';
-        document.getElementById('pfPhone').value = profile.phone_number || '';
-      }
+    if (!session) {
+      showCard('logInCard');
       return;
     }
 
-    document.getElementById('pendingView').hidden = !!(profile && profile.approved);
-    document.getElementById('approvedView').hidden = !(profile && profile.approved);
+    const pendingRaw = sessionStorage.getItem(PENDING_KEY);
+
+    if (pendingRaw && !isProfileComplete(profile)) {
+      // Returning from the Google leg of Create Account, step 2.
+      const pending = JSON.parse(pendingRaw);
+      const payload = Object.assign({}, pending);
+      if (!payload.email) payload.email = session.user.email;
+      const { error } = await memberClient.from('profiles').update(payload).eq('id', session.user.id);
+      sessionStorage.removeItem(PENDING_KEY);
+      if (error) {
+        showCard('finishProfileCard');
+        document.getElementById('profileStatus').textContent = 'Could not save your details: ' + error.message + ' Please fill this in again.';
+        return;
+      }
+      window.location.reload();
+      return;
+    }
+
+    if (isProfileComplete(profile)) {
+      showCard(profile && profile.approved ? 'approvedView' : 'pendingView');
+      return;
+    }
+
+    // Signed in (usually via Google from the Log In screen) but no completed
+    // account exists yet — ask for the same details Create Account would.
+    showCard('finishProfileCard');
+    document.getElementById('noAccountNotice').hidden = false;
+    const usingGoogle = !isUsernameAccount(session);
+    document.getElementById('pfEmailWrap').hidden = usingGoogle;
+    if (profile) {
+      document.getElementById('pfFirstName').value = profile.first_name || '';
+      document.getElementById('pfLastName').value = profile.last_name || '';
+      document.getElementById('pfPhone').value = profile.phone_number || '';
+    }
   })();
 </script>
 </main>
