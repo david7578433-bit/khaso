@@ -89,6 +89,7 @@
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Username</th>
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Year Room</th>
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Approved</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Remove</th>
           </tr>
         </thead>
         <tbody id="membersTableBody"></tbody>
@@ -227,6 +228,26 @@
         });
         item.appendChild(approveButton);
 
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', async () => {
+          const name = member.display_name || member.email || 'this signup';
+          if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
+          removeButton.disabled = true;
+          const { error: removeError } = await supabaseClient
+            .from('profiles')
+            .delete()
+            .eq('id', member.id);
+          if (removeError) {
+            setStatus('Could not remove: ' + removeError.message, true);
+            removeButton.disabled = false;
+            return;
+          }
+          item.remove();
+        });
+        item.appendChild(removeButton);
+
         list.appendChild(item);
       });
     }
@@ -315,6 +336,31 @@
         approvedCell.style.borderBottom = '1px solid var(--border)';
         approvedCell.textContent = member.approved ? 'Yes' : 'No';
         row.appendChild(approvedCell);
+
+        const removeCell = document.createElement('td');
+        removeCell.style.padding = '6px 8px';
+        removeCell.style.borderBottom = '1px solid var(--border)';
+        const removeButton = document.createElement('button');
+        removeButton.type = 'button';
+        removeButton.className = 'secondary';
+        removeButton.textContent = 'Remove';
+        removeButton.addEventListener('click', async () => {
+          const name = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.email || 'this member';
+          if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
+          removeButton.disabled = true;
+          const { error: removeError } = await supabaseClient
+            .from('profiles')
+            .delete()
+            .eq('id', member.id);
+          if (removeError) {
+            setStatus('Could not remove: ' + removeError.message, true);
+            removeButton.disabled = false;
+            return;
+          }
+          row.remove();
+        });
+        removeCell.appendChild(removeButton);
+        row.appendChild(removeCell);
 
         body.appendChild(row);
       });
