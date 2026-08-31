@@ -82,6 +82,53 @@
   }
   .emoji-panel button { background: none; border: 0; font-size: 20px; padding: 6px; border-radius: 8px; cursor: pointer; }
   .emoji-panel button:hover { background: #e8ecee; }
+
+  .sticker-row { display: flex; flex-wrap: wrap; gap: 6px; padding: 8px 10px; border-top: 1px solid var(--border); }
+  .sticker-row button { background: none; border: 0; font-size: 26px; padding: 2px 4px; border-radius: 8px; cursor: pointer; }
+  .sticker-row button:hover { background: #e8ecee; }
+
+  .chat-sticker { background: none !important; border: 0 !important; box-shadow: none !important; padding: 0 !important; font-size: 52px; line-height: 1; }
+
+  .mention { color: var(--accent-dark); font-weight: 700; background: rgba(21,157,135,.12); border-radius: 4px; padding: 0 2px; }
+
+  .attach-btn {
+    flex-shrink: 0; width: 44px; height: 44px; padding: 0; font-size: 19px;
+    background: #f0f2f4; color: var(--ink); border: 1px solid var(--border);
+  }
+  .attach-btn:hover { background: #e4e8ea; }
+
+  .staged-attachments { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 8px; }
+  .staged-chip {
+    display: flex; align-items: center; gap: 6px; background: #f0f2f4; border: 1px solid var(--border);
+    border-radius: 8px; padding: 5px 8px; font-size: 12px; max-width: 180px;
+  }
+  .staged-chip img { width: 24px; height: 24px; object-fit: cover; border-radius: 4px; }
+  .staged-chip span { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+  .staged-chip button { background: none; border: 0; color: var(--muted); cursor: pointer; font-size: 14px; padding: 0 2px; }
+
+  .msg-attachments { display: flex; flex-direction: column; gap: 6px; margin-top: 6px; }
+  .msg-attachments img { max-width: 220px; max-height: 220px; border-radius: 10px; display: block; }
+  .file-chip {
+    display: flex; align-items: center; gap: 8px; background: rgba(0,0,0,.04); border-radius: 10px;
+    padding: 8px 10px; text-decoration: none; color: inherit; font-size: 13px;
+  }
+  .chat-bubble-row.own .file-chip { background: rgba(255,255,255,.18); color: white; }
+  .file-chip .file-icon { font-size: 18px; }
+  .file-chip .file-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; max-width: 160px; }
+
+  .mention-dropdown {
+    position: relative;
+  }
+  .mention-dropdown-list {
+    position: absolute; bottom: 100%; left: 0; right: 0; margin-bottom: 4px;
+    background: white; border: 1px solid var(--border); border-radius: 10px;
+    box-shadow: 0 8px 20px rgba(30,50,68,.15); max-height: 160px; overflow-y: auto; z-index: 15;
+  }
+  .mention-dropdown-list button {
+    display: block; width: 100%; text-align: left; background: none; border: 0;
+    color: var(--ink); font-weight: 600; padding: 8px 12px; cursor: pointer; border-radius: 0;
+  }
+  .mention-dropdown-list button:hover { background: #f0f2f4; }
 </style>
 </head>
 <body>
@@ -112,14 +159,21 @@
     <h2>Discussion</h2>
     <div class="topic-list" id="topicList"></div>
     <div class="chat-window" id="postList"></div>
+    <div class="sticker-row" id="stickerRow"></div>
     <div class="emoji-panel" id="emojiPanel" hidden></div>
-    <form id="postForm">
-      <div class="chat-input-row">
-        <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji">🙂</button>
-        <textarea id="postBody" placeholder="Type a message…" required></textarea>
-        <button type="submit" class="send-btn">Send</button>
-      </div>
-    </form>
+    <div class="staged-attachments" id="stagedAttachments"></div>
+    <div class="mention-dropdown" id="mentionDropdownWrap">
+      <div class="mention-dropdown-list" id="mentionDropdownList" hidden></div>
+      <form id="postForm">
+        <div class="chat-input-row">
+          <input type="file" id="chatFileInput" multiple hidden>
+          <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files">📎</button>
+          <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji" title="Emoji">🙂</button>
+          <textarea id="postBody" placeholder="Type a message… use @ to mention someone"></textarea>
+          <button type="submit" class="send-btn">Send</button>
+        </div>
+      </form>
+    </div>
     <p id="boardStatus" role="status" aria-live="polite"></p>
   </section>
 
@@ -154,6 +208,8 @@
 <script>
   let currentTopicId = null;
   let currentUserId = null;
+  let stagedAttachments = [];
+  let knownNames = [];
 
   async function loadTopics(profile) {
     const { data, error } = await memberClient.from('topics').select('id, title').order('id');
@@ -186,6 +242,35 @@
     loadPosts();
   }
 
+  function escapeHtml(str) {
+    const div = document.createElement('div');
+    div.textContent = str;
+    return div.innerHTML;
+  }
+
+  function renderTextWithMentions(text) {
+    const escaped = escapeHtml(text);
+    return escaped.replace(/(^|\s)@([A-Za-z\u0590-\u05FF][\w\u0590-\u05FF]*(?:\s[A-Za-z\u0590-\u05FF][\w\u0590-\u05FF]*)?)/g,
+      (m, pre, name) => pre + '<span class="mention">@' + name + '</span>');
+  }
+
+  function parseBody(raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
+        return { text: parsed.text || '', attachments: parsed.attachments || [], sticker: parsed.sticker || null };
+      }
+    } catch (e) {}
+    return { text: raw, attachments: [], sticker: null };
+  }
+
+  function fileIconFor(type) {
+    if (type && type.indexOf('image/') === 0) return '🖼️';
+    if (type && type.indexOf('pdf') !== -1) return '📄';
+    if (type && (type.indexOf('zip') !== -1 || type.indexOf('compressed') !== -1)) return '🗂️';
+    return '📎';
+  }
+
   async function loadPosts() {
     const postList = document.getElementById('postList');
     postList.innerHTML = '<p class="chat-empty">Loading…</p>';
@@ -208,28 +293,67 @@
       return;
     }
 
+    const seenNames = {};
     data.forEach((post) => {
       const isOwn = currentUserId && post.author_id === currentUserId;
+      const displayName = post.profiles && post.profiles.display_name ? post.profiles.display_name : 'Member';
+      if (!isOwn) seenNames[displayName] = true;
+
+      const parsed = parseBody(post.body);
       const row = document.createElement('div');
       row.className = 'chat-bubble-row ' + (isOwn ? 'own' : 'other');
       const meta = document.createElement('p');
       meta.className = 'chat-meta';
-      meta.textContent = (isOwn ? 'You' : (post.profiles && post.profiles.display_name ? post.profiles.display_name : 'Member'))
-        + ' · ' + new Date(post.created_at).toLocaleString();
-      const bubble = document.createElement('div');
-      bubble.className = 'chat-bubble';
-      bubble.textContent = post.body;
+      meta.textContent = (isOwn ? 'You' : displayName) + ' · ' + new Date(post.created_at).toLocaleString();
       row.appendChild(meta);
-      row.appendChild(bubble);
+
+      if (parsed.sticker) {
+        const sticker = document.createElement('div');
+        sticker.className = 'chat-bubble chat-sticker';
+        sticker.textContent = parsed.sticker;
+        row.appendChild(sticker);
+      } else {
+        const bubble = document.createElement('div');
+        bubble.className = 'chat-bubble';
+        if (parsed.text) bubble.innerHTML = renderTextWithMentions(parsed.text);
+        if (parsed.attachments && parsed.attachments.length) {
+          const wrap = document.createElement('div');
+          wrap.className = 'msg-attachments';
+          parsed.attachments.forEach((att) => {
+            if (att.type && att.type.indexOf('image/') === 0) {
+              const img = document.createElement('img');
+              img.src = att.url;
+              img.alt = att.name || 'attachment';
+              wrap.appendChild(img);
+            } else {
+              const link = document.createElement('a');
+              link.className = 'file-chip';
+              link.href = att.url;
+              link.target = '_blank';
+              link.rel = 'noopener';
+              const icon = document.createElement('span');
+              icon.className = 'file-icon';
+              icon.textContent = fileIconFor(att.type);
+              const name = document.createElement('span');
+              name.className = 'file-name';
+              name.textContent = att.name || 'file';
+              link.appendChild(icon);
+              link.appendChild(name);
+              wrap.appendChild(link);
+            }
+          });
+          bubble.appendChild(wrap);
+        }
+        row.appendChild(bubble);
+      }
       postList.appendChild(row);
     });
+    knownNames = Object.keys(seenNames);
     postList.scrollTop = postList.scrollHeight;
   }
 
-  document.getElementById('postForm').addEventListener('submit', async (event) => {
-    event.preventDefault();
+  async function sendMessage(payload) {
     const statusEl = document.getElementById('boardStatus');
-    const bodyField = document.getElementById('postBody');
     if (currentTopicId === null) { statusEl.textContent = 'Pick a topic first.'; return; }
 
     const { data: { session } } = await memberClient.auth.getSession();
@@ -238,7 +362,7 @@
     const { error } = await memberClient.from('posts').insert({
       topic_id: currentTopicId,
       author_id: session.user.id,
-      body: bodyField.value.trim()
+      body: JSON.stringify(payload)
     });
 
     if (error) {
@@ -246,9 +370,82 @@
       return;
     }
 
-    bodyField.value = '';
     statusEl.textContent = '';
     await loadPosts();
+  }
+
+  function renderStagedAttachments() {
+    const wrap = document.getElementById('stagedAttachments');
+    wrap.innerHTML = '';
+    stagedAttachments.forEach((att, index) => {
+      const chip = document.createElement('div');
+      chip.className = 'staged-chip';
+      if (att.type && att.type.indexOf('image/') === 0) {
+        const img = document.createElement('img');
+        img.src = att.url;
+        chip.appendChild(img);
+      }
+      const name = document.createElement('span');
+      name.textContent = att.name;
+      chip.appendChild(name);
+      const removeBtn = document.createElement('button');
+      removeBtn.type = 'button';
+      removeBtn.textContent = '✕';
+      removeBtn.addEventListener('click', () => {
+        stagedAttachments.splice(index, 1);
+        renderStagedAttachments();
+      });
+      chip.appendChild(removeBtn);
+      wrap.appendChild(chip);
+    });
+  }
+
+  async function uploadChatFile(file) {
+    const { data: { session } } = await memberClient.auth.getSession();
+    const path = 'chat/' + session.user.id + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+    const { error } = await memberClient.storage.from('community-photos').upload(path, file);
+    if (error) throw error;
+    const { data: urlData } = memberClient.storage.from('community-photos').getPublicUrl(path);
+    return { url: urlData.publicUrl, name: file.name, type: file.type || 'application/octet-stream', size: file.size };
+  }
+
+  document.getElementById('attachToggleBtn').addEventListener('click', () => {
+    document.getElementById('chatFileInput').click();
+  });
+
+  document.getElementById('chatFileInput').addEventListener('change', async (event) => {
+    const statusEl = document.getElementById('boardStatus');
+    const files = Array.from(event.target.files || []);
+    if (!files.length) return;
+    statusEl.textContent = 'Uploading ' + files.length + ' file(s)…';
+    for (const file of files) {
+      try {
+        const uploaded = await uploadChatFile(file);
+        stagedAttachments.push(uploaded);
+      } catch (err) {
+        statusEl.textContent = 'Could not upload ' + file.name + ': ' + err.message;
+      }
+    }
+    renderStagedAttachments();
+    if (statusEl.textContent.indexOf('Could not') === -1) statusEl.textContent = '';
+    event.target.value = '';
+  });
+
+  document.getElementById('postForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const statusEl = document.getElementById('boardStatus');
+    const bodyField = document.getElementById('postBody');
+    const text = bodyField.value.trim();
+
+    if (!text && stagedAttachments.length === 0) {
+      statusEl.textContent = 'Write a message or attach a file first.';
+      return;
+    }
+
+    await sendMessage({ text, attachments: stagedAttachments.slice(), sticker: null });
+    bodyField.value = '';
+    stagedAttachments = [];
+    renderStagedAttachments();
   });
 
   async function loadPhotos() {
@@ -342,6 +539,57 @@
   });
   document.getElementById('emojiToggleBtn').addEventListener('click', () => {
     emojiPanel.hidden = !emojiPanel.hidden;
+  });
+
+  const STICKERS = ['🎉','❤️','👍','😂','🔥','🙏','👏','🥳'];
+  const stickerRow = document.getElementById('stickerRow');
+  STICKERS.forEach((sticker) => {
+    const btn = document.createElement('button');
+    btn.type = 'button';
+    btn.textContent = sticker;
+    btn.title = 'Send sticker';
+    btn.addEventListener('click', () => {
+      sendMessage({ text: '', attachments: [], sticker });
+    });
+    stickerRow.appendChild(btn);
+  });
+
+  const mentionList = document.getElementById('mentionDropdownList');
+  function hideMentionDropdown() { mentionList.hidden = true; mentionList.innerHTML = ''; }
+  function showMentionDropdown(matches) {
+    mentionList.innerHTML = '';
+    if (!matches.length) { hideMentionDropdown(); return; }
+    matches.forEach((name) => {
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.textContent = name;
+      btn.addEventListener('click', () => {
+        const field = document.getElementById('postBody');
+        const cursor = field.selectionStart;
+        const before = field.value.slice(0, cursor).replace(/@([\w\u0590-\u05FF]*)$/, '@' + name + ' ');
+        const after = field.value.slice(cursor);
+        field.value = before + after;
+        hideMentionDropdown();
+        field.focus();
+      });
+      mentionList.appendChild(btn);
+    });
+    mentionList.hidden = false;
+  }
+  document.getElementById('postBody').addEventListener('input', (event) => {
+    const field = event.target;
+    const upToCursor = field.value.slice(0, field.selectionStart);
+    const match = /@([\w\u0590-\u05FF]*)$/.exec(upToCursor);
+    if (match && knownNames.length) {
+      const query = match[1].toLowerCase();
+      const matches = knownNames.filter((n) => n.toLowerCase().indexOf(query) === 0);
+      showMentionDropdown(matches);
+    } else {
+      hideMentionDropdown();
+    }
+  });
+  document.getElementById('postBody').addEventListener('blur', () => {
+    setTimeout(hideMentionDropdown, 150);
   });
 
   (async () => {
