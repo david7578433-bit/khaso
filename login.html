@@ -71,6 +71,14 @@
     <h2 class="form-title">Log In</h2>
     <p class="form-sub">Already have an account? Sign in below.</p>
 
+    <label for="unameLoginUser">Username</label>
+    <input id="unameLoginUser" autocomplete="username">
+    <label for="unameLoginPass">Password</label>
+    <input id="unameLoginPass" type="password" autocomplete="current-password">
+    <button type="button" onclick="doUsernameLogin()">Log In</button>
+
+    <div class="divider">or</div>
+
     <button type="button" class="google-btn" onclick="startGoogleLogin()">
       <svg width="18" height="18" viewBox="0 0 18 18" aria-hidden="true">
         <path fill="#4285F4" d="M17.64 9.2c0-.64-.06-1.25-.16-1.84H9v3.48h4.84a4.14 4.14 0 0 1-1.8 2.72v2.26h2.9c1.7-1.57 2.7-3.88 2.7-6.62z"/>
@@ -80,17 +88,6 @@
       </svg>
       Sign in with Google
     </button>
-
-    <p class="link-row"><button type="button" class="link" onclick="showUsernameLogin()">I don't have an email</button></p>
-
-    <div id="usernameLoginBox" hidden>
-      <div class="divider">or</div>
-      <label for="unameLoginUser">Username</label>
-      <input id="unameLoginUser" autocomplete="username">
-      <label for="unameLoginPass">Password</label>
-      <input id="unameLoginPass" type="password" autocomplete="current-password">
-      <button type="button" onclick="doUsernameLogin()">Log In</button>
-    </div>
 
     <p id="authStatus" role="status" aria-live="polite"></p>
 
@@ -275,10 +272,6 @@
   function goToCreateAccount() { showCard('caStep1Card'); }
   function goToLogIn() { showCard('logInCard'); }
   function backToStep1() { showCard('caStep1Card'); }
-
-  function showUsernameLogin() {
-    document.getElementById('usernameLoginBox').hidden = false;
-  }
 
   async function startGoogleLogin() {
     sessionStorage.removeItem(PENDING_KEY);
