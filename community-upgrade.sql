@@ -333,6 +333,18 @@ create policy "Members manage own reads" on public.post_reads for all to authent
 create policy "Members create reports" on public.reports for insert to authenticated with check (reporter_id = auth.uid());
 create policy "Admins manage reports" on public.reports for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
 create policy "Members create suggestions" on public.suggestions for insert to authenticated with check (sender_id = auth.uid());
+do $$
+begin
+  if not exists (
+    select 1 from pg_policies
+    where schemaname = 'public'
+      and tablename = 'suggestions'
+      and policyname = 'Visitors create suggestions'
+  ) then
+    execute 'create policy "Visitors create suggestions" on public.suggestions for insert to anon with check (sender_id is null)';
+  end if;
+end;
+$$;
 create policy "Admins manage suggestions" on public.suggestions for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
 create policy "Anyone adds a submission contact" on public.submission_contacts for insert to anon, authenticated with check (true);
 create policy "Admins read submission contacts" on public.submission_contacts for select to authenticated using (public.is_site_admin());
@@ -510,5 +522,5 @@ for each row execute function public.notify_photo_status();
 
 grant select on public.site_settings, public.events, public.yahrzeits, public.campaigns to anon, authenticated;
 grant all on public.notifications, public.member_settings, public.post_reactions, public.post_reads, public.reports, public.suggestions, public.submission_contacts, public.community_forms, public.jobs, public.albums, public.comments, public.admin_activity to authenticated;
-grant insert on public.submission_contacts to anon;
+grant insert on public.suggestions, public.submission_contacts to anon;
 grant select on public.backup_status to authenticated;

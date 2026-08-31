@@ -90,6 +90,8 @@
     cursor: pointer;
   }
 
+  .sidebar > .lang-button { margin-bottom: 72px; }
+
 
   .main {
     flex: 1;
@@ -354,6 +356,7 @@
   @media (max-width: 780px) {
     .layout { flex-direction: column; }
     .sidebar { width: 100%; }
+    .sidebar > .lang-button { margin-bottom: 0; }
     .boxes { grid-template-columns: repeat(2, 1fr); max-width: 460px; }
     .hero-row { flex-wrap: wrap; }
     .hero { max-width: 440px; }
@@ -375,7 +378,6 @@
     <nav class="side-menu">
       <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
       <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
-      <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
       <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
     </nav>
     <div class="sidebar-spacer"></div>
@@ -396,7 +398,7 @@
     </div>
     <div class="boxes-wrap">
       <div class="boxes">
-        <div class="box"></div>
+        <a class="box" href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
         <a class="box" href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
         <a class="box" href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
         <a class="box" href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
