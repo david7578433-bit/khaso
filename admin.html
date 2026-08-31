@@ -34,6 +34,9 @@
     .gallery-manage-item .gm-category { font-weight: 700; }
     .gallery-manage-item .gm-caption { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
     .gallery-manage-item button { padding: 6px 12px; }
+    .staged-photo-preview { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
+    .staged-photo-preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
+    .staged-photo-preview button { padding: 6px 12px; }
   </style>
 </head>
 <body>
@@ -124,17 +127,15 @@
       <div class="section-item" id="section-add-picture">
       <h2>Add a Picture</h2>
       <form id="galleryUploadForm">
-        <label for="galleryCategory">Category</label>
-        <select id="galleryCategory" required>
-          <option value="rabbi">Rabbi</option>
-          <option value="yeshiva_gedola">Yeshiva Gedola</option>
-          <option value="yeshiva_ktana">Yeshiva Ktana</option>
-          <option value="kiryas_joel">Kiryas Joel</option>
-          <option value="monsey">Monsey</option>
-          <option value="maamodim">מעמדים</option>
-        </select>
+        <label for="galleryCategory">Album</label>
+        <input type="text" id="galleryCategory" list="albumNamesList" placeholder="Album name" required>
+        <datalist id="albumNamesList"></datalist>
         <label for="galleryFile">Picture</label>
         <input type="file" id="galleryFile" accept="image/*" required>
+        <div class="staged-photo-preview" id="stagedPhotoPreview" hidden>
+          <img id="stagedPhotoImg" alt="Preview">
+          <button type="button" id="reEditPhotoBtn">Re-edit</button>
+        </div>
         <label for="galleryCaption">Caption (optional)</label>
         <input type="text" id="galleryCaption" maxlength="200">
         <button id="galleryUploadButton" type="submit">Add Picture</button>
@@ -152,6 +153,7 @@
   </section></main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="photo-editor.js"></script>
   <script>
     const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
     const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
@@ -622,6 +624,50 @@
       maamodim: 'מעמדים'
     };
 
+    const LABEL_TO_SLUG = {};
+    Object.keys(CATEGORY_LABELS).forEach((slug) => { LABEL_TO_SLUG[CATEGORY_LABELS[slug]] = slug; });
+    let editedPhotoBlob = null;
+
+    async function loadAlbumNames() {
+      const names = new Set(Object.values(CATEGORY_LABELS));
+      const { data } = await supabaseClient.from('gallery_photos').select('category');
+      if (data) data.forEach((row) => { if (row.category) names.add(CATEGORY_LABELS[row.category] || row.category); });
+      const list = document.getElementById('albumNamesList');
+      list.innerHTML = '';
+      Array.from(names).sort().forEach((name) => {
+        const opt = document.createElement('option');
+        opt.value = name;
+        list.appendChild(opt);
+      });
+    }
+
+    document.getElementById('galleryFile').addEventListener('change', async () => {
+      const fileInput = document.getElementById('galleryFile');
+      const file = fileInput.files[0];
+      if (!file) return;
+      const blob = await window.openPhotoEditor(file);
+      const preview = document.getElementById('stagedPhotoPreview');
+      const previewImg = document.getElementById('stagedPhotoImg');
+      if (blob) {
+        editedPhotoBlob = blob;
+        previewImg.src = URL.createObjectURL(blob);
+        preview.hidden = false;
+      } else {
+        editedPhotoBlob = null;
+        fileInput.value = '';
+        preview.hidden = true;
+      }
+    });
+    document.getElementById('reEditPhotoBtn').addEventListener('click', async () => {
+      const source = editedPhotoBlob || document.getElementById('galleryFile').files[0];
+      if (!source) return;
+      const blob = await window.openPhotoEditor(source);
+      if (blob) {
+        editedPhotoBlob = blob;
+        document.getElementById('stagedPhotoImg').src = URL.createObjectURL(blob);
+      }
+    });
+
     async function loadGalleryManage() {
       const list = document.getElementById('galleryList');
       list.innerHTML = '<p>Loading…</p>';
@@ -668,6 +714,31 @@
         }
         item.appendChild(info);
 
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.className = 'secondary';
+        editButton.textContent = 'Edit';
+        editButton.addEventListener('click', async () => {
+          editButton.disabled = true;
+          try {
+            const resp = await fetch(urlData.publicUrl);
+            const sourceBlob = await resp.blob();
+            const newBlob = await window.openPhotoEditor(sourceBlob);
+            if (!newBlob) { editButton.disabled = false; return; }
+            const newPath = photo.category.replace(/[^a-zA-Z0-9._-]/g, '_') + '/' + Date.now() + '-edited.jpg';
+            const { error: upErr } = await supabaseClient.storage.from('gallery-photos').upload(newPath, newBlob, { contentType: 'image/jpeg' });
+            if (upErr) { setStatus('Could not save edited picture: ' + upErr.message, true); editButton.disabled = false; return; }
+            const { error: updErr } = await supabaseClient.from('gallery_photos').update({ storage_path: newPath }).eq('id', photo.id);
+            if (updErr) { setStatus('Could not update picture: ' + updErr.message, true); editButton.disabled = false; return; }
+            await supabaseClient.storage.from('gallery-photos').remove([photo.storage_path]);
+            await loadGalleryManage();
+          } catch (err) {
+            setStatus('Could not open picture for editing: ' + err.message, true);
+            editButton.disabled = false;
+          }
+        });
+        item.appendChild(editButton);
+
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.className = 'secondary';
@@ -695,18 +766,21 @@
     document.getElementById('galleryUploadForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const galleryStatusEl = document.getElementById('galleryStatus');
-      const categorySelect = document.getElementById('galleryCategory');
+      const categoryInput = document.getElementById('galleryCategory');
       const fileInput = document.getElementById('galleryFile');
       const captionInput = document.getElementById('galleryCaption');
       const button = document.getElementById('galleryUploadButton');
-      const file = fileInput.files[0];
+      const file = editedPhotoBlob || fileInput.files[0];
       if (!file) return;
+
+      const typedValue = categoryInput.value.trim();
+      const categoryToStore = LABEL_TO_SLUG[typedValue] || typedValue;
 
       button.disabled = true;
       galleryStatusEl.textContent = 'Uploading…';
 
-      const path = categorySelect.value + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
-      const { error: uploadError } = await supabaseClient.storage.from('gallery-photos').upload(path, file);
+      const path = categoryToStore.replace(/[^a-zA-Z0-9._-]/g, '_') + '/' + Date.now() + '-edited.jpg';
+      const { error: uploadError } = await supabaseClient.storage.from('gallery-photos').upload(path, file, { contentType: 'image/jpeg' });
       if (uploadError) {
         galleryStatusEl.textContent = 'Could not upload: ' + uploadError.message;
         button.disabled = false;
@@ -714,7 +788,7 @@
       }
 
       const { error: insertError } = await supabaseClient.from('gallery_photos').insert({
-        category: categorySelect.value,
+        category: categoryToStore,
         storage_path: path,
         caption: captionInput.value.trim() || null
       });
@@ -727,8 +801,12 @@
 
       fileInput.value = '';
       captionInput.value = '';
+      categoryInput.value = '';
+      editedPhotoBlob = null;
+      document.getElementById('stagedPhotoPreview').hidden = true;
       galleryStatusEl.textContent = 'Picture added.';
       await loadGalleryManage();
+      await loadAlbumNames();
     });
 
     async function showEditor() {
@@ -741,6 +819,7 @@
       await loadAdminMessages();
       await loadSubmissions();
       await loadGalleryManage();
+      await loadAlbumNames();
     }
 
     loginForm.addEventListener('submit', async (event) => {
