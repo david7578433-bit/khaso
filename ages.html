@@ -30,6 +30,8 @@
   .chat-bubble-row.other { align-self: flex-start; align-items: flex-start; }
 
   .chat-meta { font-size: 11px; color: var(--muted); margin: 0 4px 3px; }
+  .message-actions { display: flex; gap: 5px; margin-top: 4px; }
+  .message-actions button { padding: 3px 8px; font-size: 11px; background: #607d9a; }
 
   .chat-bubble {
     padding: 10px 14px;
@@ -126,6 +128,14 @@
     color: var(--ink); font-weight: 600; padding: 8px 12px; cursor: pointer; border-radius: 0;
   }
   .mention-dropdown-list button:hover { background: #f0f2f4; }
+  .pinned-label { display:inline-block; font-size:11px; font-weight:700; color:#8a5d00; background:#fff4c7; border-radius:999px; padding:2px 7px; margin-left:5px; }
+  .reply-context { font-size:12px; color:var(--muted); border-left:3px solid var(--accent); padding:4px 7px; margin-bottom:5px; max-width:100%; }
+  .reaction-row { display:flex; gap:5px; flex-wrap:wrap; margin-top:5px; }
+  .reaction-row button { background:#f0f2f4; color:var(--ink); border:1px solid var(--border); padding:3px 7px; font-size:12px; }
+  .reaction-row button.mine { background:#dff5ef; border-color:var(--accent); }
+  .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
+  .reply-preview button { padding:3px 8px; }
+  .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
 </style>
 </head>
 <body>
@@ -142,6 +152,7 @@
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html" aria-current="page">Ages</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html">Log In</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -161,11 +172,12 @@
       <div class="emoji-grid" id="emojiGrid"></div>
     </div>
     <div class="staged-attachments" id="stagedAttachments"></div>
+    <div class="reply-preview" id="replyPreview" hidden><span id="replyPreviewText"></span><button type="button" id="cancelReply">Cancel</button></div>
     <div class="mention-dropdown" id="mentionDropdownWrap">
       <div class="mention-dropdown-list" id="mentionDropdownList" hidden></div>
       <form id="postForm">
         <div class="chat-input-row">
-          <input type="file" id="chatFileInput" multiple hidden>
+          <input type="file" id="chatFileInput" accept="image/*,application/pdf" multiple hidden>
           <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files">📎</button>
           <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji" title="Emoji">🙂</button>
           <textarea id="postBody" placeholder="Type a message… use @ to mention someone"></textarea>
@@ -183,8 +195,11 @@
 <script>
   let currentTopicId = null;
   let currentUserId = null;
+  let currentProfile = null;
   let stagedAttachments = [];
   let knownNames = [];
+  let knownMembers = {};
+  let replyToPostId = null;
 
   async function loadTopics(profile) {
     const { data, error } = await memberClient.from('topics').select('id, title').order('id');
@@ -203,18 +218,41 @@
     visibleTopics.forEach((topic, index) => {
       const button = document.createElement('button');
       button.type = 'button';
-      button.textContent = topic.title;
+      const title = document.createElement('span');
+      title.textContent = topic.title;
+      button.appendChild(title);
       button.addEventListener('click', () => selectTopic(topic.id, button));
       list.appendChild(button);
+      updateUnreadBadge(topic.id, button);
       if (index === 0) selectTopic(topic.id, button);
     });
+  }
+
+  async function updateUnreadBadge(topicId, button) {
+    let lastRead = null;
+    try { lastRead = localStorage.getItem('khaso_last_read_' + topicId); } catch (_) {}
+    let query = memberClient.from('posts').select('*', { count:'exact', head:true }).eq('topic_id', topicId);
+    if (lastRead) query = query.gt('created_at', lastRead);
+    const result = await query;
+    const old = button.querySelector('.unread-badge');
+    if (old) old.remove();
+    if (!result.error && result.count) {
+      const badge = document.createElement('span');
+      badge.className = 'unread-badge';
+      badge.textContent = result.count > 99 ? '99+' : result.count;
+      button.appendChild(badge);
+    }
   }
 
   function selectTopic(topicId, button) {
     currentTopicId = topicId;
     document.querySelectorAll('#topicList button').forEach((b) => b.classList.remove('active'));
     button.classList.add('active');
-    loadPosts();
+    loadPosts().then(() => {
+      try { localStorage.setItem('khaso_last_read_' + topicId, new Date().toISOString()); } catch (_) {}
+      const badge = button.querySelector('.unread-badge');
+      if (badge) badge.remove();
+    });
   }
 
   function escapeHtml(str) {
@@ -253,7 +291,7 @@
 
     const { data, error } = await memberClient
       .from('posts')
-      .select('id, body, created_at, author_id, profiles(display_name)')
+      .select('id, body, created_at, author_id, reply_to_id, pinned, locked, profiles(display_name)')
       .eq('topic_id', currentTopicId)
       .order('created_at', { ascending: true });
 
@@ -268,11 +306,41 @@
       return;
     }
 
-    const seenNames = {};
+    const postIds = data.map((post) => post.id);
+    const reactionMap = {};
+    if (postIds.length) {
+      const reactionResult = await memberClient.from('post_reactions').select('post_id,user_id,emoji').in('post_id', postIds);
+      (reactionResult.data || []).forEach((reaction) => {
+        if (!reactionMap[reaction.post_id]) reactionMap[reaction.post_id] = [];
+        reactionMap[reaction.post_id].push(reaction);
+      });
+    }
+
+    const attachmentPaths = [];
     data.forEach((post) => {
+      const parsed = parseBody(post.body);
+      (parsed.attachments || []).forEach((att) => { if (att.storagePath) attachmentPaths.push(att.storagePath); });
+    });
+    const approvedPaths = new Set();
+    if (attachmentPaths.length) {
+      const { data: approvedFiles } = await memberClient
+        .from('photo_uploads')
+        .select('storage_path')
+        .eq('status', 'approved')
+        .in('storage_path', attachmentPaths);
+      (approvedFiles || []).forEach((file) => approvedPaths.add(file.storage_path));
+    }
+
+    const seenNames = {};
+    knownMembers = {};
+    const orderedData = data.filter((post) => post.pinned).concat(data.filter((post) => !post.pinned));
+    orderedData.forEach((post) => {
       const isOwn = currentUserId && post.author_id === currentUserId;
       const displayName = post.profiles && post.profiles.display_name ? post.profiles.display_name : 'Member';
-      if (!isOwn) seenNames[displayName] = true;
+      if (!isOwn) {
+        seenNames[displayName] = true;
+        knownMembers[displayName] = post.author_id;
+      }
 
       const parsed = parseBody(post.body);
       const row = document.createElement('div');
@@ -280,7 +348,21 @@
       const meta = document.createElement('p');
       meta.className = 'chat-meta';
       meta.textContent = (isOwn ? 'You' : displayName) + ' · ' + new Date(post.created_at).toLocaleString();
+      if (post.pinned) {
+        const pinned = document.createElement('span'); pinned.className = 'pinned-label'; pinned.textContent = '📌 Pinned'; meta.appendChild(pinned);
+      }
       row.appendChild(meta);
+
+      if (post.reply_to_id) {
+        const original = data.find((candidate) => candidate.id === post.reply_to_id);
+        if (original) {
+          const reply = document.createElement('div'); reply.className = 'reply-context';
+          const originalBody = parseBody(original.body);
+          const originalName = original.author_id === currentUserId ? 'You' : (original.profiles && original.profiles.display_name || 'Member');
+          reply.textContent = 'Reply to ' + originalName + ': ' + (originalBody.text || originalBody.sticker || 'attachment').slice(0,100);
+          row.appendChild(reply);
+        }
+      }
 
       if (parsed.sticker) {
         const sticker = document.createElement('div');
@@ -295,6 +377,13 @@
           const wrap = document.createElement('div');
           wrap.className = 'msg-attachments';
           parsed.attachments.forEach((att) => {
+            if (att.storagePath && !approvedPaths.has(att.storagePath)) {
+              const waiting = document.createElement('span');
+              waiting.className = 'file-chip';
+              waiting.textContent = 'Waiting for admin approval: ' + (att.name || 'file');
+              wrap.appendChild(waiting);
+              return;
+            }
             if (att.type && att.type.indexOf('image/') === 0) {
               const img = document.createElement('img');
               img.src = att.url;
@@ -321,6 +410,83 @@
         }
         row.appendChild(bubble);
       }
+
+      const reactions = reactionMap[post.id] || [];
+      const reactionRow = document.createElement('div'); reactionRow.className = 'reaction-row';
+      ['👍','❤️','😂','🙏'].forEach((emoji) => {
+        const matching = reactions.filter((reaction) => reaction.emoji === emoji);
+        const mine = matching.some((reaction) => reaction.user_id === currentUserId);
+        const button = document.createElement('button'); button.type = 'button'; button.className = mine ? 'mine' : '';
+        button.textContent = emoji + (matching.length ? ' ' + matching.length : '');
+        button.addEventListener('click', async () => {
+          button.disabled = true;
+          if (mine) await memberClient.from('post_reactions').delete().eq('post_id',post.id).eq('user_id',currentUserId).eq('emoji',emoji);
+          else await memberClient.from('post_reactions').insert({post_id:post.id,user_id:currentUserId,emoji});
+          await loadPosts();
+        });
+        reactionRow.appendChild(button);
+      });
+      row.appendChild(reactionRow);
+
+      const actions = document.createElement('div');
+      actions.className = 'message-actions';
+
+      if (!post.locked) {
+        const replyButton = document.createElement('button'); replyButton.type = 'button'; replyButton.textContent = 'Reply';
+        replyButton.addEventListener('click', () => {
+          replyToPostId = post.id;
+          document.getElementById('replyPreviewText').textContent = 'Replying to ' + (isOwn ? 'your message' : displayName);
+          document.getElementById('replyPreview').hidden = false;
+          document.getElementById('postBody').focus();
+        });
+        actions.appendChild(replyButton);
+      }
+
+      if (isOwn) {
+
+        if (!parsed.sticker) {
+          const editButton = document.createElement('button');
+          editButton.type = 'button';
+          editButton.textContent = 'Edit';
+          editButton.addEventListener('click', async () => {
+            const changedText = window.prompt('Edit your message:', parsed.text || '');
+            if (changedText === null) return;
+            const updated = { text: changedText.trim(), attachments: parsed.attachments || [], sticker: null };
+            if (!updated.text && updated.attachments.length === 0) return;
+            const { error: updateError } = await memberClient.from('posts').update({ body: JSON.stringify(updated) }).eq('id', post.id).eq('author_id', currentUserId);
+            if (updateError) document.getElementById('boardStatus').textContent = 'Could not edit: ' + updateError.message;
+            else await loadPosts();
+          });
+          actions.appendChild(editButton);
+        }
+
+        const deleteButton = document.createElement('button');
+        deleteButton.type = 'button';
+        deleteButton.textContent = 'Delete';
+        deleteButton.addEventListener('click', async () => {
+          if (!window.confirm('Delete this message?')) return;
+          const { error: deleteError } = await memberClient.from('posts').delete().eq('id', post.id).eq('author_id', currentUserId);
+          if (deleteError) document.getElementById('boardStatus').textContent = 'Could not delete: ' + deleteError.message;
+          else await loadPosts();
+        });
+        actions.appendChild(deleteButton);
+      } else {
+        const reportButton = document.createElement('button'); reportButton.type = 'button'; reportButton.textContent = 'Report';
+        reportButton.addEventListener('click', async () => {
+          const reason = window.prompt('Why are you reporting this message?');
+          if (!reason || !reason.trim()) return;
+          const result = await memberClient.from('reports').insert({reporter_id:currentUserId,post_id:post.id,reported_user_id:post.author_id,reason:reason.trim()});
+          document.getElementById('boardStatus').textContent = result.error ? 'Could not report: ' + result.error.message : 'Report sent privately to the admins.';
+        });
+        actions.appendChild(reportButton);
+      }
+
+      if (currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin')) {
+        const pinButton = document.createElement('button'); pinButton.type = 'button'; pinButton.textContent = post.pinned ? 'Unpin' : 'Pin';
+        pinButton.addEventListener('click', async () => { await memberClient.from('posts').update({pinned:!post.pinned}).eq('id',post.id); await loadPosts(); });
+        actions.appendChild(pinButton);
+      }
+      if (actions.childNodes.length) row.appendChild(actions);
       postList.appendChild(row);
     });
     knownNames = Object.keys(seenNames);
@@ -337,7 +503,8 @@
     const { error } = await memberClient.from('posts').insert({
       topic_id: currentTopicId,
       author_id: session.user.id,
-      body: JSON.stringify(payload)
+      body: JSON.stringify(payload),
+      reply_to_id: replyToPostId
     });
 
     if (error) {
@@ -345,9 +512,25 @@
       return;
     }
 
+    if (payload.text) {
+      const mentions = Object.keys(knownMembers).filter((name) => payload.text.toLowerCase().includes('@' + name.toLowerCase()));
+      await Promise.all(mentions.map((name) => memberClient.rpc('notify_mention', {
+        target_user: knownMembers[name],
+        notification_title: 'You were mentioned',
+        notification_body: (currentProfile && currentProfile.display_name ? currentProfile.display_name : 'A member') + ': ' + payload.text.slice(0,200),
+        notification_link: 'ages.html'
+      })));
+    }
+    replyToPostId = null;
+    document.getElementById('replyPreview').hidden = true;
     statusEl.textContent = '';
     await loadPosts();
   }
+
+  document.getElementById('cancelReply').addEventListener('click', () => {
+    replyToPostId = null;
+    document.getElementById('replyPreview').hidden = true;
+  });
 
   function renderStagedAttachments() {
     const wrap = document.getElementById('stagedAttachments');
@@ -380,8 +563,14 @@
     const path = 'chat/' + session.user.id + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
     const { error } = await memberClient.storage.from('community-photos').upload(path, file);
     if (error) throw error;
+    const { error: recordError } = await memberClient.from('photo_uploads').insert({
+      uploader_id: session.user.id,
+      storage_path: path,
+      caption: file.name
+    });
+    if (recordError) throw recordError;
     const { data: urlData } = memberClient.storage.from('community-photos').getPublicUrl(path);
-    return { url: urlData.publicUrl, name: file.name, type: file.type || 'application/octet-stream', size: file.size };
+    return { url: urlData.publicUrl, storagePath: path, name: file.name, type: file.type, size: file.size };
   }
 
   document.getElementById('attachToggleBtn').addEventListener('click', () => {
@@ -392,6 +581,12 @@
     const statusEl = document.getElementById('boardStatus');
     const files = Array.from(event.target.files || []);
     if (!files.length) return;
+    const disallowed = files.find((file) => !(file.type.indexOf('image/') === 0 || file.type === 'application/pdf'));
+    if (disallowed) {
+      statusEl.textContent = 'Only images and PDF files are allowed.';
+      event.target.value = '';
+      return;
+    }
     statusEl.textContent = 'Uploading ' + files.length + ' file(s)…';
     for (const file of files) {
       try {
@@ -514,6 +709,13 @@
     gateCard.hidden = true;
     boardCard.hidden = false;
     currentUserId = session.user.id;
+    currentProfile = profile;
+    if (profile.suspended_until && new Date(profile.suspended_until) > new Date()) {
+      gateCard.hidden = false;
+      boardCard.hidden = true;
+      gateMessage.textContent = 'Your account is temporarily suspended until ' + new Date(profile.suspended_until).toLocaleString() + '.';
+      return;
+    }
     await loadTopics(profile);
   })();
 </script>
@@ -527,6 +729,7 @@
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
   <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
   <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>

@@ -56,7 +56,7 @@ window.getMemberStatus = async function () {
 
   const { data: profile, error } = await window.memberClient
     .from('profiles')
-    .select('id, display_name, approved, first_name, last_name, phone_number, city, email, username, jewish_year')
+    .select('id, display_name, approved, first_name, last_name, phone_number, city, email, username, jewish_year, role, suspended_until, avatar_url, avatar_path, show_phone, show_email, show_city, show_avatar, directory_approved')
     .eq('id', session.user.id)
     .single();
 

@@ -354,31 +354,6 @@
     .hero-row { flex-wrap: wrap; }
     .hero { max-width: 440px; }
   }
-
-  /* Phone-only: the desktop/tablet sidebar is a full-height splash panel,
-     which on a small screen pushes all the real content (the boxes and the
-     welcome message) below the fold. Shrink it to a compact header instead,
-     and stop the footer from permanently covering part of the screen. */
-  @media (max-width: 480px) {
-    .sidebar { padding: 20px 16px 16px; }
-    .sidebar img { width: 90px; margin-bottom: 8px; }
-    .n1 { font-size: 40px; margin-top: -8px; }
-    .n2 { font-size: 15px; }
-    .n3 { font-size: 13px; }
-    .n4 { font-size: 11px; margin-top: 6px; }
-    .side-menu { margin-top: 12px; padding-top: 10px; gap: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; }
-    .side-menu a { font-size: 13px; padding: 7px 10px; }
-    .sidebar-spacer { display: none; }
-    .sidebar .lang-button { padding: 9px 22px; font-size: 15px; margin-top: 12px; }
-    .topbar { padding: 10px 14px 0; }
-    .boxes-wrap { padding: 6px 14px 0; }
-    .boxes { gap: 10px; max-width: 100%; }
-    .box { min-height: 88px; font-size: 15px; padding: 10px; border-radius: 12px; }
-    .hero-row { width: calc(100% - 28px); gap: 14px; margin-top: 18px; }
-    .hero { padding: 20px 18px; min-height: 0; max-width: 100%; }
-    footer { position: static; box-shadow: none; padding: 16px 16px 22px; justify-content: flex-start; gap: 10px 14px; }
-    .main { padding-bottom: 24px; }
-  }
 </style>
 </head>
 <body>
@@ -396,6 +371,7 @@
     <nav class="side-menu">
       <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
       <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+      <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
       <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
     </nav>
     <div class="sidebar-spacer"></div>
@@ -458,8 +434,8 @@
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
   <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
   <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
-  <a href="admin.html"><span data-lang="en">Admin</span><span data-lang="yi" hidden>אדמין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
 
@@ -472,37 +448,28 @@
   const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
 
 
-  async function loadAnnouncement() {
-    const { data, error } = await supabaseClient
-      .from('announcements')
-      .select('title, content, created_at')
-      .order('created_at', { ascending: false })
-      .limit(2);
+  async function loadHomeUpdates() {
+    const [newsResult, simchaResult] = await Promise.all([
+      supabaseClient.from('submissions').select('title, body').eq('category', 'news').eq('approved', true).order('created_at', { ascending: false }).limit(1),
+      supabaseClient.from('submissions').select('title, body').eq('category', 'simcha').eq('approved', true).order('created_at', { ascending: false }).limit(1)
+    ]);
 
-
-    if (error) {
-      console.error('Could not load announcement:', error.message);
-      return;
-    }
-
-
-    if (data && data.length > 0) {
-      document.getElementById('announcementTitle').textContent = data[0].title || '';
-      document.getElementById('announcementContent').textContent = data[0].content || '';
+    if (newsResult.data && newsResult.data.length) {
+      document.getElementById('announcementTitle').textContent = 'News: ' + (newsResult.data[0].title || '');
+      document.getElementById('announcementContent').textContent = newsResult.data[0].body || '';
       document.getElementById('announcement').hidden = false;
       document.getElementById('welcomeBlock').hidden = true;
     }
 
-
-    if (data && data.length > 1) {
-      document.getElementById('announcementTitle2').textContent = data[1].title || '';
-      document.getElementById('announcementContent2').textContent = data[1].content || '';
+    if (simchaResult.data && simchaResult.data.length) {
+      document.getElementById('announcementTitle2').textContent = 'Simchas: ' + (simchaResult.data[0].title || '');
+      document.getElementById('announcementContent2').textContent = simchaResult.data[0].body || '';
       document.getElementById('heroBox2').hidden = false;
     }
   }
 
 
-  loadAnnouncement();
+  loadHomeUpdates();
 
 
   (async () => {

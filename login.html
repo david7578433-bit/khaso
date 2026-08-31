@@ -43,6 +43,12 @@
 
   h2.form-title { margin-top: 0; }
   p.form-sub { color: var(--muted); margin-top: -8px; }
+  .member-panel { margin-top:18px; padding-top:16px; border-top:1px solid var(--border); text-align:left; }
+  .member-item { padding:10px 0; border-top:1px solid var(--border); }
+  .member-item:first-child { border-top:0; }
+  .member-item.unread { background:#eefaf7; margin:0 -8px; padding:10px 8px; border-radius:7px; }
+  .directory-row { display:flex; align-items:center; gap:10px; }
+  .directory-row img { width:46px; height:46px; object-fit:cover; border-radius:50%; }
 </style>
 </head>
 <body>
@@ -60,6 +66,7 @@
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html" aria-current="page"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -91,7 +98,31 @@
 
     <p id="authStatus" role="status" aria-live="polite"></p>
 
+    <p class="link-row"><button type="button" class="link" onclick="showCard('forgotPasswordCard')">Forgot password?</button></p>
+
     <p class="link-row">New here? <button type="button" class="link" onclick="goToCreateAccount()">Create Account</button></p>
+  </section>
+
+  <section class="card auth-card" id="forgotPasswordCard" hidden>
+    <h2 class="form-title">Forgot Password</h2>
+    <p class="form-sub">Enter the real email connected to your account.</p>
+    <form id="forgotPasswordForm">
+      <label for="forgotEmail">Email</label>
+      <input id="forgotEmail" type="email" autocomplete="email" required>
+      <button type="submit">Send Reset Email</button>
+    </form>
+    <p id="forgotStatus" role="status"></p>
+    <p class="link-row"><button type="button" class="link" onclick="goToLogIn()">Back to Log In</button></p>
+  </section>
+
+  <section class="card auth-card" id="resetPasswordCard" hidden>
+    <h2 class="form-title">Create a New Password</h2>
+    <form id="resetPasswordForm">
+      <label for="recoveryPassword">New password</label>
+      <input id="recoveryPassword" type="password" minlength="6" autocomplete="new-password" required>
+      <button type="submit">Save New Password</button>
+    </form>
+    <p id="resetStatus" role="status"></p>
   </section>
 
   <!-- CREATE ACCOUNT: STEP 1 -->
@@ -110,8 +141,8 @@
       <label for="caPhone">Phone Number *</label>
       <input id="caPhone" type="tel" required>
 
-      <label for="caYear">What year did you leave yeshiva/school? *</label>
-      <select id="caYear" required></select>
+      <label for="caYear">What year did you leave yeshiva/school?</label>
+      <select id="caYear"></select>
 
       <div id="caEmailWrap">
         <label for="caEmail">Email <span id="caEmailStar">*</span></label>
@@ -191,8 +222,8 @@
       <label for="pfPhone">Phone Number *</label>
       <input id="pfPhone" type="tel" required>
 
-      <label for="pfYear">What year did you leave yeshiva/school? *</label>
-      <select id="pfYear" required></select>
+      <label for="pfYear">What year did you leave yeshiva/school?</label>
+      <select id="pfYear"></select>
 
       <div id="pfEmailWrap">
         <label for="pfEmail">Email <span id="pfEmailStar">*</span></label>
@@ -229,6 +260,39 @@
 
   <section class="card" id="approvedView" hidden>
     <p>You're signed in and approved.</p>
+    <div class="member-panel">
+      <h2>Notifications</h2>
+      <div id="notificationsList"><p>Loading…</p></div>
+    </div>
+    <div class="member-panel">
+      <h2>Member Directory</h2>
+      <input id="directorySearch" type="search" placeholder="Search members…">
+      <div id="directoryList"><p>Loading…</p></div>
+      <p id="directoryMessage"></p>
+    </div>
+    <div class="member-panel">
+      <h2>Profile & Privacy</h2>
+      <p>Your directory changes can be reviewed by an admin.</p>
+      <form id="privacyForm">
+        <label class="checkbox-row"><input id="showPhone" type="checkbox"> Show my phone</label>
+        <label class="checkbox-row"><input id="showEmail" type="checkbox"> Show my email</label>
+        <label class="checkbox-row"><input id="showCity" type="checkbox"> Show my city</label>
+        <label class="checkbox-row"><input id="showAvatar" type="checkbox"> Show my profile picture</label>
+        <label for="profilePicture">Add or change profile picture (admin approval required)</label>
+        <input id="profilePicture" type="file" accept="image/*">
+        <button type="submit">Save Privacy Settings</button>
+      </form>
+      <p id="privacyStatus" role="status"></p>
+    </div>
+    <div class="member-panel">
+      <h2>Change Password</h2>
+      <form id="changePasswordForm">
+        <label for="newMemberPassword">New password</label>
+        <input id="newMemberPassword" type="password" minlength="6" autocomplete="new-password" required>
+        <button type="submit">Change Password</button>
+      </form>
+      <p id="passwordStatus" role="status"></p>
+    </div>
     <button type="button" class="secondary" onclick="signOutMember()">Log Out</button>
   </section>
 
@@ -264,7 +328,7 @@
   const PENDING_KEY = 'khaso_pending_signup';
 
   function showCard(id) {
-    ['logInCard', 'caStep1Card', 'caStep2Card', 'finishProfileCard', 'pendingView', 'approvedView'].forEach((cardId) => {
+    ['logInCard', 'forgotPasswordCard', 'resetPasswordCard', 'caStep1Card', 'caStep2Card', 'finishProfileCard', 'pendingView', 'approvedView'].forEach((cardId) => {
       document.getElementById(cardId).hidden = cardId !== id;
     });
   }
@@ -292,6 +356,23 @@
     }
     window.location.reload();
   }
+
+  document.getElementById('forgotPasswordForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const status = document.getElementById('forgotStatus');
+    status.textContent = 'Sending…';
+    const result = await memberClient.auth.resetPasswordForEmail(document.getElementById('forgotEmail').value.trim(), { redirectTo:new URL('login.html', location.href).href });
+    status.textContent = result.error ? 'Could not send: ' + result.error.message : 'Check your email for the reset link.';
+  });
+
+  document.getElementById('resetPasswordForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const status = document.getElementById('resetStatus');
+    status.textContent = 'Saving…';
+    const result = await memberClient.auth.updateUser({password:document.getElementById('recoveryPassword').value});
+    if (result.error) status.textContent = 'Could not save: ' + result.error.message;
+    else { status.textContent = 'Password changed. You can now use it to log in.'; setTimeout(() => { history.replaceState(null,'',location.pathname); window.location.reload(); },1200); }
+  });
 
   document.getElementById('caCity').addEventListener('change', (event) => {
     document.getElementById('caCityOtherWrap').hidden = event.target.value !== 'other';
@@ -451,9 +532,112 @@
     window.location.reload();
   });
 
+  let directoryMembers = [];
+
+  function safeText(value) { return value == null ? '' : String(value); }
+
+  function renderDirectory(query) {
+    const list = document.getElementById('directoryList');
+    const normalized = (query || '').trim().toLowerCase();
+    const items = directoryMembers.filter((member) => !normalized || [member.display_name, member.first_name, member.last_name, member.city, member.jewish_year].some((value) => safeText(value).toLowerCase().includes(normalized)));
+    list.innerHTML = '';
+    items.forEach((member) => {
+      const row = document.createElement('div'); row.className = 'member-item directory-row';
+      if (member.show_avatar && member.avatar_path) {
+        const image = document.createElement('img');
+        image.src = memberClient.storage.from('community-photos').getPublicUrl(member.avatar_path).data.publicUrl;
+        image.alt = '';
+        row.appendChild(image);
+      }
+      const info = document.createElement('div');
+      const name = document.createElement('strong'); name.textContent = member.display_name || [member.first_name,member.last_name].filter(Boolean).join(' ') || 'Member';
+      const details = document.createElement('p'); details.style.margin = '4px 0 0'; details.style.color = 'var(--muted)';
+      details.textContent = [member.show_city ? member.city : '', member.jewish_year, member.show_phone ? member.phone_number : '', member.show_email ? member.email : ''].filter(Boolean).join(' · ');
+      info.appendChild(name); info.appendChild(details); row.appendChild(info); list.appendChild(row);
+    });
+    if (!items.length) list.innerHTML = '<p>No approved directory members found.</p>';
+  }
+
+  async function loadApprovedMemberTools(session, profile) {
+    const [notifications, members] = await Promise.all([
+      memberClient.from('notifications').select('*').order('created_at', {ascending:false}).limit(50),
+      memberClient.from('profiles').select('id,display_name,first_name,last_name,phone_number,email,city,jewish_year,avatar_path,show_phone,show_email,show_city,show_avatar,directory_approved').eq('approved', true).eq('directory_approved', true).order('display_name')
+    ]);
+
+    const notificationList = document.getElementById('notificationsList');
+    notificationList.innerHTML = '';
+    (notifications.data || []).forEach((item) => {
+      const row = document.createElement('div'); row.className = 'member-item' + (item.read_at ? '' : ' unread');
+      const title = document.createElement('strong'); title.textContent = item.title;
+      const body = document.createElement('p'); body.textContent = item.body || ''; body.style.margin = '4px 0';
+      row.appendChild(title); row.appendChild(body);
+      if (item.link) { const link = document.createElement('a'); link.href = item.link; link.textContent = 'Open'; row.appendChild(link); }
+      if (!item.read_at) {
+        const read = document.createElement('button'); read.type = 'button'; read.textContent = 'Mark read'; read.style.marginLeft = '8px';
+        read.addEventListener('click', async () => { await memberClient.from('notifications').update({read_at:new Date().toISOString()}).eq('id',item.id); row.classList.remove('unread'); read.remove(); });
+        row.appendChild(read);
+      }
+      notificationList.appendChild(row);
+    });
+    if (!notifications.data || !notifications.data.length) notificationList.innerHTML = '<p>No notifications yet.</p>';
+
+    directoryMembers = members.data || [];
+    renderDirectory('');
+    document.getElementById('directorySearch').addEventListener('input', (event) => renderDirectory(event.target.value));
+
+    document.getElementById('showPhone').checked = !!profile.show_phone;
+    document.getElementById('showEmail').checked = !!profile.show_email;
+    document.getElementById('showCity').checked = profile.show_city !== false;
+    document.getElementById('showAvatar').checked = profile.show_avatar !== false;
+  }
+
+  document.getElementById('privacyForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const status = document.getElementById('privacyStatus');
+    const { data: { session } } = await memberClient.auth.getSession();
+    if (!session) return;
+    status.textContent = 'Saving…';
+    const profileResult = await memberClient.from('profiles').update({
+      show_phone:document.getElementById('showPhone').checked,
+      show_email:document.getElementById('showEmail').checked,
+      show_city:document.getElementById('showCity').checked,
+      show_avatar:document.getElementById('showAvatar').checked
+    }).eq('id',session.user.id);
+    if (profileResult.error) { status.textContent = 'Could not save: ' + profileResult.error.message; return; }
+
+    const file = document.getElementById('profilePicture').files[0];
+    if (file) {
+      const path = 'profiles/' + session.user.id + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g,'_');
+      const upload = await memberClient.storage.from('community-photos').upload(path,file);
+      if (upload.error) { status.textContent = 'Settings saved, but the picture could not upload: ' + upload.error.message; return; }
+      const record = await memberClient.from('photo_uploads').insert({uploader_id:session.user.id,storage_path:path,caption:'Profile picture',purpose:'profile'});
+      if (record.error) { status.textContent = 'Picture uploaded, but approval could not be requested: ' + record.error.message; return; }
+      document.getElementById('profilePicture').value = '';
+      status.textContent = 'Settings saved. Your profile picture is waiting for admin approval.';
+      return;
+    }
+    status.textContent = 'Privacy settings saved.';
+  });
+
+  document.getElementById('changePasswordForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const status = document.getElementById('passwordStatus');
+    const password = document.getElementById('newMemberPassword').value;
+    status.textContent = 'Changing…';
+    const result = await memberClient.auth.updateUser({password});
+    if (result.error) status.textContent = 'Could not change password: ' + result.error.message;
+    else { event.target.reset(); status.textContent = 'Password changed.'; }
+  });
+
   (async () => {
     const statusEl = document.getElementById('authStatus');
     const { session, profile } = await getMemberStatus();
+
+    const isRecovery = location.hash.includes('type=recovery') || location.search.includes('type=recovery');
+    if (isRecovery && session) {
+      showCard('resetPasswordCard');
+      return;
+    }
 
     if (!session) {
       showCard('logInCard');
@@ -480,6 +664,7 @@
 
     if (isProfileComplete(profile)) {
       showCard(profile && profile.approved ? 'approvedView' : 'pendingView');
+      if (profile && profile.approved) await loadApprovedMemberTools(session, profile);
       return;
     }
 
@@ -507,6 +692,7 @@
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="editorial.html">Editorial</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>

@@ -22,6 +22,7 @@
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -40,17 +41,36 @@
         <option value="simcha">Simcha</option>
       </select>
 
+      <div id="simchaFields" hidden>
+        <label for="eventType">Type of Simcha</label>
+        <select id="eventType">
+          <option value="wedding">Wedding / חתונה</option>
+          <option value="bar_mitzvah">Bar Mitzvah / בר מצוה</option>
+          <option value="bris">Bris / ברית</option>
+          <option value="vach_nacht">Vach Nacht / וואך נאכט</option>
+          <option value="engagement">Engagement / תנאים</option>
+          <option value="kiddush">Kiddush / קידוש</option>
+          <option value="other">Other</option>
+        </select>
+        <label for="eventDate">Date and time (optional)</label>
+        <input id="eventDate" type="datetime-local">
+        <label for="eventLocation">Hall or location (optional)</label>
+        <input id="eventLocation">
+        <label for="eventAddress">Address (optional)</label>
+        <input id="eventAddress">
+        <label for="eventMap">Map link (optional)</label>
+        <input id="eventMap" type="url" placeholder="https://…">
+      </div>
+
       <label for="subTitle"><span data-lang="en">Title</span><span data-lang="yi" hidden>טיטל</span></label>
       <input id="subTitle" required>
 
       <label for="subBody"><span data-lang="en">Details</span><span data-lang="yi" hidden>פרטים</span></label>
       <textarea id="subBody" required></textarea>
 
-      <label for="subName"><span data-lang="en">Your name</span><span data-lang="yi" hidden>אייער נאמען</span></label>
-      <input id="subName" required>
-
-      <label for="subContact"><span data-lang="en">Your phone or email (so we can reach you if needed)</span><span data-lang="yi" hidden>אייער טעלעפאן אדער אימעיל</span></label>
-      <input id="subContact" required>
+      <label for="notificationEmail">Email for approval updates (optional)</label>
+      <input id="notificationEmail" type="email" autocomplete="email">
+      <p style="font-size:13px;color:var(--muted);margin-top:5px;">This email stays private and is visible only to admins.</p>
 
       <button type="submit"><span data-lang="en">Submit</span><span data-lang="yi" hidden>שיקט אריין</span></button>
     </form>
@@ -68,6 +88,7 @@
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
   <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
   <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
@@ -78,20 +99,32 @@
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
   const client = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+  document.getElementById('subCategory').addEventListener('change', (event) => {
+    document.getElementById('simchaFields').hidden = event.target.value !== 'simcha';
+  });
+
   document.getElementById('submitForm').addEventListener('submit', async (event) => {
     event.preventDefault();
     const statusEl = document.getElementById('subStatus');
     const submitBtn = event.target.querySelector('button[type="submit"]');
 
+    const category = document.getElementById('subCategory').value;
+    const sessionResult = await client.auth.getSession();
     const payload = {
-      category: document.getElementById('subCategory').value,
+      category,
       title: document.getElementById('subTitle').value.trim(),
       body: document.getElementById('subBody').value.trim(),
-      submitter_name: document.getElementById('subName').value.trim(),
-      submitter_contact: document.getElementById('subContact').value.trim()
+      submitter_name: 'Anonymous',
+      submitter_contact: '',
+      submitter_id: sessionResult.data.session ? sessionResult.data.session.user.id : null,
+      event_type: category === 'simcha' ? document.getElementById('eventType').value : null,
+      event_date: category === 'simcha' && document.getElementById('eventDate').value ? new Date(document.getElementById('eventDate').value).toISOString() : null,
+      location_name: category === 'simcha' ? document.getElementById('eventLocation').value.trim() || null : null,
+      address: category === 'simcha' ? document.getElementById('eventAddress').value.trim() || null : null,
+      map_url: category === 'simcha' ? document.getElementById('eventMap').value.trim() || null : null
     };
 
-    if (!payload.title || !payload.body || !payload.submitter_name || !payload.submitter_contact) {
+    if (!payload.title || !payload.body) {
       statusEl.textContent = 'Please fill in all the fields.';
       return;
     }
@@ -106,6 +139,19 @@
     if (error) {
       statusEl.textContent = 'Could not send: ' + error.message;
       return;
+    }
+
+    const notificationEmail = document.getElementById('notificationEmail').value.trim();
+    if (notificationEmail) {
+      const contactResult = await client.from('submission_contacts').insert({
+        submission_title: payload.title,
+        submission_category: payload.category,
+        email: notificationEmail
+      });
+      if (contactResult.error) {
+        statusEl.textContent = 'The submission was sent, but the notification email could not be saved.';
+        return;
+      }
     }
 
     statusEl.textContent = 'Thank you! Your submission was sent to the admin for review.';

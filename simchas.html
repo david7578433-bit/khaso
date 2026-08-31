@@ -22,6 +22,7 @@
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
   <a href="ages.html">Ages</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -32,6 +33,10 @@
     <h2 data-lang="yi" hidden>שיקט אריין א שמחה</h2>
     <p data-lang="en">Have a simcha to announce? <a href="editorial.html">Send it in here</a>.</p>
     <p data-lang="yi" hidden><a href="editorial.html">שיקט עס אריין דא</a>.</p>
+  </section>
+  <section class="card">
+    <label for="simchaSearch">Search Simchas</label>
+    <input id="simchaSearch" type="search" placeholder="Search names, type, date or location…">
   </section>
   <div id="simchasList"></div>
   <section class="card" id="emptyState">
@@ -50,6 +55,7 @@
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
+  <a href="community.html" data-testing-feature>Community</a>
   <a href="editorial.html">Editorial</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
@@ -60,31 +66,78 @@
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
   const client = window.supabase.createClient(supabaseUrl, supabaseKey);
 
+  let allSimchas = [];
+
+  function favoriteButton(item) {
+    const key = 'simcha:' + item.id;
+    let favorites = [];
+    try { favorites = JSON.parse(localStorage.getItem('khaso_favorites') || '[]'); } catch (_) {}
+    const button = document.createElement('button'); button.type = 'button';
+    const refresh = () => { button.textContent = favorites.includes(key) ? '★ Saved' : '☆ Save'; };
+    button.addEventListener('click', () => { favorites = favorites.includes(key) ? favorites.filter((value) => value !== key) : favorites.concat(key); localStorage.setItem('khaso_favorites',JSON.stringify(favorites)); refresh(); });
+    refresh(); return button;
+  }
+
+  function renderSimchas(items) {
+    const list = document.getElementById('simchasList');
+    list.innerHTML = '';
+    document.getElementById('emptyState').hidden = items.length > 0;
+    items.forEach((item) => {
+      const card = document.createElement('section');
+      card.className = 'card';
+      const h2 = document.createElement('h2');
+      h2.textContent = item.title || '';
+      card.appendChild(h2);
+      const details = [
+        item.event_type ? item.event_type.replaceAll('_', ' ') : '',
+        item.event_date ? new Date(item.event_date).toLocaleString() : '',
+        item.event_date ? new Intl.DateTimeFormat('he-u-ca-hebrew',{day:'numeric',month:'long',year:'numeric'}).format(new Date(item.event_date)) : '',
+        item.location_name || '',
+        item.address || ''
+      ].filter(Boolean);
+      if (details.length) {
+        const meta = document.createElement('p');
+        meta.style.color = 'var(--muted)';
+        meta.textContent = details.join(' · ');
+        card.appendChild(meta);
+      }
+      const p = document.createElement('p');
+      p.textContent = item.body || '';
+      p.style.whiteSpace = 'pre-wrap';
+      card.appendChild(p);
+      if (item.map_url) {
+        const map = document.createElement('a');
+        map.href = item.map_url;
+        map.target = '_blank';
+        map.rel = 'noopener';
+        map.textContent = 'Open map';
+        card.appendChild(map);
+      }
+      card.appendChild(favoriteButton(item));
+      list.appendChild(card);
+    });
+  }
+
   async function loadSimchas() {
     const { data, error } = await client
       .from('submissions')
-      .select('title, body, created_at')
+      .select('id, title, body, created_at, event_type, event_date, location_name, address, map_url')
       .eq('category', 'simcha')
       .eq('approved', true)
       .order('created_at', { ascending: false });
 
     if (error || !data || data.length === 0) return;
 
-    document.getElementById('emptyState').hidden = true;
-    const list = document.getElementById('simchasList');
-    data.forEach((item) => {
-      const card = document.createElement('section');
-      card.className = 'card';
-      const h2 = document.createElement('h2');
-      h2.textContent = item.title || '';
-      const p = document.createElement('p');
-      p.textContent = item.body || '';
-      p.style.whiteSpace = 'pre-wrap';
-      card.appendChild(h2);
-      card.appendChild(p);
-      list.appendChild(card);
-    });
+    allSimchas = data;
+    renderSimchas(allSimchas);
   }
+
+  document.getElementById('simchaSearch').addEventListener('input', (event) => {
+    const query = event.target.value.trim().toLowerCase();
+    renderSimchas(!query ? allSimchas : allSimchas.filter((item) =>
+      [item.title,item.body,item.event_type,item.location_name,item.address,item.event_date].some((value) => String(value || '').toLowerCase().includes(query))
+    ));
+  });
 
   loadSimchas();
 </script>

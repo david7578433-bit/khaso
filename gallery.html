@@ -7,13 +7,12 @@
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
 <style>
-  .photo-grid { column-count: 3; column-gap: 12px; margin-top: 16px; }
-  .photo-grid figure { margin: 0 0 12px; break-inside: avoid; }
-  .photo-grid img { width: 100%; height: auto; border-radius: 8px; display: block; }
+  .photo-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 10px; margin-top: 16px; }
+  .photo-grid figure { margin: 0; }
+  .photo-grid img { width: 100%; height: 150px; object-fit: cover; border-radius: 8px; display: block; }
   .photo-grid figcaption { font-size: 12px; color: var(--muted); margin-top: 4px; text-align: center; }
   .empty-note { color: var(--muted); font-size: 14px; }
   .back-link { display: inline-block; margin-top: 4px; font-weight: 700; }
-  @media (max-width: 620px) { .photo-grid { column-count: 2; } }
 </style>
 </head>
 <body>
@@ -34,6 +33,10 @@
 
 <main><section class="card">
   <a class="back-link" href="pictures.html">&larr; <span data-lang="en">Back to Pictures</span><span data-lang="yi" hidden>צוריק צו בילדער</span></a>
+  <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:14px;">
+    <input id="photoSearch" type="search" placeholder="Search captions…" style="flex:1;min-width:170px;margin:0;">
+    <select id="photoYear" style="width:auto;margin:0;"><option value="">All years</option></select>
+  </div>
   <div class="photo-grid" id="photoGrid"></div>
 </section></main>
 
@@ -51,6 +54,28 @@
     monsey: 'Monsey',
     maamodim: 'מעמדים'
   };
+  let allPhotos = [];
+
+  function renderPhotos() {
+    const query = document.getElementById('photoSearch').value.trim().toLowerCase();
+    const year = document.getElementById('photoYear').value;
+    const grid = document.getElementById('photoGrid');
+    const photos = allPhotos.filter((photo) => (!query || (photo.caption || '').toLowerCase().includes(query)) && (!year || String(new Date(photo.created_at).getFullYear()) === year));
+    grid.innerHTML = '';
+    photos.forEach((photo) => {
+      const { data: urlData } = supabaseClient.storage.from('gallery-photos').getPublicUrl(photo.storage_path);
+      const figure = document.createElement('figure');
+      const img = document.createElement('img'); img.src = urlData.publicUrl; img.alt = photo.caption || ''; img.loading = 'lazy'; figure.appendChild(img);
+      if (photo.caption) { const caption = document.createElement('figcaption'); caption.textContent = photo.caption; figure.appendChild(caption); }
+      const key = 'photo:' + photo.id; let favorites = [];
+      try { favorites = JSON.parse(localStorage.getItem('khaso_favorites') || '[]'); } catch (_) {}
+      const save = document.createElement('button'); save.type = 'button'; save.style.width = '100%'; save.style.marginTop = '4px';
+      const refresh = () => { save.textContent = favorites.includes(key) ? '★ Saved' : '☆ Save'; };
+      save.addEventListener('click', () => { favorites = favorites.includes(key) ? favorites.filter((value) => value !== key) : favorites.concat(key); localStorage.setItem('khaso_favorites',JSON.stringify(favorites)); refresh(); });
+      refresh(); figure.appendChild(save); grid.appendChild(figure);
+    });
+    if (!photos.length) grid.innerHTML = '<p class="empty-note">No matching pictures.</p>';
+  }
 
   async function loadCategory() {
     const params = new URLSearchParams(window.location.search);
@@ -58,19 +83,18 @@
     const grid = document.getElementById('photoGrid');
     const titleEl = document.getElementById('categoryTitle');
 
-    if (!category) {
+    if (!category || !CATEGORY_LABELS[category]) {
       titleEl.textContent = 'Pictures';
       grid.innerHTML = '<p class="empty-note">No category selected.</p>';
       return;
     }
 
-    const label = CATEGORY_LABELS[category] || category;
-    titleEl.textContent = label;
-    document.title = label + ' | ברכת שמים קאשוי';
+    titleEl.textContent = CATEGORY_LABELS[category];
+    document.title = CATEGORY_LABELS[category] + ' | ברכת שמים קאשוי';
 
     const { data, error } = await supabaseClient
       .from('gallery_photos')
-      .select('storage_path, caption, created_at')
+      .select('id, storage_path, caption, created_at')
       .eq('category', category)
       .order('created_at', { ascending: false });
 
@@ -84,23 +108,14 @@
       return;
     }
 
-    grid.innerHTML = '';
-    data.forEach((photo) => {
-      const { data: urlData } = supabaseClient.storage.from('gallery-photos').getPublicUrl(photo.storage_path);
-      const figure = document.createElement('figure');
-      const img = document.createElement('img');
-      img.src = urlData.publicUrl;
-      img.alt = photo.caption || '';
-      img.loading = 'lazy';
-      figure.appendChild(img);
-      if (photo.caption) {
-        const caption = document.createElement('figcaption');
-        caption.textContent = photo.caption;
-        figure.appendChild(caption);
-      }
-      grid.appendChild(figure);
-    });
+    allPhotos = data;
+    const yearSelect = document.getElementById('photoYear');
+    [...new Set(data.map((photo) => new Date(photo.created_at).getFullYear()))].sort((a,b)=>b-a).forEach((year) => { const option=document.createElement('option'); option.value=String(year); option.textContent=year; yearSelect.appendChild(option); });
+    renderPhotos();
   }
+
+  document.getElementById('photoSearch').addEventListener('input',renderPhotos);
+  document.getElementById('photoYear').addEventListener('change',renderPhotos);
 
   loadCategory();
 </script>

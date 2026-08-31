@@ -34,19 +34,15 @@
     .gallery-manage-item .gm-category { font-weight: 700; }
     .gallery-manage-item .gm-caption { color: var(--muted); font-size: 13px; margin: 4px 0 0; }
     .gallery-manage-item button { padding: 6px 12px; }
-    .staged-photo-preview { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
-    .staged-photo-preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
-    .staged-photo-preview button { padding: 6px 12px; }
-
-    @media (max-width: 620px) {
-      .admin-quicknav { padding: 10px; gap: 6px; }
-      .admin-quicknav a { padding: 8px 12px; font-size: 13px; }
-      #pendingList li { flex-wrap: wrap; }
-      .gallery-manage-item { flex-wrap: wrap; }
-      .gallery-manage-item .gm-info { flex: 1 1 140px; min-width: 140px; }
-      .gallery-manage-item img { width: 70px; height: 70px; }
-      #membersTable { font-size: 12px; }
-    }
+    .stats-grid { display:grid; grid-template-columns:repeat(auto-fit,minmax(110px,1fr)); gap:10px; }
+    .stat-box { background:#f4f7f8; border:1px solid var(--border); border-radius:10px; padding:12px; text-align:center; }
+    .stat-box strong { display:block; font-size:25px; color:var(--accent-dark); }
+    .admin-list-item { border-top:1px solid var(--border); padding:10px 0; }
+    .admin-list-item:first-child { border-top:0; }
+    .admin-list-actions { display:flex; gap:7px; flex-wrap:wrap; }
+    .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
+    .form-grid .wide { grid-column:1 / -1; }
+    @media (max-width:600px) { .form-grid { grid-template-columns:1fr; } .form-grid .wide { grid-column:auto; } }
   </style>
 </head>
 <body>
@@ -71,6 +67,14 @@
         <button id="logoutButton" class="secondary" type="button">Log Out</button>
       </div>
       <nav class="admin-quicknav" aria-label="Admin sections">
+        <a href="#section-dashboard">Dashboard</a>
+        <a href="#section-site-settings">Testing Mode</a>
+        <a href="#section-events">Events</a>
+        <a href="#section-yahrzeits">Yahrzeits</a>
+        <a href="#section-community-tools">Community Tools</a>
+        <a href="#section-suggestions">Suggestions</a>
+        <a href="#section-reports">Reports</a>
+        <a href="#section-activity">Activity</a>
         <a href="#section-announcements">Announcements</a>
         <a href="#section-pending-members">Pending Members</a>
         <a href="#section-all-members">All Members</a>
@@ -80,6 +84,87 @@
         <a href="#section-add-picture">Add Picture</a>
         <a href="#section-manage-pictures">Manage Pictures</a>
       </nav>
+      <div class="section-item" id="section-dashboard">
+        <h2>Dashboard</h2>
+        <div class="stats-grid" id="dashboardStats"><p>Loading…</p></div>
+      </div>
+
+      <div class="section-item" id="section-site-settings">
+        <h2>Testing & Maintenance</h2>
+        <form id="siteSettingsForm">
+          <label><input id="testingMode" type="checkbox"> Testing mode (unfinished features are for admins)</label>
+          <label><input id="maintenanceMode" type="checkbox"> Put the public website on hold</label>
+          <label for="maintenanceMessage">Hold message</label>
+          <input id="maintenanceMessage" value="We will be back soon.">
+          <button type="submit">Save Site Settings</button>
+        </form>
+      </div>
+
+      <div class="section-item" id="section-events">
+        <h2>Community Calendar</h2>
+        <form id="eventForm" class="form-grid">
+          <div class="wide"><label for="eventTitle">Title</label><input id="eventTitle" required></div>
+          <div><label for="eventTypeAdmin">Type</label><select id="eventTypeAdmin"><option value="wedding">Wedding</option><option value="bar_mitzvah">Bar Mitzvah</option><option value="bris">Bris</option><option value="vach_nacht">Vach Nacht</option><option value="zmanim">Zmanim</option><option value="community">Community</option><option value="other">Other</option></select></div>
+          <div><label for="eventStarts">Date & time</label><input id="eventStarts" type="datetime-local" required></div>
+          <div><label for="eventLocationAdmin">Location</label><input id="eventLocationAdmin"></div>
+          <div><label for="eventAddressAdmin">Address</label><input id="eventAddressAdmin"></div>
+          <div class="wide"><label for="eventDescription">Details</label><textarea id="eventDescription"></textarea></div>
+          <div class="wide"><label for="eventMapAdmin">Map link</label><input id="eventMapAdmin" type="url"></div>
+          <button type="submit">Add Event</button>
+        </form>
+        <div id="adminEventsList"></div>
+      </div>
+
+      <div class="section-item" id="section-yahrzeits">
+        <h2>Yahrzeits</h2>
+        <form id="yahrzeitForm" class="form-grid">
+          <div><label for="yahrzeitName">Name</label><input id="yahrzeitName" required></div>
+          <div><label for="yahrzeitDate">Hebrew date</label><input id="yahrzeitDate" required placeholder="י׳ אלול"></div>
+          <div class="wide"><label for="yahrzeitNotes">Notes</label><input id="yahrzeitNotes"></div>
+          <button type="submit">Add Yahrzeit</button>
+        </form>
+        <div id="adminYahrzeitsList"></div>
+      </div>
+
+      <div class="section-item" id="section-community-tools">
+        <h2>Community Forms, Jobs & Campaigns</h2>
+        <h3>Add a downloadable form</h3>
+        <form id="communityFormForm" class="form-grid">
+          <div><label for="communityFormTitle">Title</label><input id="communityFormTitle" required></div>
+          <div><label for="communityFormUrl">File or Google Drive link</label><input id="communityFormUrl" type="url" required></div>
+          <div class="wide"><label for="communityFormDescription">Description</label><input id="communityFormDescription"></div>
+          <button type="submit">Add Form</button>
+        </form>
+        <h3>Add a job</h3>
+        <form id="jobForm" class="form-grid">
+          <div><label for="jobTitle">Title</label><input id="jobTitle" required></div>
+          <div><label for="jobLocation">Location</label><input id="jobLocation"></div>
+          <div class="wide"><label for="jobDescription">Details</label><textarea id="jobDescription"></textarea></div>
+          <div class="wide"><label for="jobContact">Contact</label><input id="jobContact"></div>
+          <button type="submit">Post Job</button>
+        </form>
+        <h3>Add a fundraising campaign</h3>
+        <form id="campaignForm" class="form-grid">
+          <div><label for="campaignTitle">Title</label><input id="campaignTitle" required></div>
+          <div><label for="campaignGoal">Goal</label><input id="campaignGoal" type="number" min="0"></div>
+          <div class="wide"><label for="campaignDescription">Details</label><textarea id="campaignDescription"></textarea></div>
+          <div class="wide"><label for="campaignUrl">Secure donation link</label><input id="campaignUrl" type="url"></div>
+          <button type="submit">Add Campaign</button>
+        </form>
+      </div>
+
+      <div class="section-item" id="section-suggestions">
+        <h2>Member Suggestions</h2>
+        <div id="suggestionsList"></div>
+      </div>
+      <div class="section-item" id="section-reports">
+        <h2>Message Reports</h2>
+        <div id="reportsList"></div>
+      </div>
+      <div class="section-item" id="section-activity">
+        <h2>Admin Activity</h2>
+        <div id="activityList"></div>
+      </div>
       <div class="section-item" id="section-announcements">
       <form id="announcementForm">
         <h3>Announcement 1</h3>
@@ -115,6 +200,9 @@
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Username</th>
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Year Room</th>
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Approved</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Directory</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Role</th>
+            <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Suspend</th>
             <th style="text-align:left; padding:6px 8px; border-bottom:1px solid var(--border);">Remove</th>
           </tr>
         </thead>
@@ -137,15 +225,17 @@
       <div class="section-item" id="section-add-picture">
       <h2>Add a Picture</h2>
       <form id="galleryUploadForm">
-        <label for="galleryCategory">Album</label>
-        <input type="text" id="galleryCategory" list="albumNamesList" placeholder="Album name" required>
-        <datalist id="albumNamesList"></datalist>
+        <label for="galleryCategory">Category</label>
+        <select id="galleryCategory" required>
+          <option value="rabbi">Rabbi</option>
+          <option value="yeshiva_gedola">Yeshiva Gedola</option>
+          <option value="yeshiva_ktana">Yeshiva Ktana</option>
+          <option value="kiryas_joel">Kiryas Joel</option>
+          <option value="monsey">Monsey</option>
+          <option value="maamodim">מעמדים</option>
+        </select>
         <label for="galleryFile">Picture</label>
         <input type="file" id="galleryFile" accept="image/*" required>
-        <div class="staged-photo-preview" id="stagedPhotoPreview" hidden>
-          <img id="stagedPhotoImg" alt="Preview">
-          <button type="button" id="reEditPhotoBtn">Re-edit</button>
-        </div>
         <label for="galleryCaption">Caption (optional)</label>
         <input type="text" id="galleryCaption" maxlength="200">
         <button id="galleryUploadButton" type="submit">Add Picture</button>
@@ -163,7 +253,6 @@
   </section></main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-  <script src="photo-editor.js"></script>
   <script>
     const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
     const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
@@ -298,7 +387,7 @@
 
       const { data, error } = await supabaseClient
         .from('profiles')
-        .select('id, first_name, last_name, phone_number, email, city, username, jewish_year, approved')
+        .select('id, first_name, last_name, phone_number, email, city, username, jewish_year, approved, directory_approved, role, suspended_until')
         .order('last_name', { ascending: true });
 
       if (error) {
@@ -368,6 +457,41 @@
         approvedCell.textContent = member.approved ? 'Yes' : 'No';
         row.appendChild(approvedCell);
 
+        const directoryCell = document.createElement('td');
+        directoryCell.style.padding = '6px 8px'; directoryCell.style.borderBottom = '1px solid var(--border)';
+        const directoryCheck = document.createElement('input'); directoryCheck.type = 'checkbox'; directoryCheck.checked = !!member.directory_approved;
+        directoryCheck.addEventListener('change', async () => {
+          directoryCheck.disabled = true;
+          const result = await supabaseClient.rpc('set_member_directory',{target_user:member.id,is_approved:directoryCheck.checked});
+          directoryCheck.disabled = false;
+          if (result.error) { directoryCheck.checked = !directoryCheck.checked; setStatus(result.error.message,true); }
+        });
+        directoryCell.appendChild(directoryCheck); row.appendChild(directoryCell);
+
+        const roleCell = document.createElement('td'); roleCell.style.padding = '6px 8px'; roleCell.style.borderBottom = '1px solid var(--border)';
+        if (member.role === 'owner') roleCell.textContent = 'Owner';
+        else {
+          const roleSelect = document.createElement('select'); roleSelect.style.margin = '0';
+          ['member','admin'].forEach((role) => { const option = document.createElement('option'); option.value = role; option.textContent = role[0].toUpperCase()+role.slice(1); option.selected = (member.role || 'member') === role; roleSelect.appendChild(option); });
+          roleSelect.addEventListener('change', async () => {
+            roleSelect.disabled = true; const result = await supabaseClient.rpc('set_member_role',{target_user:member.id,new_role:roleSelect.value}); roleSelect.disabled = false;
+            if (result.error) { setStatus(result.error.message,true); await loadAllMembers(); }
+          });
+          roleCell.appendChild(roleSelect);
+        }
+        row.appendChild(roleCell);
+
+        const suspendCell = document.createElement('td'); suspendCell.style.padding = '6px 8px'; suspendCell.style.borderBottom = '1px solid var(--border)';
+        const suspendButton = document.createElement('button'); suspendButton.type = 'button'; suspendButton.className = 'secondary';
+        suspendButton.textContent = member.suspended_until && new Date(member.suspended_until) > new Date() ? 'Unsuspend' : '7 days';
+        suspendButton.addEventListener('click', async () => {
+          const currentlySuspended = member.suspended_until && new Date(member.suspended_until) > new Date();
+          const until = currentlySuspended ? null : new Date(Date.now()+7*86400000).toISOString();
+          const result = await supabaseClient.rpc('suspend_member',{target_user:member.id,until_time:until});
+          if (result.error) setStatus(result.error.message,true); else await loadAllMembers();
+        });
+        suspendCell.appendChild(suspendButton); row.appendChild(suspendCell);
+
         const removeCell = document.createElement('td');
         removeCell.style.padding = '6px 8px';
         removeCell.style.borderBottom = '1px solid var(--border)';
@@ -391,6 +515,16 @@
           row.remove();
         });
         removeCell.appendChild(removeButton);
+        if (member.email && !member.email.endsWith('@khaso-noemail.com')) {
+          const resetButton = document.createElement('button');
+          resetButton.type = 'button'; resetButton.className = 'secondary'; resetButton.textContent = 'Reset email';
+          resetButton.addEventListener('click', async () => {
+            if (!confirm('Send a password-reset email to ' + member.email + '?')) return;
+            const result = await supabaseClient.auth.resetPasswordForEmail(member.email, {redirectTo:new URL('login.html',location.href).href});
+            setStatus(result.error ? 'Could not send reset email: ' + result.error.message : 'Password-reset email sent.', !!result.error);
+          });
+          removeCell.insertBefore(resetButton, removeButton);
+        }
         row.appendChild(removeCell);
 
         body.appendChild(row);
@@ -485,10 +619,19 @@
         const card = document.createElement('div');
         card.className = 'pending-photo';
 
-        const img = document.createElement('img');
-        img.src = urlData.publicUrl;
-        img.alt = photo.caption || '';
-        card.appendChild(img);
+        if (/\.pdf$/i.test(photo.storage_path)) {
+          const pdfLink = document.createElement('a');
+          pdfLink.href = urlData.publicUrl;
+          pdfLink.target = '_blank';
+          pdfLink.rel = 'noopener';
+          pdfLink.textContent = 'Open PDF';
+          card.appendChild(pdfLink);
+        } else {
+          const img = document.createElement('img');
+          img.src = urlData.publicUrl;
+          img.alt = photo.caption || '';
+          card.appendChild(img);
+        }
 
         if (photo.caption) {
           const caption = document.createElement('p');
@@ -548,7 +691,7 @@
 
       const { data, error } = await supabaseClient
         .from('submissions')
-        .select('id, category, title, body, submitter_name, submitter_contact, approved, created_at')
+        .select('id, category, title, body, submitter_name, submitter_contact, approved, created_at, event_type, event_date, location_name, address, map_url, scheduled_publish_at, expires_at')
         .eq('approved', false)
         .order('created_at', { ascending: false });
 
@@ -563,6 +706,7 @@
         return;
       }
 
+      const contactResult = await supabaseClient.from('submission_contacts').select('submission_title,submission_category,email');
       data.forEach((sub) => {
         const card = document.createElement('div');
         card.style.padding = '12px';
@@ -572,11 +716,22 @@
         const meta = document.createElement('p');
         meta.style.margin = '0 0 6px';
         meta.style.fontWeight = '700';
-        meta.textContent = '[' + sub.category + '] ' + sub.title + ' — ' + sub.submitter_name + ' (' + sub.submitter_contact + ')';
+        meta.textContent = '[' + sub.category + '] ' + sub.title;
 
         const body = document.createElement('p');
         body.style.whiteSpace = 'pre-wrap';
         body.textContent = sub.body;
+
+        const details = document.createElement('p');
+        details.style.color = 'var(--muted)';
+        const contact = (contactResult.data || []).find((item) => item.submission_title === sub.title && item.submission_category === sub.category);
+        details.textContent = [sub.event_type, sub.event_date ? new Date(sub.event_date).toLocaleString() : '', sub.location_name, sub.address, contact ? 'Update email: ' + contact.email : ''].filter(Boolean).join(' · ');
+
+        const scheduleLabel = document.createElement('label'); scheduleLabel.textContent = 'Publish later (optional)';
+        const scheduleInput = document.createElement('input'); scheduleInput.type = 'datetime-local';
+        const expiryLabel = document.createElement('label'); expiryLabel.textContent = 'Keep posted for';
+        const expirySelect = document.createElement('select');
+        [['7','7 days'],['30','30 days'],['forever','Forever']].forEach(([value,label]) => { const option=document.createElement('option'); option.value=value; option.textContent=label; expirySelect.appendChild(option); });
 
         const actions = document.createElement('div');
         actions.className = 'admin-actions';
@@ -586,9 +741,12 @@
         approveButton.textContent = 'Approve & Post';
         approveButton.addEventListener('click', async () => {
           approveButton.disabled = true;
+          const scheduled = scheduleInput.value ? new Date(scheduleInput.value) : null;
+          const start = scheduled || new Date();
+          const expires = expirySelect.value === 'forever' ? null : new Date(start.getTime() + Number(expirySelect.value) * 86400000).toISOString();
           const { error: updateError } = await supabaseClient
             .from('submissions')
-            .update({ approved: true })
+            .update({ approved: true, scheduled_publish_at: scheduled ? scheduled.toISOString() : null, expires_at: expires })
             .eq('id', sub.id);
           if (updateError) {
             alert('Could not approve: ' + updateError.message);
@@ -620,6 +778,11 @@
         actions.appendChild(rejectButton);
         card.appendChild(meta);
         card.appendChild(body);
+        card.appendChild(details);
+        card.appendChild(scheduleLabel);
+        card.appendChild(scheduleInput);
+        card.appendChild(expiryLabel);
+        card.appendChild(expirySelect);
         card.appendChild(actions);
         list.appendChild(card);
       });
@@ -633,50 +796,6 @@
       monsey: 'Monsey',
       maamodim: 'מעמדים'
     };
-
-    const LABEL_TO_SLUG = {};
-    Object.keys(CATEGORY_LABELS).forEach((slug) => { LABEL_TO_SLUG[CATEGORY_LABELS[slug]] = slug; });
-    let editedPhotoBlob = null;
-
-    async function loadAlbumNames() {
-      const names = new Set(Object.values(CATEGORY_LABELS));
-      const { data } = await supabaseClient.from('gallery_photos').select('category');
-      if (data) data.forEach((row) => { if (row.category) names.add(CATEGORY_LABELS[row.category] || row.category); });
-      const list = document.getElementById('albumNamesList');
-      list.innerHTML = '';
-      Array.from(names).sort().forEach((name) => {
-        const opt = document.createElement('option');
-        opt.value = name;
-        list.appendChild(opt);
-      });
-    }
-
-    document.getElementById('galleryFile').addEventListener('change', async () => {
-      const fileInput = document.getElementById('galleryFile');
-      const file = fileInput.files[0];
-      if (!file) return;
-      const blob = await window.openPhotoEditor(file);
-      const preview = document.getElementById('stagedPhotoPreview');
-      const previewImg = document.getElementById('stagedPhotoImg');
-      if (blob) {
-        editedPhotoBlob = blob;
-        previewImg.src = URL.createObjectURL(blob);
-        preview.hidden = false;
-      } else {
-        editedPhotoBlob = null;
-        fileInput.value = '';
-        preview.hidden = true;
-      }
-    });
-    document.getElementById('reEditPhotoBtn').addEventListener('click', async () => {
-      const source = editedPhotoBlob || document.getElementById('galleryFile').files[0];
-      if (!source) return;
-      const blob = await window.openPhotoEditor(source);
-      if (blob) {
-        editedPhotoBlob = blob;
-        document.getElementById('stagedPhotoImg').src = URL.createObjectURL(blob);
-      }
-    });
 
     async function loadGalleryManage() {
       const list = document.getElementById('galleryList');
@@ -724,31 +843,6 @@
         }
         item.appendChild(info);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'secondary';
-        editButton.textContent = 'Edit';
-        editButton.addEventListener('click', async () => {
-          editButton.disabled = true;
-          try {
-            const resp = await fetch(urlData.publicUrl);
-            const sourceBlob = await resp.blob();
-            const newBlob = await window.openPhotoEditor(sourceBlob);
-            if (!newBlob) { editButton.disabled = false; return; }
-            const newPath = photo.category.replace(/[^a-zA-Z0-9._-]/g, '_') + '/' + Date.now() + '-edited.jpg';
-            const { error: upErr } = await supabaseClient.storage.from('gallery-photos').upload(newPath, newBlob, { contentType: 'image/jpeg' });
-            if (upErr) { setStatus('Could not save edited picture: ' + upErr.message, true); editButton.disabled = false; return; }
-            const { error: updErr } = await supabaseClient.from('gallery_photos').update({ storage_path: newPath }).eq('id', photo.id);
-            if (updErr) { setStatus('Could not update picture: ' + updErr.message, true); editButton.disabled = false; return; }
-            await supabaseClient.storage.from('gallery-photos').remove([photo.storage_path]);
-            await loadGalleryManage();
-          } catch (err) {
-            setStatus('Could not open picture for editing: ' + err.message, true);
-            editButton.disabled = false;
-          }
-        });
-        item.appendChild(editButton);
-
         const deleteButton = document.createElement('button');
         deleteButton.type = 'button';
         deleteButton.className = 'secondary';
@@ -776,21 +870,18 @@
     document.getElementById('galleryUploadForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const galleryStatusEl = document.getElementById('galleryStatus');
-      const categoryInput = document.getElementById('galleryCategory');
+      const categorySelect = document.getElementById('galleryCategory');
       const fileInput = document.getElementById('galleryFile');
       const captionInput = document.getElementById('galleryCaption');
       const button = document.getElementById('galleryUploadButton');
-      const file = editedPhotoBlob || fileInput.files[0];
+      const file = fileInput.files[0];
       if (!file) return;
-
-      const typedValue = categoryInput.value.trim();
-      const categoryToStore = LABEL_TO_SLUG[typedValue] || typedValue;
 
       button.disabled = true;
       galleryStatusEl.textContent = 'Uploading…';
 
-      const path = categoryToStore.replace(/[^a-zA-Z0-9._-]/g, '_') + '/' + Date.now() + '-edited.jpg';
-      const { error: uploadError } = await supabaseClient.storage.from('gallery-photos').upload(path, file, { contentType: 'image/jpeg' });
+      const path = categorySelect.value + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const { error: uploadError } = await supabaseClient.storage.from('gallery-photos').upload(path, file);
       if (uploadError) {
         galleryStatusEl.textContent = 'Could not upload: ' + uploadError.message;
         button.disabled = false;
@@ -798,7 +889,7 @@
       }
 
       const { error: insertError } = await supabaseClient.from('gallery_photos').insert({
-        category: categoryToStore,
+        category: categorySelect.value,
         storage_path: path,
         caption: captionInput.value.trim() || null
       });
@@ -811,13 +902,177 @@
 
       fileInput.value = '';
       captionInput.value = '';
-      categoryInput.value = '';
-      editedPhotoBlob = null;
-      document.getElementById('stagedPhotoPreview').hidden = true;
       galleryStatusEl.textContent = 'Picture added.';
       await loadGalleryManage();
-      await loadAlbumNames();
     });
+
+    async function logAdminAction(action, targetType, targetId, details) {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+      await supabaseClient.from('admin_activity').insert({
+        admin_id: session.user.id,
+        action,
+        target_type: targetType || null,
+        target_id: targetId == null ? null : String(targetId),
+        details: details || {}
+      });
+    }
+
+    async function loadDashboard() {
+      const stats = [
+        ['Members', 'profiles', null],
+        ['Pending Members', 'profiles', ['approved', false]],
+        ['Messages', 'posts', null],
+        ['Pending Photos', 'photo_uploads', ['status', 'pending']],
+        ['Submissions', 'submissions', ['approved', false]],
+        ['Suggestions', 'suggestions', ['status', 'new']]
+      ];
+      const values = await Promise.all(stats.map(async ([label, table, filter]) => {
+        let query = supabaseClient.from(table).select('*', { count: 'exact', head: true });
+        if (filter) query = query.eq(filter[0], filter[1]);
+        const result = await query;
+        return { label, count: result.error ? '—' : (result.count || 0) };
+      }));
+      document.getElementById('dashboardStats').innerHTML = values.map((item) =>
+        '<div class="stat-box"><strong>' + item.count + '</strong><span>' + item.label + '</span></div>'
+      ).join('');
+    }
+
+    async function loadSiteSettings() {
+      const { data } = await supabaseClient.from('site_settings').select('key,value').in('key', ['testing_mode','maintenance']);
+      (data || []).forEach((item) => {
+        if (item.key === 'testing_mode') document.getElementById('testingMode').checked = !!item.value.enabled;
+        if (item.key === 'maintenance') {
+          document.getElementById('maintenanceMode').checked = !!item.value.enabled;
+          document.getElementById('maintenanceMessage').value = item.value.message || 'We will be back soon.';
+        }
+      });
+    }
+
+    document.getElementById('siteSettingsForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const rows = [
+        { key:'testing_mode', value:{ enabled:document.getElementById('testingMode').checked } },
+        { key:'maintenance', value:{ enabled:document.getElementById('maintenanceMode').checked, message:document.getElementById('maintenanceMessage').value.trim() || 'We will be back soon.' } }
+      ];
+      const result = await supabaseClient.from('site_settings').upsert(rows);
+      if (result.error) setStatus('Could not save site settings: ' + result.error.message, true);
+      else { setStatus('Site settings saved.'); await logAdminAction('update_settings', 'site_settings', null, rows); }
+    });
+
+    async function loadEventsAdmin() {
+      const list = document.getElementById('adminEventsList');
+      const { data, error } = await supabaseClient.from('events').select('*').order('starts_at');
+      if (error) { list.innerHTML = '<p>Events will appear after the community database upgrade is installed.</p>'; return; }
+      list.innerHTML = '';
+      (data || []).forEach((item) => {
+        const row = document.createElement('div');
+        row.className = 'admin-list-item';
+        const text = document.createElement('p');
+        text.textContent = item.title + ' · ' + new Date(item.starts_at).toLocaleString();
+        const button = document.createElement('button');
+        button.type = 'button'; button.textContent = 'Delete';
+        button.addEventListener('click', async () => {
+          if (!confirm('Delete this event?')) return;
+          const result = await supabaseClient.from('events').delete().eq('id', item.id);
+          if (result.error) setStatus(result.error.message, true); else { await logAdminAction('delete','event',item.id,{title:item.title}); await loadEventsAdmin(); }
+        });
+        row.appendChild(text); row.appendChild(button); list.appendChild(row);
+      });
+      if (!data || !data.length) list.innerHTML = '<p>No events yet.</p>';
+    }
+
+    document.getElementById('eventForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const payload = {
+        title:document.getElementById('eventTitle').value.trim(), event_type:document.getElementById('eventTypeAdmin').value,
+        starts_at:new Date(document.getElementById('eventStarts').value).toISOString(),
+        location_name:document.getElementById('eventLocationAdmin').value.trim() || null,
+        address:document.getElementById('eventAddressAdmin').value.trim() || null,
+        description:document.getElementById('eventDescription').value.trim() || null,
+        map_url:document.getElementById('eventMapAdmin').value.trim() || null,
+        created_by:session.user.id
+      };
+      const result = await supabaseClient.from('events').insert(payload).select('id').single();
+      if (result.error) setStatus('Could not add event: ' + result.error.message, true);
+      else { event.target.reset(); setStatus('Event added.'); await logAdminAction('create','event',result.data.id,{title:payload.title}); await loadEventsAdmin(); }
+    });
+
+    async function loadYahrzeitsAdmin() {
+      const list = document.getElementById('adminYahrzeitsList');
+      const { data, error } = await supabaseClient.from('yahrzeits').select('*').order('created_at', {ascending:false});
+      if (error) { list.innerHTML = '<p>Yahrzeits will appear after the database upgrade.</p>'; return; }
+      list.innerHTML = (data || []).map((item) => '<div class="admin-list-item"><strong>' + item.name + '</strong> · ' + item.hebrew_date + '</div>').join('') || '<p>No yahrzeits yet.</p>';
+    }
+
+    document.getElementById('yahrzeitForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const payload = { name:document.getElementById('yahrzeitName').value.trim(), hebrew_date:document.getElementById('yahrzeitDate').value.trim(), notes:document.getElementById('yahrzeitNotes').value.trim() || null, created_by:session.user.id };
+      const result = await supabaseClient.from('yahrzeits').insert(payload);
+      if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Yahrzeit added.'); await logAdminAction('create','yahrzeit',null,payload); await loadYahrzeitsAdmin(); }
+    });
+
+    document.getElementById('communityFormForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const payload = { title:document.getElementById('communityFormTitle').value.trim(), file_url:document.getElementById('communityFormUrl').value.trim(), description:document.getElementById('communityFormDescription').value.trim() || null, created_by:session.user.id };
+      const result = await supabaseClient.from('community_forms').insert(payload);
+      if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Community form added.'); await logAdminAction('create','community_form',null,payload); }
+    });
+
+    document.getElementById('jobForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const payload = { title:document.getElementById('jobTitle').value.trim(), description:document.getElementById('jobDescription').value.trim() || null, contact:document.getElementById('jobContact').value.trim() || null, location:document.getElementById('jobLocation').value.trim() || null, approved:true, created_by:session.user.id };
+      const result = await supabaseClient.from('jobs').insert(payload);
+      if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Job posted.'); await logAdminAction('create','job',null,payload); }
+    });
+
+    document.getElementById('campaignForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      const payload = { title:document.getElementById('campaignTitle').value.trim(), description:document.getElementById('campaignDescription').value.trim() || null, goal:document.getElementById('campaignGoal').value || null, donation_url:document.getElementById('campaignUrl').value.trim() || null, created_by:session.user.id };
+      const result = await supabaseClient.from('campaigns').insert(payload);
+      if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Campaign added.'); await logAdminAction('create','campaign',null,payload); }
+    });
+
+    async function loadSuggestions() {
+      const list = document.getElementById('suggestionsList');
+      const { data, error } = await supabaseClient.from('suggestions').select('*').order('created_at', {ascending:false});
+      if (error) { list.innerHTML = '<p>Suggestions will appear after the database upgrade.</p>'; return; }
+      list.innerHTML = '';
+      (data || []).forEach((item) => {
+        const row = document.createElement('div'); row.className = 'admin-list-item';
+        const body = document.createElement('p'); body.textContent = item.body;
+        const meta = document.createElement('p'); meta.style.color = 'var(--muted)'; meta.textContent = item.status + ' · ' + new Date(item.created_at).toLocaleString();
+        const button = document.createElement('button'); button.type = 'button'; button.textContent = 'Mark handled'; button.disabled = item.status === 'handled';
+        button.addEventListener('click', async () => { await supabaseClient.from('suggestions').update({status:'handled'}).eq('id',item.id); await logAdminAction('handle','suggestion',item.id,{}); await loadSuggestions(); });
+        row.appendChild(body); row.appendChild(meta); row.appendChild(button); list.appendChild(row);
+      });
+      if (!data || !data.length) list.innerHTML = '<p>No suggestions yet.</p>';
+    }
+
+    async function loadReportsAndActivity() {
+      const [reports, activity] = await Promise.all([
+        supabaseClient.from('reports').select('*').order('created_at',{ascending:false}).limit(100),
+        supabaseClient.from('admin_activity').select('*').order('created_at',{ascending:false}).limit(100)
+      ]);
+      const reportsList = document.getElementById('reportsList'); reportsList.innerHTML = '';
+      (reports.data || []).forEach((item) => {
+        const row = document.createElement('div'); row.className = 'admin-list-item';
+        const text = document.createElement('p'); text.textContent = item.reason + ' · Post ' + (item.post_id || '—');
+        const meta = document.createElement('p'); meta.style.color='var(--muted)'; meta.textContent = item.status + ' · ' + new Date(item.created_at).toLocaleString();
+        const button = document.createElement('button'); button.type='button'; button.textContent='Resolve'; button.disabled=item.status==='resolved';
+        button.addEventListener('click',async()=>{ const {data:{session}}=await supabaseClient.auth.getSession(); await supabaseClient.from('reports').update({status:'resolved',resolved_at:new Date().toISOString(),resolved_by:session.user.id}).eq('id',item.id); await logAdminAction('resolve','report',item.id,{}); await loadReportsAndActivity(); });
+        row.appendChild(text); row.appendChild(meta); row.appendChild(button); reportsList.appendChild(row);
+      });
+      if (!reports.data || !reports.data.length) reportsList.innerHTML='<p>No reports.</p>';
+
+      const activityList = document.getElementById('activityList');
+      activityList.innerHTML = (activity.data || []).map((item) => '<div class="admin-list-item"><strong>' + item.action + '</strong> · ' + (item.target_type || '') + ' ' + (item.target_id || '') + '<br><small>' + new Date(item.created_at).toLocaleString() + '</small></div>').join('') || '<p>No activity yet.</p>';
+    }
 
     async function showEditor() {
       loginForm.style.display = 'none';
@@ -829,7 +1084,12 @@
       await loadAdminMessages();
       await loadSubmissions();
       await loadGalleryManage();
-      await loadAlbumNames();
+      await loadDashboard();
+      await loadSiteSettings();
+      await loadEventsAdmin();
+      await loadYahrzeitsAdmin();
+      await loadSuggestions();
+      await loadReportsAndActivity();
     }
 
     loginForm.addEventListener('submit', async (event) => {
