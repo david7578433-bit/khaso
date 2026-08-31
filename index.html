@@ -354,6 +354,31 @@
     .hero-row { flex-wrap: wrap; }
     .hero { max-width: 440px; }
   }
+
+  /* Phone-only: the desktop/tablet sidebar is a full-height splash panel,
+     which on a small screen pushes all the real content (the boxes and the
+     welcome message) below the fold. Shrink it to a compact header instead,
+     and stop the footer from permanently covering part of the screen. */
+  @media (max-width: 480px) {
+    .sidebar { padding: 20px 16px 16px; }
+    .sidebar img { width: 90px; margin-bottom: 8px; }
+    .n1 { font-size: 40px; margin-top: -8px; }
+    .n2 { font-size: 15px; }
+    .n3 { font-size: 13px; }
+    .n4 { font-size: 11px; margin-top: 6px; }
+    .side-menu { margin-top: 12px; padding-top: 10px; gap: 0; flex-direction: row; flex-wrap: wrap; justify-content: center; }
+    .side-menu a { font-size: 13px; padding: 7px 10px; }
+    .sidebar-spacer { display: none; }
+    .sidebar .lang-button { padding: 9px 22px; font-size: 15px; margin-top: 12px; }
+    .topbar { padding: 10px 14px 0; }
+    .boxes-wrap { padding: 6px 14px 0; }
+    .boxes { gap: 10px; max-width: 100%; }
+    .box { min-height: 88px; font-size: 15px; padding: 10px; border-radius: 12px; }
+    .hero-row { width: calc(100% - 28px); gap: 14px; margin-top: 18px; }
+    .hero { padding: 20px 18px; min-height: 0; max-width: 100%; }
+    footer { position: static; box-shadow: none; padding: 16px 16px 22px; justify-content: flex-start; gap: 10px 14px; }
+    .main { padding-bottom: 24px; }
+  }
 </style>
 </head>
 <body>
