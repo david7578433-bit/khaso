@@ -271,11 +271,14 @@ button:disabled { opacity: .6; cursor: wait; }
   header { padding: 24px 14px 28px; }
   .site-logo { width: 120px; margin-bottom: 10px; }
   nav { gap: 4px 14px; padding: 9px 10px; }
-  nav a { font-size: 14px; }
+  nav a { font-size: 14px; padding: 9px 4px; }
   .lang-button { padding: 7px 12px; }
-  main { padding: 26px 12px 150px; }
+  main { padding: 22px 12px 36px; }
   .card { padding: 24px 18px; }
   .branch-grid { grid-template-columns: 1fr; }
+
+  /* iOS Safari zooms the page in when a text input is smaller than 16px. */
+  input, select, textarea { font-size: 16px; }
 }
 
 footer {
@@ -344,4 +347,25 @@ footer .lang-button:hover { color: white; text-decoration: underline; }
   background: var(--accent);
   border-color: var(--accent);
   color: white;
+}
+
+/* Phone-only overrides. Kept at the very end of the file so they win over
+   the unconditional footer/admin-quicknav rules above, which come later in
+   source order than the main mobile block further up this stylesheet. */
+@media (max-width: 620px) {
+  /* On a phone a footer pinned to the bottom of the screen permanently
+     covers a big slice of a small viewport. Let it scroll with the page. */
+  footer {
+    position: static;
+    box-shadow: none;
+    justify-content: flex-start;
+    gap: 12px 16px;
+    padding: 18px 18px 24px;
+  }
+  footer a { padding: 6px 0; }
+
+  .admin-quicknav { gap: 6px; padding: 10px; }
+  .admin-quicknav a { padding: 8px 12px; }
+
+  table { font-size: 12px; }
 }
