@@ -398,7 +398,7 @@
 
       const { data, error } = await supabaseClient
         .from('profiles')
-        .select('id, email, display_name, created_at')
+        .select('id, email, display_name, first_name, last_name, phone_number, created_at')
         .eq('approved', false)
         .order('created_at', { ascending: true });
 
@@ -423,8 +423,17 @@
         const item = document.createElement('li');
 
         const label = document.createElement('span');
-        label.textContent = member.display_name || member.email || member.id;
+        label.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.display_name || member.email || member.id;
         item.appendChild(label);
+
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.className = 'secondary';
+        editButton.textContent = 'Edit Details';
+        editButton.addEventListener('click', async () => {
+          await editMemberDetails(member, loadPendingMembers);
+        });
+        item.appendChild(editButton);
 
         const approveButton = document.createElement('button');
         approveButton.type = 'button';
@@ -450,13 +459,10 @@
         removeButton.type = 'button';
         removeButton.textContent = 'Remove';
         removeButton.addEventListener('click', async () => {
-          const name = member.display_name || member.email || 'this signup';
+          const name = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.display_name || member.email || 'this signup';
           if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
           removeButton.disabled = true;
-          const { error: removeError } = await supabaseClient
-            .from('profiles')
-            .delete()
-            .eq('id', member.id);
+          const { error: removeError } = await supabaseClient.rpc('remove_member', { target_user: member.id });
           if (removeError) {
             setStatus('Could not remove: ' + removeError.message, true);
             removeButton.disabled = false;
@@ -478,6 +484,28 @@
       'תשפ"ה (5785)','תשפ"ו (5786)','תשפ"ז (5787)','תשפ"ח (5788)','תשפ"ט (5789)',
       'תש"צ (5790)'
     ];
+
+    async function editMemberDetails(member, afterSave) {
+      const firstName = prompt('First name', member.first_name || '');
+      if (firstName === null) return;
+      const lastName = prompt('Last name', member.last_name || '');
+      if (lastName === null) return;
+      const phone = prompt('Phone number', member.phone_number || '');
+      if (phone === null) return;
+
+      const result = await supabaseClient.rpc('update_member_contact', {
+        target_user: member.id,
+        new_first_name: firstName.trim() || null,
+        new_last_name: lastName.trim() || null,
+        new_phone_number: phone.trim() || null
+      });
+      if (result.error) {
+        setStatus('Could not save member details: ' + result.error.message, true);
+        return;
+      }
+      setStatus('Member details saved.');
+      if (afterSave) await afterSave();
+    }
 
     async function loadAllMembers() {
       const body = document.getElementById('membersTableBody');
@@ -510,7 +538,18 @@
         const nameCell = document.createElement('td');
         nameCell.style.padding = '6px 8px';
         nameCell.style.borderBottom = '1px solid var(--border)';
-        nameCell.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || '—';
+        const nameText = document.createElement('span');
+        nameText.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || '—';
+        nameCell.appendChild(nameText);
+        const editButton = document.createElement('button');
+        editButton.type = 'button';
+        editButton.className = 'secondary';
+        editButton.textContent = 'Edit';
+        editButton.style.marginLeft = '6px';
+        editButton.addEventListener('click', async () => {
+          await editMemberDetails(member, loadAllMembers);
+        });
+        nameCell.appendChild(editButton);
         row.appendChild(nameCell);
 
         [member.phone_number, member.email, member.city, member.username].forEach((value) => {
@@ -601,10 +640,7 @@
           const name = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.email || 'this member';
           if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
           removeButton.disabled = true;
-          const { error: removeError } = await supabaseClient
-            .from('profiles')
-            .delete()
-            .eq('id', member.id);
+          const { error: removeError } = await supabaseClient.rpc('remove_member', { target_user: member.id });
           if (removeError) {
             setStatus('Could not remove: ' + removeError.message, true);
             removeButton.disabled = false;

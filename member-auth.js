@@ -31,9 +31,13 @@ window.usernameToAuthEmail = function (username) {
   return clean + '@khaso-noemail.com';
 };
 
-window.signUpWithUsername = async function (username, password) {
+window.signUpWithUsername = async function (username, password, profileData) {
   const email = window.usernameToAuthEmail(username);
-  return window.memberClient.auth.signUp({ email, password });
+  return window.memberClient.auth.signUp({
+    email,
+    password,
+    options: { data: Object.assign({}, profileData || {}, { username }) }
+  });
 };
 
 window.signInWithUsername = async function (username, password) {

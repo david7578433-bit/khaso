@@ -450,7 +450,7 @@
     if (password !== password2) { statusEl.textContent = 'Passwords do not match.'; return; }
 
     statusEl.textContent = 'Creating account…';
-    const { data, error } = await signUpWithUsername(username, password);
+    const { data, error } = await signUpWithUsername(username, password, pending);
     if (error) {
       statusEl.textContent = 'Could not create account: ' + error.message;
       return;

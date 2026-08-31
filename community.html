@@ -18,12 +18,6 @@
   .toolbar { display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px; }
   .toolbar input { margin:0; flex:1; min-width:180px; }
   .tag { display:inline-block; background:#e7f5f2; color:var(--accent-dark); border-radius:999px; padding:3px 9px; font-size:12px; font-weight:700; }
-  .zmanim-locations { display:flex; gap:8px; flex-wrap:wrap; margin:12px 0; }
-  .zmanim-locations .button { border:0; cursor:pointer; font-family:inherit; }
-  .zmanim-locations .button[aria-pressed="true"] { outline:3px solid rgba(16,135,126,.25); background:var(--accent-dark); }
-  .zmanim-list { border-top:1px solid var(--border); margin-top:10px; }
-  .zman-row { display:flex; justify-content:space-between; gap:15px; padding:8px 0; border-bottom:1px solid var(--border); }
-  .zman-row strong { white-space:nowrap; }
 </style>
 </head>
 <body data-testing-page>
@@ -49,19 +43,6 @@
   </section>
 
   <div class="community-grid">
-    <section class="card">
-      <h2>Daily Zmanim</h2>
-      <p>Choose your location to see today's actual local zmanim.</p>
-      <div class="zmanim-locations" aria-label="Choose a zmanim location">
-        <button class="button zmanim-location" type="button" data-location="kiryas_joel" aria-pressed="true">Kiryas Joel</button>
-        <button class="button zmanim-location" type="button" data-location="monsey" aria-pressed="false">Monsey</button>
-        <button class="button zmanim-location" type="button" data-location="williamsburg" aria-pressed="false">Williamsburg</button>
-      </div>
-      <p class="meta" id="zmanimDate"></p>
-      <div class="zmanim-list" id="zmanimList"><p class="empty">Loading today's zmanim…</p></div>
-      <p class="meta">Times provided by <a href="https://www.hebcal.com/home/1663/zmanim-halachic-times-api" target="_blank" rel="noopener">Hebcal Zmanim</a>.</p>
-    </section>
-
     <section class="card">
       <h2>Yahrzeits</h2>
       <div id="yahrzeitList"><p class="empty">Loading…</p></div>
@@ -171,63 +152,6 @@
     document.getElementById('jobsList').innerHTML = (jobs.data || []).map((item) => '<article class="item"><h3>' + esc(item.title) + '</h3>' + (item.description ? '<p>' + esc(item.description) + '</p>' : '') + (item.location ? '<p class="meta">📍 ' + esc(item.location) + '</p>' : '') + (item.contact ? '<p class="meta">Contact: ' + esc(item.contact) + '</p>' : '') + '</article>').join('') || '<p class="empty">No jobs posted.</p>';
 
   }
-
-  const zmanimLocations = {
-    kiryas_joel: { name:'Kiryas Joel', zip:'10950' },
-    monsey: { name:'Monsey', zip:'10952' },
-    williamsburg: { name:'Williamsburg', zip:'11211' }
-  };
-
-  function todayInNewYork() {
-    const parts = Object.fromEntries(new Intl.DateTimeFormat('en-US', {
-      timeZone:'America/New_York', year:'numeric', month:'2-digit', day:'2-digit'
-    }).formatToParts(new Date()).filter((part) => part.type !== 'literal').map((part) => [part.type, part.value]));
-    return parts.year + '-' + parts.month + '-' + parts.day;
-  }
-
-  function formatZman(value) {
-    if (!value) return '—';
-    return new Date(value).toLocaleTimeString('en-US', {
-      timeZone:'America/New_York', hour:'numeric', minute:'2-digit'
-    });
-  }
-
-  async function loadZmanim(locationKey) {
-    const location = zmanimLocations[locationKey];
-    const list = document.getElementById('zmanimList');
-    const date = todayInNewYork();
-    document.querySelectorAll('.zmanim-location').forEach((button) => {
-      button.setAttribute('aria-pressed', String(button.dataset.location === locationKey));
-    });
-    document.getElementById('zmanimDate').textContent = location.name + ' · ' + new Date(date + 'T12:00:00').toLocaleDateString('en-US', { dateStyle:'long' });
-    list.innerHTML = '<p class="empty">Loading today\'s zmanim…</p>';
-
-    try {
-      const response = await fetch('https://www.hebcal.com/zmanim?cfg=json&zip=' + encodeURIComponent(location.zip) + '&date=' + date);
-      if (!response.ok) throw new Error('Zmanim service unavailable');
-      const data = await response.json();
-      const times = data.times || {};
-      const rows = [
-        ['Alos HaShachar', times.alotHaShachar],
-        ['Sunrise', times.sunrise],
-        ['Latest Shema (MGA)', times.sofZmanShmaMGA],
-        ['Latest Shema (GRA)', times.sofZmanShma],
-        ['Latest Shacharis', times.sofZmanTfilla],
-        ['Chatzos', times.chatzot],
-        ['Mincha Gedola', times.minchaGedola],
-        ['Plag HaMincha', times.plagHaMincha],
-        ['Shkiah', times.sunset],
-        ['Tzeis (72 minutes)', times.tzeit72min]
-      ];
-      list.innerHTML = rows.map((row) => '<div class="zman-row"><span>' + esc(row[0]) + '</span><strong>' + esc(formatZman(row[1])) + '</strong></div>').join('');
-    } catch (_) {
-      list.innerHTML = '<p class="empty">Could not load today\'s zmanim. Please try again shortly.</p>';
-    }
-  }
-
-  document.querySelectorAll('.zmanim-location').forEach((button) => {
-    button.addEventListener('click', () => loadZmanim(button.dataset.location));
-  });
 
   document.getElementById('suggestionForm').addEventListener('submit', async (event) => {
     event.preventDefault();

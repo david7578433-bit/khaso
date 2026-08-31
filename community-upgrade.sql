@@ -462,6 +462,118 @@ grant execute on function public.set_member_role(uuid, text) to authenticated;
 grant execute on function public.set_member_directory(uuid, boolean) to authenticated;
 grant execute on function public.suspend_member(uuid, timestamptz) to authenticated;
 
+-- Save signup details immediately when Auth creates a profile. This prevents
+-- names and phone numbers being lost if the browser closes before step two.
+create or replace function public.handle_new_user()
+returns trigger
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  insert into public.profiles (
+    id, email, display_name, first_name, last_name, phone_number, city, username, jewish_year
+  ) values (
+    new.id,
+    coalesce(new.raw_user_meta_data->>'email', new.email),
+    coalesce(
+      nullif(trim(concat_ws(' ', new.raw_user_meta_data->>'first_name', new.raw_user_meta_data->>'last_name')), ''),
+      new.raw_user_meta_data->>'full_name',
+      new.email
+    ),
+    new.raw_user_meta_data->>'first_name',
+    new.raw_user_meta_data->>'last_name',
+    new.raw_user_meta_data->>'phone_number',
+    new.raw_user_meta_data->>'city',
+    new.raw_user_meta_data->>'username',
+    new.raw_user_meta_data->>'jewish_year'
+  )
+  on conflict (id) do update set
+    first_name = coalesce(excluded.first_name, profiles.first_name),
+    last_name = coalesce(excluded.last_name, profiles.last_name),
+    phone_number = coalesce(excluded.phone_number, profiles.phone_number),
+    city = coalesce(excluded.city, profiles.city),
+    username = coalesce(excluded.username, profiles.username),
+    jewish_year = coalesce(excluded.jewish_year, profiles.jewish_year);
+  return new;
+end;
+$$;
+
+create or replace function public.update_member_contact(
+  target_user uuid,
+  new_first_name text,
+  new_last_name text,
+  new_phone_number text
+)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+begin
+  if not public.is_site_admin() then raise exception 'Admin permission required'; end if;
+  update public.profiles
+  set first_name = nullif(trim(new_first_name), ''),
+      last_name = nullif(trim(new_last_name), ''),
+      phone_number = nullif(trim(new_phone_number), ''),
+      display_name = coalesce(
+        nullif(trim(concat_ws(' ', new_first_name, new_last_name)), ''),
+        display_name
+      )
+  where id = target_user;
+  if not found then raise exception 'Member not found'; end if;
+  insert into public.admin_activity(admin_id,action,target_type,target_id,details)
+  values(auth.uid(),'update_member_contact','profile',target_user::text,'{}'::jsonb);
+end;
+$$;
+
+create or replace function public.remove_member(target_user uuid)
+returns void
+language plpgsql
+security definer
+set search_path = public
+as $$
+declare
+  target_role text;
+begin
+  if not public.is_site_admin() then raise exception 'Admin permission required'; end if;
+  if target_user is null or target_user = auth.uid() then
+    raise exception 'You cannot remove your own account';
+  end if;
+
+  select role into target_role from public.profiles where id = target_user;
+  if not found then raise exception 'Member not found'; end if;
+  if target_role = 'owner' then raise exception 'The owner account cannot be removed'; end if;
+  if target_role = 'admin' and not public.is_site_owner() then
+    raise exception 'Only the owner can remove another admin';
+  end if;
+
+  update public.admin_activity set admin_id = null where admin_id = target_user;
+  update public.albums set created_by = null where created_by = target_user;
+  update public.campaigns set created_by = null where created_by = target_user;
+  update public.community_forms set created_by = null where created_by = target_user;
+  update public.events set created_by = null where created_by = target_user;
+  update public.jobs set created_by = null where created_by = target_user;
+  update public.reports set reported_user_id = null where reported_user_id = target_user;
+  update public.reports set resolved_by = null where resolved_by = target_user;
+  update public.site_settings set updated_by = null where updated_by = target_user;
+  update public.submissions set submitter_id = null where submitter_id = target_user;
+  update public.suggestions set sender_id = null where sender_id = target_user;
+  update public.yahrzeits set created_by = null where created_by = target_user;
+  delete from public.comments where author_id = target_user;
+  delete from public.reports where reporter_id = target_user;
+
+  insert into public.admin_activity(admin_id,action,target_type,target_id,details)
+  values(auth.uid(),'remove_member','profile',target_user::text,jsonb_build_object('previous_role',target_role));
+
+  delete from auth.users where id = target_user;
+  if not found then raise exception 'Authentication account not found'; end if;
+end;
+$$;
+
+grant execute on function public.update_member_contact(uuid, text, text, text) to authenticated;
+grant execute on function public.remove_member(uuid) to authenticated;
+
 create or replace function public.notify_content_approval()
 returns trigger
 language plpgsql
