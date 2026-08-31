@@ -37,6 +37,16 @@
     .staged-photo-preview { display: flex; align-items: center; gap: 10px; margin: 8px 0; }
     .staged-photo-preview img { width: 70px; height: 70px; object-fit: cover; border-radius: 6px; }
     .staged-photo-preview button { padding: 6px 12px; }
+
+    @media (max-width: 620px) {
+      .admin-quicknav { padding: 10px; gap: 6px; }
+      .admin-quicknav a { padding: 8px 12px; font-size: 13px; }
+      #pendingList li { flex-wrap: wrap; }
+      .gallery-manage-item { flex-wrap: wrap; }
+      .gallery-manage-item .gm-info { flex: 1 1 140px; min-width: 140px; }
+      .gallery-manage-item img { width: 70px; height: 70px; }
+      #membersTable { font-size: 12px; }
+    }
   </style>
 </head>
 <body>
