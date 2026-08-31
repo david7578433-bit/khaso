@@ -296,3 +296,32 @@ footer .lang-button {
 }
 
 footer .lang-button:hover { color: white; text-decoration: underline; }
+
+.admin-quicknav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin: 14px 0 6px;
+  padding: 12px;
+  background: #f7f9fa;
+  border: 1px solid var(--border);
+  border-radius: 9px;
+}
+
+.admin-quicknav a {
+  padding: 5px 11px;
+  border-radius: 999px;
+  background: white;
+  border: 1px solid var(--border);
+  color: var(--ink);
+  font-size: 13px;
+  font-weight: 700;
+  text-decoration: none;
+}
+
+.admin-quicknav a:hover,
+.admin-quicknav a:focus-visible {
+  background: var(--accent);
+  border-color: var(--accent);
+  color: white;
+}
