@@ -57,6 +57,17 @@
         <h2>Edit Announcements</h2>
         <button id="logoutButton" class="secondary" type="button">Log Out</button>
       </div>
+      <nav class="admin-quicknav" aria-label="Admin sections">
+        <a href="#section-announcements">Announcements</a>
+        <a href="#section-pending-members">Pending Members</a>
+        <a href="#section-all-members">All Members</a>
+        <a href="#section-photos">Photos</a>
+        <a href="#section-messages">Messages</a>
+        <a href="#section-submissions">Submissions</a>
+        <a href="#section-add-picture">Add Picture</a>
+        <a href="#section-manage-pictures">Manage Pictures</a>
+      </nav>
+      <div class="section-item" id="section-announcements">
       <form id="announcementForm">
         <h3>Announcement 1</h3>
         <label for="announcementTitle">Title</label>
@@ -73,10 +84,12 @@
 
         <button id="saveButton" type="submit">Save Announcements</button>
       </form>
-
+      </div>
+      <div class="section-item" id="section-pending-members">
       <h2>Pending Members</h2>
       <ul id="pendingList"></ul>
-
+      </div>
+      <div class="section-item" id="section-all-members">
       <h2>All Members</h2>
       <div style="overflow-x:auto;">
       <table id="membersTable" style="width:100%; border-collapse: collapse; font-size: 13px;">
@@ -95,16 +108,20 @@
         <tbody id="membersTableBody"></tbody>
       </table>
       </div>
-
+      </div>
+      <div class="section-item" id="section-photos">
       <h2>Pending Photos</h2>
       <div id="pendingPhotos"></div>
-
+      </div>
+      <div class="section-item" id="section-messages">
       <h2>Messages to Admin</h2>
       <div id="adminMessagesList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
-
+      </div>
+      <div class="section-item" id="section-submissions">
       <h2>Pending Submissions (News / Simchas)</h2>
       <div id="submissionsList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
-
+      </div>
+      <div class="section-item" id="section-add-picture">
       <h2>Add a Picture</h2>
       <form id="galleryUploadForm">
         <label for="galleryCategory">Category</label>
@@ -123,9 +140,11 @@
         <button id="galleryUploadButton" type="submit">Add Picture</button>
       </form>
       <p id="galleryStatus" role="status" aria-live="polite"></p>
-
+      </div>
+      <div class="section-item" id="section-manage-pictures">
       <h2>Manage Pictures</h2>
       <div id="galleryList"></div>
+      </div>
     </section>
 
     <p id="status" role="status" aria-live="polite"></p>
