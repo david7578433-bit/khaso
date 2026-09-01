@@ -165,6 +165,24 @@
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
+  .topic-list button.active { background:#cfe7e2; box-shadow:inset 4px 0 0 var(--accent-dark); }
+  .topic-list button.has-unread,.member-list button.has-unread { background:#eef7f5; font-weight:800; }
+  .topic-list button.has-unread .topic-last-message { color:#263c50; font-weight:700; }
+  .chat-app-layout small,.chat-app-layout .chat-meta,.chat-app-layout .topic-time { font-size:12px; }
+  .chat-app-layout button:not(.chat-toast-close):not(.message-hover-bar button):not(.private-hover-bar button) { min-height:38px; }
+  .chat-app-layout button:disabled { cursor:not-allowed; }
+  .chat-input-row,#privateMessageForm { position:sticky; bottom:0; z-index:5; background:white; }
+  .chat-bubble a,.private-bubble a,.link-preview,.file-chip { overflow-wrap:anywhere; word-break:break-word; }
+  .chat-app-layout button:focus-visible,.chat-app-layout a:focus-visible,.chat-app-layout input:focus-visible,.chat-app-layout textarea:focus-visible,.chat-app-layout select:focus-visible { outline:3px solid rgba(11,87,208,.4); outline-offset:2px; }
+  #discussionSection,#privateSection { position:relative; }
+  .new-messages-jump { position:absolute; bottom:76px; left:50%; z-index:8; min-height:34px !important; padding:7px 14px; border-radius:999px; box-shadow:0 4px 14px rgba(30,50,68,.22); transform:translateX(-50%); }
+  .chat-load-skeleton { display:grid; gap:10px; width:100%; padding:10px 0; }
+  .chat-load-skeleton span { display:block; width:62%; height:42px; border-radius:14px; background:linear-gradient(90deg,#e9eef1,#f7f9fa,#e9eef1); background-size:200% 100%; animation:chat-loading 1.2s linear infinite; }
+  .chat-load-skeleton span:nth-child(2) { width:48%; margin-left:auto; }
+  .chat-load-skeleton span:nth-child(3) { width:70%; }
+  .inline-retry { display:inline-flex; align-items:center; gap:9px; padding:12px; color:#8a2f2f; background:#fff2f2; border:1px solid #efc8c8; border-radius:10px; }
+  .inline-retry button { min-height:32px !important; padding:5px 10px; }
+  @keyframes chat-loading { to { background-position:-200% 0; } }
   .chat-toast-stack { position:fixed; top:74px; right:18px; z-index:1200; display:flex; width:min(370px,calc(100vw - 30px)); flex-direction:column; gap:9px; pointer-events:none; }
   .chat-toast { display:grid; grid-template-columns:40px minmax(0,1fr) auto; gap:10px; align-items:center; padding:11px 12px; border:1px solid #d8e0e5; border-radius:13px; color:#263c50; background:white; box-shadow:0 8px 28px rgba(30,50,68,.2); pointer-events:auto; cursor:pointer; animation:toast-in .18s ease-out; }
   .chat-toast-avatar { display:grid; width:40px; height:40px; place-items:center; border-radius:50%; color:white; background:#0f7f6d; font-weight:800; }
@@ -210,7 +228,7 @@
   .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { display:flex; align-items:center; gap:10px; width:100%; margin:0; padding:11px 12px; color:white; background:transparent; border:0; border-radius:10px; text-decoration:none; text-align:left; font:inherit; font-weight:700; }
   .chat-app-sidebar .section-tab:hover, .chat-app-sidebar .chat-nav-link:hover, .chat-app-sidebar .section-tab.active { background:rgba(255,255,255,.15); color:white; }
   .chat-nav-spacer { flex:1; }
-  .chat-list-pane { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; padding:18px 12px; background:#f4f7f8; border-right:1px solid var(--border); }
+  .chat-list-pane { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; padding:14px 10px; background:#f4f7f8; border-right:1px solid var(--border); }
   .chat-list-pane h2 { margin:0 8px 4px; font-size:22px; }
   .chat-list-pane > p { margin:0 8px 16px; color:var(--muted); font-size:13px; }
   .topic-list { display:flex; flex:1; flex-direction:column; flex-wrap:nowrap; gap:6px; justify-content:flex-start; min-height:0; margin:0; overflow-y:auto; overscroll-behavior:contain; }
@@ -228,7 +246,7 @@
   #discussionSection { display:flex; flex:1; flex-direction:column; min-height:0; padding:0 16px 14px; }
   #discussionSection[hidden], #photosSection[hidden] { display:none; }
   #photosSection { flex:1; min-height:0; overflow:auto; padding:22px; }
-  .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 10px; padding:50px 24px 18px; border:0; border-radius:0; background:#f8fafb; }
+  .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 6px; padding:26px 24px 14px; border:0; border-radius:0; background:#f8fafb; }
   .chat-bubble-row { max-width:72%; }
   .chat-input-row { padding-top:2px; }
   #boardStatus { min-height:18px; margin:5px 0 0; font-size:12px; }
@@ -591,6 +609,19 @@
     if (fullName && /^(administrator|admin|owner)$/i.test(displayName)) return fullName;
     return displayName || fullName || 'Member';
   }
+  const chatDateTimeFormatter=new Intl.DateTimeFormat([],{month:'short',day:'numeric',year:'numeric',hour:'numeric',minute:'2-digit'});
+  const chatTimeFormatter=new Intl.DateTimeFormat([],{hour:'numeric',minute:'2-digit'});
+  const chatShortDateFormatter=new Intl.DateTimeFormat([],{month:'short',day:'numeric'});
+  function formatChatDateTime(value){return chatDateTimeFormatter.format(new Date(value));}
+  function formatChatTime(value){return chatTimeFormatter.format(new Date(value));}
+  function formatChatShortDate(value){return chatShortDateFormatter.format(new Date(value));}
+  function loadingSkeleton(){return '<div class="chat-load-skeleton" aria-label="Loading messages"><span></span><span></span><span></span></div>';}
+  function renderRetry(container,message,retry){container.innerHTML='';const wrap=document.createElement('div');wrap.className='inline-retry';const text=document.createElement('span');text.textContent=message;const button=document.createElement('button');button.type='button';button.textContent='Retry';button.addEventListener('click',retry);wrap.appendChild(text);wrap.appendChild(button);container.appendChild(wrap);}
+  function addNewMessagesJump(list){const host=list.parentElement;if(host.querySelector(':scope > .new-messages-jump'))return;const button=document.createElement('button');button.type='button';button.className='new-messages-jump';button.textContent='New messages below ↓';button.addEventListener('click',()=>{list.scrollTop=list.scrollHeight;button.remove();});host.appendChild(button);}
+  function autoGrow(field){field.style.height='auto';field.style.height=Math.min(field.scrollHeight,140)+'px';}
+  function updateComposerButtons(){const groupButton=document.querySelector('#postForm button[type="submit"]');const privateButton=document.querySelector('#privateMessageForm button[type="submit"]');if(groupButton)groupButton.disabled=!document.getElementById('postBody').value.trim()&&!stagedAttachments.length;if(privateButton)privateButton.disabled=!document.getElementById('privateMessageBody').value.trim()&&!privateStagedAttachments.length;}
+  function enableListKeyboardNavigation(list){list.addEventListener('keydown',(event)=>{if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;const buttons=Array.from(list.querySelectorAll('button:not([hidden])'));if(!buttons.length)return;const current=buttons.indexOf(document.activeElement);let next=current;if(event.key==='ArrowDown')next=Math.min(buttons.length-1,current+1);if(event.key==='ArrowUp')next=Math.max(0,current-1);if(event.key==='Home')next=0;if(event.key==='End')next=buttons.length-1;event.preventDefault();buttons[Math.max(0,next)].focus();});}
+  function dismissJumpAtBottom(list){list.addEventListener('scroll',()=>{if(list.scrollHeight-list.scrollTop-list.clientHeight<50){const button=list.parentElement.querySelector(':scope > .new-messages-jump');if(button)button.remove();}});}
   function draftKey(type,id) { return 'kasho_chat_draft_' + type + '_' + id; }
   function saveCurrentDraft() {
     try {
@@ -599,7 +630,7 @@
     } catch (_) {}
   }
   function restoreDraft(type,id,fieldId) {
-    try { document.getElementById(fieldId).value = localStorage.getItem(draftKey(type,id)) || ''; } catch (_) {}
+    try { const field=document.getElementById(fieldId);field.value=localStorage.getItem(draftKey(type,id))||'';autoGrow(field);updateComposerButtons(); } catch (_) {}
   }
   function clearDraft(type,id) { try { localStorage.removeItem(draftKey(type,id)); } catch (_) {} }
 
@@ -630,7 +661,7 @@
       const top = document.createElement('span'); top.className = 'topic-summary-top';
       const title = document.createElement('strong'); title.className = 'topic-title'; title.textContent = topic.title;
       const recent = recentByTopic.get(String(topic.id));
-      const time = document.createElement('span'); time.className = 'topic-time'; time.textContent = recent ? new Date(recent.created_at).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+      const time = document.createElement('span'); time.className = 'topic-time'; time.textContent = recent ? formatChatShortDate(recent.created_at) : '';
       top.appendChild(title); top.appendChild(time); summary.appendChild(top);
       const preview = document.createElement('span'); preview.className = 'topic-last-message';
       if (recent) { const parsed = parseBody(recent.body); const sender = recent.author_id === currentUserId ? 'You' : profileName(recent.profiles); preview.textContent = sender + ': ' + (parsed.text || parsed.sticker || ((parsed.attachments || []).length ? 'Attachment' : 'New message')); }
@@ -738,7 +769,7 @@
       .on('postgres_changes', {event:'*',schema:'public',table:'posts'}, async (change) => {
         const topicId = change.new && change.new.topic_id ? change.new.topic_id : change.old && change.old.topic_id;
         if (change.eventType === 'INSERT' && change.new.author_id !== currentUserId) { const topic = chatTopics.find((item)=>String(item.id)===String(topicId)); const member=privateMembers.find((item)=>String(item.id)===String(change.new.author_id));const parsed=parseBody(change.new.body);notifyNewMessage((member?profileName(member):'Member')+' · '+(topic?topic.title:'Group chat'),parsed.text||parsed.sticker||((parsed.attachments||[]).length?'Attachment':'New message'),'topic',topicId); }
-        if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts({preservePosition:true});
+        if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts({preservePosition:true,newMessage:change.eventType==='INSERT'});
         else { const button=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(String(topicId))+'"]');if(button)updateUnreadBadge(topicId,button); }
       })
       .on('postgres_changes', {event:'*',schema:'public',table:'private_messages'}, async (change) => {
@@ -748,7 +779,7 @@
         await refreshPrivateInbox();
         if (activeChatView === 'private') {
           renderPrivateMembers(document.getElementById('chatSearch').value);
-          if (activePrivateMember && (row.sender_id === activePrivateMember.id || row.recipient_id === activePrivateMember.id)) loadPrivateConversation({preservePosition:true});
+          if (activePrivateMember && (row.sender_id === activePrivateMember.id || row.recipient_id === activePrivateMember.id)) loadPrivateConversation({preservePosition:true,newMessage:change.eventType==='INSERT'});
         }
       })
       .subscribe();
@@ -762,11 +793,13 @@
     const result = await query;
     const old = button.querySelector('.unread-badge');
     if (old) old.remove();
+    button.classList.remove('has-unread');
     if (!result.error && result.count) {
       const badge = document.createElement('span');
       badge.className = 'unread-badge';
       badge.textContent = result.count > 99 ? '99+' : result.count;
       button.appendChild(badge);
+      button.classList.add('has-unread');
     }
   }
 
@@ -784,6 +817,7 @@
       try { localStorage.setItem('khaso_last_read_' + topicId, new Date().toISOString()); } catch (_) {}
       const badge = button.querySelector('.unread-badge');
       if (badge) badge.remove();
+      button.classList.remove('has-unread');
     });
   }
 
@@ -894,7 +928,7 @@
   async function loadPosts(options) {
     const postList = document.getElementById('postList');
     const preservePosition=!!(options&&options.preservePosition);const distanceFromBottom=postList.scrollHeight-postList.scrollTop-postList.clientHeight;const wasNearBottom=distanceFromBottom<90;
-    if (!preservePosition || !postList.children.length) postList.innerHTML = '<p class="chat-empty">Loading…</p>';
+    if (!preservePosition || !postList.children.length) postList.innerHTML = loadingSkeleton();
     if (currentTopicId === null) { postList.innerHTML = ''; return; }
 
     const { data, error } = await memberClient
@@ -904,7 +938,7 @@
       .order('created_at', { ascending: true });
 
     if (error) {
-      postList.innerHTML = '<p class="chat-empty">Could not load messages: ' + error.message + '</p>';
+      renderRetry(postList,'Could not load messages.',()=>loadPosts());
       return;
     }
 
@@ -980,7 +1014,7 @@
       if (starredPostIds.has(String(post.id))) row.classList.add('starred-message');
       const meta = document.createElement('p');
       meta.className = 'chat-meta';
-      meta.textContent = (isOwn ? 'You' : displayName) + ' · ' + new Date(post.created_at).toLocaleString();
+      meta.textContent = (isOwn ? 'You' : displayName) + ' · ' + formatChatDateTime(post.created_at);
       if (!isOwn) {
         const avatar = document.createElement('span'); avatar.className = 'chat-meta-avatar'; avatar.textContent = displayName.trim().charAt(0).toUpperCase() || '?';
         meta.prepend(avatar);
@@ -1080,7 +1114,7 @@
       const copyButton = document.createElement('button'); copyButton.type = 'button'; copyButton.textContent = 'Copy';
       copyButton.addEventListener('click', () => navigator.clipboard.writeText(parsed.text || parsed.sticker || ''));
       actions.appendChild(copyButton);
-      const quoteButton=document.createElement('button');quoteButton.type='button';quoteButton.textContent='Quote in reply';quoteButton.addEventListener('click',()=>{const field=document.getElementById('postBody');const excerpt=(parsed.text||parsed.sticker||'Attachment').slice(0,220);replyToPostId=post.id;document.getElementById('replyPreviewText').textContent='Quoting '+(isOwn?'your message':displayName);document.getElementById('replyPreview').hidden=false;field.value='“'+excerpt+'”\n\n'+field.value;field.focus();});actions.appendChild(quoteButton);
+      const quoteButton=document.createElement('button');quoteButton.type='button';quoteButton.textContent='Quote in reply';quoteButton.addEventListener('click',()=>{const field=document.getElementById('postBody');const excerpt=(parsed.text||parsed.sticker||'Attachment').slice(0,220);replyToPostId=post.id;document.getElementById('replyPreviewText').textContent='Quoting '+(isOwn?'your message':displayName);document.getElementById('replyPreview').hidden=false;field.value='“'+excerpt+'”\n\n'+field.value;field.dispatchEvent(new Event('input',{bubbles:true}));field.focus();});actions.appendChild(quoteButton);
       const translateButton = document.createElement('button'); translateButton.type = 'button'; translateButton.textContent = 'Translate'; translateButton.addEventListener('click',()=>translateMessage(parsed.text || parsed.sticker || '')); actions.appendChild(translateButton);
       const calendarButton = document.createElement('button'); calendarButton.type = 'button'; calendarButton.textContent = 'Add to calendar'; calendarButton.addEventListener('click',()=>createCalendarEventFromMessage(parsed.text || parsed.sticker || '')); actions.appendChild(calendarButton);
       const forwardButton = document.createElement('button'); forwardButton.type = 'button'; forwardButton.textContent = 'Forward';
@@ -1187,6 +1221,7 @@
     knownNames = Object.keys(seenNames);
     if (!preservePosition || wasNearBottom) postList.scrollTop = postList.scrollHeight;
     else postList.scrollTop = Math.max(0,postList.scrollHeight-postList.clientHeight-distanceFromBottom);
+    if (options&&options.newMessage&&!wasNearBottom) addNewMessagesJump(postList);
   }
 
   async function sendMessage(payload) {
@@ -1204,7 +1239,7 @@
     });
 
     if (error) {
-      statusEl.textContent = 'Could not post: ' + error.message;
+      renderRetry(statusEl,'Could not send the message.',()=>document.getElementById('postForm').requestSubmit());
       return false;
     }
 
@@ -1253,6 +1288,7 @@
       chip.appendChild(removeBtn);
       wrap.appendChild(chip);
     });
+    updateComposerButtons();
   }
 
   async function uploadChatFile(file) {
@@ -1320,8 +1356,8 @@
       event.target.value = '';
       return;
     }
-    statusEl.textContent = 'Uploading ' + files.length + ' file(s)…';
-    for (const file of files) {
+    for (let index=0;index<files.length;index++) {
+      const file=files[index];statusEl.textContent='Uploading '+(index+1)+' of '+files.length+': '+file.name;
       try {
         const uploaded = await uploadChatFile(file);
         stagedAttachments.push(uploaded);
@@ -1348,6 +1384,7 @@
     const sent = await sendMessage({ text, attachments: stagedAttachments.slice(), sticker: null });
     if (!sent) return;
     bodyField.value = '';
+    autoGrow(bodyField);
     clearDraft('topic',currentTopicId);
     stagedAttachments = [];
     renderStagedAttachments();
@@ -1382,6 +1419,7 @@
     btn.addEventListener('click', () => {
       const field = document.getElementById('postBody');
       field.value += emoji;
+      field.dispatchEvent(new Event('input',{bubbles:true}));
       field.focus();
     });
     emojiGrid.appendChild(btn);
@@ -1427,6 +1465,8 @@
     mentionList.hidden = false;
   }
   document.getElementById('postBody').addEventListener('input', (event) => {
+    autoGrow(event.target);
+    updateComposerButtons();
     if (currentTopicId !== null) { try { localStorage.setItem(draftKey('topic',currentTopicId),event.target.value); } catch (_) {} }
     announceTyping('topic',currentTopicId);
     const field = event.target;
@@ -1536,9 +1576,9 @@
       if (member.email) { const email = document.createElement('small'); email.className = 'member-email'; email.textContent = member.email; identity.appendChild(email); }
       button.appendChild(avatar); button.appendChild(identity);
       const unread = privateInbox.filter((msg) => msg.sender_id === member.id && msg.recipient_id === currentUserId && !msg.read_at).length;
-      if (unread) { const badge = document.createElement('span'); badge.className = 'private-unread'; badge.textContent = unread; button.appendChild(badge); }
+      if (unread) { button.classList.add('has-unread');const badge = document.createElement('span'); badge.className = 'private-unread'; badge.textContent = unread; button.appendChild(badge); }
       if (blockedMemberIds.has(String(member.id))) { const blocked = document.createElement('span'); blocked.className = 'blocked-label'; blocked.textContent = 'Blocked'; button.appendChild(blocked); }
-      else { const availability = memberAvailability.get(String(member.id)) || 'available'; const presence = document.createElement('span'); presence.className = 'presence-dot' + (onlineMemberIds.has(String(member.id)) ? ' ' + availability : ''); const seen=memberLastSeen.get(String(member.id)); presence.title = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen ' + new Date(seen).toLocaleString() : 'Offline'); button.appendChild(presence); }
+      else { const availability = memberAvailability.get(String(member.id)) || 'available'; const presence = document.createElement('span'); presence.className = 'presence-dot' + (onlineMemberIds.has(String(member.id)) ? ' ' + availability : ''); const seen=memberLastSeen.get(String(member.id)); presence.title = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen ' + formatChatDateTime(seen) : 'Offline'); button.appendChild(presence); }
       button.addEventListener('click', () => selectPrivateMember(member));
       list.appendChild(button);
     });
@@ -1561,7 +1601,7 @@
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = profileName(member);
     const availability=memberAvailability.get(String(member.id))||'available';const seen=memberLastSeen.get(String(member.id));
-    document.getElementById('roomSubtitle').textContent = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen '+new Date(seen).toLocaleString() : 'Private conversation');
+    document.getElementById('roomSubtitle').textContent = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen '+formatChatDateTime(seen) : 'Private conversation');
     updatePrivateComposerState();
     restoreDraft('private',member.id,'privateMessageBody');
     await memberClient.rpc('mark_private_messages_read',{other_user:member.id});
@@ -1576,7 +1616,7 @@
     const list = document.getElementById('privateConversationList');const preservePosition=!!(options&&options.preservePosition);const distanceFromBottom=list.scrollHeight-list.scrollTop-list.clientHeight;const wasNearBottom=distanceFromBottom<90;
     const result = await memberClient.from('private_messages').select('*').or('and(sender_id.eq.' + currentUserId + ',recipient_id.eq.' + other + '),and(sender_id.eq.' + other + ',recipient_id.eq.' + currentUserId + ')').order('created_at');
     list.innerHTML = '';
-    if (result.error) { list.innerHTML = '<p>Could not load this conversation.</p>'; return; }
+    if (result.error) { renderRetry(list,'Could not load this conversation.',()=>loadPrivateConversation());return; }
     const messages = result.data || [];
     const messageIds = messages.map((msg) => msg.id);
     const starredIds = new Set(); const pinnedIds = new Set(); const reactionMap = new Map();
@@ -1631,7 +1671,7 @@
         else { const link = document.createElement('a'); link.href = att.url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = att.name || 'Open file'; wrap.appendChild(link); }
         bubble.appendChild(wrap);
       });
-      const time = document.createElement('small'); time.textContent = new Date(msg.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) + (msg.edited_at ? ' · edited' : '') + (pinnedIds.has(String(msg.id)) ? ' · pinned' : '') + (msg.sender_id === currentUserId ? (msg.read_at ? ' · ✓✓' : ' · ✓') : '');
+      const time = document.createElement('small'); time.textContent = formatChatTime(msg.created_at) + (msg.edited_at ? ' · edited' : '') + (pinnedIds.has(String(msg.id)) ? ' · pinned' : '') + (msg.sender_id === currentUserId ? (msg.read_at ? ' · ✓✓' : ' · ✓') : '');
       bubble.appendChild(time);
 
       const reactions = reactionMap.get(String(msg.id)) || []; const reactionRow = document.createElement('div'); reactionRow.className = 'private-reactions';
@@ -1641,7 +1681,7 @@
       const actions = document.createElement('div'); actions.className = 'private-action-menu'; actions.hidden = true;
       const addAction = (label,handler) => { const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',handler);actions.appendChild(button); };
       addAction('Reply',()=>{privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Replying to '+(msg.sender_id===currentUserId?'your message':profileName(activePrivateMember))+': '+(parsed.text||'Attachment').slice(0,80);document.getElementById('privateReplyPreview').hidden=false;document.getElementById('privateMessageBody').focus();});
-      addAction('Quote in reply',()=>{const field=document.getElementById('privateMessageBody');const sender=msg.sender_id===currentUserId?'You':profileName(activePrivateMember);privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Quoting '+sender;document.getElementById('privateReplyPreview').hidden=false;field.value='“'+(parsed.text||'Attachment').slice(0,220)+'”\n\n'+field.value;field.focus();});
+      addAction('Quote in reply',()=>{const field=document.getElementById('privateMessageBody');const sender=msg.sender_id===currentUserId?'You':profileName(activePrivateMember);privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Quoting '+sender;document.getElementById('privateReplyPreview').hidden=false;field.value='“'+(parsed.text||'Attachment').slice(0,220)+'”\n\n'+field.value;field.dispatchEvent(new Event('input',{bubbles:true}));field.focus();});
       addAction('Copy',()=>navigator.clipboard.writeText(parsed.text || ''));
       addAction('Translate',()=>translateMessage(parsed.text || ''));
       addAction('Add to calendar',()=>createCalendarEventFromMessage(parsed.text || ''));
@@ -1669,6 +1709,7 @@
     if (!messages.length) list.innerHTML = '<p class="chat-empty">No messages yet. Say hello.</p>';
     if (!preservePosition || wasNearBottom) list.scrollTop = list.scrollHeight;
     else list.scrollTop = Math.max(0,list.scrollHeight-list.clientHeight-distanceFromBottom);
+    if(options&&options.newMessage&&!wasNearBottom)addNewMessagesJump(list);
     await memberClient.rpc('mark_private_messages_read',{other_user:other});
     await refreshPrivateInbox(); renderPrivateMembers(document.getElementById('chatSearch').value);
   }
@@ -1679,8 +1720,8 @@
     const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId});
-    if (!result.error) { field.value = ''; clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation(); }
-    else alert('Could not send this message: ' + result.error.message);
+    if (!result.error) { field.value = '';autoGrow(field);clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation(); }
+    else renderRetry(document.getElementById('privateTypingIndicator'),'Could not send the message.',()=>document.getElementById('privateMessageForm').requestSubmit());
   });
   document.getElementById('cancelPrivateReply').addEventListener('click',()=>{privateReplyToId=null;document.getElementById('privateReplyPreview').hidden=true;});
   document.getElementById('schedulePrivateButton').addEventListener('click',()=>{
@@ -1695,11 +1736,16 @@
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
   });
-  document.getElementById('privateMessageBody').addEventListener('input',(event)=>{ if (activePrivateMember) { try { localStorage.setItem(draftKey('private',activePrivateMember.id),event.target.value); } catch (_) {} announceTyping('private',activePrivateMember.id); } });
+  document.getElementById('privateMessageBody').addEventListener('input',(event)=>{autoGrow(event.target);updateComposerButtons();if (activePrivateMember) { try { localStorage.setItem(draftKey('private',activePrivateMember.id),event.target.value); } catch (_) {} announceTyping('private',activePrivateMember.id); } });
+  enableListKeyboardNavigation(document.getElementById('topicList'));
+  enableListKeyboardNavigation(document.getElementById('privateMemberList'));
+  dismissJumpAtBottom(document.getElementById('postList'));
+  dismissJumpAtBottom(document.getElementById('privateConversationList'));
+  updateComposerButtons();
   const privateEmojiPanel = document.getElementById('privateEmojiPanel');
   ['😀','😂','😍','👍','❤️','🙏','🎉','👏','😊','😢','🔥','✅'].forEach((emoji) => {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = emoji;
-    button.addEventListener('click', () => { const field = document.getElementById('privateMessageBody'); field.value += emoji; field.focus(); privateEmojiPanel.hidden = true; });
+    button.addEventListener('click', () => { const field = document.getElementById('privateMessageBody'); field.value += emoji;field.dispatchEvent(new Event('input',{bubbles:true}));field.focus(); privateEmojiPanel.hidden = true; });
     privateEmojiPanel.appendChild(button);
   });
   document.getElementById('privateEmojiToggle').addEventListener('click', () => { privateEmojiPanel.hidden = !privateEmojiPanel.hidden; });
@@ -1711,6 +1757,7 @@
       const name = document.createElement('span'); name.textContent = att.name || 'attachment'; chip.appendChild(name);
       const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '✕'; remove.addEventListener('click',()=>{privateStagedAttachments.splice(index,1);renderPrivateStaged();}); chip.appendChild(remove); wrap.appendChild(chip);
     });
+    updateComposerButtons();
   }
 
   async function uploadPrivateFile(file) {
@@ -1724,10 +1771,11 @@
 
   async function stagePrivateFiles(files) {
     const button = document.getElementById('privateAttachButton'); button.disabled = true;
-    for (const file of files) {
-      try { privateStagedAttachments.push(await uploadPrivateFile(file)); } catch (error) { alert(error.message || 'Could not upload this file.'); }
+    for (let index=0;index<files.length;index++) {
+      const file=files[index];document.getElementById('privateTypingIndicator').textContent='Uploading '+(index+1)+' of '+files.length+': '+file.name;
+      try { privateStagedAttachments.push(await uploadPrivateFile(file)); } catch (error) { document.getElementById('privateTypingIndicator').textContent='Could not upload '+file.name+'. Please try again.'; }
     }
-    button.disabled = false; renderPrivateStaged();
+    button.disabled = false;if(document.getElementById('privateTypingIndicator').textContent.startsWith('Uploading '))document.getElementById('privateTypingIndicator').textContent='';renderPrivateStaged();
   }
   document.getElementById('privateAttachButton').addEventListener('click',()=>document.getElementById('privateFileInput').click());
   document.getElementById('privateFileInput').addEventListener('change',(event)=>{stagePrivateFiles(Array.from(event.target.files || []));event.target.value='';});
@@ -1787,12 +1835,12 @@
       const button = document.createElement('button'); button.type = 'button'; button.className = 'search-result';
       if (item.kind === 'group') {
         const topic = chatTopics.find((candidate) => String(candidate.id) === String(item.post.topic_id));
-        button.innerHTML = '<strong>' + escapeHtml(item.name) + ' · ' + escapeHtml(topic ? topic.title : 'Group chat') + '</strong><span>' + escapeHtml((item.parsed.text || item.parsed.attachments.map((att)=>att.name).join(', ') || 'Attachment').slice(0,220)) + '</span><small>' + new Date(item.post.created_at).toLocaleString() + '</small>';
+        button.innerHTML = '<strong>' + escapeHtml(item.name) + ' · ' + escapeHtml(topic ? topic.title : 'Group chat') + '</strong><span>' + escapeHtml((item.parsed.text || item.parsed.attachments.map((att)=>att.name).join(', ') || 'Attachment').slice(0,220)) + '</span><small>' + formatChatDateTime(item.post.created_at) + '</small>';
         button.addEventListener('click', () => { const topicButton = document.querySelector('#topicList button[data-topic-id="' + item.post.topic_id + '"]'); if (topicButton) selectTopic(item.post.topic_id, topicButton); });
       } else {
         const otherId = item.msg.sender_id === currentUserId ? item.msg.recipient_id : item.msg.sender_id;
         const member = privateMembers.find((candidate) => candidate.id === otherId);
-        button.innerHTML = '<strong>Private message' + (member ? ' · ' + escapeHtml(profileName(member)) : '') + '</strong><span>' + escapeHtml((item.parsed.text || item.parsed.attachments.map((att)=>att.name).join(', ') || 'Attachment').slice(0,220)) + '</span><small>' + new Date(item.msg.created_at).toLocaleString() + '</small>';
+        button.innerHTML = '<strong>Private message' + (member ? ' · ' + escapeHtml(profileName(member)) : '') + '</strong><span>' + escapeHtml((item.parsed.text || item.parsed.attachments.map((att)=>att.name).join(', ') || 'Attachment').slice(0,220)) + '</span><small>' + formatChatDateTime(item.msg.created_at) + '</small>';
         if (member) button.addEventListener('click', () => selectPrivateMember(member));
       }
       wrap.appendChild(button);
