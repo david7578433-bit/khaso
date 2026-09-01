@@ -535,7 +535,7 @@
   async function loadHomeUpdates() {
     const [newsResult, simchaResult] = await Promise.all([
       supabaseClient.from('submissions').select('title, body').eq('category', 'news').eq('approved', true).order('created_at', { ascending: false }).limit(1),
-      supabaseClient.from('submissions').select('title, body').eq('category', 'simcha').eq('approved', true).order('created_at', { ascending: false }).limit(1)
+      supabaseClient.from('submissions').select('title, body').eq('category', 'simcha').eq('approved', true).order('created_at', { ascending: false }).limit(20)
     ]);
 
     if (newsResult.data && newsResult.data.length) {
@@ -546,9 +546,22 @@
     }
 
     if (simchaResult.data && simchaResult.data.length) {
-      document.getElementById('announcementTitle2').textContent = 'Simchas: ' + (simchaResult.data[0].title || '');
-      document.getElementById('announcementContent2').textContent = simchaResult.data[0].body || '';
+      let simchaIndex = 0;
+      const showSimcha = () => {
+        const simcha = simchaResult.data[simchaIndex];
+        document.getElementById('announcementTitle2').textContent = 'Simchas: ' + (simcha.title || '');
+        document.getElementById('announcementContent2').textContent = simcha.body || '';
+      };
+
+      showSimcha();
       document.getElementById('heroBox2').hidden = false;
+
+      if (simchaResult.data.length > 1) {
+        setInterval(() => {
+          simchaIndex = (simchaIndex + 1) % simchaResult.data.length;
+          showSimcha();
+        }, 7000);
+      }
     }
   }
 
