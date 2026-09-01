@@ -65,7 +65,7 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html" aria-current="page"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
@@ -262,7 +262,7 @@
     <p>You're signed in and approved.</p>
     <div class="member-panel">
       <h2>Notifications</h2>
-      <p><a class="button" href="messages.html">Open Private Messages</a></p>
+      <p><a class="button" href="ages.html?view=private">Open Private Messages</a></p>
       <div id="notificationsList"><p>Loading…</p></div>
     </div>
     <div class="member-panel">
@@ -557,7 +557,7 @@
       info.appendChild(name); info.appendChild(details); row.appendChild(info);
       const messageLink = document.createElement('a');
       messageLink.className = 'button';
-      messageLink.href = 'messages.html?with=' + encodeURIComponent(member.id);
+      messageLink.href = 'ages.html?view=private&with=' + encodeURIComponent(member.id);
       messageLink.textContent = 'Message';
       row.appendChild(messageLink);
       list.appendChild(row);
@@ -695,7 +695,7 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
