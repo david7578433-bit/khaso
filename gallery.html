@@ -99,7 +99,10 @@
       .order('created_at', { ascending: false });
 
     if (error) {
-      grid.innerHTML = '<p class="empty-note">Could not load pictures: ' + error.message + '</p>';
+      const message = document.createElement('p');
+      message.className = 'empty-note';
+      message.textContent = 'Could not load pictures. Please try again.';
+      grid.replaceChildren(message);
       return;
     }
 

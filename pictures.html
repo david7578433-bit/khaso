@@ -31,7 +31,7 @@
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
-  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>  <a href="ages.html">Ages</a>  <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
+  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>  <a href="ages.html">Kasho Chat</a>  <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
 
@@ -64,7 +64,10 @@
     const { data, error } = await supabaseClient.from('gallery_photos').select('category');
 
     if (error) {
-      box.innerHTML = '<p class="empty-note">Could not load albums: ' + error.message + '</p>';
+      const message = document.createElement('p');
+      message.className = 'empty-note';
+      message.textContent = 'Could not load albums. Please try again.';
+      box.replaceChildren(message);
       return;
     }
 
@@ -94,7 +97,7 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>

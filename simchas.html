@@ -21,7 +21,7 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="community.html" data-testing-feature>Community</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
@@ -51,7 +51,7 @@
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
@@ -118,6 +118,21 @@
     });
   }
 
+  function showSimchasError() {
+    const list = document.getElementById('simchasList');
+    const card = document.createElement('section');
+    card.className = 'card';
+    const message = document.createElement('p');
+    message.textContent = 'Simchas could not load. Please check your connection and try again.';
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = 'Try Again';
+    retry.addEventListener('click', loadSimchas);
+    card.append(message, retry);
+    list.replaceChildren(card);
+    document.getElementById('emptyState').hidden = true;
+  }
+
   async function loadSimchas() {
     const { data, error } = await client
       .from('submissions')
@@ -126,9 +141,12 @@
       .eq('approved', true)
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) return;
+    if (error) {
+      showSimchasError();
+      return;
+    }
 
-    allSimchas = data;
+    allSimchas = data || [];
     renderSimchas(allSimchas);
   }
 

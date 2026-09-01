@@ -56,7 +56,7 @@
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
   <a href="community.html" aria-current="page">Community</a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="login.html">Log In</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -140,7 +140,7 @@
   <a href="news.html">News</a>
   <a href="simchas.html">Simchas</a>
   <a href="community.html">Community</a>
-  <a href="ages.html">Ages</a>
+  <a href="ages.html">Kasho Chat</a>
   <a href="login.html">Log In</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
@@ -148,7 +148,7 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
 <script>
-  const communityClient = window.supabase.createClient(MEMBER_SUPABASE_URL, MEMBER_SUPABASE_KEY);
+  const communityClient = memberClient;
   let allEvents = [];
   let communitySession = null;
   let communityProfile = null;
@@ -390,8 +390,11 @@
     renderYahrzeitMonth();
   });
 
-  loadPublicContent();
-  loadMemberContent();
+  document.addEventListener('DOMContentLoaded', () => {
+    if (!document.getElementById('eventsList')) return;
+    loadPublicContent();
+    loadMemberContent();
+  });
 </script>
 </body>
 </html>

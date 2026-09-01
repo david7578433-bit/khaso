@@ -102,6 +102,21 @@
     });
   }
 
+  function showNewsError() {
+    const list = document.getElementById('newsList');
+    const card = document.createElement('section');
+    card.className = 'card';
+    const message = document.createElement('p');
+    message.textContent = 'News could not load. Please check your connection and try again.';
+    const retry = document.createElement('button');
+    retry.type = 'button';
+    retry.textContent = 'Try Again';
+    retry.addEventListener('click', loadNews);
+    card.append(message, retry);
+    list.replaceChildren(card);
+    document.getElementById('emptyState').hidden = true;
+  }
+
   async function loadNews() {
     const { data, error } = await client
       .from('submissions')
@@ -110,9 +125,12 @@
       .eq('approved', true)
       .order('created_at', { ascending: false });
 
-    if (error || !data || data.length === 0) return;
+    if (error) {
+      showNewsError();
+      return;
+    }
 
-    allNews = data;
+    allNews = data || [];
     renderNews(allNews);
   }
 
