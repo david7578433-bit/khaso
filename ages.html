@@ -406,6 +406,297 @@
     .member-list { max-height:230px; }
     .message-actions, .reaction-row { opacity:1; }
   }
+
+  /* 2026 workspace refresh: calmer, denser, and easier to scan */
+  :root {
+    --chat-blue:#0b57d0;
+    --chat-blue-soft:#d3e3fd;
+    --chat-canvas:#f8fafd;
+    --chat-panel:#ffffff;
+    --chat-line:#dfe3e7;
+    --chat-text:#1f1f1f;
+    --chat-muted:#5f6368;
+    --chat-hover:#eef3f8;
+  }
+  body.chat-page { overflow:hidden; background:var(--chat-canvas); }
+  .chat-page #boardCard.card { background:var(--chat-canvas); }
+  .chat-page .chat-app-layout {
+    grid-template-columns:248px 328px minmax(420px,1fr);
+    height:100dvh;
+    min-height:600px;
+    background:var(--chat-canvas);
+  }
+  .chat-app-sidebar {
+    gap:2px;
+    padding:14px 12px 12px;
+    border:0;
+    background:#edf3f9;
+    overflow-y:auto;
+    scrollbar-width:thin;
+  }
+  .chat-app-brand {
+    min-height:44px;
+    padding:4px 10px 12px;
+    color:#12324a;
+    font-size:21px;
+    letter-spacing:-.35px;
+  }
+  .chat-app-brand::before {
+    width:34px;
+    height:34px;
+    border-radius:11px;
+    background:linear-gradient(145deg,#0b57d0 0 50%,#159d87 50% 100%);
+    box-shadow:inset 0 0 0 7px rgba(255,255,255,.9),0 2px 8px rgba(11,87,208,.15);
+  }
+  .chat-app-brand small { margin:1px 0 0; font-size:11px; letter-spacing:.1px; }
+  .new-chat-primary {
+    display:flex;
+    align-items:center;
+    gap:10px;
+    width:fit-content;
+    min-height:48px!important;
+    margin:4px 4px 13px;
+    padding:0 18px;
+    color:#0b57d0;
+    background:#fff;
+    border:0;
+    border-radius:15px;
+    box-shadow:0 1px 3px rgba(60,64,67,.18);
+    font-size:14px;
+    font-weight:700;
+  }
+  .new-chat-primary:hover { background:#f8fbff; box-shadow:0 2px 7px rgba(60,64,67,.2); }
+  .new-chat-primary span { font-size:23px; font-weight:400; line-height:1; }
+  .chat-nav-label {
+    padding:10px 12px 5px;
+    color:#68727d;
+    font-size:11px;
+    font-weight:800;
+    letter-spacing:.08em;
+    text-transform:uppercase;
+  }
+  .chat-app-sidebar .section-tab,.chat-app-sidebar .chat-nav-link {
+    min-height:40px!important;
+    gap:12px;
+    padding:8px 13px;
+    border-radius:20px;
+    font-size:14px;
+  }
+  .chat-app-sidebar .section-tab.active { font-weight:700; }
+  .chat-nav-spacer { min-height:8px; }
+  .sidebar-setting { font-size:12px!important; }
+  .presence-select { margin:6px 5px; border-color:#d2d9e0; border-radius:18px; background:rgba(255,255,255,.75); }
+
+  .chat-list-pane {
+    padding:18px 10px 10px;
+    border:0;
+    border-radius:22px 0 0 22px;
+    background:#fff;
+    box-shadow:-1px 0 0 var(--chat-line),0 1px 2px rgba(60,64,67,.08);
+  }
+  .chat-list-pane h2 { margin:0 12px 2px; color:var(--chat-text); font-size:25px; letter-spacing:-.5px; }
+  .chat-list-pane>p { margin:0 12px 14px; }
+  .new-group-button { margin:0 8px 10px; width:calc(100% - 16px); min-height:40px!important; border-radius:20px; box-shadow:none; }
+  .topic-list,.member-list { gap:2px; padding:0 3px 8px; scrollbar-width:thin; }
+  .topic-list button,.member-list button {
+    min-height:64px;
+    padding:8px 10px;
+    border-radius:15px;
+    transition:background .14s ease,transform .14s ease;
+  }
+  .topic-list button:hover,.member-list button:hover { background:var(--chat-hover); }
+  .topic-list button.active,.member-list button.active { background:var(--chat-blue-soft); box-shadow:none; }
+  .topic-summary-top strong { font-size:14px; }
+  .topic-last-message { margin-top:1px; font-size:12px; }
+  .member-avatar,.chat-meta-avatar,.chat-toast-avatar { background:linear-gradient(145deg,#0b57d0,#147e91); }
+  .member-avatar { width:42px; height:42px; flex-basis:42px; }
+  .presence-dot { border:2px solid #fff; box-sizing:content-box; }
+  .unread-badge,.private-unread { background:#0b57d0; font-weight:800; }
+
+  .chat-room-main {
+    margin:0;
+    height:100dvh;
+    border-left:1px solid var(--chat-line);
+    background:#fff;
+  }
+  .chat-room-header {
+    min-height:72px;
+    padding:10px 18px;
+    background:rgba(255,255,255,.94);
+    backdrop-filter:blur(12px);
+  }
+  .room-identity { display:flex; min-width:190px; align-items:center; gap:11px; }
+  .room-avatar {
+    display:grid;
+    width:42px;
+    height:42px;
+    flex:0 0 42px;
+    place-items:center;
+    border-radius:14px;
+    color:#fff;
+    background:linear-gradient(145deg,#0b57d0,#159d87);
+    font-weight:800;
+  }
+  .room-heading { min-width:0; }
+  .chat-room-header h2 { overflow:hidden; font-size:18px; letter-spacing:-.2px; text-overflow:ellipsis; white-space:nowrap; }
+  .chat-room-header p { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .chat-search-shell { position:relative; max-width:620px; }
+  .chat-search-shell input { min-height:46px; padding:11px 18px 11px 42px; background-color:#eef3f8; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='20' viewBox='0 0 24 24' fill='none' stroke='%235f6368' stroke-width='2'%3E%3Ccircle cx='11' cy='11' r='7'/%3E%3Cpath d='m16 16 4 4'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:14px center; }
+  .search-filter-bar { display:none; position:absolute; top:62px; z-index:30; padding:6px; border:1px solid var(--chat-line); border-radius:16px; background:#fff; box-shadow:0 8px 28px rgba(60,64,67,.18); }
+  .chat-search-shell:focus-within .search-filter-bar { display:flex; }
+  .icon-button { transition:background .14s ease,transform .14s ease; }
+  .icon-button:active { transform:scale(.94); }
+  .mobile-back-button { display:none; }
+
+  .chat-home-view { padding:clamp(22px,4vw,52px); background:#fff; }
+  .chat-home-welcome { max-width:720px; margin:0 auto 24px; }
+  .chat-home-welcome h2 { font-size:32px; letter-spacing:-.9px; }
+  .chat-home-grid { max-width:900px; margin:auto; gap:14px; }
+  .chat-home-card {
+    min-height:150px;
+    padding:22px;
+    border-color:#e1e5ea;
+    border-radius:22px;
+    box-shadow:none;
+    transition:transform .16s ease,box-shadow .16s ease,border-color .16s ease;
+  }
+  .chat-home-card:hover { transform:translateY(-2px); border-color:#c8d4e3; box-shadow:0 8px 24px rgba(60,64,67,.09); }
+  .chat-home-card button { width:auto; border-radius:18px; }
+
+  .chat-window,.private-conversation-list {
+    padding:22px 28px 16px;
+    background:#fff;
+    scrollbar-width:thin;
+  }
+  .chat-bubble-row { width:100%; max-width:none; padding:2px 0 7px 44px; align-self:stretch!important; align-items:flex-start!important; }
+  .chat-bubble-row.own { padding-left:44px; }
+  .chat-meta { display:flex; align-items:center; margin:0 0 2px; color:#687078; font-size:11px; }
+  .chat-meta-avatar { position:absolute; left:0; top:1px; width:34px; height:34px; }
+  .chat-bubble,.chat-page .chat-bubble-row.own .chat-bubble,.chat-page .chat-bubble-row.other .chat-bubble {
+    max-width:min(760px,82%);
+    padding:7px 10px;
+    color:var(--chat-text);
+    background:transparent;
+    border:0;
+    border-radius:10px;
+    box-shadow:none;
+    font-size:14px;
+    line-height:1.5;
+  }
+  .chat-bubble-row:hover { background:#f8fafc; }
+  .chat-bubble-row:hover .chat-bubble { background:#f8fafc; }
+  .reply-context { max-width:min(680px,78%); border-left-color:#0b57d0; border-radius:0 8px 8px 0; background:#f2f6fb; }
+  .message-hover-bar { top:-19px; right:18px!important; left:auto!important; border-radius:18px; }
+  .reaction-row { margin-left:8px; }
+  .chat-date-divider { position:sticky; top:4px; z-index:2; width:max-content; align-self:center; margin:12px auto; padding:5px 11px; border:1px solid #e1e5ea; border-radius:999px; background:rgba(255,255,255,.94); }
+  .chat-date-divider::before,.chat-date-divider::after { display:none; }
+
+  .private-message-row { padding:2px 0 7px 44px; }
+  .private-message-row.mine { padding-left:0; padding-right:44px; }
+  .private-message-row:not(.mine)::before,.private-message-row.mine::after {
+    content:attr(data-initial);
+    position:absolute;
+    top:2px;
+    display:grid;
+    width:34px;
+    height:34px;
+    place-items:center;
+    border-radius:50%;
+    color:#fff;
+    background:linear-gradient(145deg,#0b57d0,#147e91);
+    font-size:12px;
+    font-weight:800;
+  }
+  .private-message-row:not(.mine)::before { left:0; }
+  .private-message-row.mine::after { right:0; background:linear-gradient(145deg,#159d87,#12635f); }
+  .private-bubble,.private-bubble.mine {
+    max-width:min(720px,82%);
+    padding:9px 12px;
+    border:0;
+    border-radius:14px;
+    color:var(--chat-text);
+    background:#eef2f5;
+  }
+  .private-bubble.mine { background:#d7f0e9; }
+  .private-bubble small { font-size:10px; text-align:right; }
+  .private-hover-bar { top:-23px; }
+
+  .chat-input-row,#privateMessageForm {
+    margin:0 14px 12px;
+    padding:8px 10px;
+    border:1px solid #d9dfe5;
+    border-radius:22px;
+    background:#f8fafc;
+    box-shadow:0 2px 10px rgba(60,64,67,.08);
+  }
+  .chat-input-row textarea,.private-compose textarea {
+    min-height:40px;
+    padding:9px 8px;
+    border:0;
+    outline:0;
+    background:transparent;
+    box-shadow:none;
+    font-size:15px;
+  }
+  .chat-input-row textarea:focus,.private-compose textarea:focus { box-shadow:none; }
+  .attach-btn,.emoji-toggle,.private-compose .icon-button { width:38px; height:38px; min-height:38px!important; border:0; background:transparent; }
+  .attach-btn:hover,.emoji-toggle:hover,.private-compose .icon-button:hover { background:#e7edf4; }
+  .send-btn { width:40px; height:40px; min-height:40px!important; padding:0; display:grid; place-items:center; border-radius:50%; }
+  .send-btn:disabled { color:#8b949e; background:#e4e8ec; opacity:1; }
+  .typing-indicator { padding-left:20px; }
+  .reply-preview,.private-reply-preview,.staged-attachments,.private-staged,.emoji-panel,.private-emoji-panel,.link-attach-panel { margin-left:14px; margin-right:14px; border-radius:14px; }
+  .search-results { padding:24px 30px; background:#fff; }
+  .search-result { padding:15px 17px; border-radius:16px; box-shadow:none; }
+  .search-result:hover { border-color:#a8c7fa; background:#f8fbff; }
+
+  @media (max-width:1120px) {
+    .chat-page .chat-app-layout { grid-template-columns:82px 300px minmax(380px,1fr); }
+    .chat-app-sidebar { padding:12px 8px; align-items:center; }
+    .chat-app-brand { padding:4px 0 12px; font-size:0; }
+    .chat-app-brand small,.chat-nav-label,.chat-app-sidebar .section-tab:not(.active),.chat-app-sidebar .chat-nav-link,.presence-select,.chat-nav-spacer { font-size:0!important; }
+    .chat-app-sidebar .section-tab,.chat-app-sidebar .chat-nav-link { width:52px; justify-content:center; padding:8px; }
+    .chat-app-sidebar .section-tab svg,.chat-app-sidebar .chat-nav-link svg { width:22px; height:22px; }
+    .chat-app-sidebar .section-tab.active { font-size:0; }
+    .new-chat-primary { width:52px; padding:0; justify-content:center; }
+    .new-chat-primary strong { display:none; }
+    .presence-select { width:52px; min-height:40px; padding:0; }
+    .chat-room-header { flex-wrap:wrap; }
+    .room-identity { flex:1; }
+    .chat-search-shell { order:3; flex-basis:100%; max-width:none; }
+  }
+  @media (max-width:800px) {
+    body.chat-page { overflow:hidden; }
+    .chat-page .chat-app-layout { display:block; height:100dvh; min-height:0; overflow:hidden; }
+    .chat-app-sidebar { position:fixed; left:0; right:0; bottom:0; z-index:50; display:flex; height:64px; flex-direction:row; justify-content:space-around; padding:6px 8px max(6px,env(safe-area-inset-bottom)); border-top:1px solid var(--chat-line); }
+    .chat-app-brand,.new-chat-primary,.chat-nav-label,.presence-select,.sidebar-setting,.chat-nav-spacer,.chat-app-sidebar .chat-nav-link { display:none!important; }
+    .chat-app-sidebar .section-tab { display:none; width:48px; min-width:48px; height:48px; }
+    .chat-app-sidebar #tabHome,.chat-app-sidebar #tabUnread,.chat-app-sidebar #tabDiscussion,.chat-app-sidebar #tabPrivate { display:grid; place-items:center; }
+    .chat-list-pane { position:absolute; inset:0 0 64px; display:block; padding:20px 10px; border-radius:0; }
+    .topic-list,.member-list { max-height:calc(100dvh - 150px); }
+    .chat-room-main { position:absolute; inset:0 0 64px; z-index:20; display:none; height:auto; border:0; }
+    body.mobile-chat-open .chat-room-main { display:flex; }
+    body.mobile-chat-open .chat-list-pane { display:none; }
+    .mobile-back-button { display:grid; flex:0 0 40px; }
+    .chat-room-header { min-height:64px; flex-wrap:nowrap; padding:8px 10px; }
+    .room-avatar { width:36px; height:36px; flex-basis:36px; border-radius:12px; }
+    .room-identity { min-width:0; }
+    .chat-room-tools { margin-left:auto; }
+    .chat-room-tools .icon-button:not(#chatInfoButton) { display:none; }
+    .chat-search-shell { position:absolute; top:66px; left:10px; right:10px; z-index:20; display:none; }
+    .chat-room-header.search-open .chat-search-shell { display:flex; }
+    .chat-home-view { padding:22px 15px; }
+    .chat-home-grid { grid-template-columns:1fr; }
+    .chat-window,.private-conversation-list { padding:18px 12px 12px; }
+    .chat-bubble-row { padding-left:40px; }
+    .chat-bubble,.private-bubble,.chat-page .chat-bubble-row.own .chat-bubble { max-width:92%; }
+    .private-message-row { padding-left:40px; }
+    .private-message-row.mine { padding-right:40px; }
+    .chat-input-row,#privateMessageForm { margin:0 7px 7px; padding:6px; border-radius:18px; }
+    .chat-input-row { flex-wrap:nowrap; }
+    .chat-input-row textarea { order:0; flex-basis:auto; }
+    #linkAttachBtn,#pollButton { display:none; }
+    .search-results { padding:16px 12px; }
+  }
 </style>
 </head>
 <body class="chat-page">
@@ -420,11 +711,14 @@
     <div class="chat-app-layout">
       <aside class="chat-app-sidebar" aria-label="Chat shortcuts">
         <div class="chat-app-brand">Kasho Chat<small>Member community</small></div>
+        <button type="button" class="new-chat-primary" id="newChatButton"><span aria-hidden="true">＋</span><strong>New chat</strong></button>
+        <div class="chat-nav-label">Shortcuts</div>
         <button type="button" class="section-tab active" id="tabHome"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9M9.5 19v-5h5v5"/></svg>Chat Home</button>
         <button type="button" class="section-tab" id="tabUnread"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Z"/><path d="m5 7 7 6 7-6"/></svg>Unread</button>
         <button type="button" class="section-tab" id="tabMentions"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M15 9v5a2 2 0 0 0 4 0v-2a7 7 0 1 0-2 5"/></svg>Mentions</button>
         <button type="button" class="section-tab" id="tabStarred"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Starred</button>
         <button type="button" class="section-tab" id="tabFavorites"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Favorite chats</button>
+        <div class="chat-nav-label">Conversations</div>
         <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
         <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
         <button type="button" class="section-tab" id="tabShared"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg>Files & links</button>
@@ -446,7 +740,8 @@
       </aside>
       <section class="chat-room-main">
         <div class="chat-room-header">
-          <div class="room-heading"><h2 id="roomTitle">Chat Home</h2><p id="roomSubtitle">Your conversations in one place</p></div>
+          <button type="button" class="icon-button mobile-back-button" id="mobileBackButton" aria-label="Back to conversations"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M19 12H5M11 6l-6 6 6 6"/></svg></button>
+          <div class="room-identity"><span class="room-avatar" id="roomAvatar" aria-hidden="true">K</span><div class="room-heading"><h2 id="roomTitle">Chat Home</h2><p id="roomSubtitle">Your conversations in one place</p></div></div>
           <div class="chat-search-shell">
             <input id="chatSearch" type="search" placeholder="Search chats, people, links and files…" aria-label="Search chats">
             <div class="search-filter-bar" aria-label="Search filters">
@@ -529,11 +824,11 @@
     </div>
   </section>
 
-  <dialog class="app-dialog" id="forwardDialog"><div class="dialog-head"><h3>Forward message</h3><button type="button" class="icon-button" data-close-dialog="forwardDialog">✕</button></div><div class="dialog-body" id="forwardMemberList"></div></dialog>
-  <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
-  <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
+  <dialog class="app-dialog" id="forwardDialog"><div class="dialog-head"><h3>Forward message</h3><button type="button" class="icon-button" data-close-dialog="forwardDialog" aria-label="Close forward message">✕</button></div><div class="dialog-body" id="forwardMemberList"></div></dialog>
+  <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog" aria-label="Close chat information">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
+  <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog" aria-label="Close poll">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
   <dialog class="app-dialog image-lightbox" id="imageLightbox"><button type="button" class="icon-button lightbox-close" data-close-dialog="imageLightbox" aria-label="Close image">✕</button><img id="lightboxImage" alt="Full-size attachment"></dialog>
-  <dialog class="app-dialog" id="scheduleDialog"><div class="dialog-head"><h3>Schedule private message</h3><button type="button" class="icon-button" data-close-dialog="scheduleDialog">✕</button></div><form class="dialog-body" id="scheduleForm"><label>Send date and time<input id="scheduleTime" type="datetime-local" required></label><p>The message will send when any approved member has Kasho Chat open.</p><button type="submit">Schedule message</button></form></dialog>
+  <dialog class="app-dialog" id="scheduleDialog"><div class="dialog-head"><h3>Schedule private message</h3><button type="button" class="icon-button" data-close-dialog="scheduleDialog" aria-label="Close scheduled message">✕</button></div><form class="dialog-body" id="scheduleForm"><label>Send date and time<input id="scheduleTime" type="datetime-local" required></label><p>The message will send when any approved member has Kasho Chat open.</p><button type="submit">Schedule message</button></form></dialog>
 
 </main>
 
@@ -569,6 +864,8 @@
   let blockedByMemberIds = new Set();
   let showOnlineStatus = true;
   let toastStack = null;
+  let sendingGroupMessage = false;
+  let sendingPrivateMessage = false;
   function profileName(p) {
     if (!p) return 'Member';
     const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
@@ -586,7 +883,16 @@
   function renderRetry(container,message,retry){container.innerHTML='';const wrap=document.createElement('div');wrap.className='inline-retry';const text=document.createElement('span');text.textContent=message;const button=document.createElement('button');button.type='button';button.textContent='Retry';button.addEventListener('click',retry);wrap.appendChild(text);wrap.appendChild(button);container.appendChild(wrap);}
   function addNewMessagesJump(list){const host=list.parentElement;if(host.querySelector(':scope > .new-messages-jump'))return;const button=document.createElement('button');button.type='button';button.className='new-messages-jump';button.textContent='New messages below ↓';button.addEventListener('click',()=>{list.scrollTop=list.scrollHeight;button.remove();});host.appendChild(button);}
   function autoGrow(field){field.style.height='auto';field.style.height=Math.min(field.scrollHeight,140)+'px';}
-  function updateComposerButtons(){const groupButton=document.querySelector('#postForm button[type="submit"]');const privateButton=document.querySelector('#privateMessageForm button[type="submit"]');if(groupButton)groupButton.disabled=!document.getElementById('postBody').value.trim()&&!stagedAttachments.length;if(privateButton)privateButton.disabled=!document.getElementById('privateMessageBody').value.trim()&&!privateStagedAttachments.length;}
+  function updateComposerButtons(){const groupButton=document.querySelector('#postForm button[type="submit"]');const privateButton=document.querySelector('#privateMessageForm button[type="submit"]');if(groupButton)groupButton.disabled=sendingGroupMessage||(!document.getElementById('postBody').value.trim()&&!stagedAttachments.length);if(privateButton)privateButton.disabled=sendingPrivateMessage||(!document.getElementById('privateMessageBody').value.trim()&&!privateStagedAttachments.length);}
+  function updateRoomIdentity(title,type) {
+    const avatar=document.getElementById('roomAvatar');
+    avatar.textContent=String(title||'K').trim().charAt(0).toUpperCase()||'K';
+    avatar.style.borderRadius=type==='private'?'50%':'14px';
+  }
+  function updateMobileWorkspace(view) {
+    const open=view==='home'||view==='discussion'||view==='searchResults'||(view==='private'&&!!activePrivateMember);
+    document.body.classList.toggle('mobile-chat-open',open);
+  }
   function enableListKeyboardNavigation(list){list.addEventListener('keydown',(event)=>{if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;const buttons=Array.from(list.querySelectorAll('button:not([hidden])'));if(!buttons.length)return;const current=buttons.indexOf(document.activeElement);let next=current;if(event.key==='ArrowDown')next=Math.min(buttons.length-1,current+1);if(event.key==='ArrowUp')next=Math.max(0,current-1);if(event.key==='Home')next=0;if(event.key==='End')next=buttons.length-1;event.preventDefault();buttons[Math.max(0,next)].focus();});}
   function dismissJumpAtBottom(list){list.addEventListener('scroll',()=>{if(list.scrollHeight-list.scrollTop-list.clientHeight<50){const button=list.parentElement.querySelector(':scope > .new-messages-jump');if(button)button.remove();}});}
   function draftKey(type,id) { return 'kasho_chat_draft_' + type + '_' + id; }
@@ -654,6 +960,7 @@
     document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your available rooms';
     document.getElementById('showArchivedButton').hidden = view !== 'private';
     document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
+    updateMobileWorkspace(view);
     updateRoomTools();
   }
 
@@ -664,6 +971,7 @@
     document.getElementById('chatSearch').value = '';
     activeSearchFilter = 'all';
     document.querySelectorAll('[data-search-filter]').forEach((button) => button.classList.toggle('active', button.dataset.searchFilter === 'all'));
+    updateRoomIdentity('Kasho Chat','home');
   }
 
   function preferenceFor(type,id) { return chatPreferences.find((pref) => pref.target_type === type && String(pref.target_id) === String(id)); }
@@ -779,6 +1087,7 @@
     button.classList.add('active');
     document.getElementById('roomTitle').textContent = button.querySelector('.topic-title').textContent;
     document.getElementById('roomSubtitle').textContent = 'Approved members · group conversation';
+    updateRoomIdentity(button.querySelector('.topic-title').textContent,'topic');
     restoreDraft('topic',topicId,'postBody');
     loadPosts().then(() => {
       try { localStorage.setItem('khaso_last_read_' + topicId, new Date().toISOString()); } catch (_) {}
@@ -1117,7 +1426,7 @@
             const updated = { text: changedText.trim(), attachments: parsed.attachments || [], sticker: null };
             if (!updated.text && updated.attachments.length === 0) return;
             const { error: updateError } = await memberClient.from('posts').update({ body: JSON.stringify(updated) }).eq('id', post.id).eq('author_id', currentUserId);
-            if (updateError) document.getElementById('boardStatus').textContent = 'Could not edit: ' + updateError.message;
+            if (updateError) { console.error('Group message edit failed',updateError); document.getElementById('boardStatus').textContent = 'The message could not be edited. Please try again.'; }
             else await loadPosts();
           });
           actions.appendChild(editButton);
@@ -1129,7 +1438,7 @@
         deleteButton.addEventListener('click', async () => {
           if (!window.confirm('Delete this message?')) return;
           const { error: deleteError } = await memberClient.from('posts').delete().eq('id', post.id).eq('author_id', currentUserId);
-          if (deleteError) document.getElementById('boardStatus').textContent = 'Could not delete: ' + deleteError.message;
+          if (deleteError) { console.error('Group message delete failed',deleteError); document.getElementById('boardStatus').textContent = 'The message could not be deleted. Please try again.'; }
           else await loadPosts();
         });
         actions.appendChild(deleteButton);
@@ -1330,7 +1639,8 @@
         const uploaded = await uploadChatFile(file);
         stagedAttachments.push(uploaded);
       } catch (err) {
-        statusEl.textContent = 'Could not upload ' + file.name + ': ' + err.message;
+        console.error('Chat file upload failed',err);
+        statusEl.textContent = 'Could not upload ' + file.name + '. Please try again.';
       }
     }
     renderStagedAttachments();
@@ -1340,6 +1650,7 @@
 
   document.getElementById('postForm').addEventListener('submit', async (event) => {
     event.preventDefault();
+    if (sendingGroupMessage) return;
     const statusEl = document.getElementById('boardStatus');
     const bodyField = document.getElementById('postBody');
     const text = bodyField.value.trim();
@@ -1349,8 +1660,13 @@
       return;
     }
 
+    sendingGroupMessage = true;
+    updateComposerButtons();
+    const submitButton=event.currentTarget.querySelector('button[type="submit"]');
+    submitButton.disabled=true;
     const sent = await sendMessage({ text, attachments: stagedAttachments.slice(), sticker: null });
-    if (!sent) return;
+    sendingGroupMessage = false;
+    if (!sent) { updateComposerButtons(); return; }
     bodyField.value = '';
     autoGrow(bodyField);
     clearDraft('topic',currentTopicId);
@@ -1557,6 +1873,7 @@
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = activePrivateMember ? profileName(activePrivateMember) : 'Private messages';
     document.getElementById('roomSubtitle').textContent = activePrivateMember ? 'Private conversation' : 'Choose or search for a member';
+    updateRoomIdentity(activePrivateMember ? profileName(activePrivateMember) : 'Private messages',activePrivateMember?'private':'topic');
     await loadPrivateMembers();
     renderPrivateMembers(document.getElementById('chatSearch').value);
   }
@@ -1568,6 +1885,7 @@
     document.getElementById('privateReplyPreview').hidden = true;
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = profileName(member);
+    updateRoomIdentity(profileName(member),'private');
     const availability=memberAvailability.get(String(member.id))||'available';const seen=memberLastSeen.get(String(member.id));
     document.getElementById('roomSubtitle').textContent = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen '+formatChatDateTime(seen) : 'Private conversation');
     updatePrivateComposerState();
@@ -1620,7 +1938,7 @@
       if (!unreadDividerShown && msg.sender_id === other && !msg.read_at) {
         const unread = document.createElement('div'); unread.className = 'private-unread-divider'; unread.textContent = 'New messages'; list.appendChild(unread); unreadDividerShown = true;
       }
-      const row = document.createElement('div'); row.className = 'private-message-row' + (msg.sender_id === currentUserId ? ' mine' : '');
+      const row = document.createElement('div'); row.className = 'private-message-row' + (msg.sender_id === currentUserId ? ' mine' : ''); row.dataset.initial = (msg.sender_id === currentUserId ? profileName(currentProfile) : profileName(activePrivateMember)).trim().charAt(0).toUpperCase() || '?';
       const bubble = document.createElement('div'); bubble.className = 'private-bubble' + (msg.sender_id === currentUserId ? ' mine' : '');
       if (starredIds.has(String(msg.id)) || pinnedIds.has(String(msg.id))) bubble.classList.add('starred-message');
       if (msg.reply_to_id && messageMap.has(String(msg.reply_to_id))) {
@@ -1683,13 +2001,15 @@
   }
 
   document.getElementById('privateMessageForm').addEventListener('submit', async (event) => {
-    event.preventDefault(); if (!activePrivateMember) return;
+    event.preventDefault(); if (!activePrivateMember || sendingPrivateMessage) return;
     if (privateMessagingBlocked(activePrivateMember)) { updatePrivateComposerState(); return; }
     const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
+    sendingPrivateMessage=true;updateComposerButtons();
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId});
+    sendingPrivateMessage=false;
     if (!result.error) { field.value = '';autoGrow(field);clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation(); }
-    else renderRetry(document.getElementById('privateTypingIndicator'),'Could not send the message.',()=>document.getElementById('privateMessageForm').requestSubmit());
+    else { updateComposerButtons(); renderRetry(document.getElementById('privateTypingIndicator'),'Could not send the message.',()=>document.getElementById('privateMessageForm').requestSubmit()); }
   });
   document.getElementById('cancelPrivateReply').addEventListener('click',()=>{privateReplyToId=null;document.getElementById('privateReplyPreview').hidden=true;});
   document.getElementById('schedulePrivateButton').addEventListener('click',()=>{
@@ -1796,7 +2116,9 @@
 
   function renderSearchResults(results, customTitle) {
     setActiveChatView('searchResults');
-    document.getElementById('roomTitle').textContent = customTitle || (activeSearchFilter === 'links' ? 'Shared links' : activeSearchFilter === 'files' ? 'Shared files' : 'Search results');
+    const resultsTitle=customTitle || (activeSearchFilter === 'links' ? 'Shared links' : activeSearchFilter === 'files' ? 'Shared files' : 'Search results');
+    document.getElementById('roomTitle').textContent = resultsTitle;
+    updateRoomIdentity(resultsTitle,'topic');
     document.getElementById('roomSubtitle').textContent = results.length + ' result' + (results.length === 1 ? '' : 's');
     const wrap = document.getElementById('searchResultsSection'); wrap.innerHTML = '';
     results.forEach((item) => {
@@ -1853,6 +2175,7 @@
     document.querySelectorAll('.chat-app-sidebar .section-tab').forEach((button)=>button.classList.remove('active'));
     document.getElementById('tabFavorites').classList.add('active');
     document.getElementById('roomTitle').textContent = 'Favorite chats';
+    updateRoomIdentity('Favorite chats','topic');
     const favorites = chatPreferences.filter((pref)=>pref.favorite);
     document.getElementById('roomSubtitle').textContent = favorites.length + ' favorite' + (favorites.length===1?'':'s');
     const wrap=document.getElementById('searchResultsSection');wrap.innerHTML='';
@@ -1884,6 +2207,7 @@
   }));
 
   document.getElementById('tabHome').addEventListener('click', showChatHome);
+  document.getElementById('newChatButton').addEventListener('click', async()=>{await openPrivateMessages();document.getElementById('chatSearch').focus();});
   document.getElementById('tabUnread').addEventListener('click',()=>openSmartInbox('unread','tabUnread','Unread messages'));
   document.getElementById('tabMentions').addEventListener('click',()=>openSmartInbox('mentions','tabMentions','Mentions'));
   document.getElementById('tabStarred').addEventListener('click',()=>openSmartInbox('starred','tabStarred','Starred messages'));
@@ -1898,6 +2222,24 @@
   document.getElementById('homeOpenGroups').addEventListener('click', () => document.getElementById('tabDiscussion').click());
   document.getElementById('homeOpenPrivate').addEventListener('click', () => document.getElementById('tabPrivate').click());
   document.getElementById('homeFocusSearch').addEventListener('click', () => document.getElementById('chatSearch').focus());
+  document.getElementById('mobileBackButton').addEventListener('click',()=>{
+    saveCurrentDraft();
+    document.body.classList.remove('mobile-chat-open');
+    document.getElementById('chatSearch').value='';
+    if(activeChatView==='private') renderPrivateMembers('');
+  });
+
+  document.addEventListener('keydown',(event)=>{
+    if(event.key==='Escape') {
+      document.querySelectorAll('.message-more-menu,.message-reaction-picker,.private-action-menu,.private-reaction-picker').forEach((menu)=>{menu.hidden=true;});
+      document.getElementById('emojiPanel').hidden=true;
+      document.getElementById('privateEmojiPanel').hidden=true;
+      return;
+    }
+    if(event.target.matches('input,textarea,select,[contenteditable="true"]')) return;
+    if(event.key==='/') { event.preventDefault();document.getElementById('chatSearch').focus(); }
+    if(event.key.toLowerCase()==='q') { event.preventDefault();document.getElementById('newChatButton').click(); }
+  });
 
   function openForwardDialog(payload) {
     forwardedPayload = payload; const list = document.getElementById('forwardMemberList'); list.innerHTML = '';
