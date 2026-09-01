@@ -158,6 +158,10 @@
   .message-more-menu[hidden] { display:none; }
   .message-more-menu button { width:100%; padding:8px 10px; color:#3c4043; background:transparent; border:0; border-radius:7px; text-align:left; font-size:12px; }
   .message-more-menu button:hover { background:#f0f4f9; }
+  .message-reaction-picker { position:absolute; top:38px; left:0; z-index:15; display:grid; grid-template-columns:repeat(6,32px); gap:2px; padding:7px; background:white; border:1px solid #dadce0; border-radius:12px; box-shadow:0 4px 16px rgba(60,64,67,.25); }
+  .message-reaction-picker[hidden] { display:none; }
+  .message-reaction-picker button { width:32px; height:32px; padding:2px; color:#202124; background:transparent; border:0; border-radius:7px; font-size:18px; }
+  .message-reaction-picker button:hover { background:#f0f4f9; }
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
@@ -205,6 +209,10 @@
   .topic-list button { display:flex; justify-content:space-between; align-items:center; width:100%; min-height:54px; padding:10px 12px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
   .topic-list button:hover { background:white; }
   .topic-list button.active { color:var(--ink); background:#dcebe9; }
+  .topic-summary { display:flex; flex:1; min-width:0; flex-direction:column; gap:3px; }
+  .topic-summary-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .topic-last-message { overflow:hidden; color:#5f6368; font-size:12px; font-weight:400; text-overflow:ellipsis; white-space:nowrap; }
+  .topic-time { flex:0 0 auto; color:#747775; font-size:10px; font-weight:400; }
   .chat-room-main { display:flex; flex-direction:column; min-width:0; min-height:0; background:white; }
   .chat-room-header { display:flex; justify-content:space-between; align-items:center; min-height:68px; padding:12px 20px; border-bottom:1px solid var(--border); }
   .chat-room-header h2 { margin:0; font-size:21px; }
@@ -279,6 +287,8 @@
   .member-list button:hover, .member-list button.active { background:#d3e3fd; }
   .presence-dot { flex:0 0 9px; width:9px; height:9px; margin-left:auto; border-radius:50%; background:#9aa0a6; }
   .presence-dot.online { background:#1e8e3e; box-shadow:0 0 0 2px #ceead6; }
+  .presence-dot.busy { background:#d93025; box-shadow:0 0 0 2px #fce8e6; }
+  .presence-dot.away { background:#f9ab00; box-shadow:0 0 0 2px #feefc3; }
   .blocked-label { margin-left:auto; color:#b3261e; font-size:11px; font-weight:700; }
   .member-avatar { flex:0 0 38px; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:white; background:#0b57d0; font-weight:700; }
   .member-list-name { min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
@@ -312,6 +322,7 @@
   .icon-button:hover, .icon-button.active { color:#0842a0; background:#d3e3fd; }
   .icon-button .nav-icon { width:21px; height:21px; }
   .sidebar-setting { margin-top:2px; font-size:13px !important; }
+  .presence-select { width:100%; margin:4px 0 2px; padding:9px 10px; color:#3c4043; background:white; border:1px solid #c7d1dc; border-radius:10px; font:inherit; font-size:13px; }
   .new-group-button { width:100%; margin:0 0 10px; color:#0b57d0; background:white; border:1px solid #a8c7fa; }
   .new-group-button[hidden] { display:none; }
   .private-staged { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 8px; background:white; }
@@ -342,6 +353,19 @@
   .chat-input-row, #postForm, #mentionDropdownWrap { flex:0 0 auto; }
   .block-member-button { width:100%; margin-top:14px; color:#b3261e; background:#fce8e6; border:1px solid #f3b8b3; }
   .block-member-button.unblock { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
+  #threadDialog { width:min(460px,100vw); height:100dvh; max-height:none; margin:0 0 0 auto; border-radius:0; }
+  .thread-root { margin:12px 0; padding:14px; background:#edf2fa; border-radius:14px; }
+  .thread-message { margin:9px 0; padding:11px 13px; background:white; border:1px solid #e1e5ea; border-radius:13px; }
+  .thread-message strong,.thread-message small { display:block; }
+  .thread-message small { margin-top:5px; color:#5f6368; }
+  .thread-compose { display:flex; gap:8px; padding:14px 20px 20px; border-top:1px solid #e1e5ea; }
+  .thread-compose textarea { flex:1; min-height:44px; margin:0; }
+  .poll-card { min-width:280px; margin-top:8px; padding:14px; color:#202124; background:white; border:1px solid #dadce0; border-radius:14px; }
+  .poll-card strong { display:block; margin-bottom:10px; }
+  .poll-option { display:flex; justify-content:space-between; width:100%; margin:5px 0; padding:9px 11px; color:#202124; background:#f8fafd; border:1px solid #d8e2ef; border-radius:9px; text-align:left; }
+  .poll-option.voted { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
+  .role-badge { margin-left:auto; padding:2px 7px; color:#0842a0; background:#d3e3fd; border-radius:999px; font-size:10px; font-weight:700; }
+  .role-action { margin-left:6px; padding:4px 7px!important; font-size:10px!important; }
   @media (max-width:920px) {
     body.chat-page { overflow:auto; }
     .chat-page .chat-app-layout { grid-template-columns:1fr; height:auto; min-height:100vh; }
@@ -366,10 +390,15 @@
       <aside class="chat-app-sidebar" aria-label="Chat shortcuts">
         <div class="chat-app-brand">Kasho Chat<small>Member community</small></div>
         <button type="button" class="section-tab active" id="tabHome"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9M9.5 19v-5h5v5"/></svg>Chat Home</button>
+        <button type="button" class="section-tab" id="tabUnread"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Z"/><path d="m5 7 7 6 7-6"/></svg>Unread</button>
+        <button type="button" class="section-tab" id="tabMentions"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M15 9v5a2 2 0 0 0 4 0v-2a7 7 0 1 0-2 5"/></svg>Mentions</button>
+        <button type="button" class="section-tab" id="tabStarred"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Starred</button>
         <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
         <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
         <button type="button" class="section-tab" id="tabPhotos"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m4 17 5-5 4 4 2-2 5 4"/></svg>Photos</button>
+        <button type="button" class="section-tab" id="tabShared"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg>Files & links</button>
         <div class="chat-nav-spacer"></div>
+        <select class="presence-select" id="presenceStatus" aria-label="Your chat status"><option value="available">● Available</option><option value="busy">● Busy</option><option value="away">● Away</option></select>
         <a class="chat-nav-link" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 12h14M5 12l5-5M5 12l5 5"/></svg>Website Home</a>
         <button type="button" class="chat-nav-link sidebar-setting" id="soundToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9c1.5 1.5 1.5 4.5 0 6M19.5 6.5c3 3 3 8 0 11"/></svg>Sounds: Off</button>
         <button type="button" class="chat-nav-link sidebar-setting" id="notificationToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg>Notifications: Off</button>
@@ -397,6 +426,7 @@
           <div class="chat-room-tools" id="chatRoomTools" hidden>
             <button type="button" class="icon-button" id="muteChatButton" title="Mute chat" aria-label="Mute chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg></button>
             <button type="button" class="icon-button" id="archiveChatButton" title="Archive chat" aria-label="Archive chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 7h16v13H4V7ZM3 4h18v3H3V4Z"/><path d="M9 11h6"/></svg></button>
+            <button type="button" class="icon-button" id="sharedContentButton" title="Files and links in this chat" aria-label="Files and links in this chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg></button>
             <button type="button" class="icon-button" id="chatInfoButton" title="Chat information" aria-label="Chat information"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg></button>
           </div>
         </div>
@@ -433,6 +463,7 @@
           <input type="file" id="chatFileInput" accept="image/*,application/pdf" multiple hidden>
           <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
           <button type="button" class="attach-btn" id="linkAttachBtn" aria-label="Attach link" title="Attach Google Drive, Dropbox or another link"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
+          <button type="button" class="attach-btn" id="pollButton" aria-label="Create poll" title="Create poll">📊</button>
           <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji" title="Emoji"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 3 4 3 4-3 4-3M9 9h.01M15 9h.01"/></svg></button>
           <textarea id="postBody" placeholder="Type a message… use @ to mention someone"></textarea>
           <button type="submit" class="send-btn" aria-label="Send message"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 4 18 8-18 8 3-8-3-8Z"/><path d="M6 12h15"/></svg><span class="visually-hidden">Send</span></button>
@@ -474,6 +505,8 @@
 
   <dialog class="app-dialog" id="forwardDialog"><div class="dialog-head"><h3>Forward message</h3><button type="button" class="icon-button" data-close-dialog="forwardDialog">✕</button></div><div class="dialog-body" id="forwardMemberList"></div></dialog>
   <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
+  <dialog class="app-dialog" id="threadDialog"><div class="dialog-head"><h3>Thread</h3><button type="button" class="icon-button" data-close-dialog="threadDialog">✕</button></div><div class="dialog-body" id="threadMessages"></div><form class="thread-compose" id="threadForm"><textarea id="threadBody" placeholder="Reply in thread…"></textarea><button type="submit" class="send-btn">Send</button></form></dialog>
+  <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
 
 </main>
 
@@ -503,15 +536,29 @@
   let showArchivedChats = false;
   let lastTypingSent = 0;
   let onlineMemberIds = new Set();
+  let memberAvailability = new Map();
+  let memberLastSeen = new Map();
   let blockedMemberIds = new Set();
   let blockedByMemberIds = new Set();
+  let activeThreadRoot = null;
   function profileName(p) {
     if (!p) return 'Member';
     return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
   }
+  function draftKey(type,id) { return 'kasho_chat_draft_' + type + '_' + id; }
+  function saveCurrentDraft() {
+    try {
+      if (activeChatView === 'discussion' && currentTopicId !== null) localStorage.setItem(draftKey('topic',currentTopicId),document.getElementById('postBody').value);
+      if (activeChatView === 'private' && activePrivateMember) localStorage.setItem(draftKey('private',activePrivateMember.id),document.getElementById('privateMessageBody').value);
+    } catch (_) {}
+  }
+  function restoreDraft(type,id,fieldId) {
+    try { document.getElementById(fieldId).value = localStorage.getItem(draftKey(type,id)) || ''; } catch (_) {}
+  }
+  function clearDraft(type,id) { try { localStorage.removeItem(draftKey(type,id)); } catch (_) {} }
 
   async function loadTopics(profile) {
-    const { data, error } = await memberClient.from('topics').select('id, title, visibility').order('id');
+    const { data, error } = await memberClient.from('topics').select('id, title, visibility, created_by').order('id');
     const list = document.getElementById('topicList');
     list.innerHTML = '';
     if (error || !data || data.length === 0) return;
@@ -524,13 +571,25 @@
       return;
     }
 
+    const topicIds = chatTopics.map((topic) => topic.id);
+    const recentResult = await memberClient.from('posts').select('topic_id,body,created_at').in('topic_id',topicIds).order('created_at',{ascending:false}).limit(500);
+    const recentByTopic = new Map();
+    (recentResult.data || []).forEach((post) => { if (!recentByTopic.has(String(post.topic_id))) recentByTopic.set(String(post.topic_id),post); });
+
     chatTopics.forEach((topic) => {
       const button = document.createElement('button');
       button.type = 'button';
       button.dataset.topicId = topic.id;
-      const title = document.createElement('span');
-      title.textContent = topic.title;
-      button.appendChild(title);
+      const summary = document.createElement('span'); summary.className = 'topic-summary';
+      const top = document.createElement('span'); top.className = 'topic-summary-top';
+      const title = document.createElement('strong'); title.className = 'topic-title'; title.textContent = topic.title;
+      const recent = recentByTopic.get(String(topic.id));
+      const time = document.createElement('span'); time.className = 'topic-time'; time.textContent = recent ? new Date(recent.created_at).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
+      top.appendChild(title); top.appendChild(time); summary.appendChild(top);
+      const preview = document.createElement('span'); preview.className = 'topic-last-message';
+      if (recent) { const parsed = parseBody(recent.body); preview.textContent = parsed.text || parsed.sticker || ((parsed.attachments || []).length ? 'Attachment' : 'New message'); }
+      else preview.textContent = 'No messages yet';
+      summary.appendChild(preview); button.appendChild(summary);
       button.addEventListener('click', () => selectTopic(topic.id, button));
       list.appendChild(button);
       updateUnreadBadge(topic.id, button);
@@ -645,13 +704,15 @@
   }
 
   function selectTopic(topicId, button) {
+    saveCurrentDraft();
     currentTopicId = topicId;
     setActiveChatView('discussion');
     document.getElementById('chatSearch').value = '';
     document.querySelectorAll('#topicList button').forEach((b) => b.classList.remove('active'));
     button.classList.add('active');
-    document.getElementById('roomTitle').textContent = button.querySelector('span').textContent;
+    document.getElementById('roomTitle').textContent = button.querySelector('.topic-title').textContent;
     document.getElementById('roomSubtitle').textContent = 'Approved members · group conversation';
+    restoreDraft('topic',topicId,'postBody');
     loadPosts().then(() => {
       try { localStorage.setItem('khaso_last_read_' + topicId, new Date().toISOString()); } catch (_) {}
       const badge = button.querySelector('.unread-badge');
@@ -675,10 +736,10 @@
     try {
       const parsed = JSON.parse(raw);
       if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) {
-        return { text: parsed.text || '', attachments: parsed.attachments || [], sticker: parsed.sticker || null };
+        return { text: parsed.text || '', attachments: parsed.attachments || [], sticker: parsed.sticker || null, pollId: parsed.pollId || null };
       }
     } catch (e) {}
-    return { text: raw, attachments: [], sticker: null };
+    return { text: raw, attachments: [], sticker: null, pollId: null };
   }
 
   function parsePrivateBody(raw) {
@@ -718,7 +779,7 @@
 
     const { data, error } = await memberClient
       .from('posts')
-      .select('id, body, created_at, author_id, reply_to_id, pinned, locked, profiles(display_name, first_name, last_name)')
+      .select('id, topic_id, body, created_at, author_id, reply_to_id, pinned, locked, profiles(display_name, first_name, last_name)')
       .eq('topic_id', currentTopicId)
       .order('created_at', { ascending: true });
 
@@ -734,8 +795,11 @@
     }
 
     const postIds = data.map((post) => post.id);
+    const pollIds = data.map((post)=>parseBody(post.body).pollId).filter(Boolean);
     const reactionMap = {};
     const starredPostIds = new Set();
+    const pollMap = new Map();
+    const pollVoteMap = new Map();
     if (postIds.length) {
       const reactionResult = await memberClient.from('post_reactions').select('post_id,user_id,emoji').in('post_id', postIds);
       (reactionResult.data || []).forEach((reaction) => {
@@ -744,6 +808,14 @@
       });
       const starResult = await memberClient.from('message_stars').select('post_id').eq('user_id',currentUserId).in('post_id',postIds);
       (starResult.data || []).forEach((star) => starredPostIds.add(String(star.post_id)));
+    }
+    if (pollIds.length) {
+      const [pollResult,voteResult] = await Promise.all([
+        memberClient.from('polls').select('*').in('id',pollIds),
+        memberClient.from('poll_votes').select('poll_id,user_id,option_index').in('poll_id',pollIds)
+      ]);
+      (pollResult.data || []).forEach((poll)=>pollMap.set(String(poll.id),poll));
+      (voteResult.data || []).forEach((vote)=>{if(!pollVoteMap.has(String(vote.poll_id)))pollVoteMap.set(String(vote.poll_id),[]);pollVoteMap.get(String(vote.poll_id)).push(vote);});
     }
 
     const attachmentPaths = [];
@@ -856,6 +928,12 @@
         row.appendChild(bubble);
       }
 
+      if (parsed.pollId && pollMap.has(String(parsed.pollId))) {
+        const poll=pollMap.get(String(parsed.pollId));const votes=pollVoteMap.get(String(parsed.pollId))||[];const card=document.createElement('div');card.className='poll-card';const question=document.createElement('strong');question.textContent=poll.question;card.appendChild(question);
+        (poll.options||[]).forEach((option,index)=>{const count=votes.filter((vote)=>vote.option_index===index).length;const mine=votes.some((vote)=>vote.user_id===currentUserId&&vote.option_index===index);const choice=document.createElement('button');choice.type='button';choice.className='poll-option'+(mine?' voted':'');choice.innerHTML='<span>'+escapeHtml(String(option))+'</span><span>'+count+'</span>';choice.addEventListener('click',async()=>{await memberClient.from('poll_votes').upsert({poll_id:poll.id,user_id:currentUserId,option_index:index},{onConflict:'poll_id,user_id'});await loadPosts();});card.appendChild(choice);});
+        row.appendChild(card);
+      }
+
       const reactions = reactionMap[post.id] || [];
       const reactionRow = document.createElement('div'); reactionRow.className = 'reaction-row';
       ['👍','❤️','😂','🙏'].forEach((emoji) => {
@@ -947,6 +1025,16 @@
         actions.appendChild(pinButton);
       }
       const hoverBar = document.createElement('div'); hoverBar.className = 'message-hover-bar';
+      const reactionPicker = document.createElement('div'); reactionPicker.className = 'message-reaction-picker'; reactionPicker.hidden = true;
+      ['👍','❤️','😂','🙏','🎉','👏','🔥','😊','😮','😢','✅','💪','🙌','🥳','👋','🌟','🤔','😉'].forEach((emoji)=>{
+        const option=document.createElement('button');option.type='button';option.textContent=emoji;option.addEventListener('click',async()=>{
+          const mine=reactions.some((reaction)=>reaction.emoji===emoji&&reaction.user_id===currentUserId);
+          if(mine)await memberClient.from('post_reactions').delete().eq('post_id',post.id).eq('user_id',currentUserId).eq('emoji',emoji);
+          else await memberClient.from('post_reactions').insert({post_id:post.id,user_id:currentUserId,emoji});
+          await loadPosts();
+        });reactionPicker.appendChild(option);
+      });
+      const addReactionButton=document.createElement('button');addReactionButton.type='button';addReactionButton.textContent='☺';addReactionButton.title='More reactions';addReactionButton.addEventListener('click',()=>{reactionPicker.hidden=!reactionPicker.hidden;actions.hidden=true;});hoverBar.appendChild(addReactionButton);
       ['👍','😂','🙏'].forEach((emoji) => {
         const quickReaction = document.createElement('button'); quickReaction.type = 'button'; quickReaction.textContent = emoji; quickReaction.title = 'React ' + emoji;
         quickReaction.addEventListener('click', async () => {
@@ -962,9 +1050,12 @@
         const replyButton = document.createElement('button'); replyButton.type = 'button'; replyButton.textContent = '↩'; replyButton.title = 'Reply';
         replyButton.addEventListener('click', replyToThisMessage); hoverBar.appendChild(replyButton);
       }
+      const threadButton = document.createElement('button'); threadButton.type = 'button'; threadButton.textContent = '🧵'; threadButton.title = 'Open thread';
+      threadButton.addEventListener('click',()=>openThread(post,displayName,parsed)); hoverBar.appendChild(threadButton);
       const moreButton = document.createElement('button'); moreButton.type = 'button'; moreButton.textContent = '⋮'; moreButton.title = 'More actions';
       moreButton.addEventListener('click', (event) => { event.stopPropagation(); actions.hidden = !actions.hidden; });
       hoverBar.appendChild(moreButton);
+      hoverBar.appendChild(reactionPicker);
       if (actions.childNodes.length) hoverBar.appendChild(actions);
       row.appendChild(hoverBar);
       postList.appendChild(row);
@@ -973,9 +1064,27 @@
     postList.scrollTop = postList.scrollHeight;
   }
 
+  async function openThread(post,displayName,parsed) {
+    activeThreadRoot = post;
+    const wrap = document.getElementById('threadMessages'); wrap.innerHTML = '';
+    const root = document.createElement('div'); root.className = 'thread-root';
+    root.innerHTML = '<strong>' + escapeHtml(displayName) + '</strong><p>' + escapeHtml(parsed.text || parsed.sticker || 'Attachment') + '</p><small>' + new Date(post.created_at).toLocaleString() + '</small>';
+    wrap.appendChild(root);
+    const replies = await memberClient.from('posts').select('id,body,created_at,profiles(display_name,first_name,last_name)').eq('reply_to_id',post.id).order('created_at');
+    (replies.data || []).forEach((reply)=>{ const body=parseBody(reply.body);const card=document.createElement('div');card.className='thread-message';card.innerHTML='<strong>'+escapeHtml(profileName(reply.profiles))+'</strong><span>'+escapeHtml(body.text||body.sticker||'Attachment')+'</span><small>'+new Date(reply.created_at).toLocaleString()+'</small>';wrap.appendChild(card); });
+    if (!document.getElementById('threadDialog').open) document.getElementById('threadDialog').showModal();
+    document.getElementById('threadBody').focus();
+  }
+
+  document.getElementById('threadForm').addEventListener('submit',async(event)=>{
+    event.preventDefault(); if(!activeThreadRoot)return; const field=document.getElementById('threadBody');const text=field.value.trim();if(!text)return;
+    const result=await memberClient.from('posts').insert({topic_id:activeThreadRoot.topic_id,author_id:currentUserId,body:JSON.stringify({text,attachments:[],sticker:null}),reply_to_id:activeThreadRoot.id});
+    if(result.error){alert('Could not send the thread reply: '+result.error.message);return;} field.value=''; const parsed=parseBody(activeThreadRoot.body); await openThread(activeThreadRoot,profileName(activeThreadRoot.profiles),parsed); await loadPosts();
+  });
+
   async function sendMessage(payload) {
     const statusEl = document.getElementById('boardStatus');
-    if (currentTopicId === null) { statusEl.textContent = 'Pick a topic first.'; return; }
+    if (currentTopicId === null) { statusEl.textContent = 'Pick a topic first.'; return false; }
 
     const { data: { session } } = await memberClient.auth.getSession();
     statusEl.textContent = 'Posting…';
@@ -989,7 +1098,7 @@
 
     if (error) {
       statusEl.textContent = 'Could not post: ' + error.message;
-      return;
+      return false;
     }
 
     if (payload.text) {
@@ -1005,6 +1114,7 @@
     document.getElementById('replyPreview').hidden = true;
     statusEl.textContent = '';
     await loadPosts();
+    return true;
   }
 
   document.getElementById('cancelReply').addEventListener('click', () => {
@@ -1126,8 +1236,10 @@
       return;
     }
 
-    await sendMessage({ text, attachments: stagedAttachments.slice(), sticker: null });
+    const sent = await sendMessage({ text, attachments: stagedAttachments.slice(), sticker: null });
+    if (!sent) return;
     bodyField.value = '';
+    clearDraft('topic',currentTopicId);
     stagedAttachments = [];
     renderStagedAttachments();
   });
@@ -1136,6 +1248,19 @@
       event.preventDefault();
       document.getElementById('postForm').requestSubmit();
     }
+  });
+  document.getElementById('pollButton').addEventListener('click',()=>{
+    if(currentTopicId===null){document.getElementById('boardStatus').textContent='Choose a room first.';return;}
+    document.getElementById('pollQuestion').value='';document.getElementById('pollOptions').value='';document.getElementById('pollDialog').showModal();
+  });
+  document.getElementById('pollForm').addEventListener('submit',async(event)=>{
+    event.preventDefault();const question=document.getElementById('pollQuestion').value.trim();const options=document.getElementById('pollOptions').value.split('\n').map((value)=>value.trim()).filter(Boolean);
+    if(!question||options.length<2){alert('Enter a question and at least two options.');return;}if(options.length>10){alert('Use no more than ten options.');return;}
+    const pollResult=await memberClient.from('polls').insert({question,options,created_by:currentUserId,topic_id:currentTopicId}).select('id').single();
+    if(pollResult.error){alert('Could not create the poll: '+pollResult.error.message);return;}
+    const postResult=await memberClient.from('posts').insert({topic_id:currentTopicId,author_id:currentUserId,body:JSON.stringify({text:'',attachments:[],sticker:null,pollId:pollResult.data.id})});
+    if(postResult.error){alert('Could not post the poll: '+postResult.error.message);return;}
+    document.getElementById('pollDialog').close();await loadPosts();
   });
 
   const EMOJIS = ['😀','😂','😊','😍','👍','🙏','🎉','❤️','😢','😮','🔥','👏','🙌','😅','🤔','😉','🥳','👋','✅','❌','🙈','💪','🌟','😴'];
@@ -1193,6 +1318,7 @@
     mentionList.hidden = false;
   }
   document.getElementById('postBody').addEventListener('input', (event) => {
+    if (currentTopicId !== null) { try { localStorage.setItem(draftKey('topic',currentTopicId),event.target.value); } catch (_) {} }
     announceTyping('topic',currentTopicId);
     const field = event.target;
     const upToCursor = field.value.slice(0, field.selectionStart);
@@ -1218,10 +1344,12 @@
 
   async function updateMyPresence() {
     if (!currentUserId || !currentProfile) return;
+    const availability = document.getElementById('presenceStatus').value || 'available';
     await memberClient.from('member_presence').upsert({
       user_id: currentUserId,
       display_name: profileName(currentProfile),
       current_page: 'chat',
+      availability,
       last_seen_at: new Date().toISOString()
     }, {onConflict:'user_id'});
   }
@@ -1229,10 +1357,12 @@
   async function refreshPresenceAndBlocks() {
     const cutoff = new Date(Date.now() - 90000).toISOString();
     const [presenceResult, blocksResult] = await Promise.all([
-      memberClient.from('member_presence').select('user_id,last_seen_at').gte('last_seen_at',cutoff),
+      memberClient.from('member_presence').select('user_id,last_seen_at,availability'),
       memberClient.from('chat_blocks').select('blocker_id,blocked_id').or('blocker_id.eq.' + currentUserId + ',blocked_id.eq.' + currentUserId)
     ]);
-    onlineMemberIds = new Set((presenceResult.data || []).map((row) => String(row.user_id)));
+    onlineMemberIds = new Set((presenceResult.data || []).filter((row)=>row.last_seen_at>=cutoff).map((row) => String(row.user_id)));
+    memberAvailability = new Map((presenceResult.data || []).map((row)=>[String(row.user_id),row.availability || 'available']));
+    memberLastSeen = new Map((presenceResult.data || []).map((row)=>[String(row.user_id),row.last_seen_at]));
     blockedMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocker_id === currentUserId).map((row) => String(row.blocked_id)));
     blockedByMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocked_id === currentUserId).map((row) => String(row.blocker_id)));
     if (activeChatView === 'private') renderPrivateMembers(document.getElementById('chatSearch').value);
@@ -1285,7 +1415,7 @@
       const unread = privateInbox.filter((msg) => msg.sender_id === member.id && msg.recipient_id === currentUserId && !msg.read_at).length;
       if (unread) { const badge = document.createElement('span'); badge.className = 'private-unread'; badge.textContent = unread; button.appendChild(badge); }
       if (blockedMemberIds.has(String(member.id))) { const blocked = document.createElement('span'); blocked.className = 'blocked-label'; blocked.textContent = 'Blocked'; button.appendChild(blocked); }
-      else { const presence = document.createElement('span'); presence.className = 'presence-dot' + (onlineMemberIds.has(String(member.id)) ? ' online' : ''); presence.title = onlineMemberIds.has(String(member.id)) ? 'Online now' : 'Offline'; button.appendChild(presence); }
+      else { const availability = memberAvailability.get(String(member.id)) || 'available'; const presence = document.createElement('span'); presence.className = 'presence-dot' + (onlineMemberIds.has(String(member.id)) ? ' ' + availability : ''); const seen=memberLastSeen.get(String(member.id)); presence.title = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen ' + new Date(seen).toLocaleString() : 'Offline'); button.appendChild(presence); }
       button.addEventListener('click', () => selectPrivateMember(member));
       list.appendChild(button);
     });
@@ -1301,11 +1431,14 @@
   }
 
   async function selectPrivateMember(member) {
+    saveCurrentDraft();
     activePrivateMember = member;
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = profileName(member);
-    document.getElementById('roomSubtitle').textContent = 'Private conversation';
+    const availability=memberAvailability.get(String(member.id))||'available';const seen=memberLastSeen.get(String(member.id));
+    document.getElementById('roomSubtitle').textContent = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen '+new Date(seen).toLocaleString() : 'Private conversation');
     updatePrivateComposerState();
+    restoreDraft('private',member.id,'privateMessageBody');
     renderPrivateMembers(document.getElementById('chatSearch').value);
     await loadPrivateConversation();
   }
@@ -1375,12 +1508,12 @@
     const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body});
-    if (!result.error) { field.value = ''; privateStagedAttachments = []; renderPrivateStaged(); await loadPrivateConversation(); }
+    if (!result.error) { field.value = ''; clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; renderPrivateStaged(); await loadPrivateConversation(); }
   });
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
   });
-  document.getElementById('privateMessageBody').addEventListener('input',()=>{ if (activePrivateMember) announceTyping('private',activePrivateMember.id); });
+  document.getElementById('privateMessageBody').addEventListener('input',(event)=>{ if (activePrivateMember) { try { localStorage.setItem(draftKey('private',activePrivateMember.id),event.target.value); } catch (_) {} announceTyping('private',activePrivateMember.id); } });
   const privateEmojiPanel = document.getElementById('privateEmojiPanel');
   ['😀','😂','😍','👍','❤️','🙏','🎉','👏','😊','😢','🔥','✅'].forEach((emoji) => {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = emoji;
@@ -1463,9 +1596,9 @@
     renderSearchResults(results);
   }
 
-  function renderSearchResults(results) {
+  function renderSearchResults(results, customTitle) {
     setActiveChatView('searchResults');
-    document.getElementById('roomTitle').textContent = activeSearchFilter === 'links' ? 'Shared links' : activeSearchFilter === 'files' ? 'Shared files' : 'Search results';
+    document.getElementById('roomTitle').textContent = customTitle || (activeSearchFilter === 'links' ? 'Shared links' : activeSearchFilter === 'files' ? 'Shared files' : 'Search results');
     document.getElementById('roomSubtitle').textContent = results.length + ' result' + (results.length === 1 ? '' : 's');
     const wrap = document.getElementById('searchResultsSection'); wrap.innerHTML = '';
     results.forEach((item) => {
@@ -1485,6 +1618,50 @@
     if (!results.length) wrap.innerHTML = '<p class="chat-empty">Nothing found.</p>';
   }
 
+  async function openSmartInbox(kind,buttonId,title) {
+    document.querySelectorAll('.chat-app-sidebar .section-tab').forEach((button)=>button.classList.remove('active'));
+    document.getElementById(buttonId).classList.add('active');
+    const allowedTopics = new Set(chatTopics.map((topic)=>String(topic.id)));
+    const postResult = await memberClient.from('posts').select('id,body,created_at,topic_id,author_id,profiles(display_name,first_name,last_name)').order('created_at',{ascending:false}).limit(500);
+    await refreshPrivateInbox();
+    let starredPosts = new Set(), starredPrivate = new Set();
+    if (kind === 'starred') {
+      const stars = await memberClient.from('message_stars').select('post_id,private_message_id').eq('user_id',currentUserId);
+      starredPosts = new Set((stars.data || []).filter((row)=>row.post_id).map((row)=>String(row.post_id)));
+      starredPrivate = new Set((stars.data || []).filter((row)=>row.private_message_id).map((row)=>String(row.private_message_id)));
+    }
+    const myMention = '@' + profileName(currentProfile).toLowerCase();
+    const results = [];
+    (postResult.data || []).forEach((post)=>{
+      if (!allowedTopics.has(String(post.topic_id))) return;
+      const parsed = parseBody(post.body); const attachments = parsed.attachments || []; const text = (parsed.text || '').toLowerCase();
+      const hasShared = /https?:\/\//i.test(parsed.text || '') || attachments.length>0;
+      let include = kind === 'mentions' ? text.includes(myMention) : kind === 'starred' ? starredPosts.has(String(post.id)) : kind === 'shared' ? hasShared : false;
+      if (kind === 'unread') { let lastRead=null; try{lastRead=localStorage.getItem('khaso_last_read_'+post.topic_id);}catch(_){} include=post.author_id!==currentUserId&&(!lastRead||post.created_at>lastRead); }
+      if (include) results.push({kind:'group',post,parsed,name:profileName(post.profiles)});
+    });
+    privateInbox.forEach((msg)=>{
+      const parsed=parsePrivateBody(msg.body); const text=(parsed.text||'').toLowerCase(); const hasShared=/https?:\/\//i.test(parsed.text||'')||(parsed.attachments||[]).length>0;
+      const include=kind==='mentions'?text.includes(myMention):kind==='starred'?starredPrivate.has(String(msg.id)):kind==='shared'?hasShared:kind==='unread'?msg.recipient_id===currentUserId&&!msg.read_at:false;
+      if(include) results.push({kind:'private',msg,parsed});
+    });
+    results.sort((a,b)=>new Date((b.post||b.msg).created_at)-new Date((a.post||a.msg).created_at));
+    renderSearchResults(results,title);
+    document.getElementById(buttonId).classList.add('active');
+  }
+
+  async function openCurrentSharedContent() {
+    const results=[];
+    if(activeChatView==='discussion'&&currentTopicId!==null){
+      const posts=await memberClient.from('posts').select('id,body,created_at,topic_id,profiles(display_name,first_name,last_name)').eq('topic_id',currentTopicId).order('created_at',{ascending:false});
+      (posts.data||[]).forEach((post)=>{const parsed=parseBody(post.body);if(/https?:\/\//i.test(parsed.text||'')||(parsed.attachments||[]).length)results.push({kind:'group',post,parsed,name:profileName(post.profiles)});});
+      const topic=chatTopics.find((item)=>String(item.id)===String(currentTopicId));renderSearchResults(results,'Files & links · '+(topic?topic.title:'Group chat'));
+    } else if(activeChatView==='private'&&activePrivateMember){
+      await refreshPrivateInbox();privateInbox.filter((msg)=>(msg.sender_id===activePrivateMember.id||msg.recipient_id===activePrivateMember.id)).forEach((msg)=>{const parsed=parsePrivateBody(msg.body);if(/https?:\/\//i.test(parsed.text||'')||(parsed.attachments||[]).length)results.push({kind:'private',msg,parsed});});
+      renderSearchResults(results,'Files & links · '+profileName(activePrivateMember));
+    }
+  }
+
   let searchTimer = null;
   document.getElementById('chatSearch').addEventListener('input', () => { clearTimeout(searchTimer); searchTimer = setTimeout(runChatSearch,250); });
   document.querySelectorAll('[data-search-filter]').forEach((button) => button.addEventListener('click', () => {
@@ -1493,6 +1670,11 @@
   }));
 
   document.getElementById('tabHome').addEventListener('click', showChatHome);
+  document.getElementById('tabUnread').addEventListener('click',()=>openSmartInbox('unread','tabUnread','Unread messages'));
+  document.getElementById('tabMentions').addEventListener('click',()=>openSmartInbox('mentions','tabMentions','Mentions'));
+  document.getElementById('tabStarred').addEventListener('click',()=>openSmartInbox('starred','tabStarred','Starred messages'));
+  document.getElementById('tabShared').addEventListener('click',()=>openSmartInbox('shared','tabShared','Files & links'));
+  document.getElementById('sharedContentButton').addEventListener('click',openCurrentSharedContent);
   document.getElementById('tabDiscussion').addEventListener('click', () => {
     const selected = document.querySelector('#topicList button.active') || document.querySelector('#topicList button');
     if (selected) selected.click();
@@ -1535,7 +1717,7 @@
   document.getElementById('showArchivedButton').addEventListener('click',()=>{
     showArchivedChats = !showArchivedChats; document.getElementById('showArchivedButton').textContent = showArchivedChats ? 'Show active chats' : 'Show archived chats'; renderPrivateMembers(document.getElementById('chatSearch').value);
   });
-  document.getElementById('chatInfoButton').addEventListener('click',()=>{
+  document.getElementById('chatInfoButton').addEventListener('click',async()=>{
     const title = document.getElementById('chatInfoTitle'); const body = document.getElementById('chatInfoBody'); body.innerHTML = '';
     if (activeChatView === 'private' && activePrivateMember) {
       title.textContent = profileName(activePrivateMember);
@@ -1565,13 +1747,14 @@
     else { const topic = chatTopics.find((item)=>String(item.id)===String(currentTopicId)); title.textContent = topic ? topic.title : 'Group chat';
       const members = topic && topic.visibility !== 'all' && topic.title !== 'General (everyone)' ? privateMembers.filter((member)=>member.jewish_year===topic.title) : privateMembers;
       const heading = document.createElement('p'); heading.textContent = (members.length + 1) + ' approved members'; body.appendChild(heading);
-      [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);const presence=document.createElement('span');presence.className='presence-dot'+(onlineMemberIds.has(String(member.id))?' online':'');presence.title=onlineMemberIds.has(String(member.id))?'Online now':'Offline';row.appendChild(avatar);row.appendChild(name);row.appendChild(presence);body.appendChild(row); }); }
+      const rolesResult=topic?await memberClient.from('topic_roles').select('user_id,role').eq('topic_id',topic.id):{data:[]};const roleMap=new Map((rolesResult.data||[]).map((role)=>[String(role.user_id),role.role]));
+      [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);const availability=memberAvailability.get(String(member.id))||'available';const presence=document.createElement('span');presence.className='presence-dot'+(onlineMemberIds.has(String(member.id))?' '+availability:'');const seen=memberLastSeen.get(String(member.id));presence.title=onlineMemberIds.has(String(member.id))?availability:(seen?'Last seen '+new Date(seen).toLocaleString():'Offline');row.appendChild(avatar);row.appendChild(name);row.appendChild(presence);const role=String(member.id)===String(topic&&topic.created_by)?'owner':roleMap.get(String(member.id));if(role){const badge=document.createElement('span');badge.className='role-badge';badge.textContent=role;row.appendChild(badge);}if(topic&&String(topic.created_by)===String(currentUserId)&&String(member.id)!==String(currentUserId)){const action=document.createElement('button');action.type='button';action.className='role-action';action.textContent=role==='moderator'?'Remove moderator':'Make moderator';action.addEventListener('click',async()=>{if(role==='moderator')await memberClient.from('topic_roles').delete().eq('topic_id',topic.id).eq('user_id',member.id);else await memberClient.from('topic_roles').upsert({topic_id:topic.id,user_id:member.id,role:'moderator'},{onConflict:'topic_id,user_id'});document.getElementById('chatInfoDialog').close();document.getElementById('chatInfoButton').click();});row.appendChild(action);}body.appendChild(row); }); }
     document.getElementById('chatInfoDialog').showModal();
   });
 
   document.getElementById('newGroupButton').addEventListener('click',async()=>{
     const title = prompt('Name the new group room:'); if (!title || !title.trim()) return;
-    const result = await memberClient.from('topics').insert({title:title.trim(),visibility:'all',created_by:currentUserId}); if (result.error) alert('Could not create the room: ' + result.error.message); else await loadTopics(currentProfile);
+    const result = await memberClient.from('topics').insert({title:title.trim(),visibility:'all',created_by:currentUserId}).select('id').single(); if (result.error) alert('Could not create the room: ' + result.error.message); else { await memberClient.from('topic_roles').upsert({topic_id:result.data.id,user_id:currentUserId,role:'owner'},{onConflict:'topic_id,user_id'}); await loadTopics(currentProfile); }
   });
 
   function updateSettingButtons() {
@@ -1585,6 +1768,9 @@
     const enabled = Notification.permission === 'granted' && localStorage.getItem('khaso_chat_notifications') !== 'on'; localStorage.setItem('khaso_chat_notifications',enabled?'on':'off'); updateSettingButtons();
   });
   updateSettingButtons();
+  const savedPresenceStatus = localStorage.getItem('kasho_presence_status') || 'available';
+  document.getElementById('presenceStatus').value = savedPresenceStatus;
+  document.getElementById('presenceStatus').addEventListener('change', async (event) => { localStorage.setItem('kasho_presence_status',event.target.value); await updateMyPresence(); await refreshPresenceAndBlocks(); });
 
   // ---- Photos tab (private per-year album) ----
 
