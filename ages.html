@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Khaso Chat | ברכת שמים קאשוי</title>
+<title>Kasho Chat | ברכת שמים קאשוי</title>
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
 <style>
@@ -198,10 +198,10 @@
   .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { display:flex; align-items:center; gap:10px; width:100%; margin:0; padding:11px 12px; color:white; background:transparent; border:0; border-radius:10px; text-decoration:none; text-align:left; font:inherit; font-weight:700; }
   .chat-app-sidebar .section-tab:hover, .chat-app-sidebar .chat-nav-link:hover, .chat-app-sidebar .section-tab.active { background:rgba(255,255,255,.15); color:white; }
   .chat-nav-spacer { flex:1; }
-  .chat-list-pane { min-width:0; padding:18px 12px; background:#f4f7f8; border-right:1px solid var(--border); }
+  .chat-list-pane { display:flex; flex-direction:column; min-width:0; min-height:0; overflow:hidden; padding:18px 12px; background:#f4f7f8; border-right:1px solid var(--border); }
   .chat-list-pane h2 { margin:0 8px 4px; font-size:22px; }
   .chat-list-pane > p { margin:0 8px 16px; color:var(--muted); font-size:13px; }
-  .topic-list { display:flex; flex-direction:column; flex-wrap:nowrap; gap:6px; justify-content:flex-start; margin:0; }
+  .topic-list { display:flex; flex:1; flex-direction:column; flex-wrap:nowrap; gap:6px; justify-content:flex-start; min-height:0; margin:0; overflow-y:auto; overscroll-behavior:contain; }
   .topic-list button { display:flex; justify-content:space-between; align-items:center; width:100%; min-height:54px; padding:10px 12px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
   .topic-list button:hover { background:white; }
   .topic-list button.active { color:var(--ink); background:#dcebe9; }
@@ -241,11 +241,11 @@
 
   /* Google Chat-inspired single-page chat */
   html { height:100%; }
-  body.chat-page { margin:0; width:100%; height:100%; min-height:100vh; overflow:hidden; color:#1f1f1f; background:#fff; font-family:"Google Sans",Roboto,Arial,sans-serif; }
-  .chat-page main { width:100%; max-width:none; height:100%; min-height:0; padding:0; margin:0; overflow:hidden; }
+  body.chat-page { margin:0; width:100%; min-height:100vh; overflow:auto; color:#1f1f1f; background:#fff; font-family:"Google Sans",Roboto,Arial,sans-serif; }
+  .chat-page main { width:100%; max-width:none; min-height:100vh; padding:0; margin:0; overflow:visible; }
   .chat-page #gateCard { margin:12vh auto 0; }
-  .chat-page #boardCard.card { box-sizing:border-box; width:100%; height:100%; margin:0!important; border:0; border-radius:0; box-shadow:none; overflow:hidden; }
-  .chat-page .chat-app-layout { grid-template-columns:224px 310px minmax(0,1fr); width:100%; height:100%; max-height:none; min-height:0; overflow:hidden; }
+  .chat-page #boardCard.card { box-sizing:border-box; width:100%; min-height:100vh; margin:0!important; border:0; border-radius:0; box-shadow:none; overflow:visible; }
+  .chat-page .chat-app-layout { grid-template-columns:224px 310px minmax(0,1fr); width:100%; height:max(100dvh,650px); max-height:none; min-height:650px; overflow:hidden; }
   .chat-app-sidebar { border-radius:0; color:#1f1f1f; background:#f0f4f9; border-right:1px solid #e1e7ed; }
   .chat-app-brand { display:flex; align-items:center; gap:10px; color:#0b57d0; font-size:22px; font-weight:600; }
   .chat-app-brand::before { content:""; width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#0b57d0 0 55%,#34a853 55% 100%); box-shadow:inset 0 0 0 6px rgba(255,255,255,.88); }
@@ -364,7 +364,7 @@
   <section class="card" id="boardCard" hidden>
     <div class="chat-app-layout">
       <aside class="chat-app-sidebar" aria-label="Chat shortcuts">
-        <div class="chat-app-brand">Khaso Chat<small>Member community</small></div>
+        <div class="chat-app-brand">Kasho Chat<small>Member community</small></div>
         <button type="button" class="section-tab active" id="tabHome"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9M9.5 19v-5h5v5"/></svg>Chat Home</button>
         <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
         <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
@@ -377,7 +377,7 @@
       </aside>
       <aside class="chat-list-pane">
         <h2 id="chatListTitle">Chats</h2>
-        <p id="chatListSubtitle">Rooms for all approved members</p>
+        <p id="chatListSubtitle">Your available rooms</p>
         <button type="button" class="new-group-button" id="newGroupButton" hidden>+ New group room</button>
         <button type="button" class="new-group-button" id="showArchivedButton" hidden>Show archived chats</button>
         <div class="topic-list" id="topicList"></div>
@@ -402,9 +402,9 @@
         </div>
 
         <div class="chat-home-view" id="homeSection">
-          <div class="chat-home-welcome"><h2>Welcome to Khaso Chat</h2><p>Choose a room or start a private conversation.</p></div>
+          <div class="chat-home-welcome"><h2>Welcome to Kasho Chat</h2><p>Choose a room or start a private conversation.</p></div>
           <div class="chat-home-grid">
-            <div class="chat-home-card"><h3>Group chats</h3><p>Every approved member can open every room.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
+            <div class="chat-home-card"><h3>Group chats</h3><p>Open General, your year room, and rooms shared by an admin.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
             <div class="chat-home-card"><h3>Private messages</h3><p>Search all approved members and start a conversation.</p><button type="button" id="homeOpenPrivate">Find a member</button></div>
             <div class="chat-home-card"><h3>Photos</h3><p>See the private photo album for your year.</p><button type="button" id="homeOpenPhotos">Open photos</button></div>
             <div class="chat-home-card"><h3>Search</h3><p>Find messages, shared links, and uploaded files.</p><button type="button" id="homeFocusSearch">Search chat</button></div>
@@ -516,7 +516,8 @@
     list.innerHTML = '';
     if (error || !data || data.length === 0) return;
 
-    chatTopics = data;
+    const allowedYear = profile && profile.jewish_year;
+    chatTopics = data.filter((topic) => topic.visibility === 'all' || topic.title === 'General (everyone)' || topic.title === allowedYear);
 
     if (chatTopics.length === 0) {
       list.innerHTML = '<p>No chat rooms are available yet.</p>';
@@ -547,7 +548,7 @@
     const navId = view === 'home' ? 'tabHome' : view === 'discussion' ? 'tabDiscussion' : view === 'private' ? 'tabPrivate' : view === 'photos' ? 'tabPhotos' : null;
     if (navId) document.getElementById(navId).classList.add('active');
     document.getElementById('chatListTitle').textContent = view === 'private' ? 'People' : 'Chats';
-    document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Rooms for all approved members';
+    document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your available rooms';
     document.getElementById('showArchivedButton').hidden = view !== 'private';
     document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
     updateRoomTools();
@@ -1562,7 +1563,7 @@
       }
     }
     else { const topic = chatTopics.find((item)=>String(item.id)===String(currentTopicId)); title.textContent = topic ? topic.title : 'Group chat';
-      const members = privateMembers;
+      const members = topic && topic.visibility !== 'all' && topic.title !== 'General (everyone)' ? privateMembers.filter((member)=>member.jewish_year===topic.title) : privateMembers;
       const heading = document.createElement('p'); heading.textContent = (members.length + 1) + ' approved members'; body.appendChild(heading);
       [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);const presence=document.createElement('span');presence.className='presence-dot'+(onlineMemberIds.has(String(member.id))?' online':'');presence.title=onlineMemberIds.has(String(member.id))?'Online now':'Offline';row.appendChild(avatar);row.appendChild(name);row.appendChild(presence);body.appendChild(row); }); }
     document.getElementById('chatInfoDialog').showModal();
