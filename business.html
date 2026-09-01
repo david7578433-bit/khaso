@@ -1,0 +1,252 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Business | ברכת שמים קאשוי</title>
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+<style>
+  .business-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 16px; margin-top: 20px; }
+  .business-card { padding: 18px; border: 1px solid var(--border); border-radius: 12px; background: var(--paper); text-align: left; }
+  .business-card img { width: 100%; height: 120px; object-fit: cover; border-radius: 8px; margin-bottom: 10px; }
+  .business-card h3 { margin: 0 0 4px; }
+  .business-card .biz-category { color: var(--accent-dark); font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: .03em; }
+  .business-card p { margin: 8px 0; font-size: 14px; }
+  .business-card .biz-contact { font-size: 13px; color: var(--muted); }
+  .business-card a { font-size: 13px; word-break: break-all; }
+  .biz-empty { color: var(--muted); text-align: center; }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי">
+  <h1 data-lang="en">Business</h1>
+  <h1 data-lang="yi" hidden>געשעפט</h1>
+</header>
+
+<nav>
+  <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
+  <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
+  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
+  <a href="ages.html">Ages</a>
+  <a href="business.html" aria-current="page">Business</a>
+  <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
+  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+</nav>
+
+<main>
+  <section class="card">
+    <h2 data-lang="en">Community Businesses</h2>
+    <h2 data-lang="yi" hidden>קהילה'ס געשעפטן</h2>
+    <p data-lang="en">Businesses run by members of our community.</p>
+    <p data-lang="yi" hidden>געשעפטן פון אונזער קהילה'ס מיטגלידער.</p>
+    <div class="business-grid" id="businessGrid"></div>
+    <p class="biz-empty" id="businessEmpty" hidden>No businesses listed yet.</p>
+  </section>
+
+  <section class="card" id="listGateCard">
+    <p id="listGateMessage">Checking your account…</p>
+    <button id="listGateSignIn" type="button" hidden onclick="signInWithGoogle('business.html')">Sign in with Google</button>
+  </section>
+
+  <section class="card" id="listFormCard" hidden>
+    <h2 data-lang="en">List Your Business</h2>
+    <p data-lang="en">An admin will review your listing before it appears above.</p>
+    <form id="businessForm">
+      <label for="bizName">Business name</label>
+      <input id="bizName" required>
+
+      <label for="bizDescription">What do you do?</label>
+      <textarea id="bizDescription" required></textarea>
+
+      <label for="bizCategory">Category</label>
+      <input id="bizCategory" placeholder="e.g. Catering, Cleaning, Photography">
+
+      <label for="bizPhone">Phone</label>
+      <input id="bizPhone" type="tel">
+
+      <label for="bizEmail">Email</label>
+      <input id="bizEmail" type="email">
+
+      <label for="bizWebsite">Website or social link</label>
+      <input id="bizWebsite">
+
+      <label for="bizPhoto">Photo or logo (optional)</label>
+      <input id="bizPhoto" type="file" accept="image/*">
+
+      <button type="submit">Submit for Approval</button>
+    </form>
+    <p id="bizStatus" role="status" aria-live="polite"></p>
+  </section>
+</main>
+
+<footer>
+  <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
+  <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
+  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
+  <a href="ages.html">Ages</a>
+  <a href="business.html">Business</a>
+  <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
+  <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+  <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
+  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="member-auth.js"></script>
+<script>
+  let currentUserId = null;
+
+  async function loadBusinesses() {
+    const { data, error } = await memberClient
+      .from('businesses')
+      .select('id, name, description, category, contact_phone, contact_email, website, image_path')
+      .eq('approved', true)
+      .order('created_at', { ascending: false });
+
+    const grid = document.getElementById('businessGrid');
+    const empty = document.getElementById('businessEmpty');
+    grid.innerHTML = '';
+
+    if (error || !data || data.length === 0) {
+      empty.hidden = false;
+      return;
+    }
+    empty.hidden = true;
+
+    data.forEach((biz) => {
+      const card = document.createElement('div');
+      card.className = 'business-card';
+
+      if (biz.image_path) {
+        const { data: urlData } = memberClient.storage.from('business-photos').getPublicUrl(biz.image_path);
+        const img = document.createElement('img');
+        img.src = urlData.publicUrl;
+        img.alt = biz.name;
+        card.appendChild(img);
+      }
+
+      if (biz.category) {
+        const cat = document.createElement('div');
+        cat.className = 'biz-category';
+        cat.textContent = biz.category;
+        card.appendChild(cat);
+      }
+
+      const h3 = document.createElement('h3');
+      h3.textContent = biz.name;
+      card.appendChild(h3);
+
+      if (biz.description) {
+        const p = document.createElement('p');
+        p.textContent = biz.description;
+        card.appendChild(p);
+      }
+
+      const contactBits = [];
+      if (biz.contact_phone) contactBits.push(biz.contact_phone);
+      if (biz.contact_email) contactBits.push(biz.contact_email);
+      if (contactBits.length) {
+        const contact = document.createElement('p');
+        contact.className = 'biz-contact';
+        contact.textContent = contactBits.join(' · ');
+        card.appendChild(contact);
+      }
+
+      if (biz.website) {
+        const link = document.createElement('a');
+        link.href = biz.website.indexOf('http') === 0 ? biz.website : 'https://' + biz.website;
+        link.target = '_blank';
+        link.rel = 'noopener';
+        link.textContent = biz.website;
+        card.appendChild(link);
+      }
+
+      grid.appendChild(card);
+    });
+  }
+  loadBusinesses();
+
+  (async () => {
+    const { session, profile } = await getMemberStatus();
+    const gateCard = document.getElementById('listGateCard');
+    const gateMessage = document.getElementById('listGateMessage');
+    const gateSignIn = document.getElementById('listGateSignIn');
+    const formCard = document.getElementById('listFormCard');
+
+    if (!session) {
+      gateMessage.textContent = 'Sign in to list your business.';
+      gateSignIn.hidden = false;
+      return;
+    }
+
+    if (!profile || !profile.approved) {
+      gateMessage.textContent = "You're signed in. Your account is waiting for approval — check back soon.";
+      return;
+    }
+
+    gateCard.hidden = true;
+    formCard.hidden = false;
+    currentUserId = session.user.id;
+  })();
+
+  document.getElementById('businessForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    const statusEl = document.getElementById('bizStatus');
+    const submitBtn = event.target.querySelector('button[type="submit"]');
+
+    const name = document.getElementById('bizName').value.trim();
+    const description = document.getElementById('bizDescription').value.trim();
+    if (!name || !description) {
+      statusEl.textContent = 'Please fill in the business name and description.';
+      return;
+    }
+
+    submitBtn.disabled = true;
+    statusEl.textContent = 'Submitting…';
+
+    let imagePath = null;
+    const fileInput = document.getElementById('bizPhoto');
+    const file = fileInput.files && fileInput.files[0];
+    if (file) {
+      const path = currentUserId + '/' + Date.now() + '-' + file.name.replace(/[^a-zA-Z0-9._-]/g, '_');
+      const { error: uploadError } = await memberClient.storage.from('business-photos').upload(path, file);
+      if (uploadError) {
+        statusEl.textContent = 'Could not upload photo: ' + uploadError.message;
+        submitBtn.disabled = false;
+        return;
+      }
+      imagePath = path;
+    }
+
+    const { error } = await memberClient.from('businesses').insert({
+      owner_id: currentUserId,
+      name,
+      description,
+      category: document.getElementById('bizCategory').value.trim() || null,
+      contact_phone: document.getElementById('bizPhone').value.trim() || null,
+      contact_email: document.getElementById('bizEmail').value.trim() || null,
+      website: document.getElementById('bizWebsite').value.trim() || null,
+      image_path: imagePath
+    });
+
+    submitBtn.disabled = false;
+
+    if (error) {
+      statusEl.textContent = 'Could not submit: ' + error.message;
+      return;
+    }
+
+    statusEl.textContent = 'Thank you! Your listing was sent to the admin for approval.';
+    event.target.reset();
+  });
+</script>
+</body>
+</html>
