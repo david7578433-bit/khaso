@@ -43,14 +43,58 @@
   document.addEventListener('DOMContentLoaded', () => {
     let savedLanguage = 'en';
     try { savedLanguage = localStorage.getItem('siteLanguage') === 'yi' ? 'yi' : 'en'; } catch (_) {}
-    applyLanguage(savedLanguage);
     initSiteDrawer();
+    applyLanguage(savedLanguage);
     applySiteAccess();
   });
 
   function initSiteDrawer() {
     const footer = document.querySelector('footer');
     if (!footer || footer.classList.contains('site-footer-drawer')) return;
+
+    footer.innerHTML = `
+      <strong class="site-menu-title"><span data-lang="en">Website Menu</span><span data-lang="yi" hidden>וועבזייטל מעניו</span></strong>
+      <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+      <details class="site-menu-group">
+        <summary><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></summary>
+        <div class="site-menu-submenu">
+          <a href="ages-hub.html"><span data-lang="en">Ages Home</span><span data-lang="yi" hidden>יארגאנג היים</span></a>
+          <a href="ages.html"><span data-lang="en">Chat</span><span data-lang="yi" hidden>שמועס</span></a>
+          <a href="age-photos.html"><span data-lang="en">Photos</span><span data-lang="yi" hidden>בילדער</span></a>
+          <a href="phone-book.html"><span data-lang="en">Phone Book</span><span data-lang="yi" hidden>טעלעפאן בוך</span></a>
+        </div>
+      </details>
+      <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+      <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+      <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
+      <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
+      <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
+      <details class="site-menu-group">
+        <summary><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></summary>
+        <div class="site-menu-submenu">
+          <a href="contact.html"><span data-lang="en">Contact Home</span><span data-lang="yi" hidden>קאנטאקט היים</span></a>
+          <a href="contact-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a>
+          <a href="contact-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a>
+        </div>
+      </details>
+      <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
+      <details class="site-menu-group">
+        <summary><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></summary>
+        <div class="site-menu-submenu">
+          <a href="botei-medrash.html"><span data-lang="en">All Botei Medrash</span><span data-lang="yi" hidden>אלע בתי מדרשים</span></a>
+          <a href="beis-medrash-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a>
+          <a href="beis-medrash-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a>
+          <a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a>
+        </div>
+      </details>
+      <a href="pictures.html"><span data-lang="en">Public Pictures</span><span data-lang="yi" hidden>פובליק בילדער</span></a>
+      <a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
+      <a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
+      <a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
+      <a href="login.html"><span data-lang="en">Account</span><span data-lang="yi" hidden>קאנטע</span></a>
+      <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
+      <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+    `;
 
     const style = document.createElement('style');
     style.textContent = `
@@ -63,13 +107,32 @@
       .site-menu-overlay.open { opacity:1; pointer-events:auto; }
       footer.site-footer-drawer { position:fixed !important; top:0 !important; bottom:0 !important; left:0 !important; right:auto !important; z-index:1001 !important; width:min(340px,88vw) !important; height:100dvh !important; padding:82px 24px 30px !important; display:flex !important; flex-direction:column !important; flex-wrap:nowrap !important; justify-content:flex-start !important; align-items:stretch !important; gap:5px !important; overflow-y:auto !important; background:#203447 !important; box-shadow:8px 0 28px rgba(20,35,50,.28) !important; transform:translateX(-105%); transition:transform .22s ease; }
       footer.site-footer-drawer.open { transform:translateX(0); }
+      .site-menu-title { display:block; padding:0 12px 12px; color:white; font:700 19px/1.3 "Assistant","Segoe UI",Arial,sans-serif; }
       footer.site-footer-drawer a,footer.site-footer-drawer .lang-button { width:100% !important; padding:11px 12px !important; margin:0 !important; border:0 !important; border-radius:8px !important; color:white !important; background:transparent !important; text-align:left !important; text-decoration:none !important; font:600 16px/1.35 "Assistant","Segoe UI",Arial,sans-serif !important; }
       footer.site-footer-drawer a:hover,footer.site-footer-drawer a:focus-visible,footer.site-footer-drawer .lang-button:hover { background:rgba(255,255,255,.12) !important; text-decoration:none !important; }
+      footer.site-footer-drawer a[aria-current="page"] { background:rgba(26,176,151,.3) !important; }
+      .site-menu-group { width:100%; margin:0; color:white; }
+      .site-menu-group summary { position:relative; padding:11px 34px 11px 12px; border-radius:8px; color:white; cursor:pointer; list-style:none; font:700 16px/1.35 "Assistant","Segoe UI",Arial,sans-serif; }
+      .site-menu-group summary::-webkit-details-marker { display:none; }
+      .site-menu-group summary::after { content:'›'; position:absolute; right:13px; top:9px; font-size:22px; transition:transform .15s ease; }
+      .site-menu-group[open] summary::after { transform:rotate(90deg); }
+      .site-menu-group summary:hover,.site-menu-group summary:focus-visible { background:rgba(255,255,255,.12); }
+      .site-menu-submenu { display:grid; gap:2px; padding:3px 0 6px 14px; border-left:2px solid rgba(255,255,255,.2); margin-left:12px; }
+      footer.site-footer-drawer .site-menu-submenu a { padding:9px 10px !important; font-size:15px !important; }
       @media (max-width:620px) { .site-menu-button { top:10px; left:10px; width:42px; height:42px; } footer.site-footer-drawer { position:fixed !important; padding-top:70px !important; } }
     `;
     document.head.appendChild(style);
     document.body.classList.add('site-drawer-enabled');
     footer.classList.add('site-footer-drawer');
+
+    const currentPage = location.pathname.split('/').pop() || 'index.html';
+    footer.querySelectorAll('a[href]').forEach((link) => {
+      if (link.getAttribute('href').split('?')[0] === currentPage) {
+        link.setAttribute('aria-current', 'page');
+        const group = link.closest('details');
+        if (group) group.open = true;
+      }
+    });
 
     const button = document.createElement('button');
     button.type = 'button';
@@ -125,6 +188,9 @@
         const profiles = profileResponse.ok ? await profileResponse.json() : [];
         isAdmin = !!(profiles[0] && (profiles[0].role === 'owner' || profiles[0].role === 'admin'));
       }
+
+      const adminMenuLink = document.querySelector('[data-admin-menu]');
+      if (adminMenuLink) adminMenuLink.hidden = !isAdmin;
 
       const settingsResponse = await fetch(projectUrl + '/rest/v1/site_settings?select=key,value&key=in.(maintenance,testing_mode)', { headers });
       if (!settingsResponse.ok) throw new Error('Site settings unavailable');
