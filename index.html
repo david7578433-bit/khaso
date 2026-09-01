@@ -299,6 +299,44 @@
   }
 
 
+  .ad-strip {
+    width: calc(100% - 104px);
+    max-width: 1040px;
+    margin: 18px auto 0;
+    padding: 14px 24px;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    box-shadow: 0 6px 16px rgba(30, 50, 68, .1);
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    text-decoration: none;
+    color: var(--ink);
+    transition: transform .12s, box-shadow .12s;
+  }
+
+  .ad-strip:hover {
+    transform: translateY(-1px);
+    box-shadow: 0 10px 22px rgba(30, 50, 68, .16);
+  }
+
+  .ad-strip .ad-tag {
+    flex-shrink: 0;
+    font-size: 11px;
+    font-weight: 800;
+    letter-spacing: .05em;
+    text-transform: uppercase;
+    color: var(--teal);
+    border: 1px solid var(--teal);
+    border-radius: 999px;
+    padding: 3px 9px;
+  }
+
+  .ad-strip .ad-text { flex: 1; min-width: 0; }
+  .ad-strip .ad-text strong { display: block; font-size: 15px; }
+  .ad-strip .ad-text span { display: block; font-size: 13px; color: var(--muted, #6b7c8c); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+
   footer {
     position: fixed;
     left: 0;
@@ -360,6 +398,7 @@
     .boxes { grid-template-columns: repeat(2, 1fr); max-width: 460px; }
     .hero-row { flex-wrap: wrap; }
     .hero { max-width: 440px; }
+    .ad-strip { width: calc(100% - 40px); flex-wrap: wrap; }
   }
 </style>
 </head>
@@ -405,7 +444,7 @@
         <a class="box" href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
         <a class="box" href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
         <a class="box" href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
-        <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
+        <a class="box" href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
         <a class="box coming-soon" href="coming-soon.html"><span data-lang="en">Coming Soon</span><span data-lang="yi" hidden>קומט באלד</span></a>
       </div>
     </div>
@@ -427,6 +466,10 @@
       <p id="announcementContent2"></p>
     </div>
     </div>
+    <a class="ad-strip" id="adStrip" href="business.html" hidden>
+      <span class="ad-tag">Business</span>
+      <span class="ad-text"><strong id="adStripName"></strong><span id="adStripDesc"></span></span>
+    </a>
   </div>
 </div>
 
@@ -477,6 +520,39 @@
 
 
   loadHomeUpdates();
+
+  async function loadFeaturedBusinesses() {
+    const { data } = await supabaseClient
+      .from('businesses')
+      .select('name, description')
+      .eq('approved', true)
+      .eq('featured', true)
+      .order('created_at', { ascending: false });
+
+    if (!data || data.length === 0) return;
+
+    const strip = document.getElementById('adStrip');
+    const nameEl = document.getElementById('adStripName');
+    const descEl = document.getElementById('adStripDesc');
+    let index = 0;
+
+    function show(i) {
+      nameEl.textContent = data[i].name;
+      descEl.textContent = data[i].description || '';
+    }
+
+    show(0);
+    strip.hidden = false;
+
+    if (data.length > 1) {
+      setInterval(() => {
+        index = (index + 1) % data.length;
+        show(index);
+      }, 6000);
+    }
+  }
+
+  loadFeaturedBusinesses();
 
 
   (async () => {
