@@ -101,6 +101,8 @@
       body.site-drawer-enabled { padding-bottom: 0 !important; }
       body.site-drawer-enabled main { padding-bottom: 44px; }
       body.site-drawer-enabled .main { padding-bottom: 34px !important; }
+      body.site-drawer-enabled nav:not(.admin-quicknav) { display:none !important; }
+      body.site-drawer-enabled .sidebar > .lang-button { display:none !important; }
       .site-menu-button { position:fixed; top:14px; left:14px; z-index:1002; width:46px; height:46px; padding:0; display:grid; place-items:center; border:1px solid rgba(255,255,255,.45); border-radius:12px; background:#203447; color:white; box-shadow:0 5px 18px rgba(20,35,50,.24); font-size:24px; line-height:1; }
       .site-menu-button:hover,.site-menu-button:focus-visible { background:#0f7f6d; }
       .site-menu-overlay { position:fixed; inset:0; z-index:999; background:rgba(18,32,45,.42); opacity:0; pointer-events:none; transition:opacity .2s ease; }
