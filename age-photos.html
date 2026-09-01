@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Year Photos | ברכת שמים קאשוי</title>
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+<style>
+  .year-photos-page { width:min(1500px,calc(100% - 40px)); max-width:none; text-align:left; }
+  .year-photos-head { display:flex; align-items:flex-start; justify-content:space-between; gap:18px; margin-bottom:22px; }
+  .year-photos-head h2 { margin:0 0 5px; }
+  .year-photos-head p { margin:0; color:var(--muted); }
+  .year-photo-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(230px,1fr)); gap:18px; }
+  .year-photo-card { overflow:hidden; border:1px solid var(--border); border-radius:14px; background:#f4f7f8; box-shadow:0 4px 14px rgba(30,50,68,.08); }
+  .year-photo-card canvas { display:block; width:100%; height:230px; object-fit:cover; user-select:none; -webkit-user-drag:none; }
+  .year-photo-meta { display:flex; justify-content:space-between; align-items:center; gap:8px; padding:9px 11px; color:var(--muted); background:white; font-size:13px; }
+  .year-photo-delete { min-height:34px; padding:5px 10px; background:#b64a4a; }
+  .year-photo-delete:hover { background:#963c3c; }
+  .year-photo-status { min-height:24px; color:var(--muted); }
+  .year-photo-privacy { padding:12px 14px; margin:0 0 18px; border:1px solid #cce1dd; border-radius:10px; color:#2e554f; background:#eef8f6; }
+  @media (max-width:700px) {
+    .year-photos-page { width:min(100% - 20px,700px); }
+    .year-photos-head { flex-direction:column; }
+    .year-photo-grid { grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+    .year-photo-card canvas { height:170px; }
+  }
+  @media (max-width:430px) { .year-photo-grid { grid-template-columns:1fr; } }
+</style>
+</head>
+<body>
+
+<header>
+  <img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי">
+  <h1 data-lang="en">Year Photos</h1>
+  <h1 data-lang="yi" hidden>יארגאנג בילדער</h1>
+</header>
+
+<main>
+  <section class="card" id="gateCard">
+    <p id="gateMessage">Checking your account…</p>
+    <button id="gateSignIn" type="button" hidden onclick="signInWithGoogle('age-photos.html')">Sign in with Google</button>
+  </section>
+
+  <section class="card year-photos-page" id="photosCard" hidden>
+    <div class="year-photos-head">
+      <div>
+        <h2 id="albumTitle">Your Year Photos</h2>
+        <p>Only approved members assigned to your year can open this album.</p>
+      </div>
+      <div>
+        <button type="button" id="addYearPhotoBtn">+ Add a Photo</button>
+        <input type="file" id="yearPhotoInput" accept="image/*" hidden>
+      </div>
+    </div>
+    <p class="year-photo-privacy">Private to your year. Photos are watermarked for the person viewing them. Please do not screenshot or share them outside the site.</p>
+    <p class="year-photo-status" id="yearPhotoStatus" role="status" aria-live="polite"></p>
+    <div class="year-photo-grid" id="yearPhotoGrid"></div>
+  </section>
+</main>
+
+<footer>
+  <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="ages.html"><span data-lang="en">Kasho Chat</span><span data-lang="yi" hidden>קאשוי שמועס</span></a>
+  <a href="pictures.html"><span data-lang="en">Public Pictures</span><span data-lang="yi" hidden>פובליק בילדער</span></a>
+  <a href="age-photos.html" aria-current="page"><span data-lang="en">Year Photos</span><span data-lang="yi" hidden>יארגאנג בילדער</span></a>
+  <a href="login.html"><span data-lang="en">Account</span><span data-lang="yi" hidden>קאנטע</span></a>
+  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+</footer>
+
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="member-auth.js"></script>
+<script src="photo-editor.js"></script>
+<script>
+  let currentUserId = null;
+  let currentProfile = null;
+
+  function profileName(profile) {
+    if (!profile) return 'Member';
+    return [profile.first_name, profile.last_name].filter(Boolean).join(' ').trim() || String(profile.display_name || '').trim() || 'Member';
+  }
+
+  async function drawWatermarkedCanvas(blob, label, maxSize) {
+    const image = await new Promise((resolve, reject) => {
+      const element = new Image();
+      element.onload = () => resolve(element);
+      element.onerror = () => reject(new Error('Could not load image'));
+      element.src = URL.createObjectURL(blob);
+    });
+    const scale = Math.min(1, maxSize / Math.max(image.naturalWidth, image.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(image.naturalWidth * scale);
+    canvas.height = Math.round(image.naturalHeight * scale);
+    const context = canvas.getContext('2d');
+    context.drawImage(image, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(image.src);
+    context.save();
+    context.translate(canvas.width / 2, canvas.height / 2);
+    context.rotate(-Math.PI / 8);
+    context.font = 'bold ' + Math.max(12, Math.round(canvas.width / 14)) + 'px Assistant, sans-serif';
+    context.fillStyle = 'rgba(255,255,255,.38)';
+    context.strokeStyle = 'rgba(0,0,0,.22)';
+    context.lineWidth = 2;
+    context.textAlign = 'center';
+    context.textBaseline = 'middle';
+    context.strokeText(label, 0, 0);
+    context.fillText(label, 0, 0);
+    context.restore();
+    return canvas;
+  }
+
+  function blockImageActions(element) {
+    element.addEventListener('contextmenu', (event) => event.preventDefault());
+    element.addEventListener('dragstart', (event) => event.preventDefault());
+  }
+
+  async function loadYearPhotos() {
+    const grid = document.getElementById('yearPhotoGrid');
+    const status = document.getElementById('yearPhotoStatus');
+    grid.innerHTML = '';
+    if (!currentProfile || !currentProfile.jewish_year) {
+      status.textContent = 'Waiting for an admin to assign you to a year.';
+      document.getElementById('addYearPhotoBtn').disabled = true;
+      return;
+    }
+    document.getElementById('albumTitle').textContent = currentProfile.jewish_year + ' Photos';
+    status.textContent = 'Loading photos…';
+    const result = await memberClient.from('age_photos').select('id,storage_path,caption,uploader_id,created_at').eq('jewish_year',currentProfile.jewish_year).order('created_at',{ascending:false});
+    if (result.error) { status.textContent = 'Could not load photos: ' + result.error.message; return; }
+    if (!result.data || !result.data.length) { status.textContent = 'No photos yet — be the first to add one.'; return; }
+    status.textContent = '';
+    const watermark = 'For ' + profileName(currentProfile) + ' only — do not share';
+    for (const photo of result.data) {
+      const signed = await memberClient.storage.from('age-photos').createSignedUrl(photo.storage_path,300);
+      if (signed.error || !signed.data) continue;
+      try {
+        const response = await fetch(signed.data.signedUrl);
+        const canvas = await drawWatermarkedCanvas(await response.blob(),watermark,900);
+        blockImageActions(canvas);
+        const card = document.createElement('article'); card.className = 'year-photo-card'; card.appendChild(canvas);
+        const meta = document.createElement('div'); meta.className = 'year-photo-meta';
+        const date = document.createElement('span'); date.textContent = new Date(photo.created_at).toLocaleDateString(); meta.appendChild(date);
+        if (photo.uploader_id === currentUserId) {
+          const remove = document.createElement('button'); remove.type = 'button'; remove.className = 'year-photo-delete'; remove.textContent = 'Delete';
+          remove.addEventListener('click',async()=>{if(!confirm('Delete this photo?'))return;remove.disabled=true;const storageResult=await memberClient.storage.from('age-photos').remove([photo.storage_path]);if(storageResult.error){status.textContent='Could not delete photo: '+storageResult.error.message;remove.disabled=false;return;}const deleteResult=await memberClient.from('age_photos').delete().eq('id',photo.id);if(deleteResult.error){status.textContent='Could not delete photo: '+deleteResult.error.message;remove.disabled=false;return;}await loadYearPhotos();});
+          meta.appendChild(remove);
+        }
+        card.appendChild(meta); grid.appendChild(card);
+      } catch (_) { /* Skip a photo that cannot be rendered. */ }
+    }
+    if (!grid.children.length) status.textContent = 'The photos could not be displayed. Please try again.';
+  }
+
+  document.getElementById('addYearPhotoBtn').addEventListener('click',()=>document.getElementById('yearPhotoInput').click());
+  document.getElementById('yearPhotoInput').addEventListener('change',async(event)=>{
+    const file=event.target.files&&event.target.files[0];event.target.value='';if(!file)return;
+    if(!file.type.startsWith('image/')){document.getElementById('yearPhotoStatus').textContent='Choose an image file.';return;}
+    const editedBlob=await window.openPhotoEditor(file);if(!editedBlob)return;
+    const status=document.getElementById('yearPhotoStatus');const button=document.getElementById('addYearPhotoBtn');button.disabled=true;status.textContent='Uploading photo…';
+    const safeYear=(currentProfile.jewish_year||'year').replace(/[^a-zA-Z0-9]+/g,'-').replace(/^-+|-+$/g,'')||'year';
+    const path=safeYear+'/'+currentUserId+'-'+Date.now()+'.jpg';
+    const upload=await memberClient.storage.from('age-photos').upload(path,editedBlob,{contentType:'image/jpeg'});
+    if(upload.error){status.textContent='Could not upload: '+upload.error.message;button.disabled=false;return;}
+    const saved=await memberClient.from('age_photos').insert({jewish_year:currentProfile.jewish_year,storage_path:path,uploader_id:currentUserId});
+    if(saved.error){await memberClient.storage.from('age-photos').remove([path]);status.textContent='Could not save photo: '+saved.error.message;button.disabled=false;return;}
+    button.disabled=false;await loadYearPhotos();
+  });
+
+  (async()=>{
+    const status=await getMemberStatus();const gate=document.getElementById('gateCard');const message=document.getElementById('gateMessage');
+    if(!status.session){message.textContent='Sign in to open your private year photos.';document.getElementById('gateSignIn').hidden=false;return;}
+    if(!status.profile||!status.profile.approved){message.textContent="You're signed in. Your account is waiting for approval.";return;}
+    if(status.profile.suspended_until&&new Date(status.profile.suspended_until)>new Date()){message.textContent='Your account is temporarily suspended.';return;}
+    currentUserId=status.session.user.id;currentProfile=status.profile;gate.hidden=true;document.getElementById('photosCard').hidden=false;await loadYearPhotos();
+  })();
+</script>
+</body>
+</html>
