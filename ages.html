@@ -426,12 +426,14 @@
         <button type="button" class="section-tab" id="tabUnread"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 6h16v12H4V6Z"/><path d="m5 7 7 6 7-6"/></svg>Unread</button>
         <button type="button" class="section-tab" id="tabMentions"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M15 9v5a2 2 0 0 0 4 0v-2a7 7 0 1 0-2 5"/></svg>Mentions</button>
         <button type="button" class="section-tab" id="tabStarred"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Starred</button>
+        <button type="button" class="section-tab" id="tabFavorites"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Favorite chats</button>
         <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
         <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
         <button type="button" class="section-tab" id="tabPhotos"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m4 17 5-5 4 4 2-2 5 4"/></svg>Photos</button>
         <button type="button" class="section-tab" id="tabShared"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg>Files & links</button>
         <div class="chat-nav-spacer"></div>
         <select class="presence-select" id="presenceStatus" aria-label="Your chat status"><option value="available">● Available</option><option value="busy">● Busy</option><option value="away">● Away</option></select>
+        <button type="button" class="chat-nav-link sidebar-setting" id="onlinePrivacyToggle">Online status: Visible</button>
         <a class="chat-nav-link" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 12h14M5 12l5-5M5 12l5 5"/></svg>Website Home</a>
         <button type="button" class="chat-nav-link sidebar-setting" id="soundToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9c1.5 1.5 1.5 4.5 0 6M19.5 6.5c3 3 3 8 0 11"/></svg>Sounds: Off</button>
         <button type="button" class="chat-nav-link sidebar-setting" id="notificationToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg>Notifications: Off</button>
@@ -457,6 +459,8 @@
             </div>
           </div>
           <div class="chat-room-tools" id="chatRoomTools" hidden>
+            <button type="button" class="icon-button" id="favoriteChatButton" title="Add chat to favorites" aria-label="Add chat to favorites">☆</button>
+            <button type="button" class="icon-button" id="conversationSearchButton" title="Search this conversation" aria-label="Search this conversation"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="10.5" cy="10.5" r="6.5"/><path d="m15.5 15.5 5 5"/></svg></button>
             <button type="button" class="icon-button" id="muteChatButton" title="Mute chat" aria-label="Mute chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg></button>
             <button type="button" class="icon-button" id="archiveChatButton" title="Archive chat" aria-label="Archive chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 7h16v13H4V7ZM3 4h18v3H3V4Z"/><path d="M9 11h6"/></svg></button>
             <button type="button" class="icon-button" id="sharedContentButton" title="Files and links in this chat" aria-label="Files and links in this chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg></button>
@@ -516,6 +520,7 @@
             <input type="file" id="privateFileInput" accept="image/*,application/pdf,audio/*" multiple hidden>
             <button type="button" class="icon-button" id="privateAttachButton" aria-label="Attach image, PDF, or audio"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
             <button type="button" class="icon-button" id="voiceRecordButton" aria-label="Record voice message"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></button>
+            <button type="button" class="icon-button" id="schedulePrivateButton" aria-label="Schedule message" title="Schedule message">◷</button>
             <button type="button" class="emoji-toggle" id="privateEmojiToggle" aria-label="Add emoji"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 3 4 3 4-3 4-3M9 9h.01M15 9h.01"/></svg></button>
             <textarea id="privateMessageBody" maxlength="4000" placeholder="Write a private message…"></textarea>
             <button type="submit" class="send-btn" aria-label="Send private message"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 4 18 8-18 8 3-8-3-8Z"/><path d="M6 12h15"/></svg><span class="visually-hidden">Send</span></button>
@@ -542,6 +547,7 @@
   <dialog class="app-dialog" id="threadDialog"><div class="dialog-head"><h3>Thread</h3><button type="button" class="icon-button" data-close-dialog="threadDialog">✕</button></div><div class="dialog-body" id="threadMessages"></div><form class="thread-compose" id="threadForm"><textarea id="threadBody" placeholder="Reply in thread…"></textarea><button type="submit" class="send-btn">Send</button></form></dialog>
   <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
   <dialog class="app-dialog image-lightbox" id="imageLightbox"><button type="button" class="icon-button lightbox-close" data-close-dialog="imageLightbox" aria-label="Close image">✕</button><img id="lightboxImage" alt="Full-size attachment"></dialog>
+  <dialog class="app-dialog" id="scheduleDialog"><div class="dialog-head"><h3>Schedule private message</h3><button type="button" class="icon-button" data-close-dialog="scheduleDialog">✕</button></div><form class="dialog-body" id="scheduleForm"><label>Send date and time<input id="scheduleTime" type="datetime-local" required></label><p>The message will send when any approved member has Kasho Chat open.</p><button type="submit">Schedule message</button></form></dialog>
 
 </main>
 
@@ -577,6 +583,7 @@
   let blockedMemberIds = new Set();
   let blockedByMemberIds = new Set();
   let activeThreadRoot = null;
+  let showOnlineStatus = true;
   function profileName(p) {
     if (!p) return 'Member';
     const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
@@ -668,7 +675,13 @@
   }
   async function saveChatPreference(type,id,changes) {
     const existing = preferenceFor(type,id) || {};
-    const record = {user_id:currentUserId,target_type:type,target_id:String(id),muted:changes.muted === undefined ? !!existing.muted : changes.muted,archived:changes.archived === undefined ? !!existing.archived : changes.archived};
+    const record = {
+      user_id:currentUserId,target_type:type,target_id:String(id),
+      muted:changes.muted === undefined ? !!existing.muted : changes.muted,
+      archived:changes.archived === undefined ? !!existing.archived : changes.archived,
+      favorite:changes.favorite === undefined ? !!existing.favorite : changes.favorite,
+      notification_sound:changes.notification_sound === undefined ? (existing.notification_sound || 'chime') : changes.notification_sound
+    };
     await memberClient.from('chat_preferences').upsert(record,{onConflict:'user_id,target_type,target_id'});
     await loadChatPreferences(); updateRoomTools();
   }
@@ -676,18 +689,22 @@
     const tools = document.getElementById('chatRoomTools'); const archive = document.getElementById('archiveChatButton');
     const type = activeChatView === 'private' && activePrivateMember ? 'private' : activeChatView === 'discussion' && currentTopicId !== null ? 'topic' : null;
     const id = type === 'private' ? activePrivateMember.id : currentTopicId; tools.hidden = !type; if (!type) return;
-    const pref = preferenceFor(type,id) || {}; const mute = document.getElementById('muteChatButton');
+    const pref = preferenceFor(type,id) || {}; const mute = document.getElementById('muteChatButton'); const favorite = document.getElementById('favoriteChatButton');
     mute.classList.toggle('active',!!pref.muted); mute.title = pref.muted ? 'Unmute chat' : 'Mute chat';
+    favorite.classList.toggle('active',!!pref.favorite); favorite.textContent = pref.favorite ? '★' : '☆'; favorite.title = pref.favorite ? 'Remove chat from favorites' : 'Add chat to favorites';
     archive.hidden = type !== 'private'; archive.classList.toggle('active',!!pref.archived); archive.title = pref.archived ? 'Unarchive chat' : 'Archive chat';
+    document.getElementById('conversationSearchButton').hidden = type !== 'private';
   }
   function chatIsMuted(type,id) { const pref = preferenceFor(type,id); return !!(pref && pref.muted); }
 
-  function playMessageSound() {
+  function playMessageSound(type,id) {
     if (localStorage.getItem('khaso_chat_sounds') !== 'on') return;
-    try { const context = new (window.AudioContext || window.webkitAudioContext)(); const oscillator = context.createOscillator(); const gain = context.createGain(); oscillator.frequency.value = 660; gain.gain.value = .05; oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + .12); } catch (_) {}
+    const sound = (preferenceFor(type,id) || {}).notification_sound || 'chime'; if (sound === 'none') return;
+    const frequencies = sound === 'bell' ? [880,660] : sound === 'pop' ? [420] : [660,880];
+    try { const context = new (window.AudioContext || window.webkitAudioContext)(); frequencies.forEach((frequency,index)=>{const oscillator=context.createOscillator();const gain=context.createGain();oscillator.frequency.value=frequency;gain.gain.value=.045;oscillator.connect(gain);gain.connect(context.destination);oscillator.start(context.currentTime+index*.09);oscillator.stop(context.currentTime+index*.09+.1);}); } catch (_) {}
   }
   function notifyNewMessage(title,body,type,id) {
-    if (chatIsMuted(type,id)) return; playMessageSound();
+    if (chatIsMuted(type,id)) return; playMessageSound(type,id);
     if (localStorage.getItem('khaso_chat_notifications') === 'on' && document.hidden && window.Notification && Notification.permission === 'granted') new Notification(title,{body:String(body || '').slice(0,140)});
   }
 
@@ -816,6 +833,22 @@
     const dialog = document.getElementById('imageLightbox'); const image = document.getElementById('lightboxImage');
     image.src = url; image.alt = alt || 'Full-size attachment';
     if (!dialog.open) dialog.showModal();
+  }
+
+  function translateMessage(text) {
+    if (!text) return;
+    const target = /[\u0590-\u05FF]/.test(text) ? 'en' : 'yi';
+    window.open('https://translate.google.com/?sl=auto&tl=' + target + '&text=' + encodeURIComponent(text) + '&op=translate','_blank','noopener');
+  }
+
+  function createCalendarEventFromMessage(text) {
+    const title = window.prompt('Event title:',String(text || 'Community event').slice(0,80)); if (!title) return;
+    const date = window.prompt('Event date (YYYY-MM-DD):',new Date().toISOString().slice(0,10)); if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '')) return;
+    const time = window.prompt('Start time (HH:MM):','18:00'); if (!/^\d{2}:\d{2}$/.test(time || '')) return;
+    const start = new Date(date + 'T' + time); if (Number.isNaN(start.getTime())) return;
+    const end = new Date(start.getTime()+60*60*1000); const stamp=(value)=>value.toISOString().replace(/[-:]/g,'').replace(/\.\d{3}/,'');
+    const url='https://calendar.google.com/calendar/render?action=TEMPLATE&text='+encodeURIComponent(title)+'&dates='+stamp(start)+'%2F'+stamp(end)+'&details='+encodeURIComponent(text || 'Created from Kasho Chat');
+    window.open(url,'_blank','noopener');
   }
 
   async function togglePrivateReaction(messageId,emoji,reactions) {
@@ -1034,6 +1067,8 @@
       const copyButton = document.createElement('button'); copyButton.type = 'button'; copyButton.textContent = 'Copy';
       copyButton.addEventListener('click', () => navigator.clipboard.writeText(parsed.text || parsed.sticker || ''));
       actions.appendChild(copyButton);
+      const translateButton = document.createElement('button'); translateButton.type = 'button'; translateButton.textContent = 'Translate'; translateButton.addEventListener('click',()=>translateMessage(parsed.text || parsed.sticker || '')); actions.appendChild(translateButton);
+      const calendarButton = document.createElement('button'); calendarButton.type = 'button'; calendarButton.textContent = 'Add to calendar'; calendarButton.addEventListener('click',()=>createCalendarEventFromMessage(parsed.text || parsed.sticker || '')); actions.appendChild(calendarButton);
       const forwardButton = document.createElement('button'); forwardButton.type = 'button'; forwardButton.textContent = 'Forward';
       forwardButton.addEventListener('click', () => openForwardDialog({text:parsed.text || parsed.sticker || '',attachments:parsed.attachments || []}));
       actions.appendChild(forwardButton);
@@ -1417,6 +1452,12 @@
     if (!result.error) privateInbox = result.data || [];
   }
 
+  async function runScheduledMessages() {
+    if (!currentUserId) return;
+    const result = await memberClient.rpc('send_due_scheduled_private_messages');
+    if (!result.error && result.data) await refreshPrivateInbox();
+  }
+
   async function updateMyPresence() {
     if (!currentUserId || !currentProfile) return;
     const availability = document.getElementById('presenceStatus').value || 'available';
@@ -1425,6 +1466,7 @@
       display_name: profileName(currentProfile),
       current_page: 'chat',
       availability,
+      show_online: showOnlineStatus,
       last_seen_at: new Date().toISOString()
     }, {onConflict:'user_id'});
   }
@@ -1432,12 +1474,15 @@
   async function refreshPresenceAndBlocks() {
     const cutoff = new Date(Date.now() - 90000).toISOString();
     const [presenceResult, blocksResult] = await Promise.all([
-      memberClient.from('member_presence').select('user_id,last_seen_at,availability'),
+      memberClient.from('member_presence').select('user_id,last_seen_at,availability,show_online'),
       memberClient.from('chat_blocks').select('blocker_id,blocked_id').or('blocker_id.eq.' + currentUserId + ',blocked_id.eq.' + currentUserId)
     ]);
     onlineMemberIds = new Set((presenceResult.data || []).filter((row)=>row.last_seen_at>=cutoff).map((row) => String(row.user_id)));
     memberAvailability = new Map((presenceResult.data || []).map((row)=>[String(row.user_id),row.availability || 'available']));
     memberLastSeen = new Map((presenceResult.data || []).map((row)=>[String(row.user_id),row.last_seen_at]));
+    const myPresence = (presenceResult.data || []).find((row)=>String(row.user_id)===String(currentUserId));
+    if (myPresence && typeof myPresence.show_online === 'boolean') showOnlineStatus = myPresence.show_online;
+    document.getElementById('onlinePrivacyToggle').textContent = 'Online status: ' + (showOnlineStatus ? 'Visible' : 'Hidden');
     blockedMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocker_id === currentUserId).map((row) => String(row.blocked_id)));
     blockedByMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocked_id === currentUserId).map((row) => String(row.blocker_id)));
     if (activeChatView === 'private') renderPrivateMembers(document.getElementById('chatSearch').value);
@@ -1590,6 +1635,8 @@
       const addAction = (label,handler) => { const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',handler);actions.appendChild(button); };
       addAction('Reply',()=>{privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Replying to '+(msg.sender_id===currentUserId?'your message':profileName(activePrivateMember))+': '+(parsed.text||'Attachment').slice(0,80);document.getElementById('privateReplyPreview').hidden=false;document.getElementById('privateMessageBody').focus();});
       addAction('Copy',()=>navigator.clipboard.writeText(parsed.text || ''));
+      addAction('Translate',()=>translateMessage(parsed.text || ''));
+      addAction('Add to calendar',()=>createCalendarEventFromMessage(parsed.text || ''));
       addAction('Forward',()=>openForwardDialog({text:parsed.text,attachments:parsed.attachments}));
       addAction(starredIds.has(String(msg.id)) ? 'Unstar' : 'Star',async()=>{
         if (starredIds.has(String(msg.id))) await memberClient.from('message_stars').delete().eq('user_id',currentUserId).eq('private_message_id',msg.id);
@@ -1627,6 +1674,15 @@
     else alert('Could not send this message: ' + result.error.message);
   });
   document.getElementById('cancelPrivateReply').addEventListener('click',()=>{privateReplyToId=null;document.getElementById('privateReplyPreview').hidden=true;});
+  document.getElementById('schedulePrivateButton').addEventListener('click',()=>{
+    if(!activePrivateMember)return;const field=document.getElementById('privateMessageBody');if(!field.value.trim()&&!privateStagedAttachments.length){alert('Write the message first, then choose Schedule.');return;}
+    const when=new Date(Date.now()+5*60*1000);when.setSeconds(0,0);document.getElementById('scheduleTime').value=new Date(when.getTime()-when.getTimezoneOffset()*60000).toISOString().slice(0,16);document.getElementById('scheduleDialog').showModal();
+  });
+  document.getElementById('scheduleForm').addEventListener('submit',async(event)=>{
+    event.preventDefault();if(!activePrivateMember)return;const field=document.getElementById('privateMessageBody');const text=field.value.trim();const scheduledFor=new Date(document.getElementById('scheduleTime').value);if(Number.isNaN(scheduledFor.getTime())||scheduledFor<=new Date()){alert('Choose a future time.');return;}
+    const body=JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});const result=await memberClient.from('scheduled_private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId,scheduled_for:scheduledFor.toISOString()});
+    if(result.error){alert('Could not schedule this message: '+result.error.message);return;}field.value='';privateStagedAttachments=[];privateReplyToId=null;renderPrivateStaged();document.getElementById('privateReplyPreview').hidden=true;document.getElementById('scheduleDialog').close();alert('Message scheduled.');
+  });
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
   });
@@ -1767,6 +1823,22 @@
     document.getElementById(buttonId).classList.add('active');
   }
 
+  function openFavoriteChats() {
+    setActiveChatView('searchResults');
+    document.querySelectorAll('.chat-app-sidebar .section-tab').forEach((button)=>button.classList.remove('active'));
+    document.getElementById('tabFavorites').classList.add('active');
+    document.getElementById('roomTitle').textContent = 'Favorite chats';
+    const favorites = chatPreferences.filter((pref)=>pref.favorite);
+    document.getElementById('roomSubtitle').textContent = favorites.length + ' favorite' + (favorites.length===1?'':'s');
+    const wrap=document.getElementById('searchResultsSection');wrap.innerHTML='';
+    favorites.forEach((pref)=>{const button=document.createElement('button');button.type='button';button.className='search-result';
+      if(pref.target_type==='topic'){const topic=chatTopics.find((item)=>String(item.id)===String(pref.target_id));if(!topic)return;button.innerHTML='<strong>'+escapeHtml(topic.title)+'</strong><small>Group chat</small>';button.addEventListener('click',()=>{const topicButton=document.querySelector('#topicList button[data-topic-id="'+topic.id+'"]');if(topicButton)topicButton.click();});}
+      else {const member=privateMembers.find((item)=>String(item.id)===String(pref.target_id));if(!member)return;button.innerHTML='<strong>'+escapeHtml(profileName(member))+'</strong><small>Private conversation</small>';button.addEventListener('click',()=>selectPrivateMember(member));}
+      wrap.appendChild(button);
+    });
+    if(!wrap.childNodes.length)wrap.innerHTML='<p class="chat-empty">Favorite a chat with the ☆ button and it will appear here.</p>';
+  }
+
   async function openCurrentSharedContent() {
     const results=[];
     if(activeChatView==='discussion'&&currentTopicId!==null){
@@ -1790,6 +1862,7 @@
   document.getElementById('tabUnread').addEventListener('click',()=>openSmartInbox('unread','tabUnread','Unread messages'));
   document.getElementById('tabMentions').addEventListener('click',()=>openSmartInbox('mentions','tabMentions','Mentions'));
   document.getElementById('tabStarred').addEventListener('click',()=>openSmartInbox('starred','tabStarred','Starred messages'));
+  document.getElementById('tabFavorites').addEventListener('click',openFavoriteChats);
   document.getElementById('tabShared').addEventListener('click',()=>openSmartInbox('shared','tabShared','Files & links'));
   document.getElementById('sharedContentButton').addEventListener('click',openCurrentSharedContent);
   document.getElementById('tabDiscussion').addEventListener('click', () => {
@@ -1822,6 +1895,12 @@
   }
   document.querySelectorAll('[data-close-dialog]').forEach((button)=>button.addEventListener('click',()=>document.getElementById(button.dataset.closeDialog).close()));
 
+  document.getElementById('favoriteChatButton').addEventListener('click',async()=>{
+    const type=activeChatView==='private'?'private':'topic';const id=type==='private'?activePrivateMember&&activePrivateMember.id:currentTopicId;if(!id)return;const pref=preferenceFor(type,id)||{};await saveChatPreference(type,id,{favorite:!pref.favorite});
+  });
+  document.getElementById('conversationSearchButton').addEventListener('click',()=>{
+    if(!activePrivateMember)return;const query=window.prompt('Search this conversation:');if(query===null)return;const normalized=query.trim().toLowerCase();let visible=0;document.querySelectorAll('#privateConversationList .private-message-row').forEach((row)=>{const match=!normalized||row.innerText.toLowerCase().includes(normalized);row.hidden=!match;if(match)visible++;});document.getElementById('roomSubtitle').textContent=normalized?(visible+' matching message'+(visible===1?'':'s')+' · search again to clear'):'Private conversation';
+  });
   document.getElementById('muteChatButton').addEventListener('click',async()=>{
     const type = activeChatView === 'private' ? 'private' : 'topic'; const id = type === 'private' ? activePrivateMember && activePrivateMember.id : currentTopicId; if (!id) return;
     const pref = preferenceFor(type,id) || {}; await saveChatPreference(type,id,{muted:!pref.muted});
@@ -1834,6 +1913,7 @@
   document.getElementById('showArchivedButton').addEventListener('click',()=>{
     showArchivedChats = !showArchivedChats; document.getElementById('showArchivedButton').textContent = showArchivedChats ? 'Show active chats' : 'Show archived chats'; renderPrivateMembers(document.getElementById('chatSearch').value);
   });
+  document.getElementById('onlinePrivacyToggle').addEventListener('click',async()=>{showOnlineStatus=!showOnlineStatus;await updateMyPresence();document.getElementById('onlinePrivacyToggle').textContent='Online status: '+(showOnlineStatus?'Visible':'Hidden');});
   document.getElementById('chatInfoButton').addEventListener('click',async()=>{
     const title = document.getElementById('chatInfoTitle'); const body = document.getElementById('chatInfoBody'); body.innerHTML = '';
     if (activeChatView === 'private' && activePrivateMember) {
@@ -1866,6 +1946,8 @@
       const heading = document.createElement('p'); heading.textContent = (members.length + 1) + ' approved members'; body.appendChild(heading);
       const rolesResult=topic?await memberClient.from('topic_roles').select('user_id,role').eq('topic_id',topic.id):{data:[]};const roleMap=new Map((rolesResult.data||[]).map((role)=>[String(role.user_id),role.role]));
       [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);const availability=memberAvailability.get(String(member.id))||'available';const presence=document.createElement('span');presence.className='presence-dot'+(onlineMemberIds.has(String(member.id))?' '+availability:'');const seen=memberLastSeen.get(String(member.id));presence.title=onlineMemberIds.has(String(member.id))?availability:(seen?'Last seen '+new Date(seen).toLocaleString():'Offline');row.appendChild(avatar);row.appendChild(name);row.appendChild(presence);const role=String(member.id)===String(topic&&topic.created_by)?'owner':roleMap.get(String(member.id));if(role){const badge=document.createElement('span');badge.className='role-badge';badge.textContent=role;row.appendChild(badge);}if(topic&&String(topic.created_by)===String(currentUserId)&&String(member.id)!==String(currentUserId)){const action=document.createElement('button');action.type='button';action.className='role-action';action.textContent=role==='moderator'?'Remove moderator':'Make moderator';action.addEventListener('click',async()=>{if(role==='moderator')await memberClient.from('topic_roles').delete().eq('topic_id',topic.id).eq('user_id',member.id);else await memberClient.from('topic_roles').upsert({topic_id:topic.id,user_id:member.id,role:'moderator'},{onConflict:'topic_id,user_id'});document.getElementById('chatInfoDialog').close();document.getElementById('chatInfoButton').click();});row.appendChild(action);}body.appendChild(row); }); }
+    const preferenceType=activeChatView==='private'?'private':'topic';const preferenceId=preferenceType==='private'?activePrivateMember&&activePrivateMember.id:currentTopicId;
+    if(preferenceId){const soundLabel=document.createElement('label');soundLabel.textContent='Notification sound for this chat';const soundSelect=document.createElement('select');soundSelect.className='presence-select';[['chime','Chime'],['bell','Bell'],['pop','Pop'],['none','None']].forEach(([value,label])=>{const option=document.createElement('option');option.value=value;option.textContent=label;soundSelect.appendChild(option);});soundSelect.value=(preferenceFor(preferenceType,preferenceId)||{}).notification_sound||'chime';soundSelect.addEventListener('change',()=>saveChatPreference(preferenceType,preferenceId,{notification_sound:soundSelect.value}));soundLabel.appendChild(soundSelect);body.prepend(soundLabel);}
     document.getElementById('chatInfoDialog').showModal();
   });
 
@@ -2081,14 +2163,22 @@
     await loadTopics(profile);
     await loadPrivateMembers();
     await loadChatPreferences();
+    await runScheduledMessages();
     await updateMyPresence();
     await refreshPresenceAndBlocks();
     showChatHome();
     startLiveChatUpdates();
-    if (location.hash === '#photos') document.getElementById('tabPhotos').click();
+    const chatParams = new URLSearchParams(location.search);
+    if (chatParams.get('view') === 'private') {
+      await openPrivateMessages();
+      const requestedMember = chatParams.get('with');
+      const member = requestedMember && privateMembers.find((item)=>String(item.id)===String(requestedMember));
+      if (member) await selectPrivateMember(member);
+    } else if (location.hash === '#photos') document.getElementById('tabPhotos').click();
     setInterval(() => { if (currentTopicId !== null && !document.hidden && !document.getElementById('discussionSection').hidden) loadPosts(); }, 20000);
     setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') { renderPrivateMembers(document.getElementById('chatSearch').value); if (activePrivateMember) await loadPrivateConversation(); } } }, 20000);
     setInterval(loadTypingIndicators,2000);
+    setInterval(runScheduledMessages,30000);
     setInterval(async () => { if (!document.hidden) { await updateMyPresence(); await refreshPresenceAndBlocks(); } },30000);
   })();
 </script>
