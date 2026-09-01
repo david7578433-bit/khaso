@@ -298,10 +298,35 @@
   .private-unread { min-width:21px; padding:2px 6px; border-radius:999px; color:white; background:#c0392b; text-align:center; font-size:11px; }
   #privateSection { display:flex; flex:1; min-height:0; flex-direction:column; overflow:hidden; }
   .private-conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto; padding:20px 25px; background:#f8fafb; }
-  .private-bubble { max-width:72%; padding:10px 13px; border:1px solid var(--border); border-radius:16px; background:white; }
+  .private-message-row { position:relative; display:flex; align-items:flex-start; gap:8px; width:100%; }
+  .private-message-row.mine { justify-content:flex-end; }
+  .private-bubble { position:relative; max-width:72%; padding:10px 13px; border:1px solid var(--border); border-radius:16px; background:white; }
   .private-bubble.mine { align-self:flex-end; color:#1f1f1f; background:#d3e3fd; border-color:#a8c7fa; }
   .private-bubble p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
   .private-bubble small { display:block; margin-top:5px; opacity:.7; }
+  .private-reply-quote { margin-bottom:7px; padding:7px 9px; color:#3c4043; background:rgba(255,255,255,.68); border-left:3px solid #0b57d0; border-radius:7px; font-size:12px; }
+  .private-reply-quote strong,.private-reply-quote span { display:block; }
+  .private-reply-quote span { margin-top:2px; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .private-reactions { display:flex; flex-wrap:wrap; gap:4px; margin-top:7px; }
+  .private-reactions button { padding:3px 7px; color:#3c4043; background:#f0f4f9; border:1px solid #d6dde6; border-radius:999px; font-size:12px; }
+  .private-reactions button.mine { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
+  .private-hover-bar { position:absolute; z-index:4; top:-20px; right:12px; display:flex; align-items:center; gap:2px; padding:3px; opacity:0; background:white; border:1px solid #dadce0; border-radius:18px; box-shadow:0 2px 8px rgba(60,64,67,.22); transition:opacity .15s; }
+  .private-message-row:not(.mine) .private-hover-bar { left:12px; right:auto; }
+  .private-message-row.mine .private-hover-bar { right:24px; }
+  .private-message-row:hover .private-hover-bar,.private-message-row:focus-within .private-hover-bar { opacity:1; }
+  .private-hover-bar>button { min-width:28px; height:28px; padding:2px 6px; color:#3c4043; background:transparent; border:0; border-radius:50%; }
+  .private-hover-bar>button:hover { background:#edf2fa; }
+  .private-action-menu,.private-reaction-picker { position:absolute; z-index:6; top:36px; right:0; min-width:120px; padding:6px; background:white; border:1px solid #dadce0; border-radius:12px; box-shadow:0 6px 20px rgba(60,64,67,.24); }
+  .private-action-menu[hidden],.private-reaction-picker[hidden] { display:none; }
+  .private-action-menu button { display:block; width:100%; padding:8px 10px; color:#202124; background:white; border:0; border-radius:7px; text-align:left; }
+  .private-action-menu button:hover { background:#f1f3f4; }
+  .private-reaction-picker { display:grid; grid-template-columns:repeat(6,32px); min-width:auto; }
+  .private-reaction-picker button { padding:5px; background:white; border:0; font-size:18px; }
+  .private-unread-divider { align-self:stretch; display:flex; align-items:center; gap:10px; margin:8px 0; color:#0b57d0; font-size:12px; font-weight:700; }
+  .private-unread-divider::before,.private-unread-divider::after { content:""; flex:1; height:1px; background:#0b57d0; }
+  .private-reply-preview { display:flex; align-items:center; justify-content:space-between; gap:12px; padding:8px 16px; color:#3c4043; background:#edf2fa; border-top:1px solid #d8e2ef; font-size:13px; }
+  .private-reply-preview[hidden] { display:none; }
+  .private-reply-preview button { padding:4px 8px; color:#3c4043; background:transparent; border:0; }
   .private-compose { display:flex; flex:0 0 auto; align-items:flex-end; gap:8px; padding:12px 16px; border-top:1px solid var(--border); background:white; }
   .private-compose textarea { flex:1; min-height:44px; max-height:120px; margin:0; resize:none; }
   .private-emoji-panel { display:flex; flex-wrap:wrap; gap:3px; padding:7px 16px; border-top:1px solid var(--border); background:white; }
@@ -332,9 +357,17 @@
   .link-preview strong,.link-preview small { display:block; }
   .link-preview small { margin-top:3px; opacity:.72; }
   .private-attachment { display:block; max-width:320px; margin-top:8px; }
-  .private-attachment img { display:block; max-width:100%; max-height:260px; border-radius:12px; }
+  .private-attachment img { display:block; max-width:100%; max-height:260px; border-radius:12px; cursor:zoom-in; }
   .private-attachment audio { width:290px; max-width:100%; }
   .private-attachment a { color:inherit; }
+  .private-audio-player { display:grid; grid-template-columns:38px minmax(120px,1fr) auto; align-items:center; gap:8px; width:min(320px,65vw); padding:8px; background:rgba(255,255,255,.72); border-radius:18px; }
+  .private-audio-player button { width:34px; height:34px; padding:0; border:0; border-radius:50%; background:#0b57d0; color:white; }
+  .private-audio-player input { width:100%; margin:0; padding:0; accent-color:#0b57d0; }
+  .private-audio-player span { min-width:38px; color:#5f6368; font-size:11px; }
+  .image-lightbox { width:min(92vw,1100px); max-width:none; padding:42px 18px 18px; background:#202124; }
+  .image-lightbox img { display:block; max-width:100%; max-height:82vh; margin:auto; object-fit:contain; }
+  .image-lightbox .lightbox-close { position:absolute; top:8px; right:8px; color:white; background:rgba(255,255,255,.14); }
+  @media (hover:none) { .private-hover-bar { position:static; align-self:flex-start; opacity:1; } }
   .starred-message { box-shadow:0 0 0 2px #f9ab00 inset; }
   .message-menu { display:flex; gap:4px; margin-top:5px; opacity:0; transition:opacity .15s; }
   .private-bubble:hover .message-menu,.private-bubble:focus-within .message-menu { opacity:1; }
@@ -478,6 +511,7 @@
           <p class="typing-indicator" id="privateTypingIndicator"></p>
           <div class="private-emoji-panel" id="privateEmojiPanel" hidden></div>
           <div class="private-staged" id="privateStagedAttachments"></div>
+          <div class="private-reply-preview" id="privateReplyPreview" hidden><span id="privateReplyPreviewText"></span><button type="button" id="cancelPrivateReply">Cancel</button></div>
           <form class="private-compose" id="privateMessageForm" hidden>
             <input type="file" id="privateFileInput" accept="image/*,application/pdf,audio/*" multiple hidden>
             <button type="button" class="icon-button" id="privateAttachButton" aria-label="Attach image, PDF, or audio"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
@@ -507,6 +541,7 @@
   <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
   <dialog class="app-dialog" id="threadDialog"><div class="dialog-head"><h3>Thread</h3><button type="button" class="icon-button" data-close-dialog="threadDialog">✕</button></div><div class="dialog-body" id="threadMessages"></div><form class="thread-compose" id="threadForm"><textarea id="threadBody" placeholder="Reply in thread…"></textarea><button type="submit" class="send-btn">Send</button></form></dialog>
   <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
+  <dialog class="app-dialog image-lightbox" id="imageLightbox"><button type="button" class="icon-button lightbox-close" data-close-dialog="imageLightbox" aria-label="Close image">✕</button><img id="lightboxImage" alt="Full-size attachment"></dialog>
 
 </main>
 
@@ -525,6 +560,7 @@
   let privateMembers = [];
   let privateInbox = [];
   let activePrivateMember = null;
+  let privateReplyToId = null;
   let activeSearchFilter = 'all';
   let activeChatView = 'home';
   let chatRealtime = null;
@@ -748,6 +784,42 @@
       if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return {text:parsed.text || '',attachments:parsed.attachments || [],forwarded:!!parsed.forwarded};
     } catch (_) {}
     return {text:raw || '',attachments:[],forwarded:false};
+  }
+
+  function formatAudioTime(seconds) {
+    if (!Number.isFinite(seconds)) return '0:00';
+    const whole = Math.max(0,Math.floor(seconds));
+    return Math.floor(whole/60) + ':' + String(whole%60).padStart(2,'0');
+  }
+
+  function createPrivateAudioPlayer(url) {
+    const player = document.createElement('div'); player.className = 'private-audio-player';
+    const audio = document.createElement('audio'); audio.preload = 'metadata'; audio.src = url;
+    const play = document.createElement('button'); play.type = 'button'; play.textContent = '▶'; play.setAttribute('aria-label','Play voice message');
+    const progress = document.createElement('input'); progress.type = 'range'; progress.min = '0'; progress.max = '100'; progress.value = '0'; progress.setAttribute('aria-label','Voice message position');
+    const time = document.createElement('span'); time.textContent = '0:00';
+    play.addEventListener('click',()=>{ if(audio.paused) audio.play(); else audio.pause(); });
+    audio.addEventListener('play',()=>{play.textContent='❚❚';play.setAttribute('aria-label','Pause voice message');});
+    audio.addEventListener('pause',()=>{play.textContent='▶';play.setAttribute('aria-label','Play voice message');});
+    audio.addEventListener('loadedmetadata',()=>{time.textContent=formatAudioTime(audio.duration);});
+    audio.addEventListener('timeupdate',()=>{progress.value=audio.duration?String((audio.currentTime/audio.duration)*100):'0';time.textContent=formatAudioTime(audio.currentTime);});
+    audio.addEventListener('ended',()=>{play.textContent='▶';progress.value='0';time.textContent=formatAudioTime(audio.duration);});
+    progress.addEventListener('input',()=>{if(audio.duration)audio.currentTime=(Number(progress.value)/100)*audio.duration;});
+    player.appendChild(play); player.appendChild(progress); player.appendChild(time); player.appendChild(audio); audio.hidden = true;
+    return player;
+  }
+
+  function openImageLightbox(url,alt) {
+    const dialog = document.getElementById('imageLightbox'); const image = document.getElementById('lightboxImage');
+    image.src = url; image.alt = alt || 'Full-size attachment';
+    if (!dialog.open) dialog.showModal();
+  }
+
+  async function togglePrivateReaction(messageId,emoji,reactions) {
+    const mine = reactions.some((reaction)=>reaction.emoji===emoji&&reaction.user_id===currentUserId);
+    if (mine) await memberClient.from('private_message_reactions').delete().eq('message_id',messageId).eq('user_id',currentUserId).eq('emoji',emoji);
+    else await memberClient.from('private_message_reactions').insert({message_id:messageId,user_id:currentUserId,emoji});
+    await loadPrivateConversation();
   }
 
   function firstUrl(text) {
@@ -1433,6 +1505,8 @@
   async function selectPrivateMember(member) {
     saveCurrentDraft();
     activePrivateMember = member;
+    privateReplyToId = null;
+    document.getElementById('privateReplyPreview').hidden = true;
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = profileName(member);
     const availability=memberAvailability.get(String(member.id))||'available';const seen=memberLastSeen.get(String(member.id));
@@ -1449,13 +1523,21 @@
     const result = await memberClient.from('private_messages').select('*').or('and(sender_id.eq.' + currentUserId + ',recipient_id.eq.' + other + '),and(sender_id.eq.' + other + ',recipient_id.eq.' + currentUserId + ')').order('created_at');
     const list = document.getElementById('privateConversationList'); list.innerHTML = '';
     if (result.error) { list.innerHTML = '<p>Could not load this conversation.</p>'; return; }
-    const messageIds = (result.data || []).map((msg) => msg.id);
-    const starredIds = new Set();
+    const messages = result.data || [];
+    const messageIds = messages.map((msg) => msg.id);
+    const starredIds = new Set(); const pinnedIds = new Set(); const reactionMap = new Map();
     if (messageIds.length) {
-      const stars = await memberClient.from('message_stars').select('private_message_id').eq('user_id',currentUserId).in('private_message_id',messageIds);
+      const [stars,pins,reactions] = await Promise.all([
+        memberClient.from('message_stars').select('private_message_id').eq('user_id',currentUserId).in('private_message_id',messageIds),
+        memberClient.from('private_message_pins').select('message_id').eq('user_id',currentUserId).in('message_id',messageIds),
+        memberClient.from('private_message_reactions').select('message_id,user_id,emoji').in('message_id',messageIds)
+      ]);
       (stars.data || []).forEach((star) => starredIds.add(String(star.private_message_id)));
+      (pins.data || []).forEach((pin) => pinnedIds.add(String(pin.message_id)));
+      (reactions.data || []).forEach((reaction)=>{const key=String(reaction.message_id);if(!reactionMap.has(key))reactionMap.set(key,[]);reactionMap.get(key).push(reaction);});
     }
-    const parsedMessages = (result.data || []).map((msg) => ({msg,parsed:parsePrivateBody(msg.body)}));
+    const parsedMessages = messages.map((msg) => ({msg,parsed:parsePrivateBody(msg.body)}));
+    const messageMap = new Map(parsedMessages.map((item)=>[String(item.msg.id),item]));
     const storagePaths = [];
     parsedMessages.forEach(({parsed}) => parsed.attachments.forEach((att) => { if (att.storagePath) storagePaths.push(att.storagePath); }));
     const approvedPaths = new Set();
@@ -1463,7 +1545,7 @@
       const approved = await memberClient.from('photo_uploads').select('storage_path').eq('status','approved').in('storage_path',storagePaths);
       (approved.data || []).forEach((file) => approvedPaths.add(file.storage_path));
     }
-    let lastDay = '';
+    let lastDay = ''; let unreadDividerShown = false;
     parsedMessages.forEach(({msg,parsed}) => {
       const day = new Date(msg.created_at).toDateString();
       if (day !== lastDay) {
@@ -1472,31 +1554,61 @@
         divider.textContent = day === today ? 'Today' : day === yesterday.toDateString() ? 'Yesterday' : new Date(msg.created_at).toLocaleDateString();
         list.appendChild(divider); lastDay = day;
       }
+      if (!unreadDividerShown && msg.sender_id === other && !msg.read_at) {
+        const unread = document.createElement('div'); unread.className = 'private-unread-divider'; unread.textContent = 'New messages'; list.appendChild(unread); unreadDividerShown = true;
+      }
+      const row = document.createElement('div'); row.className = 'private-message-row' + (msg.sender_id === currentUserId ? ' mine' : '');
       const bubble = document.createElement('div'); bubble.className = 'private-bubble' + (msg.sender_id === currentUserId ? ' mine' : '');
-      if (starredIds.has(String(msg.id))) bubble.classList.add('starred-message');
+      if (starredIds.has(String(msg.id)) || pinnedIds.has(String(msg.id))) bubble.classList.add('starred-message');
+      if (msg.reply_to_id && messageMap.has(String(msg.reply_to_id))) {
+        const original = messageMap.get(String(msg.reply_to_id)); const quote = document.createElement('div'); quote.className = 'private-reply-quote';
+        const who = document.createElement('strong'); who.textContent = original.msg.sender_id === currentUserId ? 'You' : profileName(activePrivateMember);
+        const excerpt = document.createElement('span'); excerpt.textContent = original.parsed.text || ((original.parsed.attachments || []).length ? 'Attachment' : 'Message');
+        quote.appendChild(who); quote.appendChild(excerpt); bubble.appendChild(quote);
+      }
       if (parsed.forwarded) { const forwarded = document.createElement('small'); forwarded.textContent = 'Forwarded'; bubble.appendChild(forwarded); }
       if (parsed.text) { const body = document.createElement('p'); body.textContent = parsed.text; bubble.appendChild(body); appendLinkPreview(bubble,parsed.text); }
       parsed.attachments.forEach((att) => {
         const wrap = document.createElement('div'); wrap.className = 'private-attachment';
         if (att.storagePath && !approvedPaths.has(att.storagePath)) { wrap.textContent = 'Waiting for admin approval: ' + (att.name || 'file'); bubble.appendChild(wrap); return; }
-        if ((att.type || '').startsWith('image/')) { const img = document.createElement('img'); img.src = att.url; img.alt = att.name || 'image'; wrap.appendChild(img); }
-        else if ((att.type || '').startsWith('audio/')) { const audio = document.createElement('audio'); audio.controls = true; audio.src = att.url; wrap.appendChild(audio); }
+        if ((att.type || '').startsWith('image/')) { const img = document.createElement('img'); img.src = att.url; img.alt = att.name || 'image'; img.addEventListener('click',()=>openImageLightbox(att.url,att.name)); wrap.appendChild(img); }
+        else if ((att.type || '').startsWith('audio/')) wrap.appendChild(createPrivateAudioPlayer(att.url));
         else { const link = document.createElement('a'); link.href = att.url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = att.name || 'Open file'; wrap.appendChild(link); }
         bubble.appendChild(wrap);
       });
-      const time = document.createElement('small'); time.textContent = new Date(msg.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) + (msg.sender_id === currentUserId ? (msg.read_at ? ' · ✓✓' : ' · ✓') : '');
+      const time = document.createElement('small'); time.textContent = new Date(msg.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) + (msg.edited_at ? ' · edited' : '') + (pinnedIds.has(String(msg.id)) ? ' · pinned' : '') + (msg.sender_id === currentUserId ? (msg.read_at ? ' · ✓✓' : ' · ✓') : '');
       bubble.appendChild(time);
-      const menu = document.createElement('div'); menu.className = 'message-menu';
-      const copy = document.createElement('button'); copy.type = 'button'; copy.textContent = 'Copy'; copy.addEventListener('click',()=>navigator.clipboard.writeText(parsed.text || ''));
-      const forward = document.createElement('button'); forward.type = 'button'; forward.textContent = 'Forward'; forward.addEventListener('click',()=>openForwardDialog({text:parsed.text,attachments:parsed.attachments}));
-      const star = document.createElement('button'); star.type = 'button'; star.textContent = starredIds.has(String(msg.id)) ? 'Unstar' : 'Star'; star.addEventListener('click',async()=>{
+
+      const reactions = reactionMap.get(String(msg.id)) || []; const reactionRow = document.createElement('div'); reactionRow.className = 'private-reactions';
+      Array.from(new Set(reactions.map((reaction)=>reaction.emoji))).forEach((emoji)=>{const matching=reactions.filter((reaction)=>reaction.emoji===emoji);const button=document.createElement('button');button.type='button';button.className=matching.some((reaction)=>reaction.user_id===currentUserId)?'mine':'';button.textContent=emoji+' '+matching.length;button.addEventListener('click',()=>togglePrivateReaction(msg.id,emoji,reactions));reactionRow.appendChild(button);});
+      if (reactionRow.childNodes.length) bubble.appendChild(reactionRow);
+
+      const actions = document.createElement('div'); actions.className = 'private-action-menu'; actions.hidden = true;
+      const addAction = (label,handler) => { const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',handler);actions.appendChild(button); };
+      addAction('Reply',()=>{privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Replying to '+(msg.sender_id===currentUserId?'your message':profileName(activePrivateMember))+': '+(parsed.text||'Attachment').slice(0,80);document.getElementById('privateReplyPreview').hidden=false;document.getElementById('privateMessageBody').focus();});
+      addAction('Copy',()=>navigator.clipboard.writeText(parsed.text || ''));
+      addAction('Forward',()=>openForwardDialog({text:parsed.text,attachments:parsed.attachments}));
+      addAction(starredIds.has(String(msg.id)) ? 'Unstar' : 'Star',async()=>{
         if (starredIds.has(String(msg.id))) await memberClient.from('message_stars').delete().eq('user_id',currentUserId).eq('private_message_id',msg.id);
         else await memberClient.from('message_stars').insert({user_id:currentUserId,private_message_id:msg.id});
-        loadPrivateConversation();
+        await loadPrivateConversation();
       });
-      menu.appendChild(copy); menu.appendChild(forward); menu.appendChild(star); bubble.appendChild(menu); list.appendChild(bubble);
+      addAction(pinnedIds.has(String(msg.id)) ? 'Unpin for me' : 'Pin for me',async()=>{if(pinnedIds.has(String(msg.id)))await memberClient.from('private_message_pins').delete().eq('user_id',currentUserId).eq('message_id',msg.id);else await memberClient.from('private_message_pins').insert({user_id:currentUserId,message_id:msg.id});await loadPrivateConversation();});
+      if (msg.sender_id === currentUserId) {
+        addAction('Edit',async()=>{const changed=window.prompt('Edit your message:',parsed.text||'');if(changed===null)return;const text=changed.trim();if(!text&&!parsed.attachments.length)return;const updated=JSON.stringify({text,attachments:parsed.attachments,forwarded:parsed.forwarded});const saved=await memberClient.from('private_messages').update({body:updated,edited_at:new Date().toISOString()}).eq('id',msg.id).eq('sender_id',currentUserId);if(saved.error)alert('Could not edit: '+saved.error.message);else await loadPrivateConversation();});
+        addAction('Delete',async()=>{if(!window.confirm('Delete this private message?'))return;const removed=await memberClient.from('private_messages').delete().eq('id',msg.id).eq('sender_id',currentUserId);if(removed.error)alert('Could not delete: '+removed.error.message);else await loadPrivateConversation();});
+      }
+
+      const hover = document.createElement('div'); hover.className = 'private-hover-bar';
+      ['👍','❤️','😂'].forEach((emoji)=>{const button=document.createElement('button');button.type='button';button.textContent=emoji;button.title='React '+emoji;button.addEventListener('click',()=>togglePrivateReaction(msg.id,emoji,reactions));hover.appendChild(button);});
+      const picker = document.createElement('div'); picker.className = 'private-reaction-picker'; picker.hidden = true;
+      ['👍','❤️','😂','🙏','🎉','👏','🔥','😊','😮','😢','✅','💪','🙌','🥳','👋','🌟','🤔','😉'].forEach((emoji)=>{const button=document.createElement('button');button.type='button';button.textContent=emoji;button.addEventListener('click',()=>togglePrivateReaction(msg.id,emoji,reactions));picker.appendChild(button);});
+      const moreReactions=document.createElement('button');moreReactions.type='button';moreReactions.textContent='☺';moreReactions.title='More reactions';moreReactions.addEventListener('click',()=>{picker.hidden=!picker.hidden;actions.hidden=true;});hover.appendChild(moreReactions);
+      const reply=document.createElement('button');reply.type='button';reply.textContent='↩';reply.title='Reply';reply.addEventListener('click',()=>actions.querySelector('button').click());hover.appendChild(reply);
+      const more=document.createElement('button');more.type='button';more.textContent='⋮';more.title='More actions';more.addEventListener('click',()=>{actions.hidden=!actions.hidden;picker.hidden=true;});hover.appendChild(more);
+      hover.appendChild(picker); hover.appendChild(actions); row.appendChild(bubble); row.appendChild(hover); list.appendChild(row);
     });
-    if (!result.data || !result.data.length) list.innerHTML = '<p class="chat-empty">No messages yet. Say hello.</p>';
+    if (!messages.length) list.innerHTML = '<p class="chat-empty">No messages yet. Say hello.</p>';
     list.scrollTop = list.scrollHeight;
     await memberClient.rpc('mark_private_messages_read',{other_user:other});
     await refreshPrivateInbox(); renderPrivateMembers(document.getElementById('chatSearch').value);
@@ -1507,9 +1619,11 @@
     if (privateMessagingBlocked(activePrivateMember)) { updatePrivateComposerState(); return; }
     const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
-    const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body});
-    if (!result.error) { field.value = ''; clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; renderPrivateStaged(); await loadPrivateConversation(); }
+    const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId});
+    if (!result.error) { field.value = ''; clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation(); }
+    else alert('Could not send this message: ' + result.error.message);
   });
+  document.getElementById('cancelPrivateReply').addEventListener('click',()=>{privateReplyToId=null;document.getElementById('privateReplyPreview').hidden=true;});
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
   });
