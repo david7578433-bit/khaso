@@ -25,7 +25,7 @@
     text-align: left;
   }
 
-  .chat-bubble-row { display: flex; flex-direction: column; max-width: 78%; }
+  .chat-bubble-row { position:relative; display: flex; flex-direction: column; max-width: 78%; }
   .chat-bubble-row.own { align-self: flex-end; align-items: flex-end; }
   .chat-bubble-row.other { align-self: flex-start; align-items: flex-start; }
 
@@ -144,6 +144,20 @@
   .reaction-row { display:flex; gap:5px; flex-wrap:wrap; margin-top:5px; }
   .reaction-row button { background:#f0f2f4; color:var(--ink); border:1px solid var(--border); padding:3px 7px; font-size:12px; }
   .reaction-row button.mine { background:#dff5ef; border-color:var(--accent); }
+  .message-hover-bar {
+    position:absolute; top:-39px; right:0; z-index:12; display:flex; align-items:center; gap:2px;
+    padding:4px 6px; background:white; border:1px solid #dadce0; border-radius:14px;
+    box-shadow:0 2px 8px rgba(60,64,67,.22); opacity:0; pointer-events:none; transform:translateY(3px); transition:.14s ease;
+  }
+  .chat-bubble-row.other .message-hover-bar { right:auto; left:0; }
+  .chat-bubble-row:hover .message-hover-bar,.chat-bubble-row:focus-within .message-hover-bar { opacity:1; pointer-events:auto; transform:none; }
+  .message-hover-bar>button { min-width:30px; height:30px; padding:3px 6px; color:#3c4043; background:transparent; border:0; border-radius:9px; font-size:17px; line-height:1; }
+  .message-hover-bar>button:hover { background:#f0f4f9; }
+  .message-more-menu { position:absolute; top:38px; right:0; z-index:14; display:flex; flex-direction:column; min-width:145px; padding:6px; background:white; border:1px solid #dadce0; border-radius:12px; box-shadow:0 4px 16px rgba(60,64,67,.25); }
+  .chat-bubble-row.other .message-more-menu { right:auto; left:0; }
+  .message-more-menu[hidden] { display:none; }
+  .message-more-menu button { width:100%; padding:8px 10px; color:#3c4043; background:transparent; border:0; border-radius:7px; text-align:left; font-size:12px; }
+  .message-more-menu button:hover { background:#f0f4f9; }
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
@@ -198,7 +212,7 @@
   #discussionSection { display:flex; flex:1; flex-direction:column; min-height:0; padding:0 16px 14px; }
   #discussionSection[hidden], #photosSection[hidden] { display:none; }
   #photosSection { flex:1; min-height:0; overflow:auto; padding:22px; }
-  .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 10px; padding:18px 24px; border:0; border-radius:0; background:#f8fafb; }
+  .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 10px; padding:50px 24px 18px; border:0; border-radius:0; background:#f8fafb; }
   .chat-bubble-row { max-width:72%; }
   .chat-input-row { padding-top:2px; }
   #boardStatus { min-height:18px; margin:5px 0 0; font-size:12px; }
@@ -219,7 +233,7 @@
     .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { min-width:calc(50% - 6px); }
     .chat-room-header { padding:12px 14px; }
     #discussionSection { padding:0 8px 10px; }
-    .chat-window { margin:0 -8px 8px; padding:14px 10px; }
+    .chat-window { margin:0 -8px 8px; padding:48px 10px 14px; }
     .chat-bubble-row { max-width:88%; }
     .chat-input-row { flex-wrap:wrap; }
     .chat-input-row textarea { order:-1; flex-basis:100%; }
@@ -287,8 +301,7 @@
   .search-result { display:block; width:100%; margin-bottom:8px; padding:13px 15px; color:var(--ink); background:white; border:1px solid var(--border); border-radius:12px; text-align:left; }
   .search-result strong, .search-result small { display:block; }
   .search-result small { margin-top:4px; color:var(--muted); }
-  .message-actions, .reaction-row { opacity:0; transition:opacity .15s ease; }
-  .chat-bubble-row:hover .message-actions, .chat-bubble-row:hover .reaction-row, .chat-bubble-row:focus-within .message-actions, .chat-bubble-row:focus-within .reaction-row { opacity:1; }
+  .reaction-row { opacity:1; }
   .chat-date-divider { align-self:stretch; display:flex; align-items:center; gap:10px; margin:10px 0; color:var(--muted); font-size:12px; }
   .chat-date-divider::before, .chat-date-divider::after { content:""; flex:1; height:1px; background:var(--border); }
   .chat-meta-avatar { display:inline-grid; place-items:center; width:24px; height:24px; margin-right:7px; border-radius:50%; color:white; background:#0b57d0; font-weight:700; font-size:11px; vertical-align:middle; }
@@ -846,6 +859,7 @@
       const reactionRow = document.createElement('div'); reactionRow.className = 'reaction-row';
       ['👍','❤️','😂','🙏'].forEach((emoji) => {
         const matching = reactions.filter((reaction) => reaction.emoji === emoji);
+        if (!matching.length) return;
         const mine = matching.some((reaction) => reaction.user_id === currentUserId);
         const button = document.createElement('button'); button.type = 'button'; button.className = mine ? 'mine' : '';
         button.textContent = emoji + (matching.length ? ' ' + matching.length : '');
@@ -860,7 +874,8 @@
       row.appendChild(reactionRow);
 
       const actions = document.createElement('div');
-      actions.className = 'message-actions';
+      actions.className = 'message-more-menu';
+      actions.hidden = true;
 
       const copyButton = document.createElement('button'); copyButton.type = 'button'; copyButton.textContent = 'Copy';
       copyButton.addEventListener('click', () => navigator.clipboard.writeText(parsed.text || parsed.sticker || ''));
@@ -876,15 +891,14 @@
       });
       actions.appendChild(starButton);
 
+      let replyToThisMessage = null;
       if (!post.locked) {
-        const replyButton = document.createElement('button'); replyButton.type = 'button'; replyButton.textContent = 'Reply';
-        replyButton.addEventListener('click', () => {
+        replyToThisMessage = () => {
           replyToPostId = post.id;
           document.getElementById('replyPreviewText').textContent = 'Replying to ' + (isOwn ? 'your message' : displayName);
           document.getElementById('replyPreview').hidden = false;
           document.getElementById('postBody').focus();
-        });
-        actions.appendChild(replyButton);
+        };
       }
 
       if (isOwn) {
@@ -931,7 +945,27 @@
         pinButton.addEventListener('click', async () => { await memberClient.from('posts').update({pinned:!post.pinned}).eq('id',post.id); await loadPosts(); });
         actions.appendChild(pinButton);
       }
-      if (actions.childNodes.length) row.appendChild(actions);
+      const hoverBar = document.createElement('div'); hoverBar.className = 'message-hover-bar';
+      ['👍','😂','🙏'].forEach((emoji) => {
+        const quickReaction = document.createElement('button'); quickReaction.type = 'button'; quickReaction.textContent = emoji; quickReaction.title = 'React ' + emoji;
+        quickReaction.addEventListener('click', async () => {
+          const mine = reactions.some((reaction) => reaction.emoji === emoji && reaction.user_id === currentUserId);
+          quickReaction.disabled = true;
+          if (mine) await memberClient.from('post_reactions').delete().eq('post_id',post.id).eq('user_id',currentUserId).eq('emoji',emoji);
+          else await memberClient.from('post_reactions').insert({post_id:post.id,user_id:currentUserId,emoji});
+          await loadPosts();
+        });
+        hoverBar.appendChild(quickReaction);
+      });
+      if (replyToThisMessage) {
+        const replyButton = document.createElement('button'); replyButton.type = 'button'; replyButton.textContent = '↩'; replyButton.title = 'Reply';
+        replyButton.addEventListener('click', replyToThisMessage); hoverBar.appendChild(replyButton);
+      }
+      const moreButton = document.createElement('button'); moreButton.type = 'button'; moreButton.textContent = '⋮'; moreButton.title = 'More actions';
+      moreButton.addEventListener('click', (event) => { event.stopPropagation(); actions.hidden = !actions.hidden; });
+      hoverBar.appendChild(moreButton);
+      if (actions.childNodes.length) hoverBar.appendChild(actions);
+      row.appendChild(hoverBar);
       postList.appendChild(row);
     });
     knownNames = Object.keys(seenNames);
