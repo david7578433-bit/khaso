@@ -58,7 +58,7 @@ begin
   select coalesce(nullif(trim(concat_ws(' ', first_name, last_name)), ''), display_name, 'A member')
   into sender_name from public.profiles where id = new.sender_id;
   insert into public.notifications(user_id,title,body,link)
-  values (new.recipient_id,'New private message',sender_name || ': ' || left(new.body,160),'messages.html?with=' || new.sender_id::text);
+  values (new.recipient_id,'New private message',sender_name || ': ' || left(new.body,160),'ages.html?view=private&with=' || new.sender_id::text);
   return new;
 end;
 $$;
@@ -128,4 +128,3 @@ revoke all on function public.mark_private_messages_read(uuid) from public;
 revoke all on function public.create_today_yahrzeit_reminders(text,integer,integer) from public;
 grant execute on function public.mark_private_messages_read(uuid) to authenticated;
 grant execute on function public.create_today_yahrzeit_reminders(text,integer,integer) to authenticated;
-
