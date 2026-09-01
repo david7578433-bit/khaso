@@ -88,6 +88,7 @@
     <section class="card">
       <h2>Member Polls</h2>
       <div id="pollsList"><p class="empty">Sign in as an approved member to vote.</p></div>
+      <p id="pollStatus" role="status"></p>
     </section>
 
     <section class="card">
@@ -247,7 +248,7 @@
       option_index:Number(button.dataset.option),
       created_at:new Date().toISOString()
     }, {onConflict:'poll_id,user_id'});
-    if (result.error) document.getElementById('rideStatus').textContent = 'Could not save vote: ' + result.error.message;
+    if (result.error) document.getElementById('pollStatus').textContent = 'Could not save vote: ' + result.error.message;
     await loadPolls();
   });
 
