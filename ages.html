@@ -147,6 +147,34 @@
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
+
+  .section-tabs { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
+  .section-tab {
+    background: none; color: var(--muted); border: 0; border-bottom: 3px solid transparent;
+    border-radius: 0; padding: 8px 4px; margin-bottom: -1px; font-weight: 700; font-size: 15px;
+  }
+  .section-tab:hover { background: none; color: var(--ink); }
+  .section-tab.active { color: var(--accent-dark); border-bottom-color: var(--accent); }
+
+  .photos-intro { color: var(--muted); font-size: 14px; margin-top: -6px; }
+  .photos-toolbar { margin-bottom: 16px; }
+  .age-photo-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px;
+  }
+  .age-photo-card { position: relative; border-radius: 10px; overflow: hidden; background: #f4f7f8; }
+  .age-photo-card canvas {
+    display: block; width: 100%; height: 150px; object-fit: cover; user-select: none;
+    -webkit-user-drag: none; pointer-events: none;
+  }
+  .age-photo-card .age-photo-meta {
+    display: flex; justify-content: space-between; align-items: center; gap: 6px;
+    padding: 6px 8px; font-size: 11px; color: var(--muted); background: white;
+  }
+  .age-photo-card .age-photo-delete {
+    padding: 3px 8px; font-size: 11px; background: #b64a4a;
+  }
+  .age-photo-card .age-photo-delete:hover { background: #963c3c; }
+  .age-photo-loading { color: var(--muted); font-size: 14px; }
 </style>
 </head>
 <body>
@@ -175,7 +203,12 @@
   </section>
 
   <section class="card" id="boardCard" hidden>
-    <h2>Discussion</h2>
+    <div class="section-tabs">
+      <button type="button" class="section-tab active" id="tabDiscussion">Discussion</button>
+      <button type="button" class="section-tab" id="tabPhotos">Photos</button>
+    </div>
+
+    <div id="discussionSection">
     <div class="topic-list" id="topicList"></div>
     <div class="chat-window" id="postList"></div>
     <div class="emoji-panel" id="emojiPanel" hidden>
@@ -204,12 +237,24 @@
       </form>
     </div>
     <p id="boardStatus" role="status" aria-live="polite"></p>
+    </div>
+
+    <div id="photosSection" hidden>
+      <p class="photos-intro">Private to your year — only members approved for your year can see or add photos here. Please don't screenshot or share these outside the site.</p>
+      <div class="photos-toolbar">
+        <button type="button" id="addAgePhotoBtn">+ Add a Photo</button>
+        <input type="file" id="agePhotoInput" accept="image/*" hidden>
+      </div>
+      <div class="age-photo-grid" id="agePhotoGrid"></div>
+      <p class="age-photo-loading" id="agePhotoStatus"></p>
+    </div>
   </section>
 
 </main>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
+<script src="photo-editor.js"></script>
 <script>
   let currentTopicId = null;
   let currentUserId = null;
@@ -218,6 +263,11 @@
   let knownNames = [];
   let knownMembers = {};
   let replyToPostId = null;
+
+  function profileName(p) {
+    if (!p) return 'Member';
+    return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
+  }
 
   async function loadTopics(profile) {
     const { data, error } = await memberClient.from('topics').select('id, title').order('id');
@@ -309,7 +359,7 @@
 
     const { data, error } = await memberClient
       .from('posts')
-      .select('id, body, created_at, author_id, reply_to_id, pinned, locked, profiles(display_name)')
+      .select('id, body, created_at, author_id, reply_to_id, pinned, locked, profiles(display_name, first_name, last_name)')
       .eq('topic_id', currentTopicId)
       .order('created_at', { ascending: true });
 
@@ -354,7 +404,7 @@
     const orderedData = data.filter((post) => post.pinned).concat(data.filter((post) => !post.pinned));
     orderedData.forEach((post) => {
       const isOwn = currentUserId && post.author_id === currentUserId;
-      const displayName = post.profiles && post.profiles.display_name ? post.profiles.display_name : 'Member';
+      const displayName = profileName(post.profiles);
       if (!isOwn) {
         seenNames[displayName] = true;
         knownMembers[displayName] = post.author_id;
@@ -376,7 +426,7 @@
         if (original) {
           const reply = document.createElement('div'); reply.className = 'reply-context';
           const originalBody = parseBody(original.body);
-          const originalName = original.author_id === currentUserId ? 'You' : (original.profiles && original.profiles.display_name || 'Member');
+          const originalName = original.author_id === currentUserId ? 'You' : profileName(original.profiles);
           reply.textContent = 'Reply to ' + originalName + ': ' + (originalBody.text || originalBody.sticker || 'attachment').slice(0,100);
           row.appendChild(reply);
         }
@@ -535,7 +585,7 @@
       await Promise.all(mentions.map((name) => memberClient.rpc('notify_mention', {
         target_user: knownMembers[name],
         notification_title: 'You were mentioned',
-        notification_body: (currentProfile && currentProfile.display_name ? currentProfile.display_name : 'A member') + ': ' + payload.text.slice(0,200),
+        notification_body: profileName(currentProfile) + ': ' + payload.text.slice(0,200),
         notification_link: 'ages.html'
       })));
     }
@@ -738,6 +788,182 @@
   });
   document.getElementById('postBody').addEventListener('blur', () => {
     setTimeout(hideMentionDropdown, 150);
+  });
+
+  // ---- Photos tab (private per-year album) ----
+
+  document.getElementById('tabDiscussion').addEventListener('click', () => {
+    document.getElementById('tabDiscussion').classList.add('active');
+    document.getElementById('tabPhotos').classList.remove('active');
+    document.getElementById('discussionSection').hidden = false;
+    document.getElementById('photosSection').hidden = true;
+  });
+
+  document.getElementById('tabPhotos').addEventListener('click', () => {
+    document.getElementById('tabPhotos').classList.add('active');
+    document.getElementById('tabDiscussion').classList.remove('active');
+    document.getElementById('photosSection').hidden = false;
+    document.getElementById('discussionSection').hidden = true;
+    loadAgePhotos();
+  });
+
+  // Draws a photo onto a canvas with the viewer's own name stamped across it,
+  // so a screenshot or a repost still carries who was looking at it. This is
+  // a deterrent, not a lock — nothing on the web can stop a real screenshot.
+  async function drawWatermarkedCanvas(blob, label, maxSize) {
+    const img = await new Promise((resolve, reject) => {
+      const el = new Image();
+      el.onload = () => resolve(el);
+      el.onerror = () => reject(new Error('Could not load image'));
+      el.src = URL.createObjectURL(blob);
+    });
+    const scale = Math.min(1, maxSize / Math.max(img.naturalWidth, img.naturalHeight));
+    const canvas = document.createElement('canvas');
+    canvas.width = Math.round(img.naturalWidth * scale);
+    canvas.height = Math.round(img.naturalHeight * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
+    URL.revokeObjectURL(img.src);
+
+    ctx.save();
+    ctx.translate(canvas.width / 2, canvas.height / 2);
+    ctx.rotate(-Math.PI / 8);
+    ctx.font = 'bold ' + Math.max(12, Math.round(canvas.width / 14)) + 'px Assistant, sans-serif';
+    ctx.fillStyle = 'rgba(255,255,255,.38)';
+    ctx.strokeStyle = 'rgba(0,0,0,.22)';
+    ctx.lineWidth = 2;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.strokeText(label, 0, 0);
+    ctx.fillText(label, 0, 0);
+    ctx.restore();
+
+    return canvas;
+  }
+
+  function blockImageActions(el) {
+    el.addEventListener('contextmenu', (e) => e.preventDefault());
+    el.addEventListener('dragstart', (e) => e.preventDefault());
+  }
+
+  async function loadAgePhotos() {
+    const grid = document.getElementById('agePhotoGrid');
+    const statusEl = document.getElementById('agePhotoStatus');
+    grid.innerHTML = '';
+
+    if (!currentProfile || !currentProfile.jewish_year) {
+      statusEl.textContent = 'Waiting for an admin to assign you to a year room.';
+      return;
+    }
+
+    statusEl.textContent = 'Loading photos…';
+    const { data, error } = await memberClient
+      .from('age_photos')
+      .select('id, storage_path, caption, uploader_id, created_at')
+      .eq('jewish_year', currentProfile.jewish_year)
+      .order('created_at', { ascending: false });
+
+    if (error) {
+      statusEl.textContent = 'Could not load photos: ' + error.message;
+      return;
+    }
+
+    if (!data || data.length === 0) {
+      statusEl.textContent = 'No photos yet — be the first to add one.';
+      return;
+    }
+
+    statusEl.textContent = '';
+    const watermarkLabel = 'For ' + profileName(currentProfile) + ' only — do not share';
+
+    for (const photo of data) {
+      const { data: signedData, error: signedError } = await memberClient
+        .storage.from('age-photos')
+        .createSignedUrl(photo.storage_path, 300);
+      if (signedError || !signedData) continue;
+
+      let canvas;
+      try {
+        const imgRes = await fetch(signedData.signedUrl);
+        const blob = await imgRes.blob();
+        canvas = await drawWatermarkedCanvas(blob, watermarkLabel, 640);
+      } catch (e) {
+        continue;
+      }
+      blockImageActions(canvas);
+
+      const card = document.createElement('div');
+      card.className = 'age-photo-card';
+      card.appendChild(canvas);
+
+      const meta = document.createElement('div');
+      meta.className = 'age-photo-meta';
+      const dateSpan = document.createElement('span');
+      dateSpan.textContent = new Date(photo.created_at).toLocaleDateString();
+      meta.appendChild(dateSpan);
+
+      if (currentUserId && photo.uploader_id === currentUserId) {
+        const delBtn = document.createElement('button');
+        delBtn.type = 'button';
+        delBtn.className = 'age-photo-delete';
+        delBtn.textContent = 'Delete';
+        delBtn.addEventListener('click', async () => {
+          if (!confirm('Delete this photo?')) return;
+          delBtn.disabled = true;
+          await memberClient.storage.from('age-photos').remove([photo.storage_path]);
+          await memberClient.from('age_photos').delete().eq('id', photo.id);
+          loadAgePhotos();
+        });
+        meta.appendChild(delBtn);
+      }
+      card.appendChild(meta);
+      grid.appendChild(card);
+    }
+  }
+
+  document.getElementById('addAgePhotoBtn').addEventListener('click', () => {
+    if (!currentProfile || !currentProfile.jewish_year) {
+      document.getElementById('agePhotoStatus').textContent = 'Waiting for an admin to assign you to a year room.';
+      return;
+    }
+    document.getElementById('agePhotoInput').click();
+  });
+
+  document.getElementById('agePhotoInput').addEventListener('change', async (event) => {
+    const file = event.target.files && event.target.files[0];
+    event.target.value = '';
+    if (!file) return;
+
+    const editedBlob = await window.openPhotoEditor(file);
+    if (!editedBlob) return;
+
+    const statusEl = document.getElementById('agePhotoStatus');
+    statusEl.textContent = 'Uploading…';
+
+    const safeYear = (currentProfile.jewish_year || 'year').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'year';
+    const path = safeYear + '/' + currentUserId + '-' + Date.now() + '.jpg';
+    const { error: uploadError } = await memberClient
+      .storage.from('age-photos')
+      .upload(path, editedBlob, { contentType: 'image/jpeg' });
+
+    if (uploadError) {
+      statusEl.textContent = 'Could not upload: ' + uploadError.message;
+      return;
+    }
+
+    const { error: insertError } = await memberClient.from('age_photos').insert({
+      jewish_year: currentProfile.jewish_year,
+      storage_path: path,
+      uploader_id: currentUserId
+    });
+
+    if (insertError) {
+      statusEl.textContent = 'Could not save photo: ' + insertError.message;
+      return;
+    }
+
+    statusEl.textContent = '';
+    loadAgePhotos();
   });
 
   (async () => {
