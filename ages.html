@@ -147,7 +147,6 @@
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
-
   .section-tabs { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
   .section-tab {
     background: none; color: var(--muted); border: 0; border-bottom: 3px solid transparent;
@@ -175,6 +174,56 @@
   }
   .age-photo-card .age-photo-delete:hover { background: #963c3c; }
   .age-photo-loading { color: var(--muted); font-size: 14px; }
+
+  /* Full desktop chat workspace */
+  #boardCard.card { width:min(1500px,calc(100vw - 36px)); max-width:none; padding:0; overflow:hidden; text-align:left; border-radius:18px; }
+  .chat-app-layout { display:grid; grid-template-columns:210px 290px minmax(0,1fr); min-height:690px; height:calc(100vh - 190px); max-height:850px; }
+  .chat-app-sidebar { display:flex; flex-direction:column; gap:8px; padding:20px 14px; color:white; background:linear-gradient(180deg,#183247,#176e6b); }
+  .chat-app-brand { padding:4px 8px 16px; font-size:20px; font-weight:800; }
+  .chat-app-brand small { display:block; margin-top:3px; font-size:12px; font-weight:500; opacity:.72; }
+  .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { display:flex; align-items:center; gap:10px; width:100%; margin:0; padding:11px 12px; color:white; background:transparent; border:0; border-radius:10px; text-decoration:none; text-align:left; font:inherit; font-weight:700; }
+  .chat-app-sidebar .section-tab:hover, .chat-app-sidebar .chat-nav-link:hover, .chat-app-sidebar .section-tab.active { background:rgba(255,255,255,.15); color:white; }
+  .chat-nav-spacer { flex:1; }
+  .chat-list-pane { min-width:0; padding:18px 12px; background:#f4f7f8; border-right:1px solid var(--border); }
+  .chat-list-pane h2 { margin:0 8px 4px; font-size:22px; }
+  .chat-list-pane > p { margin:0 8px 16px; color:var(--muted); font-size:13px; }
+  .topic-list { display:flex; flex-direction:column; flex-wrap:nowrap; gap:6px; justify-content:flex-start; margin:0; }
+  .topic-list button { display:flex; justify-content:space-between; align-items:center; width:100%; min-height:54px; padding:10px 12px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
+  .topic-list button:hover { background:white; }
+  .topic-list button.active { color:var(--ink); background:#dcebe9; }
+  .chat-room-main { display:flex; flex-direction:column; min-width:0; min-height:0; background:white; }
+  .chat-room-header { display:flex; justify-content:space-between; align-items:center; min-height:68px; padding:12px 20px; border-bottom:1px solid var(--border); }
+  .chat-room-header h2 { margin:0; font-size:21px; }
+  .chat-room-header p { margin:2px 0 0; color:var(--muted); font-size:12px; }
+  #discussionSection { display:flex; flex:1; flex-direction:column; min-height:0; padding:0 16px 14px; }
+  #discussionSection[hidden], #photosSection[hidden] { display:none; }
+  #photosSection { flex:1; min-height:0; overflow:auto; padding:22px; }
+  .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 10px; padding:18px 24px; border:0; border-radius:0; background:#f8fafb; }
+  .chat-bubble-row { max-width:72%; }
+  .chat-input-row { padding-top:2px; }
+  #boardStatus { min-height:18px; margin:5px 0 0; font-size:12px; }
+  @media (max-width:920px) {
+    #boardCard.card { width:min(100% - 20px,760px); }
+    .chat-app-layout { grid-template-columns:1fr; height:auto; max-height:none; }
+    .chat-app-sidebar { flex-direction:row; flex-wrap:wrap; padding:10px; }
+    .chat-app-brand { width:100%; padding:4px 8px; }
+    .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { width:auto; flex:1; justify-content:center; min-width:110px; }
+    .chat-nav-spacer { display:none; }
+    .chat-list-pane { border-right:0; border-bottom:1px solid var(--border); }
+    .topic-list { flex-direction:row; overflow-x:auto; }
+    .topic-list button { width:auto; min-width:170px; }
+    .chat-room-main { min-height:620px; }
+  }
+  @media (max-width:560px) {
+    #boardCard.card { width:calc(100% - 12px); }
+    .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { min-width:calc(50% - 6px); }
+    .chat-room-header { padding:12px 14px; }
+    #discussionSection { padding:0 8px 10px; }
+    .chat-window { margin:0 -8px 8px; padding:14px 10px; }
+    .chat-bubble-row { max-width:88%; }
+    .chat-input-row { flex-wrap:wrap; }
+    .chat-input-row textarea { order:-1; flex-basis:100%; }
+  }
 </style>
 </head>
 <body>
@@ -203,13 +252,24 @@
   </section>
 
   <section class="card" id="boardCard" hidden>
-    <div class="section-tabs">
-      <button type="button" class="section-tab active" id="tabDiscussion">Discussion</button>
-      <button type="button" class="section-tab" id="tabPhotos">Photos</button>
-    </div>
-
-    <div id="discussionSection">
-    <div class="topic-list" id="topicList"></div>
+    <div class="chat-app-layout">
+      <aside class="chat-app-sidebar" aria-label="Chat shortcuts">
+        <div class="chat-app-brand">Khaso Chat<small>Member community</small></div>
+        <a class="chat-nav-link" href="index.html">⌂ Home</a>
+        <button type="button" class="section-tab active" id="tabDiscussion">💬 Group chats</button>
+        <a class="chat-nav-link" href="messages.html">✉ Private messages</a>
+        <button type="button" class="section-tab" id="tabPhotos">▣ Photos</button>
+        <div class="chat-nav-spacer"></div>
+        <a class="chat-nav-link" href="login.html">⚙ Account</a>
+      </aside>
+      <aside class="chat-list-pane">
+        <h2>Chats</h2>
+        <p>Your approved rooms</p>
+        <div class="topic-list" id="topicList"></div>
+      </aside>
+      <section class="chat-room-main">
+        <div class="chat-room-header"><div><h2 id="roomTitle">Choose a chat</h2><p id="roomSubtitle">Private to approved members</p></div></div>
+        <div id="discussionSection">
     <div class="chat-window" id="postList"></div>
     <div class="emoji-panel" id="emojiPanel" hidden>
       <div class="sticker-row" id="stickerRow"></div>
@@ -237,9 +297,9 @@
       </form>
     </div>
     <p id="boardStatus" role="status" aria-live="polite"></p>
-    </div>
+        </div>
 
-    <div id="photosSection" hidden>
+        <div id="photosSection" hidden>
       <p class="photos-intro">Private to your year — only members approved for your year can see or add photos here. Please don't screenshot or share these outside the site.</p>
       <div class="photos-toolbar">
         <button type="button" id="addAgePhotoBtn">+ Add a Photo</button>
@@ -247,6 +307,8 @@
       </div>
       <div class="age-photo-grid" id="agePhotoGrid"></div>
       <p class="age-photo-loading" id="agePhotoStatus"></p>
+        </div>
+      </section>
     </div>
   </section>
 
@@ -263,7 +325,6 @@
   let knownNames = [];
   let knownMembers = {};
   let replyToPostId = null;
-
   function profileName(p) {
     if (!p) return 'Member';
     return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
@@ -316,6 +377,8 @@
     currentTopicId = topicId;
     document.querySelectorAll('#topicList button').forEach((b) => b.classList.remove('active'));
     button.classList.add('active');
+    document.getElementById('roomTitle').textContent = button.querySelector('span').textContent;
+    document.getElementById('roomSubtitle').textContent = 'Approved members · group conversation';
     loadPosts().then(() => {
       try { localStorage.setItem('khaso_last_read_' + topicId, new Date().toISOString()); } catch (_) {}
       const badge = button.querySelector('.unread-badge');
@@ -719,6 +782,12 @@
     stagedAttachments = [];
     renderStagedAttachments();
   });
+  document.getElementById('postBody').addEventListener('keydown', (event) => {
+    if (event.key === 'Enter' && !event.shiftKey) {
+      event.preventDefault();
+      document.getElementById('postForm').requestSubmit();
+    }
+  });
 
   const EMOJIS = ['😀','😂','😊','😍','👍','🙏','🎉','❤️','😢','😮','🔥','👏','🙌','😅','🤔','😉','🥳','👋','✅','❌','🙈','💪','🌟','😴'];
   const emojiPanel = document.getElementById('emojiPanel');
@@ -797,6 +866,9 @@
     document.getElementById('tabPhotos').classList.remove('active');
     document.getElementById('discussionSection').hidden = false;
     document.getElementById('photosSection').hidden = true;
+    const selected = document.querySelector('#topicList button.active span');
+    document.getElementById('roomTitle').textContent = selected ? selected.textContent : 'Group chats';
+    document.getElementById('roomSubtitle').textContent = 'Approved members · group conversation';
   });
 
   document.getElementById('tabPhotos').addEventListener('click', () => {
@@ -804,6 +876,8 @@
     document.getElementById('tabDiscussion').classList.remove('active');
     document.getElementById('photosSection').hidden = false;
     document.getElementById('discussionSection').hidden = true;
+    document.getElementById('roomTitle').textContent = 'Photos';
+    document.getElementById('roomSubtitle').textContent = 'Private photos for your approved year';
     loadAgePhotos();
   });
 
@@ -995,6 +1069,8 @@
       return;
     }
     await loadTopics(profile);
+    if (location.hash === '#photos') document.getElementById('tabPhotos').click();
+    setInterval(() => { if (currentTopicId !== null && !document.hidden && !document.getElementById('discussionSection').hidden) loadPosts(); }, 20000);
   })();
 </script>
 <footer>

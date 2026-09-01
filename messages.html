@@ -7,30 +7,55 @@
 <link rel="stylesheet" href="style.css">
 <script src="site.js" defer></script>
 <style>
-  .messages-card { width:min(1120px,100%); text-align:left; }
-  .messages-layout { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:620px; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
-  .member-column { padding:16px; background:#f4f7f8; border-right:1px solid var(--border); }
+  .messages-card { width:min(1500px,calc(100vw - 36px)); max-width:none; padding:0; overflow:hidden; text-align:left; border-radius:18px; }
+  .messages-layout { display:grid; grid-template-columns:210px 320px minmax(0,1fr); min-height:690px; height:calc(100vh - 190px); max-height:850px; overflow:hidden; }
+  .message-sidebar { display:flex; flex-direction:column; gap:8px; padding:20px 14px; color:white; background:linear-gradient(180deg,#183247,#176e6b); }
+  .message-brand { padding:4px 8px 16px; font-size:20px; font-weight:800; }
+  .message-brand small { display:block; margin-top:3px; font-size:12px; font-weight:500; opacity:.72; }
+  .message-sidebar a, .message-sidebar button { display:flex; align-items:center; gap:10px; width:100%; margin:0; padding:11px 12px; color:white; background:transparent; border:0; border-radius:10px; text-decoration:none; text-align:left; font:inherit; font-weight:700; }
+  .message-sidebar a:hover, .message-sidebar button:hover, .message-sidebar .active { background:rgba(255,255,255,.15); }
+  .message-sidebar-spacer { flex:1; }
+  .member-column { min-width:0; padding:18px 12px; background:#f4f7f8; border-right:1px solid var(--border); }
   .member-column h2 { margin-top:0; }
   .member-column input { margin-top:0; }
-  .message-member-list { display:flex; flex-direction:column; gap:6px; max-height:510px; overflow:auto; }
-  .message-member { width:100%; display:flex; justify-content:space-between; gap:8px; text-align:left; background:white; color:var(--ink); border:1px solid var(--border); }
-  .message-member.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .message-member-list { display:flex; flex-direction:column; gap:6px; height:calc(100% - 92px); overflow:auto; }
+  .message-member { width:100%; min-height:58px; display:flex; align-items:center; gap:9px; padding:8px 10px; text-align:left; background:transparent; color:var(--ink); border:0; }
+  .message-member:hover { background:white; }
+  .message-member.active { background:#dcebe9; color:var(--ink); }
+  .member-avatar { flex:0 0 38px; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:white; background:#39718a; font-weight:800; }
+  .member-name { min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .unread-count { min-width:22px; height:22px; padding:0 6px; display:inline-grid; place-items:center; border-radius:999px; background:#c0392b; color:white; font-size:12px; }
   .conversation-column { display:flex; flex-direction:column; min-width:0; background:white; }
-  .conversation-header { padding:14px 18px; border-bottom:1px solid var(--border); }
+  .conversation-header { display:flex; align-items:center; min-height:68px; padding:12px 20px; border-bottom:1px solid var(--border); }
   .conversation-header h2 { margin:0; }
-  .conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; padding:18px; overflow:auto; max-height:500px; background:#fbfcfc; }
+  .conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; padding:22px 26px; overflow:auto; min-height:0; background:#f8fafb; }
   .private-bubble { max-width:75%; padding:10px 13px; border-radius:14px; background:white; border:1px solid var(--border); }
   .private-bubble.mine { align-self:flex-end; background:var(--accent); color:white; border-color:var(--accent); }
   .private-bubble p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
   .private-bubble small { display:block; margin-top:5px; opacity:.72; }
-  .message-compose { display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); }
+  .message-compose { display:flex; align-items:flex-end; gap:8px; padding:12px 16px; border-top:1px solid var(--border); }
   .message-compose textarea { flex:1; min-height:48px; max-height:130px; margin:0; resize:vertical; }
   .message-compose button { align-self:flex-end; }
-  @media (max-width:760px) {
+  .dm-emoji-toggle { flex:0 0 44px; width:44px; height:44px; padding:0; color:var(--ink); background:#eef2f3; border:1px solid var(--border); font-size:19px; }
+  .dm-emoji-panel { display:flex; flex-wrap:wrap; gap:4px; padding:8px 16px; border-top:1px solid var(--border); background:white; }
+  .dm-emoji-panel[hidden] { display:none; }
+  .dm-emoji-panel button { padding:5px 7px; color:var(--ink); background:transparent; border:0; font-size:18px; }
+  @media (max-width:920px) {
+    .messages-card { width:min(100% - 20px,760px); }
     .messages-layout { grid-template-columns:1fr; }
+    .message-sidebar { flex-direction:row; flex-wrap:wrap; padding:10px; }
+    .message-brand { width:100%; padding:4px 8px; }
+    .message-sidebar a, .message-sidebar button { width:auto; flex:1; justify-content:center; min-width:110px; }
+    .message-sidebar-spacer { display:none; }
     .member-column { border-right:0; border-bottom:1px solid var(--border); }
     .message-member-list { max-height:220px; }
+    .conversation-column { min-height:620px; }
+  }
+  @media (max-width:560px) {
+    .messages-card { width:calc(100% - 12px); }
+    .message-sidebar a, .message-sidebar button { min-width:calc(50% - 6px); }
+    .conversation-list { padding:16px 10px; }
+    .private-bubble { max-width:88%; }
   }
 </style>
 </head>
@@ -44,6 +69,15 @@
   <section class="card" id="messageGate"><p id="messageGateText">Checking your account…</p><a class="button" id="messageSignIn" href="login.html" hidden>Log In</a></section>
   <section class="card messages-card" id="messagesCard" hidden>
     <div class="messages-layout">
+      <aside class="message-sidebar" aria-label="Chat shortcuts">
+        <div class="message-brand">Khaso Chat<small>Member community</small></div>
+        <a href="index.html">⌂ Home</a>
+        <a href="ages.html">💬 Group chats</a>
+        <a class="active" href="messages.html">✉ Private messages</a>
+        <a href="ages.html#photos">▣ Photos</a>
+        <div class="message-sidebar-spacer"></div>
+        <a href="login.html">⚙ Account</a>
+      </aside>
       <aside class="member-column">
         <h2>Members</h2>
         <input id="messageMemberSearch" type="search" placeholder="Search members…">
@@ -52,7 +86,9 @@
       <section class="conversation-column">
         <div class="conversation-header"><h2 id="conversationTitle">Choose a member</h2></div>
         <div class="conversation-list" id="conversationList"><p>Select a member to start a private conversation.</p></div>
+        <div class="dm-emoji-panel" id="dmEmojiPanel" hidden></div>
         <form class="message-compose" id="messageForm" hidden>
+          <button type="button" class="dm-emoji-toggle" id="dmEmojiToggle" aria-label="Add emoji" title="Emoji">🙂</button>
           <textarea id="privateMessageBody" maxlength="4000" required placeholder="Write a private message…"></textarea>
           <button type="submit">Send</button>
         </form>
@@ -88,7 +124,8 @@
     list.innerHTML = '';
     visible.forEach((member) => {
       const button = document.createElement('button'); button.type='button'; button.className='message-member' + (activeMessageMember && activeMessageMember.id===member.id?' active':'');
-      const name = document.createElement('span'); name.textContent=memberName(member); button.appendChild(name);
+      const avatar = document.createElement('span'); avatar.className='member-avatar'; avatar.textContent=memberName(member).trim().charAt(0).toUpperCase()||'?'; button.appendChild(avatar);
+      const name = document.createElement('span'); name.className='member-name'; name.textContent=memberName(member); button.appendChild(name);
       const unread = inboxMessages.filter((msg)=>msg.sender_id===member.id && msg.recipient_id===messageSession.user.id && !msg.read_at).length;
       if(unread){const badge=document.createElement('span');badge.className='unread-count';badge.textContent=unread;button.appendChild(badge);}
       button.addEventListener('click',()=>selectConversation(member)); list.appendChild(button);
@@ -124,6 +161,17 @@
   }
 
   document.getElementById('messageMemberSearch').addEventListener('input',(event)=>renderMemberList(event.target.value));
+  document.querySelector('.message-brand').addEventListener('click',()=>document.getElementById('messageMemberSearch').focus());
+  const dmEmojiPanel=document.getElementById('dmEmojiPanel');
+  ['😀','😂','😍','👍','❤️','🙏','🎉','👏','😊','😢','🔥','✅'].forEach((emoji)=>{
+    const button=document.createElement('button');button.type='button';button.textContent=emoji;
+    button.addEventListener('click',()=>{const field=document.getElementById('privateMessageBody');field.value+=emoji;field.focus();dmEmojiPanel.hidden=true;});
+    dmEmojiPanel.appendChild(button);
+  });
+  document.getElementById('dmEmojiToggle').addEventListener('click',()=>{dmEmojiPanel.hidden=!dmEmojiPanel.hidden;});
+  document.getElementById('privateMessageBody').addEventListener('keydown',(event)=>{
+    if(event.key==='Enter'&&!event.shiftKey){event.preventDefault();document.getElementById('messageForm').requestSubmit();}
+  });
   document.getElementById('messageForm').addEventListener('submit',async(event)=>{
     event.preventDefault(); if(!activeMessageMember)return;
     const field=document.getElementById('privateMessageBody'); const body=field.value.trim(); if(!body)return;
