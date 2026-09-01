@@ -436,6 +436,7 @@
   }
   .chat-app-brand {
     min-height:44px;
+    margin-left:52px;
     padding:4px 10px 12px;
     color:#12324a;
     font-size:21px;
@@ -652,7 +653,7 @@
   @media (max-width:1120px) {
     .chat-page .chat-app-layout { grid-template-columns:82px 300px minmax(380px,1fr); }
     .chat-app-sidebar { padding:12px 8px; align-items:center; }
-    .chat-app-brand { padding:4px 0 12px; font-size:0; }
+    .chat-app-brand { margin:48px 0 0; padding:4px 0 12px; font-size:0; }
     .chat-app-brand small,.chat-nav-label,.chat-app-sidebar .section-tab:not(.active),.chat-app-sidebar .chat-nav-link,.presence-select,.chat-nav-spacer { font-size:0!important; }
     .chat-app-sidebar .section-tab,.chat-app-sidebar .chat-nav-link { width:52px; justify-content:center; padding:8px; }
     .chat-app-sidebar .section-tab svg,.chat-app-sidebar .chat-nav-link svg { width:22px; height:22px; }
@@ -676,7 +677,7 @@
     .chat-room-main { position:absolute; inset:0 0 64px; z-index:20; display:none; height:auto; border:0; }
     body.mobile-chat-open .chat-room-main { display:flex; }
     body.mobile-chat-open .chat-list-pane { display:none; }
-    .mobile-back-button { display:grid; flex:0 0 40px; }
+    .mobile-back-button { display:grid; flex:0 0 40px; margin-left:48px; }
     .chat-room-header { min-height:64px; flex-wrap:nowrap; padding:8px 10px; }
     .room-avatar { width:36px; height:36px; flex-basis:36px; border-radius:12px; }
     .room-identity { min-width:0; }
@@ -725,10 +726,8 @@
         <div class="chat-nav-spacer"></div>
         <select class="presence-select" id="presenceStatus" aria-label="Your chat status"><option value="available">● Available</option><option value="busy">● Busy</option><option value="away">● Away</option></select>
         <button type="button" class="chat-nav-link sidebar-setting" id="onlinePrivacyToggle">Online status: Visible</button>
-        <a class="chat-nav-link" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 12h14M5 12l5-5M5 12l5 5"/></svg>Website Home</a>
         <button type="button" class="chat-nav-link sidebar-setting" id="soundToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9c1.5 1.5 1.5 4.5 0 6M19.5 6.5c3 3 3 8 0 11"/></svg>Sounds: Off</button>
         <button type="button" class="chat-nav-link sidebar-setting" id="notificationToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg>Notifications: Off</button>
-        <a class="chat-nav-link" href="login.html"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.7-4.2 3-6 7-6s6.3 1.8 7 6"/></svg>Account</a>
       </aside>
       <aside class="chat-list-pane">
         <h2 id="chatListTitle">Chats</h2>
@@ -831,6 +830,8 @@
   <dialog class="app-dialog" id="scheduleDialog"><div class="dialog-head"><h3>Schedule private message</h3><button type="button" class="icon-button" data-close-dialog="scheduleDialog" aria-label="Close scheduled message">✕</button></div><form class="dialog-body" id="scheduleForm"><label>Send date and time<input id="scheduleTime" type="datetime-local" required></label><p>The message will send when any approved member has Kasho Chat open.</p><button type="submit">Schedule message</button></form></dialog>
 
 </main>
+
+<footer></footer>
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
