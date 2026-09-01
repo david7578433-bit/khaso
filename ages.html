@@ -579,7 +579,10 @@
   let activeThreadRoot = null;
   function profileName(p) {
     if (!p) return 'Member';
-    return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
+    const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
+    const displayName = String(p.display_name || '').trim();
+    if (fullName && /^(administrator|admin|owner)$/i.test(displayName)) return fullName;
+    return displayName || fullName || 'Member';
   }
   function draftKey(type,id) { return 'kasho_chat_draft_' + type + '_' + id; }
   function saveCurrentDraft() {
