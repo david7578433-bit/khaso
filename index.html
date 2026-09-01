@@ -555,14 +555,16 @@
 
   loadHomeUpdates();
   async function loadFeaturedBusinesses() {
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
       .from('businesses')
-      .select('name, description')
+      .select('name, description, featured, created_at')
       .eq('approved', true)
-      .eq('featured', true)
       .order('created_at', { ascending: false });
 
-    if (!data || data.length === 0) return;
+    if (error || !data || data.length === 0) return;
+
+    const featuredBusinesses = data.filter((business) => business.featured);
+    const ads = featuredBusinesses.length ? featuredBusinesses : data.slice(0, 1);
 
     const strip = document.getElementById('adStrip');
     const nameEl = document.getElementById('adStripName');
@@ -570,16 +572,16 @@
     let index = 0;
 
     function show(i) {
-      nameEl.textContent = data[i].name;
-      descEl.textContent = data[i].description || '';
+      nameEl.textContent = ads[i].name;
+      descEl.textContent = ads[i].description || '';
     }
 
     show(0);
     strip.hidden = false;
 
-    if (data.length > 1) {
+    if (ads.length > 1) {
       setInterval(() => {
-        index = (index + 1) % data.length;
+        index = (index + 1) % ads.length;
         show(index);
       }, 6000);
     }
