@@ -299,6 +299,36 @@
   }
 
 
+  .image-announcement {
+    width: min(345px, calc(100% - 40px));
+    margin: 24px auto 0;
+    padding: 12px;
+    display: block;
+    background: var(--paper);
+    border: 1px solid var(--border);
+    border-top: 5px solid var(--teal);
+    border-radius: 16px;
+    box-shadow: 0 10px 28px rgba(30, 50, 68, .12);
+    text-decoration: none;
+    transition: transform .12s, box-shadow .12s;
+  }
+
+
+  .image-announcement:hover,
+  .image-announcement:focus-visible {
+    transform: translateY(-2px);
+    box-shadow: 0 14px 32px rgba(30, 50, 68, .18);
+  }
+
+
+  .image-announcement img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 9px;
+  }
+
+
   .ad-strip {
     width: calc(100% - 104px);
     max-width: 1040px;
@@ -467,6 +497,9 @@
       <p id="announcementContent2"></p>
     </div>
     </div>
+    <a class="image-announcement" href="announcement-kavod-kedusha.png" target="_blank" rel="noopener" aria-label="Open announcement full size">
+      <img src="announcement-kavod-kedusha.png" alt="Announcement about strengthening holiness and appointing Rabbi Moshe Mendel HaCohen Katz as moreh tzedek in the new beis medrash in Williamsburg">
+    </a>
     <a class="ad-strip" id="adStrip" href="business.html" hidden>
       <span class="ad-tag">Business</span>
       <span class="ad-text"><strong id="adStripName"></strong><span id="adStripDesc"></span></span>
