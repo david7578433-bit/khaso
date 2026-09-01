@@ -1,0 +1,150 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Private Messages | ברכת שמים קאשוי</title>
+<link rel="stylesheet" href="style.css">
+<script src="site.js" defer></script>
+<style>
+  .messages-card { width:min(1120px,100%); text-align:left; }
+  .messages-layout { display:grid; grid-template-columns:320px minmax(0,1fr); min-height:620px; border:1px solid var(--border); border-radius:14px; overflow:hidden; }
+  .member-column { padding:16px; background:#f4f7f8; border-right:1px solid var(--border); }
+  .member-column h2 { margin-top:0; }
+  .member-column input { margin-top:0; }
+  .message-member-list { display:flex; flex-direction:column; gap:6px; max-height:510px; overflow:auto; }
+  .message-member { width:100%; display:flex; justify-content:space-between; gap:8px; text-align:left; background:white; color:var(--ink); border:1px solid var(--border); }
+  .message-member.active { background:var(--accent); color:white; border-color:var(--accent); }
+  .unread-count { min-width:22px; height:22px; padding:0 6px; display:inline-grid; place-items:center; border-radius:999px; background:#c0392b; color:white; font-size:12px; }
+  .conversation-column { display:flex; flex-direction:column; min-width:0; background:white; }
+  .conversation-header { padding:14px 18px; border-bottom:1px solid var(--border); }
+  .conversation-header h2 { margin:0; }
+  .conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; padding:18px; overflow:auto; max-height:500px; background:#fbfcfc; }
+  .private-bubble { max-width:75%; padding:10px 13px; border-radius:14px; background:white; border:1px solid var(--border); }
+  .private-bubble.mine { align-self:flex-end; background:var(--accent); color:white; border-color:var(--accent); }
+  .private-bubble p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
+  .private-bubble small { display:block; margin-top:5px; opacity:.72; }
+  .message-compose { display:flex; gap:8px; padding:14px; border-top:1px solid var(--border); }
+  .message-compose textarea { flex:1; min-height:48px; max-height:130px; margin:0; resize:vertical; }
+  .message-compose button { align-self:flex-end; }
+  @media (max-width:760px) {
+    .messages-layout { grid-template-columns:1fr; }
+    .member-column { border-right:0; border-bottom:1px solid var(--border); }
+    .message-member-list { max-height:220px; }
+  }
+</style>
+</head>
+<body data-testing-page>
+<header><img class="site-logo" src="logo.png" alt="ברכת שמים קאשוי"><h1>Private Messages</h1></header>
+<nav>
+  <a href="index.html">Home</a><a href="community.html">Community</a><a href="ages.html">Ages</a><a href="messages.html" aria-current="page">Messages</a><a href="login.html">Account</a>
+  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+</nav>
+<main hidden>
+  <section class="card" id="messageGate"><p id="messageGateText">Checking your account…</p><a class="button" id="messageSignIn" href="login.html" hidden>Log In</a></section>
+  <section class="card messages-card" id="messagesCard" hidden>
+    <div class="messages-layout">
+      <aside class="member-column">
+        <h2>Members</h2>
+        <input id="messageMemberSearch" type="search" placeholder="Search members…">
+        <div class="message-member-list" id="messageMemberList"></div>
+      </aside>
+      <section class="conversation-column">
+        <div class="conversation-header"><h2 id="conversationTitle">Choose a member</h2></div>
+        <div class="conversation-list" id="conversationList"><p>Select a member to start a private conversation.</p></div>
+        <form class="message-compose" id="messageForm" hidden>
+          <textarea id="privateMessageBody" maxlength="4000" required placeholder="Write a private message…"></textarea>
+          <button type="submit">Send</button>
+        </form>
+      </section>
+    </div>
+    <p id="messageStatus" role="status" aria-live="polite"></p>
+  </section>
+</main>
+<footer><a href="index.html">Home</a><a href="community.html">Community</a><a href="ages.html">Ages</a><a href="messages.html">Messages</a><a href="login.html">Account</a></footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="member-auth.js"></script>
+<script>
+  let messageSession = null;
+  let messageMembers = [];
+  let activeMessageMember = null;
+  let inboxMessages = [];
+
+  function memberName(member) {
+    return member.display_name || [member.first_name,member.last_name].filter(Boolean).join(' ') || 'Member';
+  }
+
+  async function refreshInbox() {
+    const result = await memberClient.from('private_messages').select('*').or('sender_id.eq.' + messageSession.user.id + ',recipient_id.eq.' + messageSession.user.id).order('created_at',{ascending:false}).limit(500);
+    if (result.error) { document.getElementById('messageStatus').textContent = 'Private messages will work after the database update.'; return; }
+    inboxMessages = result.data || [];
+    renderMemberList(document.getElementById('messageMemberSearch').value);
+  }
+
+  function renderMemberList(query) {
+    const list = document.getElementById('messageMemberList');
+    const normalized = (query || '').trim().toLowerCase();
+    const visible = messageMembers.filter((member) => memberName(member).toLowerCase().includes(normalized));
+    list.innerHTML = '';
+    visible.forEach((member) => {
+      const button = document.createElement('button'); button.type='button'; button.className='message-member' + (activeMessageMember && activeMessageMember.id===member.id?' active':'');
+      const name = document.createElement('span'); name.textContent=memberName(member); button.appendChild(name);
+      const unread = inboxMessages.filter((msg)=>msg.sender_id===member.id && msg.recipient_id===messageSession.user.id && !msg.read_at).length;
+      if(unread){const badge=document.createElement('span');badge.className='unread-count';badge.textContent=unread;button.appendChild(badge);}
+      button.addEventListener('click',()=>selectConversation(member)); list.appendChild(button);
+    });
+    if(!visible.length) list.innerHTML='<p>No members found.</p>';
+  }
+
+  async function selectConversation(member) {
+    activeMessageMember=member;
+    renderMemberList(document.getElementById('messageMemberSearch').value);
+    document.getElementById('conversationTitle').textContent=memberName(member);
+    document.getElementById('messageForm').hidden=false;
+    await loadConversation();
+    history.replaceState(null,'','messages.html?with='+encodeURIComponent(member.id));
+  }
+
+  async function loadConversation() {
+    if(!activeMessageMember)return;
+    const me=messageSession.user.id, other=activeMessageMember.id;
+    const result=await memberClient.from('private_messages').select('*').or('and(sender_id.eq.'+me+',recipient_id.eq.'+other+'),and(sender_id.eq.'+other+',recipient_id.eq.'+me+')').order('created_at');
+    const list=document.getElementById('conversationList'); list.innerHTML='';
+    if(result.error){list.innerHTML='<p>Could not load conversation: '+result.error.message+'</p>';return;}
+    (result.data||[]).forEach((msg)=>{
+      const bubble=document.createElement('div'); bubble.className='private-bubble'+(msg.sender_id===me?' mine':'');
+      const body=document.createElement('p');body.textContent=msg.body;
+      const time=document.createElement('small');time.textContent=new Date(msg.created_at).toLocaleString()+(msg.sender_id===me&&msg.read_at?' · Read':'');
+      bubble.appendChild(body);bubble.appendChild(time);list.appendChild(bubble);
+    });
+    if(!result.data||!result.data.length)list.innerHTML='<p>No messages yet. Say hello.</p>';
+    list.scrollTop=list.scrollHeight;
+    await memberClient.rpc('mark_private_messages_read',{other_user:other});
+    await refreshInbox();
+  }
+
+  document.getElementById('messageMemberSearch').addEventListener('input',(event)=>renderMemberList(event.target.value));
+  document.getElementById('messageForm').addEventListener('submit',async(event)=>{
+    event.preventDefault(); if(!activeMessageMember)return;
+    const field=document.getElementById('privateMessageBody'); const body=field.value.trim(); if(!body)return;
+    const status=document.getElementById('messageStatus');status.textContent='Sending…';
+    const result=await memberClient.from('private_messages').insert({sender_id:messageSession.user.id,recipient_id:activeMessageMember.id,body});
+    if(result.error)status.textContent='Could not send: '+result.error.message;
+    else{field.value='';status.textContent='';await loadConversation();}
+  });
+
+  (async()=>{
+    const {session,profile}=await getMemberStatus(); const gate=document.getElementById('messageGate');
+    if(!session){document.getElementById('messageGateText').textContent='Log in to use private messages.';document.getElementById('messageSignIn').hidden=false;return;}
+    if(!profile||!profile.approved){document.getElementById('messageGateText').textContent='Your account is waiting for admin approval.';return;}
+    messageSession=session;
+    const members=await memberClient.from('profiles').select('id,display_name,first_name,last_name').eq('approved',true).eq('directory_approved',true).neq('id',session.user.id).order('display_name');
+    if(members.error){document.getElementById('messageGateText').textContent='Could not load members.';return;}
+    messageMembers=members.data||[]; gate.hidden=true;document.getElementById('messagesCard').hidden=false;
+    await refreshInbox();
+    const requested=new URLSearchParams(location.search).get('with'); const selected=messageMembers.find((member)=>member.id===requested); if(selected)await selectConversation(selected);
+    setInterval(async()=>{await refreshInbox();if(activeMessageMember)await loadConversation();},20000);
+  })();
+</script>
+</body>
+</html>

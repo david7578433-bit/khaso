@@ -96,8 +96,23 @@ window.startMemberPresence = async function () {
   document.addEventListener('visibilitychange', updatePresence);
 };
 
+window.checkYahrzeitReminders = async function () {
+  const { session, profile } = await window.getMemberStatus();
+  if (!session || !profile || !profile.approved) return;
+  try {
+    const parts = new Intl.DateTimeFormat('en-u-ca-hebrew', {day:'numeric',month:'long',year:'numeric'}).formatToParts(new Date());
+    const value = (type) => parts.find((part) => part.type === type)?.value;
+    const month = value('month');
+    const day = Number(value('day'));
+    const year = Number(value('year'));
+    if (!month || !day || !year) return;
+    await window.memberClient.rpc('create_today_yahrzeit_reminders', {today_month:month,today_day:day,today_year:year});
+  } catch (_) { /* Older browsers may not support the Hebrew calendar. */ }
+};
+
 if (document.readyState === 'loading') {
-  document.addEventListener('DOMContentLoaded', () => window.startMemberPresence());
+  document.addEventListener('DOMContentLoaded', () => { window.startMemberPresence(); window.checkYahrzeitReminders(); });
 } else {
   window.startMemberPresence();
+  window.checkYahrzeitReminders();
 }

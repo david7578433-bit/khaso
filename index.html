@@ -430,6 +430,7 @@
         <a class="login-btn" href="login.html" id="loginLink"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
         <button type="button" class="login-btn account-toggle" id="accountToggle" hidden>Account ▾</button>
         <div class="dropdown-menu" id="dropdownMenu" hidden>
+          <a href="messages.html">Private Messages</a>
           <a href="admin.html" id="adminMenuLink" hidden>Admin Dashboard</a>
           <button type="button" id="signOutBtn">Sign Out</button>
         </div>
@@ -520,7 +521,6 @@
 
 
   loadHomeUpdates();
-
   async function loadFeaturedBusinesses() {
     const { data } = await supabaseClient
       .from('businesses')
@@ -576,6 +576,9 @@
       if (profile && (profile.role === 'owner' || profile.role === 'admin')) {
         adminMenuLink.hidden = false;
       }
+
+      const unreadMessages = await supabaseClient.from('private_messages').select('*',{count:'exact',head:true}).eq('recipient_id',session.user.id).is('read_at',null);
+      if (!unreadMessages.error && unreadMessages.count) accountToggle.textContent = 'Account (' + unreadMessages.count + ') ▾';
 
 
       accountToggle.addEventListener('click', (event) => {

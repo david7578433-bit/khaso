@@ -224,6 +224,8 @@
         <form id="yahrzeitForm" class="form-grid">
           <div><label for="yahrzeitName">Name</label><input id="yahrzeitName" required></div>
           <div><label for="yahrzeitDate">Hebrew date</label><input id="yahrzeitDate" required placeholder="י׳ אלול"></div>
+          <div><label for="yahrzeitMonth">Reminder month</label><select id="yahrzeitMonth" required><option value="">Choose…</option><option>Tishri</option><option>Heshvan</option><option>Kislev</option><option>Tevet</option><option>Shevat</option><option>Adar</option><option>Adar I</option><option>Adar II</option><option>Nisan</option><option>Iyar</option><option>Sivan</option><option>Tamuz</option><option>Av</option><option>Elul</option></select></div>
+          <div><label for="yahrzeitDay">Reminder day</label><input id="yahrzeitDay" type="number" min="1" max="30" required></div>
           <div class="wide"><label for="yahrzeitNotes">Notes</label><input id="yahrzeitNotes"></div>
           <button type="submit">Add Yahrzeit</button>
         </form>
@@ -1220,13 +1222,28 @@
       const list = document.getElementById('adminYahrzeitsList');
       const { data, error } = await supabaseClient.from('yahrzeits').select('*').order('created_at', {ascending:false});
       if (error) { list.innerHTML = '<p>Yahrzeits will appear after the database upgrade.</p>'; return; }
-      list.innerHTML = (data || []).map((item) => '<div class="admin-list-item"><strong>' + item.name + '</strong> · ' + item.hebrew_date + '</div>').join('') || '<p>No yahrzeits yet.</p>';
+      list.innerHTML = '';
+      const months = ['Tishri','Heshvan','Kislev','Tevet','Shevat','Adar','Adar I','Adar II','Nisan','Iyar','Sivan','Tamuz','Av','Elul'];
+      (data || []).forEach((item) => {
+        const row = document.createElement('div'); row.className = 'admin-list-item';
+        const title = document.createElement('p'); const strong = document.createElement('strong'); strong.textContent = item.name; title.appendChild(strong); title.append(' · ' + item.hebrew_date); row.appendChild(title);
+        const month = document.createElement('select');
+        const empty = document.createElement('option'); empty.value=''; empty.textContent='Reminder month'; month.appendChild(empty);
+        months.forEach((value)=>{const option=document.createElement('option');option.value=value;option.textContent=value;option.selected=item.reminder_month===value;month.appendChild(option);});
+        const day = document.createElement('input'); day.type='number'; day.min='1'; day.max='30'; day.placeholder='Day'; day.value=item.reminder_day||''; day.style.maxWidth='90px';
+        const save = document.createElement('button'); save.type='button'; save.textContent='Save Reminder';
+        save.addEventListener('click',async()=>{const result=await supabaseClient.from('yahrzeits').update({reminder_month:month.value||null,reminder_day:day.value?Number(day.value):null}).eq('id',item.id);if(result.error)setStatus(result.error.message,true);else{setStatus('Yahrzeit reminder saved.');await logAdminAction('update','yahrzeit',item.id,{reminder_month:month.value,reminder_day:day.value});}});
+        const remove = document.createElement('button'); remove.type='button'; remove.textContent='Delete';
+        remove.addEventListener('click',async()=>{if(!confirm('Delete this Yahrzeit?'))return;const result=await supabaseClient.from('yahrzeits').delete().eq('id',item.id);if(result.error)setStatus(result.error.message,true);else{await logAdminAction('delete','yahrzeit',item.id,{name:item.name});await loadYahrzeitsAdmin();}});
+        row.appendChild(month); row.appendChild(day); row.appendChild(save); row.appendChild(remove); list.appendChild(row);
+      });
+      if (!data || !data.length) list.innerHTML = '<p>No yahrzeits yet.</p>';
     }
 
     document.getElementById('yahrzeitForm').addEventListener('submit', async (event) => {
       event.preventDefault();
       const { data: { session } } = await supabaseClient.auth.getSession();
-      const payload = { name:document.getElementById('yahrzeitName').value.trim(), hebrew_date:document.getElementById('yahrzeitDate').value.trim(), notes:document.getElementById('yahrzeitNotes').value.trim() || null, created_by:session.user.id };
+      const payload = { name:document.getElementById('yahrzeitName').value.trim(), hebrew_date:document.getElementById('yahrzeitDate').value.trim(), reminder_month:document.getElementById('yahrzeitMonth').value.trim(), reminder_day:Number(document.getElementById('yahrzeitDay').value), notes:document.getElementById('yahrzeitNotes').value.trim() || null, created_by:session.user.id };
       const result = await supabaseClient.from('yahrzeits').insert(payload);
       if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Yahrzeit added.'); await logAdminAction('create','yahrzeit',null,payload); await loadYahrzeitsAdmin(); }
     });

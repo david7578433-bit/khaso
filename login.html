@@ -262,6 +262,7 @@
     <p>You're signed in and approved.</p>
     <div class="member-panel">
       <h2>Notifications</h2>
+      <p><a class="button" href="messages.html">Open Private Messages</a></p>
       <div id="notificationsList"><p>Loading…</p></div>
     </div>
     <div class="member-panel">
@@ -553,7 +554,13 @@
       const name = document.createElement('strong'); name.textContent = member.display_name || [member.first_name,member.last_name].filter(Boolean).join(' ') || 'Member';
       const details = document.createElement('p'); details.style.margin = '4px 0 0'; details.style.color = 'var(--muted)';
       details.textContent = [member.show_city ? member.city : '', member.jewish_year, member.show_phone ? member.phone_number : '', member.show_email ? member.email : ''].filter(Boolean).join(' · ');
-      info.appendChild(name); info.appendChild(details); row.appendChild(info); list.appendChild(row);
+      info.appendChild(name); info.appendChild(details); row.appendChild(info);
+      const messageLink = document.createElement('a');
+      messageLink.className = 'button';
+      messageLink.href = 'messages.html?with=' + encodeURIComponent(member.id);
+      messageLink.textContent = 'Message';
+      row.appendChild(messageLink);
+      list.appendChild(row);
     });
     if (!items.length) list.innerHTML = '<p>No approved directory members found.</p>';
   }
