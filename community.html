@@ -28,6 +28,13 @@
   .pdf-dialog iframe { display:block; width:100%; height:calc(100% - 112px); border:0; background:#eef2f3; }
   .pdf-dialog-actions { display:flex; gap:8px; padding:10px 16px; border-top:1px solid var(--border); }
   .print-sheet { display:none; }
+  .poll-option { display:grid; grid-template-columns:minmax(120px,1fr) auto; gap:8px; align-items:center; margin:8px 0; }
+  .poll-bar { height:8px; background:#dbe5e7; border-radius:999px; overflow:hidden; margin-top:4px; }
+  .poll-bar span { display:block; height:100%; background:var(--accent); }
+  .ride-form { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:10px; }
+  .ride-form .wide { grid-column:1 / -1; }
+  .ride-form label { margin:0; }
+  @media (max-width:650px) { .ride-form { grid-template-columns:1fr; } .ride-form .wide { grid-column:auto; } }
   @media print {
     body.printing-event > *:not(.print-sheet) { display:none !important; }
     body.printing-event .print-sheet { display:block !important; padding:24px; color:#111; font-family:Georgia,serif; }
@@ -79,6 +86,27 @@
     </section>
 
     <section class="card">
+      <h2>Member Polls</h2>
+      <div id="pollsList"><p class="empty">Sign in as an approved member to vote.</p></div>
+    </section>
+
+    <section class="card">
+      <h2>Ride Sharing</h2>
+      <form id="rideForm" class="ride-form" hidden>
+        <label>Type<select id="rideType"><option value="request">Need a ride</option><option value="offer">Offering a ride</option></select></label>
+        <label>Date & time<input id="rideTime" type="datetime-local" required></label>
+        <label>From<input id="rideFrom" required maxlength="150"></label>
+        <label>To<input id="rideTo" required maxlength="150"></label>
+        <label>Seats<input id="rideSeats" type="number" min="1" max="20"></label>
+        <label>Contact<input id="rideContact" maxlength="150"></label>
+        <label class="wide">Notes<input id="rideNotes" maxlength="500"></label>
+        <button type="submit">Post Ride</button>
+      </form>
+      <p id="rideStatus" role="status"></p>
+      <div id="ridesList"><p class="empty">Sign in as an approved member to see rides.</p></div>
+    </section>
+
+    <section class="card">
       <h2>Suggestion Box</h2>
       <p>Anyone may privately send an idea to the admins.</p>
       <form id="suggestionForm">
@@ -112,6 +140,8 @@
 <script>
   const communityClient = window.supabase.createClient(MEMBER_SUPABASE_URL, MEMBER_SUPABASE_KEY);
   let allEvents = [];
+  let communitySession = null;
+  let communityProfile = null;
 
   function esc(value) {
     const div = document.createElement('div');
@@ -166,6 +196,9 @@
   async function loadMemberContent() {
     const { session, profile } = await getMemberStatus();
     if (!session || !profile || !profile.approved) return;
+    communitySession = session;
+    communityProfile = profile;
+    document.getElementById('rideForm').hidden = false;
 
     const [forms, jobs] = await Promise.all([
       communityClient.from('community_forms').select('*').eq('active', true).order('created_at', {ascending:false}),
@@ -179,8 +212,87 @@
         '<a href="' + url + '" target="_blank" rel="noopener">Open / Download</a></div></article>';
     }).join('') || '<p class="empty">No forms posted.</p>';
     document.getElementById('jobsList').innerHTML = (jobs.data || []).map((item) => '<article class="item"><h3>' + esc(item.title) + '</h3>' + (item.description ? '<p>' + esc(item.description) + '</p>' : '') + (item.location ? '<p class="meta">📍 ' + esc(item.location) + '</p>' : '') + (item.contact ? '<p class="meta">Contact: ' + esc(item.contact) + '</p>' : '') + '</article>').join('') || '<p class="empty">No jobs posted.</p>';
-
+    await Promise.all([loadPolls(), loadRides()]);
   }
+
+  async function loadPolls() {
+    const list = document.getElementById('pollsList');
+    const [pollResult, voteResult] = await Promise.all([
+      communityClient.from('polls').select('*').eq('active', true).order('created_at', {ascending:false}),
+      communityClient.from('poll_votes').select('poll_id,user_id,option_index')
+    ]);
+    if (pollResult.error || voteResult.error) { list.innerHTML = '<p class="empty">Polls will appear after the database update.</p>'; return; }
+    const now = new Date();
+    const polls = (pollResult.data || []).filter((poll) => !poll.closes_at || new Date(poll.closes_at) > now);
+    list.innerHTML = polls.map((poll) => {
+      const options = Array.isArray(poll.options) ? poll.options : [];
+      const votes = (voteResult.data || []).filter((vote) => vote.poll_id === poll.id);
+      const mine = votes.find((vote) => vote.user_id === communitySession.user.id);
+      return '<article class="item"><h3>' + esc(poll.question) + '</h3>' + options.map((option,index) => {
+        const count = votes.filter((vote) => vote.option_index === index).length;
+        const percent = votes.length ? Math.round(count * 100 / votes.length) : 0;
+        return '<div class="poll-option"><div><strong>' + esc(option) + '</strong><div class="poll-bar"><span style="width:' + percent + '%"></span></div></div>' +
+          '<button type="button" class="poll-vote" data-poll="' + poll.id + '" data-option="' + index + '">' + (mine && mine.option_index === index ? '✓ Voted' : count + ' vote' + (count === 1 ? '' : 's')) + '</button></div>';
+      }).join('') + '<p class="meta">' + votes.length + ' total vote' + (votes.length === 1 ? '' : 's') + '</p></article>';
+    }).join('') || '<p class="empty">No active polls.</p>';
+  }
+
+  document.getElementById('pollsList').addEventListener('click', async (event) => {
+    const button = event.target.closest('.poll-vote');
+    if (!button || !communitySession) return;
+    button.disabled = true;
+    const result = await communityClient.from('poll_votes').upsert({
+      poll_id:button.dataset.poll,
+      user_id:communitySession.user.id,
+      option_index:Number(button.dataset.option),
+      created_at:new Date().toISOString()
+    }, {onConflict:'poll_id,user_id'});
+    if (result.error) document.getElementById('rideStatus').textContent = 'Could not save vote: ' + result.error.message;
+    await loadPolls();
+  });
+
+  async function loadRides() {
+    const list = document.getElementById('ridesList');
+    const result = await communityClient.from('rides').select('*,profiles(first_name,last_name,display_name)').gte('depart_at', new Date().toISOString()).order('depart_at');
+    if (result.error) { list.innerHTML = '<p class="empty">Ride sharing will appear after the database update.</p>'; return; }
+    list.innerHTML = (result.data || []).map((ride) => {
+      const p = ride.profiles || {};
+      const name = [p.first_name,p.last_name].filter(Boolean).join(' ') || p.display_name || 'Member';
+      const own = communitySession && ride.user_id === communitySession.user.id;
+      return '<article class="item"><span class="tag">' + (ride.ride_type === 'offer' ? 'Offering a ride' : 'Needs a ride') + '</span>' +
+        '<h3>' + esc(ride.from_location) + ' → ' + esc(ride.to_location) + '</h3><p class="meta">' + esc(eventDate(ride.depart_at)) + ' · ' + esc(name) + '</p>' +
+        (ride.seats ? '<p>Seats: ' + esc(ride.seats) + '</p>' : '') + (ride.contact ? '<p>Contact: ' + esc(ride.contact) + '</p>' : '') + (ride.notes ? '<p>' + esc(ride.notes) + '</p>' : '') +
+        (own ? '<button type="button" class="ride-delete" data-id="' + ride.id + '">Remove</button>' : '') + '</article>';
+    }).join('') || '<p class="empty">No upcoming rides posted.</p>';
+  }
+
+  document.getElementById('rideForm').addEventListener('submit', async (event) => {
+    event.preventDefault();
+    if (!communitySession) return;
+    const status = document.getElementById('rideStatus');
+    status.textContent = 'Posting…';
+    const payload = {
+      user_id:communitySession.user.id,
+      ride_type:document.getElementById('rideType').value,
+      from_location:document.getElementById('rideFrom').value.trim(),
+      to_location:document.getElementById('rideTo').value.trim(),
+      depart_at:new Date(document.getElementById('rideTime').value).toISOString(),
+      seats:document.getElementById('rideSeats').value ? Number(document.getElementById('rideSeats').value) : null,
+      contact:document.getElementById('rideContact').value.trim() || null,
+      notes:document.getElementById('rideNotes').value.trim() || null
+    };
+    const result = await communityClient.from('rides').insert(payload);
+    if (result.error) status.textContent = 'Could not post ride: ' + result.error.message;
+    else { event.target.reset(); status.textContent = 'Ride posted.'; await loadRides(); }
+  });
+
+  document.getElementById('ridesList').addEventListener('click', async (event) => {
+    const button = event.target.closest('.ride-delete');
+    if (!button || !communitySession || !confirm('Remove this ride?')) return;
+    const result = await communityClient.from('rides').delete().eq('id',button.dataset.id).eq('user_id',communitySession.user.id);
+    if (result.error) document.getElementById('rideStatus').textContent = result.error.message;
+    else await loadRides();
+  });
 
   document.getElementById('suggestionForm').addEventListener('submit', async (event) => {
     event.preventDefault();

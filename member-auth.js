@@ -75,3 +75,29 @@ window.isProfileComplete = function (profile) {
   if (!profile) return false;
   return !!(profile.first_name && profile.last_name && profile.phone_number && profile.city);
 };
+
+// Keep a private last-seen record. Only admins can see everyone; a member can
+// read and update only their own row.
+window.startMemberPresence = async function () {
+  const { session, profile } = await window.getMemberStatus();
+  if (!session || !profile || !profile.approved) return;
+  const name = [profile.first_name, profile.last_name].filter(Boolean).join(' ') || profile.display_name || 'Member';
+  const updatePresence = async () => {
+    if (document.visibilityState === 'hidden') return;
+    await window.memberClient.from('member_presence').upsert({
+      user_id: session.user.id,
+      display_name: name,
+      current_page: window.location.pathname.split('/').pop() || 'index.html',
+      last_seen_at: new Date().toISOString()
+    }, { onConflict: 'user_id' });
+  };
+  await updatePresence();
+  window.setInterval(updatePresence, 60000);
+  document.addEventListener('visibilitychange', updatePresence);
+};
+
+if (document.readyState === 'loading') {
+  document.addEventListener('DOMContentLoaded', () => window.startMemberPresence());
+} else {
+  window.startMemberPresence();
+}

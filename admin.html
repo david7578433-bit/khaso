@@ -78,16 +78,7 @@
     #section-photos,
     #section-messages,
     #section-submissions,
-    #section-businesses,
     #section-manage-pictures { grid-column:1 / -1; }
-    .biz-listing { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; align-items: flex-start; margin-bottom: 12px; }
-    .biz-listing img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
-    .biz-listing .biz-info { flex: 1; }
-    .biz-listing .biz-info h3 { margin: 0 0 4px; }
-    .biz-listing .biz-info p { margin: 4px 0; color: var(--muted); font-size: 13px; }
-    .biz-listing-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
-    .biz-listing-actions button { padding: 6px 12px; }
-    .biz-listing-actions label { display: flex; align-items: center; gap: 5px; font-size: 13px; margin: 0; }
     .admin-content input,
     .admin-content select,
     .admin-content textarea { padding:9px 10px; margin-bottom:8px; }
@@ -169,6 +160,7 @@
       <nav class="admin-quicknav" aria-label="Admin sections">
         <span class="admin-nav-label">Overview</span>
         <a href="#section-dashboard">Dashboard</a>
+        <a href="#section-online">Who Is Online</a>
         <a href="#section-site-settings">Testing Mode</a>
         <span class="admin-nav-label">Community</span>
         <a href="#section-events">Events</a>
@@ -185,7 +177,6 @@
         <a href="#section-photos">Photos</a>
         <a href="#section-messages">Messages</a>
         <a href="#section-submissions">Submissions</a>
-        <a href="#section-businesses">Businesses</a>
         <span class="admin-nav-label">Gallery</span>
         <a href="#section-add-picture">Add Picture</a>
         <a href="#section-manage-pictures">Manage Pictures</a>
@@ -194,6 +185,12 @@
       <div class="section-item" id="section-dashboard">
         <h2>Dashboard</h2>
         <div class="stats-grid" id="dashboardStats"><p>Loading…</p></div>
+      </div>
+
+      <div class="section-item" id="section-online">
+        <h2>Who Is Online</h2>
+        <p class="meta">Only admins can see this. “Online” means active during the last 3 minutes.</p>
+        <div id="onlineMembersList"><p>Loading…</p></div>
       </div>
 
       <div class="section-item" id="section-site-settings">
@@ -258,6 +255,16 @@
           <div class="wide"><label for="campaignUrl">Secure donation link</label><input id="campaignUrl" type="url"></div>
           <button type="submit">Add Campaign</button>
         </form>
+        <h3>Create a member poll</h3>
+        <form id="pollAdminForm" class="form-grid">
+          <div class="wide"><label for="pollQuestion">Question</label><input id="pollQuestion" required maxlength="300"></div>
+          <div class="wide"><label for="pollOptions">Answers (one answer per line)</label><textarea id="pollOptions" required placeholder="Yes&#10;No"></textarea></div>
+          <div><label for="pollCloses">Closing date (optional)</label><input id="pollCloses" type="datetime-local"></div>
+          <button type="submit">Create Poll</button>
+        </form>
+        <div id="adminPollsList"></div>
+        <h3>Manage ride sharing</h3>
+        <div id="adminRidesList"></div>
       </div>
 
       <div class="section-item" id="section-suggestions">
@@ -296,6 +303,8 @@
       </div>
       <div class="section-item" id="section-all-members">
       <h2>All Members</h2>
+      <label for="memberSearch">Search members</label>
+      <input id="memberSearch" type="search" placeholder="Search name, phone, email, city, username or year…" style="max-width:520px;">
       <div style="overflow-x:auto;">
       <table id="membersTable" style="width:100%; border-collapse: collapse; font-size: 13px;">
         <thead>
@@ -328,13 +337,6 @@
       <div class="section-item" id="section-submissions">
       <h2>Pending Submissions (News / Simchas)</h2>
       <div id="submissionsList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
-      </div>
-      <div class="section-item" id="section-businesses">
-      <h2>Business Listings</h2>
-      <h3>Pending Approval</h3>
-      <div id="pendingBusinessList"><p>Loading…</p></div>
-      <h3>Approved (toggle "Featured" to show as a homepage ad)</h3>
-      <div id="approvedBusinessList"><p>Loading…</p></div>
       </div>
       <div class="section-item" id="section-add-picture">
       <h2>Add a Picture</h2>
@@ -374,6 +376,7 @@
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
     let currentAnnouncementId = null;
     let currentAnnouncementId2 = null;
+    let onlineRefreshTimer = null;
 
     const loginForm = document.getElementById('loginForm');
     const editor = document.getElementById('editor');
@@ -443,14 +446,30 @@
         label.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.display_name || member.email || member.id;
         item.appendChild(label);
 
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'secondary';
-        editButton.textContent = 'Edit Details';
-        editButton.addEventListener('click', async () => {
-          await editMemberDetails(member, loadPendingMembers);
+        const detailsEditor = document.createElement('div');
+        detailsEditor.style.display = 'flex';
+        detailsEditor.style.gap = '6px';
+        detailsEditor.style.flexWrap = 'wrap';
+        detailsEditor.style.margin = '7px 0';
+        const firstInput = document.createElement('input');
+        firstInput.placeholder = 'First name';
+        firstInput.value = member.first_name || '';
+        const lastInput = document.createElement('input');
+        lastInput.placeholder = 'Last name';
+        lastInput.value = member.last_name || '';
+        const phoneInput = document.createElement('input');
+        phoneInput.placeholder = 'Phone number';
+        phoneInput.value = member.phone_number || '';
+        [firstInput, lastInput, phoneInput].forEach((input) => { input.style.margin = '0'; input.style.width = '150px'; });
+        const saveDetailsButton = document.createElement('button');
+        saveDetailsButton.type = 'button';
+        saveDetailsButton.className = 'secondary';
+        saveDetailsButton.textContent = 'Save Details';
+        saveDetailsButton.addEventListener('click', async () => {
+          await saveMemberDetails(member, firstInput.value, lastInput.value, phoneInput.value, saveDetailsButton, loadPendingMembers);
         });
-        item.appendChild(editButton);
+        detailsEditor.append(firstInput, lastInput, phoneInput, saveDetailsButton);
+        item.appendChild(detailsEditor);
 
         const approveButton = document.createElement('button');
         approveButton.type = 'button';
@@ -477,7 +496,8 @@
         removeButton.textContent = 'Remove';
         removeButton.addEventListener('click', async () => {
           const name = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.display_name || member.email || 'this signup';
-          if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
+          const confirmation = prompt('PERMANENTLY remove ' + name + '? This deletes the member\'s sign-in account and cannot be undone. Type REMOVE to continue.');
+          if (confirmation !== 'REMOVE') return;
           removeButton.disabled = true;
           const { error: removeError } = await supabaseClient.rpc('remove_member', { target_user: member.id });
           if (removeError) {
@@ -502,14 +522,8 @@
       'תש"צ (5790)'
     ];
 
-    async function editMemberDetails(member, afterSave) {
-      const firstName = prompt('First name', member.first_name || '');
-      if (firstName === null) return;
-      const lastName = prompt('Last name', member.last_name || '');
-      if (lastName === null) return;
-      const phone = prompt('Phone number', member.phone_number || '');
-      if (phone === null) return;
-
+    async function saveMemberDetails(member, firstName, lastName, phone, button, afterSave) {
+      if (button) button.disabled = true;
       const result = await supabaseClient.rpc('update_member_contact', {
         target_user: member.id,
         new_first_name: firstName.trim() || null,
@@ -518,6 +532,7 @@
       });
       if (result.error) {
         setStatus('Could not save member details: ' + result.error.message, true);
+        if (button) button.disabled = false;
         return;
       }
       setStatus('Member details saved.');
@@ -551,25 +566,40 @@
 
       data.forEach((member) => {
         const row = document.createElement('tr');
+        row.dataset.memberSearch = [member.first_name, member.last_name, member.phone_number, member.email, member.city, member.username, member.jewish_year].filter(Boolean).join(' ').toLowerCase();
 
         const nameCell = document.createElement('td');
         nameCell.style.padding = '6px 8px';
         nameCell.style.borderBottom = '1px solid var(--border)';
-        const nameText = document.createElement('span');
-        nameText.textContent = [member.first_name, member.last_name].filter(Boolean).join(' ') || '—';
-        nameCell.appendChild(nameText);
-        const editButton = document.createElement('button');
-        editButton.type = 'button';
-        editButton.className = 'secondary';
-        editButton.textContent = 'Edit';
-        editButton.style.marginLeft = '6px';
-        editButton.addEventListener('click', async () => {
-          await editMemberDetails(member, loadAllMembers);
-        });
-        nameCell.appendChild(editButton);
+        const firstInput = document.createElement('input');
+        firstInput.placeholder = 'First';
+        firstInput.value = member.first_name || '';
+        const lastInput = document.createElement('input');
+        lastInput.placeholder = 'Last';
+        lastInput.value = member.last_name || '';
+        [firstInput, lastInput].forEach((input) => { input.style.margin = '0 0 4px'; input.style.width = '105px'; input.style.display = 'block'; });
+        const saveDetailsButton = document.createElement('button');
+        saveDetailsButton.type = 'button';
+        saveDetailsButton.className = 'secondary';
+        saveDetailsButton.textContent = 'Save';
+        nameCell.append(firstInput, lastInput, saveDetailsButton);
         row.appendChild(nameCell);
 
-        [member.phone_number, member.email, member.city, member.username].forEach((value) => {
+        const phoneCell = document.createElement('td');
+        phoneCell.style.padding = '6px 8px';
+        phoneCell.style.borderBottom = '1px solid var(--border)';
+        const phoneInput = document.createElement('input');
+        phoneInput.placeholder = 'Phone';
+        phoneInput.value = member.phone_number || '';
+        phoneInput.style.margin = '0';
+        phoneInput.style.width = '125px';
+        phoneCell.appendChild(phoneInput);
+        row.appendChild(phoneCell);
+        saveDetailsButton.addEventListener('click', async () => {
+          await saveMemberDetails(member, firstInput.value, lastInput.value, phoneInput.value, saveDetailsButton, loadAllMembers);
+        });
+
+        [member.email, member.city, member.username].forEach((value) => {
           const cell = document.createElement('td');
           cell.style.padding = '6px 8px';
           cell.style.borderBottom = '1px solid var(--border)';
@@ -655,7 +685,8 @@
         removeButton.textContent = 'Remove';
         removeButton.addEventListener('click', async () => {
           const name = [member.first_name, member.last_name].filter(Boolean).join(' ') || member.email || 'this member';
-          if (!confirm('Remove ' + name + '? This cannot be undone.')) return;
+          const confirmation = prompt('PERMANENTLY remove ' + name + '? This deletes the member\'s sign-in account and cannot be undone. Type REMOVE to continue.');
+          if (confirmation !== 'REMOVE') return;
           removeButton.disabled = true;
           const { error: removeError } = await supabaseClient.rpc('remove_member', { target_user: member.id });
           if (removeError) {
@@ -680,7 +711,17 @@
 
         body.appendChild(row);
       });
+
+      const query = document.getElementById('memberSearch').value.trim().toLowerCase();
+      body.querySelectorAll('tr').forEach((row) => { row.hidden = !!query && !row.dataset.memberSearch.includes(query); });
     }
+
+    document.getElementById('memberSearch').addEventListener('input', (event) => {
+      const query = event.target.value.trim().toLowerCase();
+      document.querySelectorAll('#membersTableBody tr').forEach((row) => {
+        row.hidden = !!query && !String(row.dataset.memberSearch || '').includes(query);
+      });
+    });
 
     async function loadAdminMessages() {
       const list = document.getElementById('adminMessagesList');
@@ -939,111 +980,6 @@
       });
     }
 
-    function renderBusinessCard(biz, isPending) {
-      const card = document.createElement('div');
-      card.className = 'biz-listing';
-
-      if (biz.image_path) {
-        const { data: urlData } = supabaseClient.storage.from('business-photos').getPublicUrl(biz.image_path);
-        const img = document.createElement('img');
-        img.src = urlData.publicUrl;
-        img.alt = biz.name;
-        card.appendChild(img);
-      }
-
-      const info = document.createElement('div');
-      info.className = 'biz-info';
-      const h3 = document.createElement('h3');
-      h3.textContent = biz.name + (biz.category ? ' — ' + biz.category : '');
-      info.appendChild(h3);
-      if (biz.description) {
-        const desc = document.createElement('p');
-        desc.textContent = biz.description;
-        info.appendChild(desc);
-      }
-      const contactBits = [biz.contact_phone, biz.contact_email, biz.website].filter(Boolean);
-      if (contactBits.length) {
-        const contact = document.createElement('p');
-        contact.textContent = contactBits.join(' · ');
-        info.appendChild(contact);
-      }
-
-      const actions = document.createElement('div');
-      actions.className = 'biz-listing-actions';
-
-      if (isPending) {
-        const approveButton = document.createElement('button');
-        approveButton.type = 'button';
-        approveButton.textContent = 'Approve';
-        approveButton.addEventListener('click', async () => {
-          approveButton.disabled = true;
-          const { error } = await supabaseClient.from('businesses').update({ approved: true }).eq('id', biz.id);
-          if (error) { setStatus('Could not approve: ' + error.message, true); approveButton.disabled = false; return; }
-          await loadBusinesses();
-        });
-        actions.appendChild(approveButton);
-      } else {
-        const featuredLabel = document.createElement('label');
-        const featuredCheck = document.createElement('input');
-        featuredCheck.type = 'checkbox';
-        featuredCheck.checked = !!biz.featured;
-        featuredCheck.addEventListener('change', async () => {
-          featuredCheck.disabled = true;
-          const { error } = await supabaseClient.from('businesses').update({ featured: featuredCheck.checked }).eq('id', biz.id);
-          featuredCheck.disabled = false;
-          if (error) { featuredCheck.checked = !featuredCheck.checked; setStatus(error.message, true); }
-        });
-        featuredLabel.appendChild(featuredCheck);
-        featuredLabel.appendChild(document.createTextNode('Featured (homepage ad)'));
-        actions.appendChild(featuredLabel);
-      }
-
-      const deleteButton = document.createElement('button');
-      deleteButton.type = 'button';
-      deleteButton.className = 'secondary';
-      deleteButton.textContent = isPending ? 'Reject' : 'Delete';
-      deleteButton.addEventListener('click', async () => {
-        if (!confirm('Remove this business listing?')) return;
-        deleteButton.disabled = true;
-        const { error } = await supabaseClient.from('businesses').delete().eq('id', biz.id);
-        if (error) { setStatus('Could not remove: ' + error.message, true); deleteButton.disabled = false; return; }
-        if (biz.image_path) await supabaseClient.storage.from('business-photos').remove([biz.image_path]);
-        await loadBusinesses();
-      });
-      actions.appendChild(deleteButton);
-
-      info.appendChild(actions);
-      card.appendChild(info);
-      return card;
-    }
-
-    async function loadBusinesses() {
-      const pendingList = document.getElementById('pendingBusinessList');
-      const approvedList = document.getElementById('approvedBusinessList');
-
-      const { data, error } = await supabaseClient
-        .from('businesses')
-        .select('id, name, description, category, contact_phone, contact_email, website, image_path, approved, featured')
-        .order('created_at', { ascending: false });
-
-      if (error) {
-        pendingList.innerHTML = '<p>Could not load businesses: ' + error.message + '</p>';
-        approvedList.innerHTML = '';
-        return;
-      }
-
-      const pending = (data || []).filter((b) => !b.approved);
-      const approved = (data || []).filter((b) => b.approved);
-
-      pendingList.innerHTML = '';
-      if (!pending.length) pendingList.innerHTML = '<p>No pending listings.</p>';
-      else pending.forEach((biz) => pendingList.appendChild(renderBusinessCard(biz, true)));
-
-      approvedList.innerHTML = '';
-      if (!approved.length) approvedList.innerHTML = '<p>No approved listings yet.</p>';
-      else approved.forEach((biz) => approvedList.appendChild(renderBusinessCard(biz, false)));
-    }
-
     const CATEGORY_LABELS = {
       rabbi: 'Rabbi',
       yeshiva_gedola: 'Yeshiva Gedola',
@@ -1181,7 +1117,6 @@
         ['Messages', 'posts', null],
         ['Pending Photos', 'photo_uploads', ['status', 'pending']],
         ['Submissions', 'submissions', ['approved', false]],
-        ['Pending Businesses', 'businesses', ['approved', false]],
         ['Suggestions', 'suggestions', ['status', 'new']]
       ];
       const values = await Promise.all(stats.map(async ([label, table, filter]) => {
@@ -1193,6 +1128,31 @@
       document.getElementById('dashboardStats').innerHTML = values.map((item) =>
         '<div class="stat-box"><strong>' + item.count + '</strong><span>' + item.label + '</span></div>'
       ).join('');
+    }
+
+    async function updateAdminPresence() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return;
+      const { data: profile } = await supabaseClient.from('profiles').select('first_name,last_name,display_name').eq('id',session.user.id).single();
+      const name = profile ? ([profile.first_name,profile.last_name].filter(Boolean).join(' ') || profile.display_name || 'Admin') : 'Admin';
+      await supabaseClient.from('member_presence').upsert({user_id:session.user.id,display_name:name,current_page:'admin.html',last_seen_at:new Date().toISOString()},{onConflict:'user_id'});
+    }
+
+    async function loadOnlineMembers() {
+      const list = document.getElementById('onlineMembersList');
+      const cutoff = new Date(Date.now() - 3 * 60 * 1000).toISOString();
+      const { data, error } = await supabaseClient.from('member_presence').select('user_id,current_page,last_seen_at,profiles(first_name,last_name,display_name)').gte('last_seen_at',cutoff).order('last_seen_at',{ascending:false});
+      if (error) { list.innerHTML = '<p>Online members will appear after the database update.</p>'; return; }
+      list.innerHTML = '';
+      (data || []).forEach((member) => {
+        const row = document.createElement('div'); row.className = 'admin-list-item';
+        const profile = member.profiles || {};
+        const memberName = [profile.first_name,profile.last_name].filter(Boolean).join(' ') || profile.display_name || 'Member';
+        const name = document.createElement('strong'); name.textContent = '● ' + memberName;
+        const detail = document.createElement('span'); detail.textContent = ' · ' + (member.current_page || 'website') + ' · ' + new Date(member.last_seen_at).toLocaleTimeString();
+        row.appendChild(name); row.appendChild(detail); list.appendChild(row);
+      });
+      if (!data || !data.length) list.innerHTML = '<p>No members are online right now.</p>';
     }
 
     async function loadSiteSettings() {
@@ -1295,6 +1255,49 @@
       if (result.error) setStatus(result.error.message, true); else { event.target.reset(); setStatus('Campaign added.'); await logAdminAction('create','campaign',null,payload); }
     });
 
+    async function loadPollsAdmin() {
+      const list = document.getElementById('adminPollsList');
+      const { data, error } = await supabaseClient.from('polls').select('*,poll_votes(count)').order('created_at',{ascending:false});
+      if (error) { list.innerHTML = '<p>Polls will appear after the database update.</p>'; return; }
+      list.innerHTML = '';
+      (data || []).forEach((poll) => {
+        const row = document.createElement('div'); row.className = 'admin-list-item';
+        const text = document.createElement('p'); text.textContent = poll.question + ' · ' + (poll.active ? 'Active' : 'Closed');
+        const close = document.createElement('button'); close.type='button'; close.textContent=poll.active?'Close Poll':'Reopen';
+        close.addEventListener('click',async()=>{ await supabaseClient.from('polls').update({active:!poll.active}).eq('id',poll.id); await logAdminAction(poll.active?'close':'reopen','poll',poll.id,{question:poll.question}); await loadPollsAdmin(); });
+        const remove = document.createElement('button'); remove.type='button'; remove.textContent='Delete';
+        remove.addEventListener('click',async()=>{ if(!confirm('Delete this poll and its votes?'))return; await supabaseClient.from('polls').delete().eq('id',poll.id); await logAdminAction('delete','poll',poll.id,{question:poll.question}); await loadPollsAdmin(); });
+        row.appendChild(text); row.appendChild(close); row.appendChild(remove); list.appendChild(row);
+      });
+      if (!data || !data.length) list.innerHTML='<p>No polls yet.</p>';
+    }
+
+    document.getElementById('pollAdminForm').addEventListener('submit', async (event) => {
+      event.preventDefault();
+      const {data:{session}} = await supabaseClient.auth.getSession();
+      const options = document.getElementById('pollOptions').value.split(/\r?\n/).map((value)=>value.trim()).filter(Boolean);
+      if (options.length < 2 || options.length > 10) { setStatus('Enter between 2 and 10 answers.',true); return; }
+      const closes = document.getElementById('pollCloses').value;
+      const payload = {question:document.getElementById('pollQuestion').value.trim(),options,closes_at:closes?new Date(closes).toISOString():null,created_by:session.user.id};
+      const result = await supabaseClient.from('polls').insert(payload).select('id').single();
+      if(result.error)setStatus(result.error.message,true); else { event.target.reset(); setStatus('Poll created.'); await logAdminAction('create','poll',result.data.id,{question:payload.question}); await loadPollsAdmin(); }
+    });
+
+    async function loadRidesAdmin() {
+      const list=document.getElementById('adminRidesList');
+      const {data,error}=await supabaseClient.from('rides').select('*').order('depart_at');
+      if(error){list.innerHTML='<p>Rides will appear after the database update.</p>';return;}
+      list.innerHTML='';
+      (data||[]).forEach((ride)=>{
+        const row=document.createElement('div'); row.className='admin-list-item';
+        const text=document.createElement('p'); text.textContent=(ride.ride_type==='offer'?'Offering':'Needs')+' · '+ride.from_location+' → '+ride.to_location+' · '+new Date(ride.depart_at).toLocaleString();
+        const remove=document.createElement('button'); remove.type='button'; remove.textContent='Delete';
+        remove.addEventListener('click',async()=>{if(!confirm('Delete this ride?'))return;await supabaseClient.from('rides').delete().eq('id',ride.id);await logAdminAction('delete','ride',ride.id,{});await loadRidesAdmin();});
+        row.appendChild(text); row.appendChild(remove); list.appendChild(row);
+      });
+      if(!data||!data.length)list.innerHTML='<p>No rides posted.</p>';
+    }
+
     async function loadSuggestions() {
       const list = document.getElementById('suggestionsList');
       const { data, error } = await supabaseClient.from('suggestions').select('*').order('created_at', {ascending:false});
@@ -1340,7 +1343,6 @@
       await loadPendingPhotos();
       await loadAdminMessages();
       await loadSubmissions();
-      await loadBusinesses();
       await loadGalleryManage();
       await loadDashboard();
       await loadSiteSettings();
@@ -1348,6 +1350,11 @@
       await loadYahrzeitsAdmin();
       await loadSuggestions();
       await loadReportsAndActivity();
+      await updateAdminPresence();
+      await loadOnlineMembers();
+      await loadPollsAdmin();
+      await loadRidesAdmin();
+      if (!onlineRefreshTimer) onlineRefreshTimer = setInterval(async () => { await updateAdminPresence(); await loadOnlineMembers(); }, 60000);
     }
 
     loginForm.addEventListener('submit', async (event) => {
