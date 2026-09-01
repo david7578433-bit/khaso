@@ -53,7 +53,10 @@ using (sender_id = auth.uid())
 with check (
   sender_id = auth.uid()
   and public.is_approved_member()
-  and exists (select 1 from public.profiles p where p.id = recipient_id and p.approved = true)
+  and exists (
+    select 1 from public.profiles p
+    where p.id = recipient_id and p.approved = true and p.directory_approved = true
+  )
 );
 
 create or replace function public.send_due_scheduled_private_messages()
@@ -70,6 +73,10 @@ begin
     select s.id,s.sender_id,s.recipient_id,s.body,s.reply_to_id
     from public.scheduled_private_messages s
     where s.sent_at is null and s.scheduled_for <= now()
+      and exists (
+        select 1 from public.profiles p
+        where p.id = s.recipient_id and p.approved = true and p.directory_approved = true
+      )
       and not exists (
         select 1 from public.chat_blocks b
         where (b.blocker_id=s.sender_id and b.blocked_id=s.recipient_id)

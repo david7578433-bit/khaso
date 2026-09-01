@@ -43,6 +43,21 @@
     <p data-lang="en">No simchas posted yet. Check back soon.</p>
     <p data-lang="yi" hidden>נאך קיין שמחות נישט. קומט צוריק באלד.</p>
   </section>
+  <section class="card" id="legacySimchas">
+    <h2 data-lang="en">Imported Simchas archive</h2>
+    <h2 data-lang="yi" hidden>אריינגעברענגטע שמחות ארכיוו</h2>
+    <p data-lang="en">These announcements were preserved from the former Kasho website. Their dates are historical.</p>
+    <p data-lang="yi" hidden>די מודעות זענען איבערגעפירט פונעם פריערדיגן קאשוי וועבזייטל. די צייטן זענען פון די ארכיוו.</p>
+    <details><summary>ר׳ מנחם גאלדבערגער — וויליאמסבורג</summary><p>לרגל הולדת בתו למזל טוב. קדישא רבה שבת קודש כי תבא בבוקר, בביהמ״ד תהלות יואל — ראטלידש.</p></details>
+    <details><summary>ר׳ חיים שמעון שטעסל — מאנסי</summary><p>לרגל סיום מסכת חגיגה. לחיים רבתי בבית מדרשינו במאנסי, ליל ג׳ כי תבא.</p></details>
+    <details><summary>ר׳ ישראל כהן — מאנטריאל</summary><p>לרגל הולדת בנו למזל טוב. זכור ליל שבת קודש כי תבא; וואך נאכט ליל ב׳ נצבים־וילך בבית מו״ח; ברית מילה ביום ג׳ בביהמ״ד.</p></details>
+    <details><summary>ר׳ יום טוב גרשון מאליק</summary><p>לרגל שמחת הולדת נכדו אצל חתנו ר׳ אברהם משה אייזנער.</p></details>
+    <details><summary>ר׳ משה הערש פרידמאן — קרית יואל</summary><p>לרגל שמחת נישואין שלו, עב״ג בת ר׳ שמעון גרינפעלד. ליל ג׳ כי תבא באולם בית רחל פערדייס.</p></details>
+    <details><summary>ר׳ יששכר גלויבער — קרית יואל</summary><p>לרגל הולדת בתו למזל טוב. קדישא רבה שבת קודש בבוקר בביהמ״ד.</p></details>
+    <details><summary>ר׳ שמעון פישער — וויליאמסבורג</summary><p>לרגל שמחת נישואין שלו, עב״ג בת ר׳ ישראל לעפקאוויטש. ליל א׳ נצבים־וילך באולם קאנטינענטל. מסדר קידושין ע״י כ״ק אדמו״ר שליט״א.</p></details>
+    <details><summary>ר׳ שמעון טייטלבוים — וויליאמסבורג</summary><p>לרגל שמחת נישואין שלו. בן ר׳ משה מאיר, נכד ידידינו ר׳ יוסף פנחס סטראלאוויטש, עב״ג בת ר׳ משה קלונימוס ניישטיין. ליל ג׳ נצבים־וילך, כתר רייזל.</p></details>
+    <details><summary>החתן שמואל גרשון גפן — וויליאמסבורג</summary><p>לרגל שמחת קישור החיתון. בן ידידינו ר׳ ליפא גפן, עב״ג בת ר׳ ישעי׳ זילבערשטיין.</p></details>
+  </section>
 </main>
 
 <footer>
@@ -155,6 +170,10 @@
     renderSimchas(!query ? allSimchas : allSimchas.filter((item) =>
       [item.title,item.body,item.event_type,item.location_name,item.address,item.event_date].some((value) => String(value || '').toLowerCase().includes(query))
     ));
+    const archive = document.getElementById('legacySimchas');
+    const archiveItems = Array.from(archive.querySelectorAll('details'));
+    archiveItems.forEach((item) => { item.hidden = !!query && !item.textContent.toLowerCase().includes(query); });
+    archive.hidden = !!query && !archiveItems.some((item) => !item.hidden);
   });
 
   loadSimchas();

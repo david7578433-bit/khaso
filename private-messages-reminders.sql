@@ -9,6 +9,7 @@ create table if not exists public.private_messages (
   recipient_id uuid not null references public.profiles(id) on delete cascade,
   body text not null check (char_length(body) between 1 and 4000),
   read_at timestamptz,
+  edited_at timestamptz,
   created_at timestamptz not null default now(),
   constraint private_messages_different_members check (sender_id <> recipient_id)
 );
@@ -17,8 +18,11 @@ create index if not exists private_messages_sender_created_idx on public.private
 create index if not exists private_messages_recipient_created_idx on public.private_messages(recipient_id, created_at desc);
 
 alter table public.private_messages enable row level security;
+alter table public.private_messages add column if not exists edited_at timestamptz;
 drop policy if exists "Participants read private messages" on public.private_messages;
 drop policy if exists "Members send private messages" on public.private_messages;
+drop policy if exists "Senders edit private messages" on public.private_messages;
+drop policy if exists "Senders delete private messages" on public.private_messages;
 create policy "Participants read private messages" on public.private_messages for select to authenticated
   using (sender_id = auth.uid() or recipient_id = auth.uid());
 create policy "Members send private messages" on public.private_messages for insert to authenticated
@@ -30,6 +34,10 @@ create policy "Members send private messages" on public.private_messages for ins
       where p.id = recipient_id and p.approved = true and p.directory_approved = true
     )
   );
+create policy "Senders edit private messages" on public.private_messages for update to authenticated
+  using (sender_id = auth.uid()) with check (sender_id = auth.uid());
+create policy "Senders delete private messages" on public.private_messages for delete to authenticated
+  using (sender_id = auth.uid());
 
 create or replace function public.mark_private_messages_read(other_user uuid)
 returns integer
@@ -122,7 +130,8 @@ end;
 $$;
 
 revoke all on public.private_messages from anon;
-grant select,insert on public.private_messages to authenticated;
+grant select,insert,delete on public.private_messages to authenticated;
+grant update(body,edited_at) on public.private_messages to authenticated;
 grant select on public.yahrzeit_reminder_deliveries to authenticated;
 revoke all on function public.mark_private_messages_read(uuid) from public;
 revoke all on function public.create_today_yahrzeit_reminders(text,integer,integer) from public;

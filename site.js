@@ -8,12 +8,32 @@
       element.hidden = element.dataset.lang !== language;
     });
 
+    document.querySelectorAll('[data-i18n-en][data-i18n-yi]').forEach((element) => {
+      element.textContent = isYiddish ? element.dataset.i18nYi : element.dataset.i18nEn;
+    });
+
+    const siteLabels = {
+      'Home': 'היים', 'About': 'וועגן אונדז', 'Contact': 'קאנטאקט',
+      'Yeshiva': 'ישיבה', 'Botei Medrash': 'בתי מדרשים', 'News': 'נייעס',
+      'Simchas': 'שמחות', 'Editorial': 'רעדאקציע', 'Community': 'קהילה',
+      'Kasho Chat': 'קאשוי שמועס', 'Pictures': 'בילדער', 'Zmanim': 'זמנים',
+      'Recordings': 'רעקארדירונגען',
+      'Log In': 'לאגין', 'Account': 'קאנטע'
+    };
+    document.querySelectorAll('nav a, footer a').forEach((link) => {
+      if (link.querySelector('[data-lang]')) return;
+      if (!link.dataset.i18nOriginal) link.dataset.i18nOriginal = link.textContent.trim();
+      const original = link.dataset.i18nOriginal;
+      if (siteLabels[original]) link.textContent = isYiddish ? siteLabels[original] : original;
+    });
+
     document.querySelectorAll('.lang-button').forEach((button) => {
       button.textContent = isYiddish ? 'English' : 'אידיש';
       button.setAttribute('aria-label', isYiddish ? 'Switch to English' : 'טוישן אויף אידיש');
     });
 
     try { localStorage.setItem('siteLanguage', language); } catch (_) {}
+    document.dispatchEvent(new CustomEvent('site-language-change', { detail: { language } }));
   }
 
   window.toggleLang = function () {

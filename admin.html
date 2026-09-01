@@ -406,6 +406,28 @@
       statusEl.style.color = isError ? '#c0392b' : '#16856f';
     }
 
+    async function hasAdminAccess() {
+      const { data: { session } } = await supabaseClient.auth.getSession();
+      if (!session) return false;
+      const { data: profile, error } = await supabaseClient
+        .from('profiles')
+        .select('approved, role')
+        .eq('id', session.user.id)
+        .single();
+      return !error && profile && profile.approved === true && ['admin', 'owner'].includes(profile.role);
+    }
+
+    async function openAdminDashboard() {
+      if (!(await hasAdminAccess())) {
+        editor.classList.remove('is-visible');
+        loginForm.style.display = 'block';
+        setStatus('Admin access only. This account cannot open the dashboard.', true);
+        return false;
+      }
+      await showEditor();
+      return true;
+    }
+
     async function loadAnnouncementIntoForm() {
       const { data, error } = await supabaseClient
         .from('announcements')
@@ -1515,8 +1537,7 @@
         return;
       }
 
-      setStatus('Logged in.');
-      await showEditor();
+      await openAdminDashboard();
     });
 
     document.getElementById('announcementForm').addEventListener('submit', async (event) => {
@@ -1576,7 +1597,7 @@
 
     (async () => {
       const { data } = await supabaseClient.auth.getSession();
-      if (data.session) await showEditor();
+      if (data.session) await openAdminDashboard();
     })();
   </script>
 <footer>

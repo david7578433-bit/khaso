@@ -1139,7 +1139,8 @@
           const reason = window.prompt('Why are you reporting this message?');
           if (!reason || !reason.trim()) return;
           const result = await memberClient.from('reports').insert({reporter_id:currentUserId,post_id:post.id,reported_user_id:post.author_id,reason:reason.trim()});
-          document.getElementById('boardStatus').textContent = result.error ? 'Could not report: ' + result.error.message : 'Report sent privately to the admins.';
+          if (result.error) console.error('Chat report failed', result.error);
+          document.getElementById('boardStatus').textContent = result.error ? 'The report could not be sent. Please try again.' : 'Report sent privately to the admins.';
         });
         actions.appendChild(reportButton);
       }
@@ -1370,9 +1371,9 @@
     event.preventDefault();const question=document.getElementById('pollQuestion').value.trim();const options=document.getElementById('pollOptions').value.split('\n').map((value)=>value.trim()).filter(Boolean);
     if(!question||options.length<2){alert('Enter a question and at least two options.');return;}if(options.length>10){alert('Use no more than ten options.');return;}
     const pollResult=await memberClient.from('polls').insert({question,options,created_by:currentUserId,topic_id:currentTopicId}).select('id').single();
-    if(pollResult.error){alert('Could not create the poll: '+pollResult.error.message);return;}
+    if(pollResult.error){console.error('Poll creation failed',pollResult.error);alert('The poll could not be created. Please try again.');return;}
     const postResult=await memberClient.from('posts').insert({topic_id:currentTopicId,author_id:currentUserId,body:JSON.stringify({text:'',attachments:[],sticker:null,pollId:pollResult.data.id})});
-    if(postResult.error){alert('Could not post the poll: '+postResult.error.message);return;}
+    if(postResult.error){console.error('Poll post failed',postResult.error);alert('The poll could not be posted. Please try again.');return;}
     document.getElementById('pollDialog').close();await loadPosts();
   });
 
@@ -1660,8 +1661,8 @@
       });
       addAction(pinnedIds.has(String(msg.id)) ? 'Unpin for me' : 'Pin for me',async()=>{if(pinnedIds.has(String(msg.id)))await memberClient.from('private_message_pins').delete().eq('user_id',currentUserId).eq('message_id',msg.id);else await memberClient.from('private_message_pins').insert({user_id:currentUserId,message_id:msg.id});await loadPrivateConversation();});
       if (msg.sender_id === currentUserId) {
-        addAction('Edit',async()=>{const changed=window.prompt('Edit your message:',parsed.text||'');if(changed===null)return;const text=changed.trim();if(!text&&!parsed.attachments.length)return;const updated=JSON.stringify({text,attachments:parsed.attachments,forwarded:parsed.forwarded});const saved=await memberClient.from('private_messages').update({body:updated,edited_at:new Date().toISOString()}).eq('id',msg.id).eq('sender_id',currentUserId);if(saved.error)alert('Could not edit: '+saved.error.message);else await loadPrivateConversation();});
-        addAction('Delete',async()=>{if(!window.confirm('Delete this private message?'))return;const removed=await memberClient.from('private_messages').delete().eq('id',msg.id).eq('sender_id',currentUserId);if(removed.error)alert('Could not delete: '+removed.error.message);else await loadPrivateConversation();});
+        addAction('Edit',async()=>{const changed=window.prompt('Edit your message:',parsed.text||'');if(changed===null)return;const text=changed.trim();if(!text&&!parsed.attachments.length)return;const updated=JSON.stringify({text,attachments:parsed.attachments,forwarded:parsed.forwarded});const saved=await memberClient.from('private_messages').update({body:updated,edited_at:new Date().toISOString()}).eq('id',msg.id).eq('sender_id',currentUserId);if(saved.error){console.error('Private message edit failed',saved.error);alert('The message could not be edited. Please try again.');}else await loadPrivateConversation();});
+        addAction('Delete',async()=>{if(!window.confirm('Delete this private message?'))return;const removed=await memberClient.from('private_messages').delete().eq('id',msg.id).eq('sender_id',currentUserId);if(removed.error){console.error('Private message delete failed',removed.error);alert('The message could not be deleted. Please try again.');}else await loadPrivateConversation();});
       }
 
       const hover = document.createElement('div'); hover.className = 'private-hover-bar';
@@ -1698,7 +1699,7 @@
   document.getElementById('scheduleForm').addEventListener('submit',async(event)=>{
     event.preventDefault();if(!activePrivateMember)return;const field=document.getElementById('privateMessageBody');const text=field.value.trim();const scheduledFor=new Date(document.getElementById('scheduleTime').value);if(Number.isNaN(scheduledFor.getTime())||scheduledFor<=new Date()){alert('Choose a future time.');return;}
     const body=JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});const result=await memberClient.from('scheduled_private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId,scheduled_for:scheduledFor.toISOString()});
-    if(result.error){alert('Could not schedule this message: '+result.error.message);return;}field.value='';privateStagedAttachments=[];privateReplyToId=null;renderPrivateStaged();document.getElementById('privateReplyPreview').hidden=true;document.getElementById('scheduleDialog').close();alert('Message scheduled.');
+    if(result.error){console.error('Private message scheduling failed',result.error);alert('The message could not be scheduled. Please try again.');return;}field.value='';privateStagedAttachments=[];privateReplyToId=null;renderPrivateStaged();document.getElementById('privateReplyPreview').hidden=true;document.getElementById('scheduleDialog').close();alert('Message scheduled.');
   });
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
@@ -1950,7 +1951,7 @@
           const result = isBlocked
             ? await memberClient.from('chat_blocks').delete().eq('blocker_id',currentUserId).eq('blocked_id',activePrivateMember.id)
             : await memberClient.from('chat_blocks').insert({blocker_id:currentUserId,blocked_id:activePrivateMember.id});
-          if (result.error) alert('Could not change this block: ' + result.error.message);
+          if (result.error) { console.error('Chat block update failed', result.error); alert('The block setting could not be changed. Please try again.'); }
           await refreshPresenceAndBlocks();
           updatePrivateComposerState();
           document.getElementById('chatInfoDialog').close();
@@ -1970,7 +1971,7 @@
 
   document.getElementById('newGroupButton').addEventListener('click',async()=>{
     const title = prompt('Name the new group room:'); if (!title || !title.trim()) return;
-    const result = await memberClient.from('topics').insert({title:title.trim(),visibility:'all',created_by:currentUserId}).select('id').single(); if (result.error) alert('Could not create the room: ' + result.error.message); else { await memberClient.from('topic_roles').upsert({topic_id:result.data.id,user_id:currentUserId,role:'owner'},{onConflict:'topic_id,user_id'}); await loadTopics(currentProfile); }
+    const result = await memberClient.from('topics').insert({title:title.trim(),visibility:'all',created_by:currentUserId}).select('id').single(); if (result.error) { console.error('Chat room creation failed',result.error); alert('The room could not be created. Please try again.'); } else { await memberClient.from('topic_roles').upsert({topic_id:result.data.id,user_id:currentUserId,role:'owner'},{onConflict:'topic_id,user_id'}); await loadTopics(currentProfile); }
   });
 
   function updateSettingButtons() {

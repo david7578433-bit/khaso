@@ -317,7 +317,8 @@ create policy "Owner changes site settings" on public.site_settings for all to a
 create policy "Public reads visible events" on public.events for select using (public_visible and coalesce(scheduled_publish_at, now()) <= now() and (expires_at is null or expires_at > now()));
 create policy "Admins manage events" on public.events for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
 
-create policy "Public reads visible yahrzeits" on public.yahrzeits for select using (public_visible);
+create policy "Approved members read visible yahrzeits" on public.yahrzeits for select to authenticated
+  using (public_visible and public.is_approved_member());
 create policy "Admins manage yahrzeits" on public.yahrzeits for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
 
 create policy "Members read own notifications" on public.notifications for select to authenticated using (user_id = auth.uid());
@@ -350,10 +351,13 @@ create policy "Anyone adds a submission contact" on public.submission_contacts f
 create policy "Admins read submission contacts" on public.submission_contacts for select to authenticated using (public.is_site_admin());
 create policy "Admins delete submission contacts" on public.submission_contacts for delete to authenticated using (public.is_site_admin());
 
-create policy "Members read active forms" on public.community_forms for select to authenticated using (active);
+create policy "Approved members read active forms" on public.community_forms for select to authenticated
+  using (active and public.is_approved_member());
 create policy "Admins manage forms" on public.community_forms for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
-create policy "Members read approved jobs" on public.jobs for select to authenticated using (approved and (expires_at is null or expires_at > now()));
-create policy "Members submit jobs" on public.jobs for insert to authenticated with check (created_by = auth.uid());
+create policy "Approved members read approved jobs" on public.jobs for select to authenticated
+  using (approved and (expires_at is null or expires_at > now()) and public.is_approved_member());
+create policy "Approved members submit jobs" on public.jobs for insert to authenticated
+  with check (created_by = auth.uid() and public.is_approved_member());
 create policy "Admins manage jobs" on public.jobs for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
 create policy "Public reads active campaigns" on public.campaigns for select using (active);
 create policy "Admins manage campaigns" on public.campaigns for all to authenticated using (public.is_site_admin()) with check (public.is_site_admin());
@@ -632,7 +636,9 @@ create trigger photo_status_notification
 after update of status on public.photo_uploads
 for each row execute function public.notify_photo_status();
 
-grant select on public.site_settings, public.events, public.yahrzeits, public.campaigns to anon, authenticated;
+grant select on public.site_settings, public.events, public.campaigns to anon, authenticated;
+revoke all on public.yahrzeits from anon;
+grant select on public.yahrzeits to authenticated;
 grant all on public.notifications, public.member_settings, public.post_reactions, public.post_reads, public.reports, public.suggestions, public.submission_contacts, public.community_forms, public.jobs, public.albums, public.comments, public.admin_activity to authenticated;
 grant insert on public.suggestions, public.submission_contacts to anon;
 grant select on public.backup_status to authenticated;
