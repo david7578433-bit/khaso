@@ -165,6 +165,14 @@
   .reply-preview { display:flex; justify-content:space-between; align-items:center; gap:8px; background:#eef7f5; border-left:4px solid var(--accent); padding:8px 10px; margin-bottom:8px; font-size:13px; }
   .reply-preview button { padding:3px 8px; }
   .unread-badge { display:inline-block; margin-left:5px; background:#c0392b; color:white; border-radius:999px; min-width:18px; padding:1px 5px; font-size:11px; }
+  .chat-toast-stack { position:fixed; top:74px; right:18px; z-index:1200; display:flex; width:min(370px,calc(100vw - 30px)); flex-direction:column; gap:9px; pointer-events:none; }
+  .chat-toast { display:grid; grid-template-columns:40px minmax(0,1fr) auto; gap:10px; align-items:center; padding:11px 12px; border:1px solid #d8e0e5; border-radius:13px; color:#263c50; background:white; box-shadow:0 8px 28px rgba(30,50,68,.2); pointer-events:auto; cursor:pointer; animation:toast-in .18s ease-out; }
+  .chat-toast-avatar { display:grid; width:40px; height:40px; place-items:center; border-radius:50%; color:white; background:#0f7f6d; font-weight:800; }
+  .chat-toast-copy { min-width:0; }
+  .chat-toast-copy strong,.chat-toast-copy span { display:block; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .chat-toast-copy span { color:#60758a; font-size:13px; }
+  .chat-toast-close { padding:3px 7px; color:#60758a; background:transparent; }
+  @keyframes toast-in { from { opacity:0; transform:translateY(-8px); } }
   .section-tabs { display: flex; gap: 8px; margin-bottom: 18px; border-bottom: 1px solid var(--border); }
   .section-tab {
     background: none; color: var(--muted); border: 0; border-bottom: 3px solid transparent;
@@ -386,13 +394,6 @@
   .chat-input-row, #postForm, #mentionDropdownWrap { flex:0 0 auto; }
   .block-member-button { width:100%; margin-top:14px; color:#b3261e; background:#fce8e6; border:1px solid #f3b8b3; }
   .block-member-button.unblock { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
-  #threadDialog { width:min(460px,100vw); height:100dvh; max-height:none; margin:0 0 0 auto; border-radius:0; }
-  .thread-root { margin:12px 0; padding:14px; background:#edf2fa; border-radius:14px; }
-  .thread-message { margin:9px 0; padding:11px 13px; background:white; border:1px solid #e1e5ea; border-radius:13px; }
-  .thread-message strong,.thread-message small { display:block; }
-  .thread-message small { margin-top:5px; color:#5f6368; }
-  .thread-compose { display:flex; gap:8px; padding:14px 20px 20px; border-top:1px solid #e1e5ea; }
-  .thread-compose textarea { flex:1; min-height:44px; margin:0; }
   .poll-card { min-width:280px; margin-top:8px; padding:14px; color:#202124; background:white; border:1px solid #dadce0; border-radius:14px; }
   .poll-card strong { display:block; margin-bottom:10px; }
   .poll-option { display:flex; justify-content:space-between; width:100%; margin:5px 0; padding:9px 11px; color:#202124; background:#f8fafd; border:1px solid #d8e2ef; border-radius:9px; text-align:left; }
@@ -544,7 +545,6 @@
 
   <dialog class="app-dialog" id="forwardDialog"><div class="dialog-head"><h3>Forward message</h3><button type="button" class="icon-button" data-close-dialog="forwardDialog">✕</button></div><div class="dialog-body" id="forwardMemberList"></div></dialog>
   <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
-  <dialog class="app-dialog" id="threadDialog"><div class="dialog-head"><h3>Thread</h3><button type="button" class="icon-button" data-close-dialog="threadDialog">✕</button></div><div class="dialog-body" id="threadMessages"></div><form class="thread-compose" id="threadForm"><textarea id="threadBody" placeholder="Reply in thread…"></textarea><button type="submit" class="send-btn">Send</button></form></dialog>
   <dialog class="app-dialog" id="pollDialog"><div class="dialog-head"><h3>Create a poll</h3><button type="button" class="icon-button" data-close-dialog="pollDialog">✕</button></div><form class="dialog-body" id="pollForm"><label>Question<input id="pollQuestion" maxlength="200" required></label><label>Options—one per line<textarea id="pollOptions" rows="6" placeholder="First option&#10;Second option" required></textarea></label><button type="submit">Post poll</button></form></dialog>
   <dialog class="app-dialog image-lightbox" id="imageLightbox"><button type="button" class="icon-button lightbox-close" data-close-dialog="imageLightbox" aria-label="Close image">✕</button><img id="lightboxImage" alt="Full-size attachment"></dialog>
   <dialog class="app-dialog" id="scheduleDialog"><div class="dialog-head"><h3>Schedule private message</h3><button type="button" class="icon-button" data-close-dialog="scheduleDialog">✕</button></div><form class="dialog-body" id="scheduleForm"><label>Send date and time<input id="scheduleTime" type="datetime-local" required></label><p>The message will send when any approved member has Kasho Chat open.</p><button type="submit">Schedule message</button></form></dialog>
@@ -582,8 +582,8 @@
   let memberLastSeen = new Map();
   let blockedMemberIds = new Set();
   let blockedByMemberIds = new Set();
-  let activeThreadRoot = null;
   let showOnlineStatus = true;
+  let toastStack = null;
   function profileName(p) {
     if (!p) return 'Member';
     const fullName = [p.first_name, p.last_name].filter(Boolean).join(' ').trim();
@@ -618,7 +618,7 @@
     }
 
     const topicIds = chatTopics.map((topic) => topic.id);
-    const recentResult = await memberClient.from('posts').select('topic_id,body,created_at').in('topic_id',topicIds).order('created_at',{ascending:false}).limit(500);
+    const recentResult = await memberClient.from('posts').select('topic_id,body,created_at,author_id,profiles(display_name,first_name,last_name)').in('topic_id',topicIds).order('created_at',{ascending:false}).limit(500);
     const recentByTopic = new Map();
     (recentResult.data || []).forEach((post) => { if (!recentByTopic.has(String(post.topic_id))) recentByTopic.set(String(post.topic_id),post); });
 
@@ -633,7 +633,7 @@
       const time = document.createElement('span'); time.className = 'topic-time'; time.textContent = recent ? new Date(recent.created_at).toLocaleDateString([], {month:'short',day:'numeric'}) : '';
       top.appendChild(title); top.appendChild(time); summary.appendChild(top);
       const preview = document.createElement('span'); preview.className = 'topic-last-message';
-      if (recent) { const parsed = parseBody(recent.body); preview.textContent = parsed.text || parsed.sticker || ((parsed.attachments || []).length ? 'Attachment' : 'New message'); }
+      if (recent) { const parsed = parseBody(recent.body); const sender = recent.author_id === currentUserId ? 'You' : profileName(recent.profiles); preview.textContent = sender + ': ' + (parsed.text || parsed.sticker || ((parsed.attachments || []).length ? 'Attachment' : 'New message')); }
       else preview.textContent = 'No messages yet';
       summary.appendChild(preview); button.appendChild(summary);
       button.addEventListener('click', () => selectTopic(topic.id, button));
@@ -704,8 +704,18 @@
     try { const context = new (window.AudioContext || window.webkitAudioContext)(); frequencies.forEach((frequency,index)=>{const oscillator=context.createOscillator();const gain=context.createGain();oscillator.frequency.value=frequency;gain.gain.value=.045;oscillator.connect(gain);gain.connect(context.destination);oscillator.start(context.currentTime+index*.09);oscillator.stop(context.currentTime+index*.09+.1);}); } catch (_) {}
   }
   function notifyNewMessage(title,body,type,id) {
-    if (chatIsMuted(type,id)) return; playMessageSound(type,id);
+    if (chatIsMuted(type,id)) return; playMessageSound(type,id); showMessageToast(title,body,type,id);
     if (localStorage.getItem('khaso_chat_notifications') === 'on' && document.hidden && window.Notification && Notification.permission === 'granted') new Notification(title,{body:String(body || '').slice(0,140)});
+  }
+
+  function showMessageToast(title,body,type,id) {
+    if (!toastStack) { toastStack=document.createElement('div');toastStack.className='chat-toast-stack';toastStack.setAttribute('aria-live','polite');document.body.appendChild(toastStack); }
+    const toast=document.createElement('div');toast.className='chat-toast';toast.tabIndex=0;
+    const avatar=document.createElement('span');avatar.className='chat-toast-avatar';avatar.textContent=String(title||'?').trim().charAt(0).toUpperCase()||'?';
+    const copy=document.createElement('span');copy.className='chat-toast-copy';const heading=document.createElement('strong');heading.textContent=title||'New message';const message=document.createElement('span');message.textContent=String(body||'New message').slice(0,180);copy.appendChild(heading);copy.appendChild(message);
+    const close=document.createElement('button');close.type='button';close.className='chat-toast-close';close.textContent='✕';close.setAttribute('aria-label','Dismiss notification');close.addEventListener('click',(event)=>{event.stopPropagation();toast.remove();});
+    const open=async()=>{toast.remove();if(type==='private'){await openPrivateMessages();const member=privateMembers.find((item)=>String(item.id)===String(id));if(member)await selectPrivateMember(member);}else{const button=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(String(id))+'"]');if(button)button.click();}};
+    toast.addEventListener('click',open);toast.addEventListener('keydown',(event)=>{if(event.key==='Enter'||event.key===' '){event.preventDefault();open();}});toast.appendChild(avatar);toast.appendChild(copy);toast.appendChild(close);toastStack.appendChild(toast);setTimeout(()=>toast.remove(),7000);
   }
 
   async function announceTyping(type,id) {
@@ -725,10 +735,11 @@
 
   function startLiveChatUpdates() {
     chatRealtime = memberClient.channel('khaso-chat-updates')
-      .on('postgres_changes', {event:'*',schema:'public',table:'posts'}, (change) => {
+      .on('postgres_changes', {event:'*',schema:'public',table:'posts'}, async (change) => {
         const topicId = change.new && change.new.topic_id ? change.new.topic_id : change.old && change.old.topic_id;
-        if (change.eventType === 'INSERT' && change.new.author_id !== currentUserId) { const topic = chatTopics.find((item)=>String(item.id)===String(topicId)); notifyNewMessage(topic ? topic.title : 'Group message','New group message','topic',topicId); }
-        if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts();
+        if (change.eventType === 'INSERT' && change.new.author_id !== currentUserId) { const topic = chatTopics.find((item)=>String(item.id)===String(topicId)); const member=privateMembers.find((item)=>String(item.id)===String(change.new.author_id));const parsed=parseBody(change.new.body);notifyNewMessage((member?profileName(member):'Member')+' · '+(topic?topic.title:'Group chat'),parsed.text||parsed.sticker||((parsed.attachments||[]).length?'Attachment':'New message'),'topic',topicId); }
+        if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts({preservePosition:true});
+        else { const button=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(String(topicId))+'"]');if(button)updateUnreadBadge(topicId,button); }
       })
       .on('postgres_changes', {event:'*',schema:'public',table:'private_messages'}, async (change) => {
         const row = change.new && change.new.sender_id ? change.new : change.old || {};
@@ -737,7 +748,7 @@
         await refreshPrivateInbox();
         if (activeChatView === 'private') {
           renderPrivateMembers(document.getElementById('chatSearch').value);
-          if (activePrivateMember && (row.sender_id === activePrivateMember.id || row.recipient_id === activePrivateMember.id)) loadPrivateConversation();
+          if (activePrivateMember && (row.sender_id === activePrivateMember.id || row.recipient_id === activePrivateMember.id)) loadPrivateConversation({preservePosition:true});
         }
       })
       .subscribe();
@@ -880,9 +891,10 @@
     return '📎';
   }
 
-  async function loadPosts() {
+  async function loadPosts(options) {
     const postList = document.getElementById('postList');
-    postList.innerHTML = '<p class="chat-empty">Loading…</p>';
+    const preservePosition=!!(options&&options.preservePosition);const distanceFromBottom=postList.scrollHeight-postList.scrollTop-postList.clientHeight;const wasNearBottom=distanceFromBottom<90;
+    if (!preservePosition || !postList.children.length) postList.innerHTML = '<p class="chat-empty">Loading…</p>';
     if (currentTopicId === null) { postList.innerHTML = ''; return; }
 
     const { data, error } = await memberClient
@@ -939,6 +951,7 @@
         .eq('status', 'approved')
         .in('storage_path', attachmentPaths);
       (approvedFiles || []).forEach((file) => approvedPaths.add(file.storage_path));
+      attachmentPaths.filter((path)=>/^(chat|private)\//.test(path)).forEach((path)=>approvedPaths.add(path));
     }
 
     const seenNames = {};
@@ -1067,6 +1080,7 @@
       const copyButton = document.createElement('button'); copyButton.type = 'button'; copyButton.textContent = 'Copy';
       copyButton.addEventListener('click', () => navigator.clipboard.writeText(parsed.text || parsed.sticker || ''));
       actions.appendChild(copyButton);
+      const quoteButton=document.createElement('button');quoteButton.type='button';quoteButton.textContent='Quote in reply';quoteButton.addEventListener('click',()=>{const field=document.getElementById('postBody');const excerpt=(parsed.text||parsed.sticker||'Attachment').slice(0,220);replyToPostId=post.id;document.getElementById('replyPreviewText').textContent='Quoting '+(isOwn?'your message':displayName);document.getElementById('replyPreview').hidden=false;field.value='“'+excerpt+'”\n\n'+field.value;field.focus();});actions.appendChild(quoteButton);
       const translateButton = document.createElement('button'); translateButton.type = 'button'; translateButton.textContent = 'Translate'; translateButton.addEventListener('click',()=>translateMessage(parsed.text || parsed.sticker || '')); actions.appendChild(translateButton);
       const calendarButton = document.createElement('button'); calendarButton.type = 'button'; calendarButton.textContent = 'Add to calendar'; calendarButton.addEventListener('click',()=>createCalendarEventFromMessage(parsed.text || parsed.sticker || '')); actions.appendChild(calendarButton);
       const forwardButton = document.createElement('button'); forwardButton.type = 'button'; forwardButton.textContent = 'Forward';
@@ -1161,7 +1175,7 @@
         replyButton.addEventListener('click', replyToThisMessage); hoverBar.appendChild(replyButton);
       }
       const threadButton = document.createElement('button'); threadButton.type = 'button'; threadButton.textContent = '🧵'; threadButton.title = 'Open thread';
-      threadButton.addEventListener('click',()=>openThread(post,displayName,parsed)); hoverBar.appendChild(threadButton);
+      threadButton.addEventListener('click',()=>{window.location.href='thread.html?post='+encodeURIComponent(post.id);}); hoverBar.appendChild(threadButton);
       const moreButton = document.createElement('button'); moreButton.type = 'button'; moreButton.textContent = '⋮'; moreButton.title = 'More actions';
       moreButton.addEventListener('click', (event) => { event.stopPropagation(); actions.hidden = !actions.hidden; });
       hoverBar.appendChild(moreButton);
@@ -1171,26 +1185,9 @@
       postList.appendChild(row);
     });
     knownNames = Object.keys(seenNames);
-    postList.scrollTop = postList.scrollHeight;
+    if (!preservePosition || wasNearBottom) postList.scrollTop = postList.scrollHeight;
+    else postList.scrollTop = Math.max(0,postList.scrollHeight-postList.clientHeight-distanceFromBottom);
   }
-
-  async function openThread(post,displayName,parsed) {
-    activeThreadRoot = post;
-    const wrap = document.getElementById('threadMessages'); wrap.innerHTML = '';
-    const root = document.createElement('div'); root.className = 'thread-root';
-    root.innerHTML = '<strong>' + escapeHtml(displayName) + '</strong><p>' + escapeHtml(parsed.text || parsed.sticker || 'Attachment') + '</p><small>' + new Date(post.created_at).toLocaleString() + '</small>';
-    wrap.appendChild(root);
-    const replies = await memberClient.from('posts').select('id,body,created_at,profiles(display_name,first_name,last_name)').eq('reply_to_id',post.id).order('created_at');
-    (replies.data || []).forEach((reply)=>{ const body=parseBody(reply.body);const card=document.createElement('div');card.className='thread-message';card.innerHTML='<strong>'+escapeHtml(profileName(reply.profiles))+'</strong><span>'+escapeHtml(body.text||body.sticker||'Attachment')+'</span><small>'+new Date(reply.created_at).toLocaleString()+'</small>';wrap.appendChild(card); });
-    if (!document.getElementById('threadDialog').open) document.getElementById('threadDialog').showModal();
-    document.getElementById('threadBody').focus();
-  }
-
-  document.getElementById('threadForm').addEventListener('submit',async(event)=>{
-    event.preventDefault(); if(!activeThreadRoot)return; const field=document.getElementById('threadBody');const text=field.value.trim();if(!text)return;
-    const result=await memberClient.from('posts').insert({topic_id:activeThreadRoot.topic_id,author_id:currentUserId,body:JSON.stringify({text,attachments:[],sticker:null}),reply_to_id:activeThreadRoot.id});
-    if(result.error){alert('Could not send the thread reply: '+result.error.message);return;} field.value=''; const parsed=parseBody(activeThreadRoot.body); await openThread(activeThreadRoot,profileName(activeThreadRoot.profiles),parsed); await loadPosts();
-  });
 
   async function sendMessage(payload) {
     const statusEl = document.getElementById('boardStatus');
@@ -1266,7 +1263,9 @@
     const { error: recordError } = await memberClient.from('photo_uploads').insert({
       uploader_id: session.user.id,
       storage_path: path,
-      caption: file.name
+      caption: file.name,
+      purpose: 'chat',
+      status: 'approved'
     });
     if (recordError) throw recordError;
     const { data: urlData } = memberClient.storage.from('community-photos').getPublicUrl(path);
@@ -1449,7 +1448,11 @@
 
   async function refreshPrivateInbox() {
     const result = await memberClient.from('private_messages').select('*').or('sender_id.eq.' + currentUserId + ',recipient_id.eq.' + currentUserId).order('created_at',{ascending:false}).limit(500);
-    if (!result.error) privateInbox = result.data || [];
+    if (!result.error) { privateInbox = result.data || []; updatePrivateUnreadCount(); }
+  }
+
+  function updatePrivateUnreadCount() {
+    const button=document.getElementById('tabPrivate');if(!button)return;const old=button.querySelector('.unread-badge');if(old)old.remove();const count=privateInbox.filter((msg)=>msg.recipient_id===currentUserId&&!msg.read_at).length;if(count){const badge=document.createElement('span');badge.className='unread-badge';badge.textContent=count>99?'99+':count;button.appendChild(badge);}
   }
 
   async function runScheduledMessages() {
@@ -1561,15 +1564,18 @@
     document.getElementById('roomSubtitle').textContent = onlineMemberIds.has(String(member.id)) ? availability.charAt(0).toUpperCase()+availability.slice(1) : (seen ? 'Last seen '+new Date(seen).toLocaleString() : 'Private conversation');
     updatePrivateComposerState();
     restoreDraft('private',member.id,'privateMessageBody');
+    await memberClient.rpc('mark_private_messages_read',{other_user:member.id});
+    await refreshPrivateInbox();
     renderPrivateMembers(document.getElementById('chatSearch').value);
     await loadPrivateConversation();
   }
 
-  async function loadPrivateConversation() {
+  async function loadPrivateConversation(options) {
     if (!activePrivateMember) return;
     const other = activePrivateMember.id;
+    const list = document.getElementById('privateConversationList');const preservePosition=!!(options&&options.preservePosition);const distanceFromBottom=list.scrollHeight-list.scrollTop-list.clientHeight;const wasNearBottom=distanceFromBottom<90;
     const result = await memberClient.from('private_messages').select('*').or('and(sender_id.eq.' + currentUserId + ',recipient_id.eq.' + other + '),and(sender_id.eq.' + other + ',recipient_id.eq.' + currentUserId + ')').order('created_at');
-    const list = document.getElementById('privateConversationList'); list.innerHTML = '';
+    list.innerHTML = '';
     if (result.error) { list.innerHTML = '<p>Could not load this conversation.</p>'; return; }
     const messages = result.data || [];
     const messageIds = messages.map((msg) => msg.id);
@@ -1592,6 +1598,7 @@
     if (storagePaths.length) {
       const approved = await memberClient.from('photo_uploads').select('storage_path').eq('status','approved').in('storage_path',storagePaths);
       (approved.data || []).forEach((file) => approvedPaths.add(file.storage_path));
+      storagePaths.filter((path)=>/^(chat|private)\//.test(path)).forEach((path)=>approvedPaths.add(path));
     }
     let lastDay = ''; let unreadDividerShown = false;
     parsedMessages.forEach(({msg,parsed}) => {
@@ -1634,6 +1641,7 @@
       const actions = document.createElement('div'); actions.className = 'private-action-menu'; actions.hidden = true;
       const addAction = (label,handler) => { const button=document.createElement('button');button.type='button';button.textContent=label;button.addEventListener('click',handler);actions.appendChild(button); };
       addAction('Reply',()=>{privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Replying to '+(msg.sender_id===currentUserId?'your message':profileName(activePrivateMember))+': '+(parsed.text||'Attachment').slice(0,80);document.getElementById('privateReplyPreview').hidden=false;document.getElementById('privateMessageBody').focus();});
+      addAction('Quote in reply',()=>{const field=document.getElementById('privateMessageBody');const sender=msg.sender_id===currentUserId?'You':profileName(activePrivateMember);privateReplyToId=msg.id;document.getElementById('privateReplyPreviewText').textContent='Quoting '+sender;document.getElementById('privateReplyPreview').hidden=false;field.value='“'+(parsed.text||'Attachment').slice(0,220)+'”\n\n'+field.value;field.focus();});
       addAction('Copy',()=>navigator.clipboard.writeText(parsed.text || ''));
       addAction('Translate',()=>translateMessage(parsed.text || ''));
       addAction('Add to calendar',()=>createCalendarEventFromMessage(parsed.text || ''));
@@ -1659,7 +1667,8 @@
       hover.appendChild(picker); hover.appendChild(actions); row.appendChild(bubble); row.appendChild(hover); list.appendChild(row);
     });
     if (!messages.length) list.innerHTML = '<p class="chat-empty">No messages yet. Say hello.</p>';
-    list.scrollTop = list.scrollHeight;
+    if (!preservePosition || wasNearBottom) list.scrollTop = list.scrollHeight;
+    else list.scrollTop = Math.max(0,list.scrollHeight-list.clientHeight-distanceFromBottom);
     await memberClient.rpc('mark_private_messages_read',{other_user:other});
     await refreshPrivateInbox(); renderPrivateMembers(document.getElementById('chatSearch').value);
   }
@@ -1708,7 +1717,7 @@
     if (!/^(image\/|audio\/)|^application\/pdf$/.test(file.type)) throw new Error('Use an image, PDF, or audio file.');
     const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,'_'); const path = 'private/' + currentUserId + '/' + Date.now() + '-' + safeName;
     const uploaded = await memberClient.storage.from('community-photos').upload(path,file,{contentType:file.type}); if (uploaded.error) throw uploaded.error;
-    const record = await memberClient.from('photo_uploads').insert({uploader_id:currentUserId,storage_path:path,caption:file.name}); if (record.error) throw record.error;
+    const record = await memberClient.from('photo_uploads').insert({uploader_id:currentUserId,storage_path:path,caption:file.name,purpose:'chat',status:'approved'}); if (record.error) throw record.error;
     const url = memberClient.storage.from('community-photos').getPublicUrl(path).data.publicUrl;
     return {url,storagePath:path,name:file.name,type:file.type,size:file.size};
   }
@@ -2174,9 +2183,9 @@
       const requestedMember = chatParams.get('with');
       const member = requestedMember && privateMembers.find((item)=>String(item.id)===String(requestedMember));
       if (member) await selectPrivateMember(member);
-    } else if (location.hash === '#photos') document.getElementById('tabPhotos').click();
-    setInterval(() => { if (currentTopicId !== null && !document.hidden && !document.getElementById('discussionSection').hidden) loadPosts(); }, 20000);
-    setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') { renderPrivateMembers(document.getElementById('chatSearch').value); if (activePrivateMember) await loadPrivateConversation(); } } }, 20000);
+    } else if (chatParams.get('topic')) { const requested=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(chatParams.get('topic'))+'"]');if(requested)requested.click(); }
+    else if (location.hash === '#photos') document.getElementById('tabPhotos').click();
+    setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') renderPrivateMembers(document.getElementById('chatSearch').value); } }, 120000);
     setInterval(loadTypingIndicators,2000);
     setInterval(runScheduledMessages,30000);
     setInterval(async () => { if (!document.hidden) { await updateMyPresence(); await refreshPresenceAndBlocks(); } },30000);
