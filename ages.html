@@ -226,18 +226,26 @@
   }
 
   /* Google Chat-inspired single-page chat */
-  body.chat-page { margin:0; min-height:100vh; overflow:hidden; background:#eef3f5; }
+  body.chat-page { margin:0; min-height:100vh; overflow:hidden; color:#1f1f1f; background:#fff; font-family:"Google Sans",Roboto,Arial,sans-serif; }
   .chat-page main { width:100%; max-width:none; min-height:100vh; padding:0; margin:0; }
   .chat-page #gateCard { margin:12vh auto 0; }
   .chat-page #boardCard.card { width:100vw; height:100vh; border:0; border-radius:0; box-shadow:none; }
-  .chat-page .chat-app-layout { grid-template-columns:220px 310px minmax(0,1fr); width:100%; height:100vh; max-height:none; min-height:0; }
-  .chat-app-sidebar { border-radius:0; }
+  .chat-page .chat-app-layout { grid-template-columns:224px 310px minmax(0,1fr); width:100%; height:100vh; max-height:none; min-height:0; }
+  .chat-app-sidebar { border-radius:0; color:#1f1f1f; background:#f0f4f9; border-right:1px solid #e1e7ed; }
+  .chat-app-brand { display:flex; align-items:center; gap:10px; color:#0b57d0; font-size:22px; font-weight:600; }
+  .chat-app-brand::before { content:""; width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#0b57d0 0 55%,#34a853 55% 100%); box-shadow:inset 0 0 0 6px rgba(255,255,255,.88); }
+  .chat-app-brand small { color:#5f6368; }
   .chat-app-sidebar button { cursor:pointer; }
+  .chat-app-sidebar .section-tab, .chat-app-sidebar .chat-nav-link { color:#3c4043; font-weight:500; }
+  .chat-app-sidebar .section-tab:hover, .chat-app-sidebar .chat-nav-link:hover { color:#202124; background:#e7edf4; }
+  .chat-app-sidebar .section-tab.active { color:#0842a0; background:#d3e3fd; }
+  .nav-icon { width:20px; height:20px; flex:0 0 20px; fill:none; stroke:currentColor; stroke-width:1.8; stroke-linecap:round; stroke-linejoin:round; }
   .chat-search-shell { display:flex; flex:1; align-items:center; gap:8px; max-width:760px; }
-  .chat-search-shell input { width:100%; margin:0; padding:11px 14px; border:1px solid #d8e0e4; border-radius:24px; background:#f1f4f5; }
+  .chat-search-shell input { width:100%; margin:0; padding:12px 16px; border:0; border-radius:24px; outline:0; background:#edf2fa; box-shadow:inset 0 0 0 1px transparent; }
+  .chat-search-shell input:focus { background:white; box-shadow:0 1px 3px rgba(60,64,67,.25),inset 0 0 0 1px #a8c7fa; }
   .search-filter-bar { display:flex; gap:5px; }
   .search-filter-bar button { padding:7px 11px; color:var(--muted); background:white; border:1px solid var(--border); border-radius:999px; font-size:12px; }
-  .search-filter-bar button.active { color:white; background:#315f78; border-color:#315f78; }
+  .search-filter-bar button.active { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
   .chat-room-header { gap:16px; }
   .room-heading { min-width:170px; }
   .chat-home-view { flex:1; min-height:0; overflow:auto; padding:24px; background:#f8fafb; }
@@ -249,18 +257,21 @@
   .chat-home-card { padding:20px; border:1px solid var(--border); border-radius:16px; background:white; box-shadow:0 2px 8px rgba(30,50,68,.05); }
   .chat-home-card h3 { margin:0 0 7px; }
   .chat-home-card p { margin:0 0 15px; color:var(--muted); }
-  .chat-home-card button { width:100%; }
+  .chat-home-card button { width:100%; background:#0b57d0; }
   .member-list { display:flex; flex-direction:column; gap:5px; overflow:auto; max-height:calc(100vh - 135px); }
   .member-list[hidden] { display:none; }
   .member-list button { display:flex; align-items:center; gap:10px; width:100%; min-height:56px; padding:8px 10px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
-  .member-list button:hover, .member-list button.active { background:#dcebe9; }
-  .member-avatar { flex:0 0 38px; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:white; background:#39718a; font-weight:800; }
+  .member-list button:hover, .member-list button.active { background:#d3e3fd; }
+  .member-avatar { flex:0 0 38px; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:white; background:#0b57d0; font-weight:700; }
   .member-list-name { min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .member-list-identity { min-width:0; flex:1; }
+  .member-list-identity .member-list-name { display:block; }
+  .member-email { display:block; overflow:hidden; color:#5f6368; font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
   .private-unread { min-width:21px; padding:2px 6px; border-radius:999px; color:white; background:#c0392b; text-align:center; font-size:11px; }
   #privateSection { display:flex; flex:1; min-height:0; flex-direction:column; }
   .private-conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto; padding:20px 25px; background:#f8fafb; }
   .private-bubble { max-width:72%; padding:10px 13px; border:1px solid var(--border); border-radius:16px; background:white; }
-  .private-bubble.mine { align-self:flex-end; color:white; background:linear-gradient(135deg,var(--accent),var(--accent-dark)); border-color:var(--accent); }
+  .private-bubble.mine { align-self:flex-end; color:#1f1f1f; background:#d3e3fd; border-color:#a8c7fa; }
   .private-bubble p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
   .private-bubble small { display:block; margin-top:5px; opacity:.7; }
   .private-compose { display:flex; align-items:flex-end; gap:8px; padding:12px 16px; border-top:1px solid var(--border); background:white; }
@@ -276,7 +287,38 @@
   .chat-bubble-row:hover .message-actions, .chat-bubble-row:hover .reaction-row, .chat-bubble-row:focus-within .message-actions, .chat-bubble-row:focus-within .reaction-row { opacity:1; }
   .chat-date-divider { align-self:stretch; display:flex; align-items:center; gap:10px; margin:10px 0; color:var(--muted); font-size:12px; }
   .chat-date-divider::before, .chat-date-divider::after { content:""; flex:1; height:1px; background:var(--border); }
-  .chat-meta-avatar { display:inline-grid; place-items:center; width:24px; height:24px; margin-right:7px; border-radius:50%; color:white; background:#39718a; font-weight:800; font-size:11px; vertical-align:middle; }
+  .chat-meta-avatar { display:inline-grid; place-items:center; width:24px; height:24px; margin-right:7px; border-radius:50%; color:white; background:#0b57d0; font-weight:700; font-size:11px; vertical-align:middle; }
+  .chat-room-tools { display:flex; align-items:center; gap:5px; }
+  .chat-page .chat-bubble-row.own .chat-bubble { color:#1f1f1f; background:#d3e3fd; border:1px solid #a8c7fa; }
+  .chat-page .send-btn { background:#0b57d0; }
+  .icon-button { width:40px; height:40px; display:grid; place-items:center; padding:0; color:#444746; background:transparent; border:0; border-radius:50%; }
+  .icon-button:hover, .icon-button.active { color:#0842a0; background:#d3e3fd; }
+  .icon-button .nav-icon { width:21px; height:21px; }
+  .sidebar-setting { margin-top:2px; font-size:13px !important; }
+  .new-group-button { width:100%; margin:0 0 10px; color:#0b57d0; background:white; border:1px solid #a8c7fa; }
+  .new-group-button[hidden] { display:none; }
+  .private-staged { display:flex; flex-wrap:wrap; gap:6px; padding:0 16px 8px; background:white; }
+  .private-staged:empty { display:none; }
+  .voice-recording { color:#b3261e !important; background:#f9dedc !important; }
+  .link-preview { display:block; margin-top:8px; padding:10px 12px; color:inherit; background:rgba(255,255,255,.72); border:1px solid rgba(60,64,67,.18); border-radius:12px; text-decoration:none; }
+  .link-preview strong,.link-preview small { display:block; }
+  .link-preview small { margin-top:3px; opacity:.72; }
+  .private-attachment { display:block; max-width:320px; margin-top:8px; }
+  .private-attachment img { display:block; max-width:100%; max-height:260px; border-radius:12px; }
+  .private-attachment audio { width:290px; max-width:100%; }
+  .private-attachment a { color:inherit; }
+  .starred-message { box-shadow:0 0 0 2px #f9ab00 inset; }
+  .message-menu { display:flex; gap:4px; margin-top:5px; opacity:0; transition:opacity .15s; }
+  .private-bubble:hover .message-menu,.private-bubble:focus-within .message-menu { opacity:1; }
+  .message-menu button { padding:3px 7px; color:#444746; background:#f0f4f9; border:0; font-size:11px; }
+  .app-dialog { width:min(520px,calc(100vw - 30px)); padding:0; border:0; border-radius:20px; box-shadow:0 12px 36px rgba(60,64,67,.28); }
+  .app-dialog::backdrop { background:rgba(32,33,36,.45); }
+  .dialog-head { display:flex; align-items:center; justify-content:space-between; padding:18px 20px; border-bottom:1px solid #e4e7eb; }
+  .dialog-head h3 { margin:0; }
+  .dialog-body { max-height:62vh; overflow:auto; padding:14px 20px 20px; }
+  .dialog-member { display:flex; align-items:center; gap:10px; width:100%; margin:4px 0; color:#1f1f1f; background:white; border:0; text-align:left; }
+  .visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
+  .typing-indicator { min-height:17px; margin:0 6px 4px; color:#5f6368; font-size:12px; font-style:italic; }
   @media (max-width:920px) {
     body.chat-page { overflow:auto; }
     .chat-page .chat-app-layout { grid-template-columns:1fr; height:auto; min-height:100vh; }
@@ -300,16 +342,21 @@
     <div class="chat-app-layout">
       <aside class="chat-app-sidebar" aria-label="Chat shortcuts">
         <div class="chat-app-brand">Khaso Chat<small>Member community</small></div>
-        <button type="button" class="section-tab active" id="tabHome">⌂ Chat Home</button>
-        <button type="button" class="section-tab" id="tabDiscussion">💬 Group chats</button>
-        <button type="button" class="section-tab" id="tabPrivate">✉ Private messages</button>
-        <button type="button" class="section-tab" id="tabPhotos">▣ Photos</button>
+        <button type="button" class="section-tab active" id="tabHome"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M3 11.5 12 4l9 7.5"/><path d="M5.5 10v9h13v-9M9.5 19v-5h5v5"/></svg>Chat Home</button>
+        <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
+        <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
+        <button type="button" class="section-tab" id="tabPhotos"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m4 17 5-5 4 4 2-2 5 4"/></svg>Photos</button>
         <div class="chat-nav-spacer"></div>
-        <a class="chat-nav-link" href="login.html">⚙ Account</a>
+        <a class="chat-nav-link" href="index.html"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 12h14M5 12l5-5M5 12l5 5"/></svg>Website Home</a>
+        <button type="button" class="chat-nav-link sidebar-setting" id="soundToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M5 9v6h4l5 4V5L9 9H5Z"/><path d="M17 9c1.5 1.5 1.5 4.5 0 6M19.5 6.5c3 3 3 8 0 11"/></svg>Sounds: Off</button>
+        <button type="button" class="chat-nav-link sidebar-setting" id="notificationToggle"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg>Notifications: Off</button>
+        <a class="chat-nav-link" href="login.html"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="8" r="3"/><path d="M5 20c.7-4.2 3-6 7-6s6.3 1.8 7 6"/></svg>Account</a>
       </aside>
       <aside class="chat-list-pane">
         <h2 id="chatListTitle">Chats</h2>
         <p id="chatListSubtitle">Your approved rooms</p>
+        <button type="button" class="new-group-button" id="newGroupButton" hidden>+ New group room</button>
+        <button type="button" class="new-group-button" id="showArchivedButton" hidden>Show archived chats</button>
         <div class="topic-list" id="topicList"></div>
         <div class="member-list" id="privateMemberList" hidden></div>
       </aside>
@@ -323,6 +370,11 @@
               <button type="button" data-search-filter="links">Links</button>
               <button type="button" data-search-filter="files">Files</button>
             </div>
+          </div>
+          <div class="chat-room-tools" id="chatRoomTools" hidden>
+            <button type="button" class="icon-button" id="muteChatButton" title="Mute chat" aria-label="Mute chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M6 9a6 6 0 0 1 12 0v5l2 2H4l2-2V9ZM10 20h4"/></svg></button>
+            <button type="button" class="icon-button" id="archiveChatButton" title="Archive chat" aria-label="Archive chat"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 7h16v13H4V7ZM3 4h18v3H3V4Z"/><path d="M9 11h6"/></svg></button>
+            <button type="button" class="icon-button" id="chatInfoButton" title="Chat information" aria-label="Chat information"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M12 11v6M12 7h.01"/></svg></button>
           </div>
         </div>
 
@@ -338,6 +390,7 @@
 
         <div id="discussionSection" hidden>
     <div class="chat-window" id="postList"></div>
+    <p class="typing-indicator" id="groupTypingIndicator"></p>
     <div class="emoji-panel" id="emojiPanel" hidden>
       <div class="sticker-row" id="stickerRow"></div>
       <div class="emoji-grid" id="emojiGrid"></div>
@@ -355,11 +408,11 @@
       <form id="postForm">
         <div class="chat-input-row">
           <input type="file" id="chatFileInput" accept="image/*,application/pdf" multiple hidden>
-          <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files">📎</button>
-          <button type="button" class="attach-btn" id="linkAttachBtn" aria-label="Attach link" title="Attach Google Drive, Dropbox or another link">🔗</button>
-          <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji" title="Emoji">🙂</button>
+          <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
+          <button type="button" class="attach-btn" id="linkAttachBtn" aria-label="Attach link" title="Attach Google Drive, Dropbox or another link"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M10 13a5 5 0 0 0 7 0l2-2a5 5 0 0 0-7-7l-1 1"/><path d="M14 11a5 5 0 0 0-7 0l-2 2a5 5 0 0 0 7 7l1-1"/></svg></button>
+          <button type="button" class="emoji-toggle" id="emojiToggleBtn" aria-label="Add emoji" title="Emoji"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 3 4 3 4-3 4-3M9 9h.01M15 9h.01"/></svg></button>
           <textarea id="postBody" placeholder="Type a message… use @ to mention someone"></textarea>
-          <button type="submit" class="send-btn">Send</button>
+          <button type="submit" class="send-btn" aria-label="Send message"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 4 18 8-18 8 3-8-3-8Z"/><path d="M6 12h15"/></svg><span class="visually-hidden">Send</span></button>
         </div>
       </form>
     </div>
@@ -368,11 +421,16 @@
 
         <div id="privateSection" hidden>
           <div class="private-conversation-list" id="privateConversationList"><p class="chat-empty">Choose a member to start a private conversation.</p></div>
+          <p class="typing-indicator" id="privateTypingIndicator"></p>
           <div class="private-emoji-panel" id="privateEmojiPanel" hidden></div>
+          <div class="private-staged" id="privateStagedAttachments"></div>
           <form class="private-compose" id="privateMessageForm" hidden>
-            <button type="button" class="emoji-toggle" id="privateEmojiToggle" aria-label="Add emoji">🙂</button>
-            <textarea id="privateMessageBody" maxlength="4000" required placeholder="Write a private message…"></textarea>
-            <button type="submit" class="send-btn">Send</button>
+            <input type="file" id="privateFileInput" accept="image/*,application/pdf,audio/*" multiple hidden>
+            <button type="button" class="icon-button" id="privateAttachButton" aria-label="Attach image, PDF, or audio"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
+            <button type="button" class="icon-button" id="voiceRecordButton" aria-label="Record voice message"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></button>
+            <button type="button" class="emoji-toggle" id="privateEmojiToggle" aria-label="Add emoji"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="9"/><path d="M8 14s1.5 3 4 3 4-3 4-3M9 9h.01M15 9h.01"/></svg></button>
+            <textarea id="privateMessageBody" maxlength="4000" placeholder="Write a private message…"></textarea>
+            <button type="submit" class="send-btn" aria-label="Send private message"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m3 4 18 8-18 8 3-8-3-8Z"/><path d="M6 12h15"/></svg><span class="visually-hidden">Send</span></button>
           </form>
         </div>
 
@@ -390,6 +448,9 @@
       </section>
     </div>
   </section>
+
+  <dialog class="app-dialog" id="forwardDialog"><div class="dialog-head"><h3>Forward message</h3><button type="button" class="icon-button" data-close-dialog="forwardDialog">✕</button></div><div class="dialog-body" id="forwardMemberList"></div></dialog>
+  <dialog class="app-dialog" id="chatInfoDialog"><div class="dialog-head"><h3 id="chatInfoTitle">Chat information</h3><button type="button" class="icon-button" data-close-dialog="chatInfoDialog">✕</button></div><div class="dialog-body" id="chatInfoBody"></div></dialog>
 
 </main>
 
@@ -411,19 +472,27 @@
   let activeSearchFilter = 'all';
   let activeChatView = 'home';
   let chatRealtime = null;
+  let privateStagedAttachments = [];
+  let chatPreferences = [];
+  let voiceRecorder = null;
+  let voiceChunks = [];
+  let forwardedPayload = null;
+  let showArchivedChats = false;
+  let lastTypingSent = 0;
   function profileName(p) {
     if (!p) return 'Member';
     return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
   }
 
   async function loadTopics(profile) {
-    const { data, error } = await memberClient.from('topics').select('id, title').order('id');
+    const { data, error } = await memberClient.from('topics').select('id, title, visibility').order('id');
     const list = document.getElementById('topicList');
     list.innerHTML = '';
     if (error || !data || data.length === 0) return;
 
     const allowedYear = profile && profile.jewish_year;
-    chatTopics = data.filter((topic) => topic.title === 'General (everyone)' || topic.title === allowedYear);
+    const isAdmin = profile && (profile.role === 'owner' || profile.role === 'admin');
+    chatTopics = data.filter((topic) => isAdmin || topic.visibility === 'all' || topic.title === 'General (everyone)' || topic.title === allowedYear);
 
     if (chatTopics.length === 0) {
       list.innerHTML = '<p>Waiting for an admin to assign you to a year room.</p>';
@@ -455,6 +524,9 @@
     if (navId) document.getElementById(navId).classList.add('active');
     document.getElementById('chatListTitle').textContent = view === 'private' ? 'People' : 'Chats';
     document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your approved rooms';
+    document.getElementById('showArchivedButton').hidden = view !== 'private';
+    document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
+    updateRoomTools();
   }
 
   function showChatHome() {
@@ -466,15 +538,61 @@
     document.querySelectorAll('[data-search-filter]').forEach((button) => button.classList.toggle('active', button.dataset.searchFilter === 'all'));
   }
 
+  function preferenceFor(type,id) { return chatPreferences.find((pref) => pref.target_type === type && String(pref.target_id) === String(id)); }
+  async function loadChatPreferences() {
+    const result = await memberClient.from('chat_preferences').select('*').eq('user_id',currentUserId);
+    chatPreferences = result.data || [];
+  }
+  async function saveChatPreference(type,id,changes) {
+    const existing = preferenceFor(type,id) || {};
+    const record = {user_id:currentUserId,target_type:type,target_id:String(id),muted:changes.muted === undefined ? !!existing.muted : changes.muted,archived:changes.archived === undefined ? !!existing.archived : changes.archived};
+    await memberClient.from('chat_preferences').upsert(record,{onConflict:'user_id,target_type,target_id'});
+    await loadChatPreferences(); updateRoomTools();
+  }
+  function updateRoomTools() {
+    const tools = document.getElementById('chatRoomTools'); const archive = document.getElementById('archiveChatButton');
+    const type = activeChatView === 'private' && activePrivateMember ? 'private' : activeChatView === 'discussion' && currentTopicId !== null ? 'topic' : null;
+    const id = type === 'private' ? activePrivateMember.id : currentTopicId; tools.hidden = !type; if (!type) return;
+    const pref = preferenceFor(type,id) || {}; const mute = document.getElementById('muteChatButton');
+    mute.classList.toggle('active',!!pref.muted); mute.title = pref.muted ? 'Unmute chat' : 'Mute chat';
+    archive.hidden = type !== 'private'; archive.classList.toggle('active',!!pref.archived); archive.title = pref.archived ? 'Unarchive chat' : 'Archive chat';
+  }
+  function chatIsMuted(type,id) { const pref = preferenceFor(type,id); return !!(pref && pref.muted); }
+
+  function playMessageSound() {
+    if (localStorage.getItem('khaso_chat_sounds') !== 'on') return;
+    try { const context = new (window.AudioContext || window.webkitAudioContext)(); const oscillator = context.createOscillator(); const gain = context.createGain(); oscillator.frequency.value = 660; gain.gain.value = .05; oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + .12); } catch (_) {}
+  }
+  function notifyNewMessage(title,body,type,id) {
+    if (chatIsMuted(type,id)) return; playMessageSound();
+    if (localStorage.getItem('khaso_chat_notifications') === 'on' && document.hidden && window.Notification && Notification.permission === 'granted') new Notification(title,{body:String(body || '').slice(0,140)});
+  }
+
+  async function announceTyping(type,id) {
+    if (!currentUserId || !id || Date.now() - lastTypingSent < 1200) return; lastTypingSent = Date.now();
+    await memberClient.from('chat_typing').upsert({user_id:currentUserId,context_type:type,context_id:String(id),updated_at:new Date().toISOString()},{onConflict:'user_id'});
+  }
+  async function loadTypingIndicators() {
+    const cutoff = new Date(Date.now()-5000).toISOString(); const result = await memberClient.from('chat_typing').select('*').gt('updated_at',cutoff).neq('user_id',currentUserId); if (result.error) return;
+    const rows = result.data || []; const topicTypers = rows.filter((row)=>row.context_type==='topic'&&String(row.context_id)===String(currentTopicId));
+    const privateTypers = activePrivateMember ? rows.filter((row)=>row.context_type==='private'&&row.user_id===activePrivateMember.id&&String(row.context_id)===String(currentUserId)) : [];
+    const namesFor = (items) => items.map((row)=>{const member=privateMembers.find((candidate)=>candidate.id===row.user_id);return member?profileName(member):'Someone';});
+    const topicNames = namesFor(topicTypers); const privateNames = namesFor(privateTypers);
+    document.getElementById('groupTypingIndicator').textContent = topicNames.length ? topicNames.join(', ') + (topicNames.length===1?' is':' are') + ' typing…' : '';
+    document.getElementById('privateTypingIndicator').textContent = privateNames.length ? privateNames[0] + ' is typing…' : '';
+  }
+
   function startLiveChatUpdates() {
     chatRealtime = memberClient.channel('khaso-chat-updates')
       .on('postgres_changes', {event:'*',schema:'public',table:'posts'}, (change) => {
         const topicId = change.new && change.new.topic_id ? change.new.topic_id : change.old && change.old.topic_id;
+        if (change.eventType === 'INSERT' && change.new.author_id !== currentUserId) { const topic = chatTopics.find((item)=>String(item.id)===String(topicId)); notifyNewMessage(topic ? topic.title : 'Group message','New group message','topic',topicId); }
         if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts();
       })
       .on('postgres_changes', {event:'*',schema:'public',table:'private_messages'}, async (change) => {
         const row = change.new && change.new.sender_id ? change.new : change.old || {};
         if (row.sender_id !== currentUserId && row.recipient_id !== currentUserId) return;
+        if (change.eventType === 'INSERT' && row.sender_id !== currentUserId) { const member = privateMembers.find((item)=>item.id===row.sender_id); notifyNewMessage(member ? profileName(member) : 'Private message',parsePrivateBody(row.body).text,'private',row.sender_id); }
         await refreshPrivateInbox();
         if (activeChatView === 'private') {
           renderPrivateMembers(document.getElementById('chatSearch').value);
@@ -537,6 +655,29 @@
     return { text: raw, attachments: [], sticker: null };
   }
 
+  function parsePrivateBody(raw) {
+    try {
+      const parsed = JSON.parse(raw);
+      if (parsed && typeof parsed === 'object' && !Array.isArray(parsed)) return {text:parsed.text || '',attachments:parsed.attachments || [],forwarded:!!parsed.forwarded};
+    } catch (_) {}
+    return {text:raw || '',attachments:[],forwarded:false};
+  }
+
+  function firstUrl(text) {
+    const match = String(text || '').match(/https?:\/\/[^\s<]+/i);
+    return match ? match[0] : null;
+  }
+
+  function appendLinkPreview(container, text) {
+    const url = firstUrl(text); if (!url) return;
+    try {
+      const parsed = new URL(url); const preview = document.createElement('a'); preview.className = 'link-preview'; preview.href = url; preview.target = '_blank'; preview.rel = 'noopener';
+      const title = document.createElement('strong'); title.textContent = parsed.hostname.replace(/^www\./,'');
+      const address = document.createElement('small'); address.textContent = url.length > 90 ? url.slice(0,87) + '…' : url;
+      preview.appendChild(title); preview.appendChild(address); container.appendChild(preview);
+    } catch (_) {}
+  }
+
   function fileIconFor(type) {
     if (type && type.indexOf('image/') === 0) return '🖼️';
     if (type && type.indexOf('pdf') !== -1) return '📄';
@@ -568,12 +709,15 @@
 
     const postIds = data.map((post) => post.id);
     const reactionMap = {};
+    const starredPostIds = new Set();
     if (postIds.length) {
       const reactionResult = await memberClient.from('post_reactions').select('post_id,user_id,emoji').in('post_id', postIds);
       (reactionResult.data || []).forEach((reaction) => {
         if (!reactionMap[reaction.post_id]) reactionMap[reaction.post_id] = [];
         reactionMap[reaction.post_id].push(reaction);
       });
+      const starResult = await memberClient.from('message_stars').select('post_id').eq('user_id',currentUserId).in('post_id',postIds);
+      (starResult.data || []).forEach((star) => starredPostIds.add(String(star.post_id)));
     }
 
     const attachmentPaths = [];
@@ -614,6 +758,7 @@
       const parsed = parseBody(post.body);
       const row = document.createElement('div');
       row.className = 'chat-bubble-row ' + (isOwn ? 'own' : 'other');
+      if (starredPostIds.has(String(post.id))) row.classList.add('starred-message');
       const meta = document.createElement('p');
       meta.className = 'chat-meta';
       meta.textContent = (isOwn ? 'You' : displayName) + ' · ' + new Date(post.created_at).toLocaleString();
@@ -646,6 +791,7 @@
         const bubble = document.createElement('div');
         bubble.className = 'chat-bubble';
         if (parsed.text) bubble.innerHTML = renderTextWithMentions(parsed.text);
+        appendLinkPreview(bubble, parsed.text);
         if (parsed.attachments && parsed.attachments.length) {
           const wrap = document.createElement('div');
           wrap.className = 'msg-attachments';
@@ -703,6 +849,20 @@
 
       const actions = document.createElement('div');
       actions.className = 'message-actions';
+
+      const copyButton = document.createElement('button'); copyButton.type = 'button'; copyButton.textContent = 'Copy';
+      copyButton.addEventListener('click', () => navigator.clipboard.writeText(parsed.text || parsed.sticker || ''));
+      actions.appendChild(copyButton);
+      const forwardButton = document.createElement('button'); forwardButton.type = 'button'; forwardButton.textContent = 'Forward';
+      forwardButton.addEventListener('click', () => openForwardDialog({text:parsed.text || parsed.sticker || '',attachments:parsed.attachments || []}));
+      actions.appendChild(forwardButton);
+      const starButton = document.createElement('button'); starButton.type = 'button'; starButton.textContent = starredPostIds.has(String(post.id)) ? 'Unstar' : 'Star';
+      starButton.addEventListener('click', async () => {
+        if (starredPostIds.has(String(post.id))) await memberClient.from('message_stars').delete().eq('user_id',currentUserId).eq('post_id',post.id);
+        else await memberClient.from('message_stars').insert({user_id:currentUserId,post_id:post.id});
+        await loadPosts();
+      });
+      actions.appendChild(starButton);
 
       if (!post.locked) {
         const replyButton = document.createElement('button'); replyButton.type = 'button'; replyButton.textContent = 'Reply';
@@ -986,6 +1146,7 @@
     mentionList.hidden = false;
   }
   document.getElementById('postBody').addEventListener('input', (event) => {
+    announceTyping('topic',currentTopicId);
     const field = event.target;
     const upToCursor = field.value.slice(0, field.selectionStart);
     const match = /@([\w\u0590-\u05FF]*)$/.exec(upToCursor);
@@ -1022,14 +1183,17 @@
   function renderPrivateMembers(searchText) {
     const list = document.getElementById('privateMemberList');
     const search = (searchText || '').trim().toLowerCase();
-    const visible = search.length >= 2 ? privateMembers.filter((member) => profileName(member).toLowerCase().includes(search)) : privateMembers;
+    const unarchived = privateMembers.filter((member) => showArchivedChats ? !!(preferenceFor('private',member.id) || {}).archived : !(preferenceFor('private',member.id) || {}).archived);
+    const visible = search.length >= 2 ? unarchived.filter((member) => (profileName(member) + ' ' + (member.email || '')).toLowerCase().includes(search)) : unarchived;
     list.innerHTML = '';
     visible.forEach((member) => {
       const button = document.createElement('button'); button.type = 'button';
       if (activePrivateMember && activePrivateMember.id === member.id) button.classList.add('active');
       const avatar = document.createElement('span'); avatar.className = 'member-avatar'; avatar.textContent = profileName(member).trim().charAt(0).toUpperCase() || '?';
-      const name = document.createElement('span'); name.className = 'member-list-name'; name.textContent = profileName(member);
-      button.appendChild(avatar); button.appendChild(name);
+      const identity = document.createElement('span'); identity.className = 'member-list-identity';
+      const name = document.createElement('span'); name.className = 'member-list-name'; name.textContent = profileName(member); identity.appendChild(name);
+      if (member.email) { const email = document.createElement('small'); email.className = 'member-email'; email.textContent = member.email; identity.appendChild(email); }
+      button.appendChild(avatar); button.appendChild(identity);
       const unread = privateInbox.filter((msg) => msg.sender_id === member.id && msg.recipient_id === currentUserId && !msg.read_at).length;
       if (unread) { const badge = document.createElement('span'); badge.className = 'private-unread'; badge.textContent = unread; button.appendChild(badge); }
       button.addEventListener('click', () => selectPrivateMember(member));
@@ -1062,8 +1226,22 @@
     const result = await memberClient.from('private_messages').select('*').or('and(sender_id.eq.' + currentUserId + ',recipient_id.eq.' + other + '),and(sender_id.eq.' + other + ',recipient_id.eq.' + currentUserId + ')').order('created_at');
     const list = document.getElementById('privateConversationList'); list.innerHTML = '';
     if (result.error) { list.innerHTML = '<p>Could not load this conversation.</p>'; return; }
+    const messageIds = (result.data || []).map((msg) => msg.id);
+    const starredIds = new Set();
+    if (messageIds.length) {
+      const stars = await memberClient.from('message_stars').select('private_message_id').eq('user_id',currentUserId).in('private_message_id',messageIds);
+      (stars.data || []).forEach((star) => starredIds.add(String(star.private_message_id)));
+    }
+    const parsedMessages = (result.data || []).map((msg) => ({msg,parsed:parsePrivateBody(msg.body)}));
+    const storagePaths = [];
+    parsedMessages.forEach(({parsed}) => parsed.attachments.forEach((att) => { if (att.storagePath) storagePaths.push(att.storagePath); }));
+    const approvedPaths = new Set();
+    if (storagePaths.length) {
+      const approved = await memberClient.from('photo_uploads').select('storage_path').eq('status','approved').in('storage_path',storagePaths);
+      (approved.data || []).forEach((file) => approvedPaths.add(file.storage_path));
+    }
     let lastDay = '';
-    (result.data || []).forEach((msg) => {
+    parsedMessages.forEach(({msg,parsed}) => {
       const day = new Date(msg.created_at).toDateString();
       if (day !== lastDay) {
         const divider = document.createElement('div'); divider.className = 'chat-date-divider';
@@ -1072,9 +1250,28 @@
         list.appendChild(divider); lastDay = day;
       }
       const bubble = document.createElement('div'); bubble.className = 'private-bubble' + (msg.sender_id === currentUserId ? ' mine' : '');
-      const body = document.createElement('p'); body.textContent = msg.body;
-      const time = document.createElement('small'); time.textContent = new Date(msg.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) + (msg.sender_id === currentUserId && msg.read_at ? ' · Read' : '');
-      bubble.appendChild(body); bubble.appendChild(time); list.appendChild(bubble);
+      if (starredIds.has(String(msg.id))) bubble.classList.add('starred-message');
+      if (parsed.forwarded) { const forwarded = document.createElement('small'); forwarded.textContent = 'Forwarded'; bubble.appendChild(forwarded); }
+      if (parsed.text) { const body = document.createElement('p'); body.textContent = parsed.text; bubble.appendChild(body); appendLinkPreview(bubble,parsed.text); }
+      parsed.attachments.forEach((att) => {
+        const wrap = document.createElement('div'); wrap.className = 'private-attachment';
+        if (att.storagePath && !approvedPaths.has(att.storagePath)) { wrap.textContent = 'Waiting for admin approval: ' + (att.name || 'file'); bubble.appendChild(wrap); return; }
+        if ((att.type || '').startsWith('image/')) { const img = document.createElement('img'); img.src = att.url; img.alt = att.name || 'image'; wrap.appendChild(img); }
+        else if ((att.type || '').startsWith('audio/')) { const audio = document.createElement('audio'); audio.controls = true; audio.src = att.url; wrap.appendChild(audio); }
+        else { const link = document.createElement('a'); link.href = att.url; link.target = '_blank'; link.rel = 'noopener'; link.textContent = att.name || 'Open file'; wrap.appendChild(link); }
+        bubble.appendChild(wrap);
+      });
+      const time = document.createElement('small'); time.textContent = new Date(msg.created_at).toLocaleTimeString([], {hour:'numeric',minute:'2-digit'}) + (msg.sender_id === currentUserId ? (msg.read_at ? ' · ✓✓' : ' · ✓') : '');
+      bubble.appendChild(time);
+      const menu = document.createElement('div'); menu.className = 'message-menu';
+      const copy = document.createElement('button'); copy.type = 'button'; copy.textContent = 'Copy'; copy.addEventListener('click',()=>navigator.clipboard.writeText(parsed.text || ''));
+      const forward = document.createElement('button'); forward.type = 'button'; forward.textContent = 'Forward'; forward.addEventListener('click',()=>openForwardDialog({text:parsed.text,attachments:parsed.attachments}));
+      const star = document.createElement('button'); star.type = 'button'; star.textContent = starredIds.has(String(msg.id)) ? 'Unstar' : 'Star'; star.addEventListener('click',async()=>{
+        if (starredIds.has(String(msg.id))) await memberClient.from('message_stars').delete().eq('user_id',currentUserId).eq('private_message_id',msg.id);
+        else await memberClient.from('message_stars').insert({user_id:currentUserId,private_message_id:msg.id});
+        loadPrivateConversation();
+      });
+      menu.appendChild(copy); menu.appendChild(forward); menu.appendChild(star); bubble.appendChild(menu); list.appendChild(bubble);
     });
     if (!result.data || !result.data.length) list.innerHTML = '<p class="chat-empty">No messages yet. Say hello.</p>';
     list.scrollTop = list.scrollHeight;
@@ -1084,13 +1281,15 @@
 
   document.getElementById('privateMessageForm').addEventListener('submit', async (event) => {
     event.preventDefault(); if (!activePrivateMember) return;
-    const field = document.getElementById('privateMessageBody'); const body = field.value.trim(); if (!body) return;
+    const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
+    const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body});
-    if (!result.error) { field.value = ''; await loadPrivateConversation(); }
+    if (!result.error) { field.value = ''; privateStagedAttachments = []; renderPrivateStaged(); await loadPrivateConversation(); }
   });
   document.getElementById('privateMessageBody').addEventListener('keydown', (event) => {
     if (event.key === 'Enter' && !event.shiftKey) { event.preventDefault(); document.getElementById('privateMessageForm').requestSubmit(); }
   });
+  document.getElementById('privateMessageBody').addEventListener('input',()=>{ if (activePrivateMember) announceTyping('private',activePrivateMember.id); });
   const privateEmojiPanel = document.getElementById('privateEmojiPanel');
   ['😀','😂','😍','👍','❤️','🙏','🎉','👏','😊','😢','🔥','✅'].forEach((emoji) => {
     const button = document.createElement('button'); button.type = 'button'; button.textContent = emoji;
@@ -1098,6 +1297,49 @@
     privateEmojiPanel.appendChild(button);
   });
   document.getElementById('privateEmojiToggle').addEventListener('click', () => { privateEmojiPanel.hidden = !privateEmojiPanel.hidden; });
+
+  function renderPrivateStaged() {
+    const wrap = document.getElementById('privateStagedAttachments'); wrap.innerHTML = '';
+    privateStagedAttachments.forEach((att,index) => {
+      const chip = document.createElement('div'); chip.className = 'staged-chip';
+      const name = document.createElement('span'); name.textContent = att.name || 'attachment'; chip.appendChild(name);
+      const remove = document.createElement('button'); remove.type = 'button'; remove.textContent = '✕'; remove.addEventListener('click',()=>{privateStagedAttachments.splice(index,1);renderPrivateStaged();}); chip.appendChild(remove); wrap.appendChild(chip);
+    });
+  }
+
+  async function uploadPrivateFile(file) {
+    if (!/^(image\/|audio\/)|^application\/pdf$/.test(file.type)) throw new Error('Use an image, PDF, or audio file.');
+    const safeName = file.name.replace(/[^a-zA-Z0-9._-]/g,'_'); const path = 'private/' + currentUserId + '/' + Date.now() + '-' + safeName;
+    const uploaded = await memberClient.storage.from('community-photos').upload(path,file,{contentType:file.type}); if (uploaded.error) throw uploaded.error;
+    const record = await memberClient.from('photo_uploads').insert({uploader_id:currentUserId,storage_path:path,caption:file.name}); if (record.error) throw record.error;
+    const url = memberClient.storage.from('community-photos').getPublicUrl(path).data.publicUrl;
+    return {url,storagePath:path,name:file.name,type:file.type,size:file.size};
+  }
+
+  async function stagePrivateFiles(files) {
+    const button = document.getElementById('privateAttachButton'); button.disabled = true;
+    for (const file of files) {
+      try { privateStagedAttachments.push(await uploadPrivateFile(file)); } catch (error) { alert(error.message || 'Could not upload this file.'); }
+    }
+    button.disabled = false; renderPrivateStaged();
+  }
+  document.getElementById('privateAttachButton').addEventListener('click',()=>document.getElementById('privateFileInput').click());
+  document.getElementById('privateFileInput').addEventListener('change',(event)=>{stagePrivateFiles(Array.from(event.target.files || []));event.target.value='';});
+  document.getElementById('privateSection').addEventListener('dragover',(event)=>{event.preventDefault();});
+  document.getElementById('privateSection').addEventListener('drop',(event)=>{event.preventDefault();stagePrivateFiles(Array.from(event.dataTransfer.files || []));});
+
+  document.getElementById('voiceRecordButton').addEventListener('click', async () => {
+    const button = document.getElementById('voiceRecordButton');
+    if (voiceRecorder && voiceRecorder.state === 'recording') { voiceRecorder.stop(); return; }
+    if (!navigator.mediaDevices || !window.MediaRecorder) { alert('Voice recording is not supported in this browser.'); return; }
+    try {
+      const stream = await navigator.mediaDevices.getUserMedia({audio:true}); voiceChunks = [];
+      voiceRecorder = new MediaRecorder(stream); voiceRecorder.ondataavailable = (event) => { if (event.data.size) voiceChunks.push(event.data); };
+      voiceRecorder.onstop = async () => { stream.getTracks().forEach((track)=>track.stop()); button.classList.remove('voice-recording');
+        const blob = new Blob(voiceChunks,{type:voiceRecorder.mimeType || 'audio/webm'}); const file = new File([blob],'voice-' + Date.now() + '.webm',{type:blob.type}); await stagePrivateFiles([file]); };
+      voiceRecorder.start(); button.classList.add('voice-recording');
+    } catch (_) { alert('Microphone permission was not allowed.'); }
+  });
 
   async function runChatSearch() {
     const query = document.getElementById('chatSearch').value.trim().toLowerCase();
@@ -1111,7 +1353,7 @@
       const parsed = parseBody(post.body); const attachments = parsed.attachments || [];
       const hasLink = attachments.some((att) => att.type === 'link' || (!att.storagePath && /^https?:/i.test(att.url || ''))) || /https?:\/\//i.test(parsed.text || '');
       const hasFile = attachments.some((att) => att.type !== 'link' && !!att.storagePath);
-      const name = profileName(post.profiles); const searchable = (parsed.text + ' ' + name + ' ' + attachments.map((att) => att.name || att.url || '').join(' ')).toLowerCase();
+      const name = profileName(post.profiles); const searchable = (parsed.text + ' ' + name + ' ' + new Date(post.created_at).toLocaleDateString() + ' ' + attachments.map((att) => att.name || att.url || '').join(' ')).toLowerCase();
       if (query && !searchable.includes(query)) return;
       if (activeSearchFilter === 'links' && !hasLink) return;
       if (activeSearchFilter === 'files' && !hasFile) return;
@@ -1119,11 +1361,13 @@
     });
     await refreshPrivateInbox();
     privateInbox.forEach((msg) => {
-      const searchable = (msg.body || '').toLowerCase(); const hasLink = /https?:\/\//i.test(msg.body || '');
+      const parsed = parsePrivateBody(msg.body); const otherId = msg.sender_id === currentUserId ? msg.recipient_id : msg.sender_id; const member = privateMembers.find((candidate)=>candidate.id===otherId);
+      const searchable = (parsed.text + ' ' + (member ? profileName(member) : '') + ' ' + new Date(msg.created_at).toLocaleDateString() + ' ' + parsed.attachments.map((att)=>att.name || att.url || '').join(' ')).toLowerCase(); const hasLink = /https?:\/\//i.test(parsed.text) || parsed.attachments.some((att)=>att.type==='link');
+      const hasFile = parsed.attachments.some((att)=>att.type!=='link');
       if (query && !searchable.includes(query)) return;
       if (activeSearchFilter === 'links' && !hasLink) return;
-      if (activeSearchFilter === 'files') return;
-      results.push({kind:'private',msg});
+      if (activeSearchFilter === 'files' && !hasFile) return;
+      results.push({kind:'private',msg,parsed});
     });
     renderSearchResults(results);
   }
@@ -1142,7 +1386,7 @@
       } else {
         const otherId = item.msg.sender_id === currentUserId ? item.msg.recipient_id : item.msg.sender_id;
         const member = privateMembers.find((candidate) => candidate.id === otherId);
-        button.innerHTML = '<strong>Private message' + (member ? ' · ' + escapeHtml(profileName(member)) : '') + '</strong><span>' + escapeHtml(item.msg.body.slice(0,220)) + '</span><small>' + new Date(item.msg.created_at).toLocaleString() + '</small>';
+        button.innerHTML = '<strong>Private message' + (member ? ' · ' + escapeHtml(profileName(member)) : '') + '</strong><span>' + escapeHtml((item.parsed.text || item.parsed.attachments.map((att)=>att.name).join(', ') || 'Attachment').slice(0,220)) + '</span><small>' + new Date(item.msg.created_at).toLocaleString() + '</small>';
         if (member) button.addEventListener('click', () => selectPrivateMember(member));
       }
       wrap.appendChild(button);
@@ -1173,6 +1417,59 @@
   document.getElementById('homeOpenPrivate').addEventListener('click', () => document.getElementById('tabPrivate').click());
   document.getElementById('homeOpenPhotos').addEventListener('click', () => document.getElementById('tabPhotos').click());
   document.getElementById('homeFocusSearch').addEventListener('click', () => document.getElementById('chatSearch').focus());
+
+  function openForwardDialog(payload) {
+    forwardedPayload = payload; const list = document.getElementById('forwardMemberList'); list.innerHTML = '';
+    privateMembers.forEach((member) => {
+      const button = document.createElement('button'); button.type = 'button'; button.className = 'dialog-member';
+      const avatar = document.createElement('span'); avatar.className = 'member-avatar'; avatar.textContent = profileName(member).charAt(0).toUpperCase();
+      const name = document.createElement('span'); name.textContent = profileName(member); button.appendChild(avatar); button.appendChild(name);
+      button.addEventListener('click',async()=>{ button.disabled = true; const body = JSON.stringify({text:forwardedPayload.text || '',attachments:forwardedPayload.attachments || [],forwarded:true});
+        await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:member.id,body}); document.getElementById('forwardDialog').close(); });
+      list.appendChild(button);
+    });
+    document.getElementById('forwardDialog').showModal();
+  }
+  document.querySelectorAll('[data-close-dialog]').forEach((button)=>button.addEventListener('click',()=>document.getElementById(button.dataset.closeDialog).close()));
+
+  document.getElementById('muteChatButton').addEventListener('click',async()=>{
+    const type = activeChatView === 'private' ? 'private' : 'topic'; const id = type === 'private' ? activePrivateMember && activePrivateMember.id : currentTopicId; if (!id) return;
+    const pref = preferenceFor(type,id) || {}; await saveChatPreference(type,id,{muted:!pref.muted});
+  });
+  document.getElementById('archiveChatButton').addEventListener('click',async()=>{
+    if (!activePrivateMember) return; const pref = preferenceFor('private',activePrivateMember.id) || {};
+    await saveChatPreference('private',activePrivateMember.id,{archived:!pref.archived}); activePrivateMember = null;
+    document.getElementById('privateMessageForm').hidden = true; document.getElementById('privateConversationList').innerHTML = '<p class="chat-empty">Choose a member to start a private conversation.</p>'; await openPrivateMessages();
+  });
+  document.getElementById('showArchivedButton').addEventListener('click',()=>{
+    showArchivedChats = !showArchivedChats; document.getElementById('showArchivedButton').textContent = showArchivedChats ? 'Show active chats' : 'Show archived chats'; renderPrivateMembers(document.getElementById('chatSearch').value);
+  });
+  document.getElementById('chatInfoButton').addEventListener('click',()=>{
+    const title = document.getElementById('chatInfoTitle'); const body = document.getElementById('chatInfoBody'); body.innerHTML = '';
+    if (activeChatView === 'private' && activePrivateMember) { title.textContent = profileName(activePrivateMember); body.innerHTML = '<p>Private conversation with an approved member.</p>'; }
+    else { const topic = chatTopics.find((item)=>String(item.id)===String(currentTopicId)); title.textContent = topic ? topic.title : 'Group chat';
+      const members = topic && topic.title !== 'General (everyone)' ? privateMembers.filter((member)=>member.jewish_year===topic.title) : privateMembers;
+      const heading = document.createElement('p'); heading.textContent = (members.length + 1) + ' approved members'; body.appendChild(heading);
+      [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);row.appendChild(avatar);row.appendChild(name);body.appendChild(row); }); }
+    document.getElementById('chatInfoDialog').showModal();
+  });
+
+  document.getElementById('newGroupButton').addEventListener('click',async()=>{
+    const title = prompt('Name the new group room:'); if (!title || !title.trim()) return;
+    const result = await memberClient.from('topics').insert({title:title.trim(),visibility:'all',created_by:currentUserId}); if (result.error) alert('Could not create the room: ' + result.error.message); else await loadTopics(currentProfile);
+  });
+
+  function updateSettingButtons() {
+    document.getElementById('soundToggle').lastChild.textContent = 'Sounds: ' + (localStorage.getItem('khaso_chat_sounds') === 'on' ? 'On' : 'Off');
+    document.getElementById('notificationToggle').lastChild.textContent = 'Notifications: ' + (localStorage.getItem('khaso_chat_notifications') === 'on' ? 'On' : 'Off');
+  }
+  document.getElementById('soundToggle').addEventListener('click',()=>{ localStorage.setItem('khaso_chat_sounds',localStorage.getItem('khaso_chat_sounds')==='on'?'off':'on'); updateSettingButtons(); });
+  document.getElementById('notificationToggle').addEventListener('click',async()=>{
+    if (!window.Notification) { alert('Browser notifications are not supported here.'); return; }
+    if (Notification.permission === 'default') await Notification.requestPermission();
+    const enabled = Notification.permission === 'granted' && localStorage.getItem('khaso_chat_notifications') !== 'on'; localStorage.setItem('khaso_chat_notifications',enabled?'on':'off'); updateSettingButtons();
+  });
+  updateSettingButtons();
 
   // ---- Photos tab (private per-year album) ----
 
@@ -1365,11 +1662,13 @@
     }
     await loadTopics(profile);
     await loadPrivateMembers();
+    await loadChatPreferences();
     showChatHome();
     startLiveChatUpdates();
     if (location.hash === '#photos') document.getElementById('tabPhotos').click();
     setInterval(() => { if (currentTopicId !== null && !document.hidden && !document.getElementById('discussionSection').hidden) loadPosts(); }, 20000);
     setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') { renderPrivateMembers(document.getElementById('chatSearch').value); if (activePrivateMember) await loadPrivateConversation(); } } }, 20000);
+    setInterval(loadTypingIndicators,2000);
   })();
 </script>
 </body>
