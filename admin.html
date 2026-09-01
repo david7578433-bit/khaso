@@ -78,7 +78,16 @@
     #section-photos,
     #section-messages,
     #section-submissions,
+    #section-businesses,
     #section-manage-pictures { grid-column:1 / -1; }
+    .biz-listing { display: flex; gap: 12px; padding: 12px; border: 1px solid var(--border); border-radius: 8px; align-items: flex-start; margin-bottom: 12px; }
+    .biz-listing img { width: 80px; height: 80px; object-fit: cover; border-radius: 6px; flex-shrink: 0; }
+    .biz-listing .biz-info { flex: 1; }
+    .biz-listing .biz-info h3 { margin: 0 0 4px; }
+    .biz-listing .biz-info p { margin: 4px 0; color: var(--muted); font-size: 13px; }
+    .biz-listing-actions { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; margin-top: 8px; }
+    .biz-listing-actions button { padding: 6px 12px; }
+    .biz-listing-actions label { display: flex; align-items: center; gap: 5px; font-size: 13px; margin: 0; }
     .admin-content input,
     .admin-content select,
     .admin-content textarea { padding:9px 10px; margin-bottom:8px; }
@@ -177,6 +186,7 @@
         <a href="#section-photos">Photos</a>
         <a href="#section-messages">Messages</a>
         <a href="#section-submissions">Submissions</a>
+        <a href="#section-businesses">Businesses</a>
         <span class="admin-nav-label">Gallery</span>
         <a href="#section-add-picture">Add Picture</a>
         <a href="#section-manage-pictures">Manage Pictures</a>
@@ -339,6 +349,13 @@
       <div class="section-item" id="section-submissions">
       <h2>Pending Submissions (News / Simchas)</h2>
       <div id="submissionsList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
+      </div>
+      <div class="section-item" id="section-businesses">
+      <h2>Business Listings</h2>
+      <h3>Pending Approval</h3>
+      <div id="pendingBusinessList"><p>Loading…</p></div>
+      <h3>Approved (toggle "Featured" to show as a homepage ad)</h3>
+      <div id="approvedBusinessList"><p>Loading…</p></div>
       </div>
       <div class="section-item" id="section-add-picture">
       <h2>Add a Picture</h2>
@@ -982,6 +999,111 @@
       });
     }
 
+    function renderBusinessCard(biz, isPending) {
+      const card = document.createElement('div');
+      card.className = 'biz-listing';
+
+      if (biz.image_path) {
+        const { data: urlData } = supabaseClient.storage.from('business-photos').getPublicUrl(biz.image_path);
+        const img = document.createElement('img');
+        img.src = urlData.publicUrl;
+        img.alt = biz.name;
+        card.appendChild(img);
+      }
+
+      const info = document.createElement('div');
+      info.className = 'biz-info';
+      const h3 = document.createElement('h3');
+      h3.textContent = biz.name + (biz.category ? ' — ' + biz.category : '');
+      info.appendChild(h3);
+      if (biz.description) {
+        const desc = document.createElement('p');
+        desc.textContent = biz.description;
+        info.appendChild(desc);
+      }
+      const contactBits = [biz.contact_phone, biz.contact_email, biz.website].filter(Boolean);
+      if (contactBits.length) {
+        const contact = document.createElement('p');
+        contact.textContent = contactBits.join(' · ');
+        info.appendChild(contact);
+      }
+
+      const actions = document.createElement('div');
+      actions.className = 'biz-listing-actions';
+
+      if (isPending) {
+        const approveButton = document.createElement('button');
+        approveButton.type = 'button';
+        approveButton.textContent = 'Approve';
+        approveButton.addEventListener('click', async () => {
+          approveButton.disabled = true;
+          const { error } = await supabaseClient.from('businesses').update({ approved: true }).eq('id', biz.id);
+          if (error) { setStatus('Could not approve: ' + error.message, true); approveButton.disabled = false; return; }
+          await loadBusinesses();
+        });
+        actions.appendChild(approveButton);
+      } else {
+        const featuredLabel = document.createElement('label');
+        const featuredCheck = document.createElement('input');
+        featuredCheck.type = 'checkbox';
+        featuredCheck.checked = !!biz.featured;
+        featuredCheck.addEventListener('change', async () => {
+          featuredCheck.disabled = true;
+          const { error } = await supabaseClient.from('businesses').update({ featured: featuredCheck.checked }).eq('id', biz.id);
+          featuredCheck.disabled = false;
+          if (error) { featuredCheck.checked = !featuredCheck.checked; setStatus(error.message, true); }
+        });
+        featuredLabel.appendChild(featuredCheck);
+        featuredLabel.appendChild(document.createTextNode('Featured (homepage ad)'));
+        actions.appendChild(featuredLabel);
+      }
+
+      const deleteButton = document.createElement('button');
+      deleteButton.type = 'button';
+      deleteButton.className = 'secondary';
+      deleteButton.textContent = isPending ? 'Reject' : 'Delete';
+      deleteButton.addEventListener('click', async () => {
+        if (!confirm('Remove this business listing?')) return;
+        deleteButton.disabled = true;
+        const { error } = await supabaseClient.from('businesses').delete().eq('id', biz.id);
+        if (error) { setStatus('Could not remove: ' + error.message, true); deleteButton.disabled = false; return; }
+        if (biz.image_path) await supabaseClient.storage.from('business-photos').remove([biz.image_path]);
+        await loadBusinesses();
+      });
+      actions.appendChild(deleteButton);
+
+      info.appendChild(actions);
+      card.appendChild(info);
+      return card;
+    }
+
+    async function loadBusinesses() {
+      const pendingList = document.getElementById('pendingBusinessList');
+      const approvedList = document.getElementById('approvedBusinessList');
+
+      const { data, error } = await supabaseClient
+        .from('businesses')
+        .select('id, name, description, category, contact_phone, contact_email, website, image_path, approved, featured')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        pendingList.innerHTML = '<p>Could not load businesses: ' + error.message + '</p>';
+        approvedList.innerHTML = '';
+        return;
+      }
+
+      const pending = (data || []).filter((b) => !b.approved);
+      const approved = (data || []).filter((b) => b.approved);
+
+      pendingList.innerHTML = '';
+      if (!pending.length) pendingList.innerHTML = '<p>No pending listings.</p>';
+      else pending.forEach((biz) => pendingList.appendChild(renderBusinessCard(biz, true)));
+
+      approvedList.innerHTML = '';
+      if (!approved.length) approvedList.innerHTML = '<p>No approved listings yet.</p>';
+      else approved.forEach((biz) => approvedList.appendChild(renderBusinessCard(biz, false)));
+    }
+
     const CATEGORY_LABELS = {
       rabbi: 'Rabbi',
       yeshiva_gedola: 'Yeshiva Gedola',
@@ -1119,6 +1241,7 @@
         ['Messages', 'posts', null],
         ['Pending Photos', 'photo_uploads', ['status', 'pending']],
         ['Submissions', 'submissions', ['approved', false]],
+        ['Pending Businesses', 'businesses', ['approved', false]],
         ['Suggestions', 'suggestions', ['status', 'new']]
       ];
       const values = await Promise.all(stats.map(async ([label, table, filter]) => {
@@ -1360,6 +1483,7 @@
       await loadPendingPhotos();
       await loadAdminMessages();
       await loadSubmissions();
+      await loadBusinesses();
       await loadGalleryManage();
       await loadDashboard();
       await loadSiteSettings();
