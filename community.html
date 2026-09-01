@@ -35,6 +35,10 @@
   .ride-form .wide { grid-column:1 / -1; }
   .ride-form label { margin:0; }
   @media (max-width:650px) { .ride-form { grid-template-columns:1fr; } .ride-form .wide { grid-column:auto; } }
+  .yahrzeit-month-nav { display:flex; align-items:center; justify-content:space-between; gap:8px; margin-bottom:10px; }
+  .yahrzeit-month-nav button { margin:0; padding:4px 12px; font-size:16px; line-height:1; }
+  .yahrzeit-month-nav span { font-weight:700; color:var(--accent-dark); }
+  .yahrzeit-day-badge { display:inline-block; min-width:26px; text-align:center; background:#e7f5f2; color:var(--accent-dark); border-radius:6px; padding:2px 6px; font-size:12px; font-weight:700; margin-inline-end:6px; }
   @media print {
     body.printing-event > *:not(.print-sheet) { display:none !important; }
     body.printing-event .print-sheet { display:block !important; padding:24px; color:#111; font-family:Georgia,serif; }
@@ -67,6 +71,11 @@
   <div class="community-grid">
     <section class="card">
       <h2>Yahrzeits</h2>
+      <div class="yahrzeit-month-nav">
+        <button type="button" id="yahrzeitPrevMonth" aria-label="Previous month">‹</button>
+        <span id="yahrzeitMonthLabel"></span>
+        <button type="button" id="yahrzeitNextMonth" aria-label="Next month">›</button>
+      </div>
       <div id="yahrzeitList"><p class="empty">Loading…</p></div>
     </section>
 
@@ -143,6 +152,9 @@
   let allEvents = [];
   let communitySession = null;
   let communityProfile = null;
+  let allYahrzeits = [];
+  let yahrzeitMonthIndex = 0;
+  const YAHRZEIT_MONTHS = ['Tishri','Heshvan','Kislev','Tevet','Shevat','Adar','Adar I','Adar II','Nisan','Iyar','Sivan','Tamuz','Av','Elul'];
 
   function esc(value) {
     const div = document.createElement('div');
@@ -177,6 +189,25 @@
     }).join('');
   }
 
+  function currentHebrewMonthName() {
+    try { return new Intl.DateTimeFormat('en-u-ca-hebrew', {month:'long'}).formatToParts(new Date()).find((part) => part.type === 'month').value; }
+    catch (_) { return YAHRZEIT_MONTHS[0]; }
+  }
+
+  function renderYahrzeitMonth() {
+    const monthName = YAHRZEIT_MONTHS[yahrzeitMonthIndex];
+    document.getElementById('yahrzeitMonthLabel').textContent = monthName;
+    const inMonth = allYahrzeits.filter((item) => item.reminder_month === monthName).sort((a,b) => (a.reminder_day || 0) - (b.reminder_day || 0));
+    const rowHtml = (item) => '<article class="item">' + (item.reminder_day ? '<span class="yahrzeit-day-badge">' + esc(item.reminder_day) + '</span>' : '') + '<h3>' + esc(item.name) + '</h3><p class="meta">' + esc(item.hebrew_date) + '</p>' + (item.notes ? '<p>' + esc(item.notes) + '</p>' : '') + '</article>';
+    let html = inMonth.map(rowHtml).join('');
+    if (!html) html = '<p class="empty">No yahrzeits in ' + esc(monthName) + '.</p>';
+    const unscheduled = allYahrzeits.filter((item) => !item.reminder_month);
+    if (unscheduled.length) {
+      html += '<p class="meta" style="margin-top:14px;">Not yet scheduled to a month:</p>' + unscheduled.map(rowHtml).join('');
+    }
+    document.getElementById('yahrzeitList').innerHTML = html;
+  }
+
   async function loadPublicContent() {
     const now = new Date().toISOString();
     const [events, yahrzeits, campaigns] = await Promise.all([
@@ -187,8 +218,10 @@
     allEvents = events.data || [];
     renderEvents(allEvents);
 
-    const yList = document.getElementById('yahrzeitList');
-    yList.innerHTML = (yahrzeits.data || []).map((item) => '<article class="item"><h3>' + esc(item.name) + '</h3><p class="meta">' + esc(item.hebrew_date) + '</p>' + (item.notes ? '<p>' + esc(item.notes) + '</p>' : '') + '</article>').join('') || '<p class="empty">No yahrzeits posted.</p>';
+    allYahrzeits = yahrzeits.data || [];
+    yahrzeitMonthIndex = YAHRZEIT_MONTHS.indexOf(currentHebrewMonthName());
+    if (yahrzeitMonthIndex < 0) yahrzeitMonthIndex = 0;
+    renderYahrzeitMonth();
 
     const cList = document.getElementById('campaignsList');
     cList.innerHTML = (campaigns.data || []).map((item) => '<article class="item"><h3>' + esc(item.title) + '</h3>' + (item.description ? '<p>' + esc(item.description) + '</p>' : '') + (item.goal ? '<p class="meta">Goal: $' + esc(Number(item.goal).toLocaleString()) + '</p>' : '') + (item.donation_url ? '<a class="button" href="' + esc(item.donation_url) + '" target="_blank" rel="noopener">Donate Securely</a>' : '') + '</article>').join('') || '<p class="empty">No active campaigns.</p>';
@@ -347,6 +380,15 @@
   }
   document.getElementById('closePdfViewer').addEventListener('click', closePdfViewer);
   pdfDialog.addEventListener('click', (event) => { if (event.target === pdfDialog) closePdfViewer(); });
+
+  document.getElementById('yahrzeitPrevMonth').addEventListener('click', () => {
+    yahrzeitMonthIndex = (yahrzeitMonthIndex - 1 + YAHRZEIT_MONTHS.length) % YAHRZEIT_MONTHS.length;
+    renderYahrzeitMonth();
+  });
+  document.getElementById('yahrzeitNextMonth').addEventListener('click', () => {
+    yahrzeitMonthIndex = (yahrzeitMonthIndex + 1) % YAHRZEIT_MONTHS.length;
+    renderYahrzeitMonth();
+  });
 
   loadPublicContent();
   loadMemberContent();
