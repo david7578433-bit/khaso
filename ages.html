@@ -199,26 +199,6 @@
   .section-tab:hover { background: none; color: var(--ink); }
   .section-tab.active { color: var(--accent-dark); border-bottom-color: var(--accent); }
 
-  .photos-intro { color: var(--muted); font-size: 14px; margin-top: -6px; }
-  .photos-toolbar { margin-bottom: 16px; }
-  .age-photo-grid {
-    display: grid; grid-template-columns: repeat(auto-fill, minmax(150px, 1fr)); gap: 12px;
-  }
-  .age-photo-card { position: relative; border-radius: 10px; overflow: hidden; background: #f4f7f8; }
-  .age-photo-card canvas {
-    display: block; width: 100%; height: 150px; object-fit: cover; user-select: none;
-    -webkit-user-drag: none; pointer-events: none;
-  }
-  .age-photo-card .age-photo-meta {
-    display: flex; justify-content: space-between; align-items: center; gap: 6px;
-    padding: 6px 8px; font-size: 11px; color: var(--muted); background: white;
-  }
-  .age-photo-card .age-photo-delete {
-    padding: 3px 8px; font-size: 11px; background: #b64a4a;
-  }
-  .age-photo-card .age-photo-delete:hover { background: #963c3c; }
-  .age-photo-loading { color: var(--muted); font-size: 14px; }
-
   /* Full desktop chat workspace */
   #boardCard.card { width:min(1500px,calc(100vw - 36px)); max-width:none; padding:0; overflow:hidden; text-align:left; border-radius:18px; }
   .chat-app-layout { display:grid; grid-template-columns:210px 290px minmax(0,1fr); min-height:690px; height:calc(100vh - 190px); max-height:850px; }
@@ -244,8 +224,7 @@
   .chat-room-header h2 { margin:0; font-size:21px; }
   .chat-room-header p { margin:2px 0 0; color:var(--muted); font-size:12px; }
   #discussionSection { display:flex; flex:1; flex-direction:column; min-height:0; padding:0 16px 14px; }
-  #discussionSection[hidden], #photosSection[hidden] { display:none; }
-  #photosSection { flex:1; min-height:0; overflow:auto; padding:22px; }
+  #discussionSection[hidden] { display:none; }
   .chat-window { flex:1; max-height:none; min-height:0; margin:0 -16px 6px; padding:26px 24px 14px; border:0; border-radius:0; background:#f8fafb; }
   .chat-bubble-row { max-width:72%; }
   .chat-input-row { padding-top:2px; }
@@ -448,7 +427,6 @@
         <button type="button" class="section-tab" id="tabFavorites"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Favorite chats</button>
         <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
         <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
-        <button type="button" class="section-tab" id="tabPhotos"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="3" y="4" width="18" height="16" rx="2"/><circle cx="9" cy="9" r="2"/><path d="m4 17 5-5 4 4 2-2 5 4"/></svg>Photos</button>
         <button type="button" class="section-tab" id="tabShared"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg>Files & links</button>
         <div class="chat-nav-spacer"></div>
         <select class="presence-select" id="presenceStatus" aria-label="Your chat status"><option value="available">● Available</option><option value="busy">● Busy</option><option value="away">● Away</option></select>
@@ -492,7 +470,6 @@
           <div class="chat-home-grid">
             <div class="chat-home-card"><h3>Group chats</h3><p>Open General, your year room, and rooms shared by an admin.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
             <div class="chat-home-card"><h3>Private messages</h3><p>Search all approved members and start a conversation.</p><button type="button" id="homeOpenPrivate">Find a member</button></div>
-            <div class="chat-home-card"><h3>Photos</h3><p>See the private photo album for your year.</p><button type="button" id="homeOpenPhotos">Open photos</button></div>
             <div class="chat-home-card"><h3>Search</h3><p>Find messages, shared links, and uploaded files.</p><button type="button" id="homeFocusSearch">Search chat</button></div>
           </div>
         </div>
@@ -548,15 +525,6 @@
 
         <div class="search-results" id="searchResultsSection" hidden></div>
 
-        <div id="photosSection" hidden>
-      <p class="photos-intro">Private to your year — only members approved for your year can see or add photos here. Please don't screenshot or share these outside the site.</p>
-      <div class="photos-toolbar">
-        <button type="button" id="addAgePhotoBtn">+ Add a Photo</button>
-        <input type="file" id="agePhotoInput" accept="image/*" hidden>
-      </div>
-      <div class="age-photo-grid" id="agePhotoGrid"></div>
-      <p class="age-photo-loading" id="agePhotoStatus"></p>
-        </div>
       </section>
     </div>
   </section>
@@ -571,7 +539,6 @@
 
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="member-auth.js"></script>
-<script src="photo-editor.js"></script>
 <script>
   let currentTopicId = null;
   let currentUserId = null;
@@ -675,13 +642,13 @@
 
   function setActiveChatView(view) {
     activeChatView = view;
-    ['homeSection','discussionSection','privateSection','photosSection','searchResultsSection'].forEach((id) => {
+    ['homeSection','discussionSection','privateSection','searchResultsSection'].forEach((id) => {
       document.getElementById(id).hidden = id !== view + 'Section';
     });
     document.getElementById('topicList').hidden = view === 'private';
     document.getElementById('privateMemberList').hidden = view !== 'private';
     document.querySelectorAll('.chat-app-sidebar .section-tab').forEach((button) => button.classList.remove('active'));
-    const navId = view === 'home' ? 'tabHome' : view === 'discussion' ? 'tabDiscussion' : view === 'private' ? 'tabPrivate' : view === 'photos' ? 'tabPhotos' : null;
+    const navId = view === 'home' ? 'tabHome' : view === 'discussion' ? 'tabDiscussion' : view === 'private' ? 'tabPrivate' : null;
     if (navId) document.getElementById(navId).classList.add('active');
     document.getElementById('chatListTitle').textContent = view === 'private' ? 'People' : 'Chats';
     document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your available rooms';
@@ -1927,15 +1894,8 @@
     if (selected) selected.click();
   });
   document.getElementById('tabPrivate').addEventListener('click', openPrivateMessages);
-  document.getElementById('tabPhotos').addEventListener('click', () => {
-    setActiveChatView('photos');
-    document.getElementById('roomTitle').textContent = 'Photos';
-    document.getElementById('roomSubtitle').textContent = 'Private photos for your approved year';
-    loadAgePhotos();
-  });
   document.getElementById('homeOpenGroups').addEventListener('click', () => document.getElementById('tabDiscussion').click());
   document.getElementById('homeOpenPrivate').addEventListener('click', () => document.getElementById('tabPrivate').click());
-  document.getElementById('homeOpenPhotos').addEventListener('click', () => document.getElementById('tabPhotos').click());
   document.getElementById('homeFocusSearch').addEventListener('click', () => document.getElementById('chatSearch').focus());
 
   function openForwardDialog(payload) {
@@ -2028,167 +1988,6 @@
   document.getElementById('presenceStatus').value = savedPresenceStatus;
   document.getElementById('presenceStatus').addEventListener('change', async (event) => { localStorage.setItem('kasho_presence_status',event.target.value); await updateMyPresence(); await refreshPresenceAndBlocks(); });
 
-  // ---- Photos tab (private per-year album) ----
-
-  // Draws a photo onto a canvas with the viewer's own name stamped across it,
-  // so a screenshot or a repost still carries who was looking at it. This is
-  // a deterrent, not a lock — nothing on the web can stop a real screenshot.
-  async function drawWatermarkedCanvas(blob, label, maxSize) {
-    const img = await new Promise((resolve, reject) => {
-      const el = new Image();
-      el.onload = () => resolve(el);
-      el.onerror = () => reject(new Error('Could not load image'));
-      el.src = URL.createObjectURL(blob);
-    });
-    const scale = Math.min(1, maxSize / Math.max(img.naturalWidth, img.naturalHeight));
-    const canvas = document.createElement('canvas');
-    canvas.width = Math.round(img.naturalWidth * scale);
-    canvas.height = Math.round(img.naturalHeight * scale);
-    const ctx = canvas.getContext('2d');
-    ctx.drawImage(img, 0, 0, canvas.width, canvas.height);
-    URL.revokeObjectURL(img.src);
-
-    ctx.save();
-    ctx.translate(canvas.width / 2, canvas.height / 2);
-    ctx.rotate(-Math.PI / 8);
-    ctx.font = 'bold ' + Math.max(12, Math.round(canvas.width / 14)) + 'px Assistant, sans-serif';
-    ctx.fillStyle = 'rgba(255,255,255,.38)';
-    ctx.strokeStyle = 'rgba(0,0,0,.22)';
-    ctx.lineWidth = 2;
-    ctx.textAlign = 'center';
-    ctx.textBaseline = 'middle';
-    ctx.strokeText(label, 0, 0);
-    ctx.fillText(label, 0, 0);
-    ctx.restore();
-
-    return canvas;
-  }
-
-  function blockImageActions(el) {
-    el.addEventListener('contextmenu', (e) => e.preventDefault());
-    el.addEventListener('dragstart', (e) => e.preventDefault());
-  }
-
-  async function loadAgePhotos() {
-    const grid = document.getElementById('agePhotoGrid');
-    const statusEl = document.getElementById('agePhotoStatus');
-    grid.innerHTML = '';
-
-    if (!currentProfile || !currentProfile.jewish_year) {
-      statusEl.textContent = 'Waiting for an admin to assign you to a year room.';
-      return;
-    }
-
-    statusEl.textContent = 'Loading photos…';
-    const { data, error } = await memberClient
-      .from('age_photos')
-      .select('id, storage_path, caption, uploader_id, created_at')
-      .eq('jewish_year', currentProfile.jewish_year)
-      .order('created_at', { ascending: false });
-
-    if (error) {
-      statusEl.textContent = 'Could not load photos: ' + error.message;
-      return;
-    }
-
-    if (!data || data.length === 0) {
-      statusEl.textContent = 'No photos yet — be the first to add one.';
-      return;
-    }
-
-    statusEl.textContent = '';
-    const watermarkLabel = 'For ' + profileName(currentProfile) + ' only — do not share';
-
-    for (const photo of data) {
-      const { data: signedData, error: signedError } = await memberClient
-        .storage.from('age-photos')
-        .createSignedUrl(photo.storage_path, 300);
-      if (signedError || !signedData) continue;
-
-      let canvas;
-      try {
-        const imgRes = await fetch(signedData.signedUrl);
-        const blob = await imgRes.blob();
-        canvas = await drawWatermarkedCanvas(blob, watermarkLabel, 640);
-      } catch (e) {
-        continue;
-      }
-      blockImageActions(canvas);
-
-      const card = document.createElement('div');
-      card.className = 'age-photo-card';
-      card.appendChild(canvas);
-
-      const meta = document.createElement('div');
-      meta.className = 'age-photo-meta';
-      const dateSpan = document.createElement('span');
-      dateSpan.textContent = new Date(photo.created_at).toLocaleDateString();
-      meta.appendChild(dateSpan);
-
-      if (currentUserId && photo.uploader_id === currentUserId) {
-        const delBtn = document.createElement('button');
-        delBtn.type = 'button';
-        delBtn.className = 'age-photo-delete';
-        delBtn.textContent = 'Delete';
-        delBtn.addEventListener('click', async () => {
-          if (!confirm('Delete this photo?')) return;
-          delBtn.disabled = true;
-          await memberClient.storage.from('age-photos').remove([photo.storage_path]);
-          await memberClient.from('age_photos').delete().eq('id', photo.id);
-          loadAgePhotos();
-        });
-        meta.appendChild(delBtn);
-      }
-      card.appendChild(meta);
-      grid.appendChild(card);
-    }
-  }
-
-  document.getElementById('addAgePhotoBtn').addEventListener('click', () => {
-    if (!currentProfile || !currentProfile.jewish_year) {
-      document.getElementById('agePhotoStatus').textContent = 'Waiting for an admin to assign you to a year room.';
-      return;
-    }
-    document.getElementById('agePhotoInput').click();
-  });
-
-  document.getElementById('agePhotoInput').addEventListener('change', async (event) => {
-    const file = event.target.files && event.target.files[0];
-    event.target.value = '';
-    if (!file) return;
-
-    const editedBlob = await window.openPhotoEditor(file);
-    if (!editedBlob) return;
-
-    const statusEl = document.getElementById('agePhotoStatus');
-    statusEl.textContent = 'Uploading…';
-
-    const safeYear = (currentProfile.jewish_year || 'year').replace(/[^a-zA-Z0-9]+/g, '-').replace(/^-+|-+$/g, '') || 'year';
-    const path = safeYear + '/' + currentUserId + '-' + Date.now() + '.jpg';
-    const { error: uploadError } = await memberClient
-      .storage.from('age-photos')
-      .upload(path, editedBlob, { contentType: 'image/jpeg' });
-
-    if (uploadError) {
-      statusEl.textContent = 'Could not upload: ' + uploadError.message;
-      return;
-    }
-
-    const { error: insertError } = await memberClient.from('age_photos').insert({
-      jewish_year: currentProfile.jewish_year,
-      storage_path: path,
-      uploader_id: currentUserId
-    });
-
-    if (insertError) {
-      statusEl.textContent = 'Could not save photo: ' + insertError.message;
-      return;
-    }
-
-    statusEl.textContent = '';
-    loadAgePhotos();
-  });
-
   (async () => {
     const { session, profile } = await getMemberStatus();
     const gateCard = document.getElementById('gateCard');
@@ -2232,7 +2031,6 @@
       const member = requestedMember && privateMembers.find((item)=>String(item.id)===String(requestedMember));
       if (member) await selectPrivateMember(member);
     } else if (chatParams.get('topic')) { const requested=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(chatParams.get('topic'))+'"]');if(requested)requested.click(); }
-    else if (location.hash === '#photos') document.getElementById('tabPhotos').click();
     setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') renderPrivateMembers(document.getElementById('chatSearch').value); } }, 120000);
     setInterval(loadTypingIndicators,2000);
     setInterval(runScheduledMessages,30000);
