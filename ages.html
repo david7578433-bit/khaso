@@ -226,11 +226,12 @@
   }
 
   /* Google Chat-inspired single-page chat */
-  body.chat-page { margin:0; min-height:100vh; overflow:hidden; color:#1f1f1f; background:#fff; font-family:"Google Sans",Roboto,Arial,sans-serif; }
-  .chat-page main { width:100%; max-width:none; min-height:100vh; padding:0; margin:0; }
+  html { height:100%; }
+  body.chat-page { margin:0; width:100%; height:100%; min-height:100vh; overflow:hidden; color:#1f1f1f; background:#fff; font-family:"Google Sans",Roboto,Arial,sans-serif; }
+  .chat-page main { width:100%; max-width:none; height:100%; min-height:0; padding:0; margin:0; overflow:hidden; }
   .chat-page #gateCard { margin:12vh auto 0; }
-  .chat-page #boardCard.card { width:100vw; height:100vh; border:0; border-radius:0; box-shadow:none; }
-  .chat-page .chat-app-layout { grid-template-columns:224px 310px minmax(0,1fr); width:100%; height:100vh; max-height:none; min-height:0; }
+  .chat-page #boardCard.card { box-sizing:border-box; width:100%; height:100%; margin:0!important; border:0; border-radius:0; box-shadow:none; overflow:hidden; }
+  .chat-page .chat-app-layout { grid-template-columns:224px 310px minmax(0,1fr); width:100%; height:100%; max-height:none; min-height:0; overflow:hidden; }
   .chat-app-sidebar { border-radius:0; color:#1f1f1f; background:#f0f4f9; border-right:1px solid #e1e7ed; }
   .chat-app-brand { display:flex; align-items:center; gap:10px; color:#0b57d0; font-size:22px; font-weight:600; }
   .chat-app-brand::before { content:""; width:30px; height:30px; border-radius:9px; background:linear-gradient(135deg,#0b57d0 0 55%,#34a853 55% 100%); box-shadow:inset 0 0 0 6px rgba(255,255,255,.88); }
@@ -262,19 +263,22 @@
   .member-list[hidden] { display:none; }
   .member-list button { display:flex; align-items:center; gap:10px; width:100%; min-height:56px; padding:8px 10px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
   .member-list button:hover, .member-list button.active { background:#d3e3fd; }
+  .presence-dot { flex:0 0 9px; width:9px; height:9px; margin-left:auto; border-radius:50%; background:#9aa0a6; }
+  .presence-dot.online { background:#1e8e3e; box-shadow:0 0 0 2px #ceead6; }
+  .blocked-label { margin-left:auto; color:#b3261e; font-size:11px; font-weight:700; }
   .member-avatar { flex:0 0 38px; width:38px; height:38px; display:grid; place-items:center; border-radius:50%; color:white; background:#0b57d0; font-weight:700; }
   .member-list-name { min-width:0; flex:1; overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
   .member-list-identity { min-width:0; flex:1; }
   .member-list-identity .member-list-name { display:block; }
   .member-email { display:block; overflow:hidden; color:#5f6368; font-size:11px; text-overflow:ellipsis; white-space:nowrap; }
   .private-unread { min-width:21px; padding:2px 6px; border-radius:999px; color:white; background:#c0392b; text-align:center; font-size:11px; }
-  #privateSection { display:flex; flex:1; min-height:0; flex-direction:column; }
+  #privateSection { display:flex; flex:1; min-height:0; flex-direction:column; overflow:hidden; }
   .private-conversation-list { flex:1; display:flex; flex-direction:column; gap:10px; min-height:0; overflow:auto; padding:20px 25px; background:#f8fafb; }
   .private-bubble { max-width:72%; padding:10px 13px; border:1px solid var(--border); border-radius:16px; background:white; }
   .private-bubble.mine { align-self:flex-end; color:#1f1f1f; background:#d3e3fd; border-color:#a8c7fa; }
   .private-bubble p { margin:0; white-space:pre-wrap; overflow-wrap:anywhere; }
   .private-bubble small { display:block; margin-top:5px; opacity:.7; }
-  .private-compose { display:flex; align-items:flex-end; gap:8px; padding:12px 16px; border-top:1px solid var(--border); background:white; }
+  .private-compose { display:flex; flex:0 0 auto; align-items:flex-end; gap:8px; padding:12px 16px; border-top:1px solid var(--border); background:white; }
   .private-compose textarea { flex:1; min-height:44px; max-height:120px; margin:0; resize:none; }
   .private-emoji-panel { display:flex; flex-wrap:wrap; gap:3px; padding:7px 16px; border-top:1px solid var(--border); background:white; }
   .private-emoji-panel[hidden] { display:none; }
@@ -319,6 +323,12 @@
   .dialog-member { display:flex; align-items:center; gap:10px; width:100%; margin:4px 0; color:#1f1f1f; background:white; border:0; text-align:left; }
   .visually-hidden { position:absolute!important; width:1px!important; height:1px!important; padding:0!important; margin:-1px!important; overflow:hidden!important; clip:rect(0,0,0,0)!important; white-space:nowrap!important; border:0!important; }
   .typing-indicator { min-height:17px; margin:0 6px 4px; color:#5f6368; font-size:12px; font-style:italic; }
+  .chat-room-main { height:100%; overflow:hidden; }
+  #discussionSection { overflow:hidden; }
+  .chat-window { overflow-y:auto; overscroll-behavior:contain; }
+  .chat-input-row, #postForm, #mentionDropdownWrap { flex:0 0 auto; }
+  .block-member-button { width:100%; margin-top:14px; color:#b3261e; background:#fce8e6; border:1px solid #f3b8b3; }
+  .block-member-button.unblock { color:#0842a0; background:#d3e3fd; border-color:#a8c7fa; }
   @media (max-width:920px) {
     body.chat-page { overflow:auto; }
     .chat-page .chat-app-layout { grid-template-columns:1fr; height:auto; min-height:100vh; }
@@ -354,7 +364,7 @@
       </aside>
       <aside class="chat-list-pane">
         <h2 id="chatListTitle">Chats</h2>
-        <p id="chatListSubtitle">Your approved rooms</p>
+        <p id="chatListSubtitle">Rooms for all approved members</p>
         <button type="button" class="new-group-button" id="newGroupButton" hidden>+ New group room</button>
         <button type="button" class="new-group-button" id="showArchivedButton" hidden>Show archived chats</button>
         <div class="topic-list" id="topicList"></div>
@@ -381,7 +391,7 @@
         <div class="chat-home-view" id="homeSection">
           <div class="chat-home-welcome"><h2>Welcome to Khaso Chat</h2><p>Choose a room or start a private conversation.</p></div>
           <div class="chat-home-grid">
-            <div class="chat-home-card"><h3>Group chats</h3><p>Talk with everyone or with your approved year.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
+            <div class="chat-home-card"><h3>Group chats</h3><p>Every approved member can open every room.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
             <div class="chat-home-card"><h3>Private messages</h3><p>Search all approved members and start a conversation.</p><button type="button" id="homeOpenPrivate">Find a member</button></div>
             <div class="chat-home-card"><h3>Photos</h3><p>See the private photo album for your year.</p><button type="button" id="homeOpenPhotos">Open photos</button></div>
             <div class="chat-home-card"><h3>Search</h3><p>Find messages, shared links, and uploaded files.</p><button type="button" id="homeFocusSearch">Search chat</button></div>
@@ -479,6 +489,9 @@
   let forwardedPayload = null;
   let showArchivedChats = false;
   let lastTypingSent = 0;
+  let onlineMemberIds = new Set();
+  let blockedMemberIds = new Set();
+  let blockedByMemberIds = new Set();
   function profileName(p) {
     if (!p) return 'Member';
     return p.display_name || [p.first_name, p.last_name].filter(Boolean).join(' ') || 'Member';
@@ -490,12 +503,10 @@
     list.innerHTML = '';
     if (error || !data || data.length === 0) return;
 
-    const allowedYear = profile && profile.jewish_year;
-    const isAdmin = profile && (profile.role === 'owner' || profile.role === 'admin');
-    chatTopics = data.filter((topic) => isAdmin || topic.visibility === 'all' || topic.title === 'General (everyone)' || topic.title === allowedYear);
+    chatTopics = data;
 
     if (chatTopics.length === 0) {
-      list.innerHTML = '<p>Waiting for an admin to assign you to a year room.</p>';
+      list.innerHTML = '<p>No chat rooms are available yet.</p>';
       return;
     }
 
@@ -523,7 +534,7 @@
     const navId = view === 'home' ? 'tabHome' : view === 'discussion' ? 'tabDiscussion' : view === 'private' ? 'tabPrivate' : view === 'photos' ? 'tabPhotos' : null;
     if (navId) document.getElementById(navId).classList.add('active');
     document.getElementById('chatListTitle').textContent = view === 'private' ? 'People' : 'Chats';
-    document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your approved rooms';
+    document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Rooms for all approved members';
     document.getElementById('showArchivedButton').hidden = view !== 'private';
     document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
     updateRoomTools();
@@ -579,7 +590,8 @@
     const namesFor = (items) => items.map((row)=>{const member=privateMembers.find((candidate)=>candidate.id===row.user_id);return member?profileName(member):'Someone';});
     const topicNames = namesFor(topicTypers); const privateNames = namesFor(privateTypers);
     document.getElementById('groupTypingIndicator').textContent = topicNames.length ? topicNames.join(', ') + (topicNames.length===1?' is':' are') + ' typing…' : '';
-    document.getElementById('privateTypingIndicator').textContent = privateNames.length ? privateNames[0] + ' is typing…' : '';
+    if (activePrivateMember && privateMessagingBlocked(activePrivateMember)) updatePrivateComposerState();
+    else document.getElementById('privateTypingIndicator').textContent = privateNames.length ? privateNames[0] + ' is typing…' : '';
   }
 
   function startLiveChatUpdates() {
@@ -1169,6 +1181,47 @@
     if (!result.error) privateInbox = result.data || [];
   }
 
+  async function updateMyPresence() {
+    if (!currentUserId || !currentProfile) return;
+    await memberClient.from('member_presence').upsert({
+      user_id: currentUserId,
+      display_name: profileName(currentProfile),
+      current_page: 'chat',
+      last_seen_at: new Date().toISOString()
+    }, {onConflict:'user_id'});
+  }
+
+  async function refreshPresenceAndBlocks() {
+    const cutoff = new Date(Date.now() - 90000).toISOString();
+    const [presenceResult, blocksResult] = await Promise.all([
+      memberClient.from('member_presence').select('user_id,last_seen_at').gte('last_seen_at',cutoff),
+      memberClient.from('chat_blocks').select('blocker_id,blocked_id').or('blocker_id.eq.' + currentUserId + ',blocked_id.eq.' + currentUserId)
+    ]);
+    onlineMemberIds = new Set((presenceResult.data || []).map((row) => String(row.user_id)));
+    blockedMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocker_id === currentUserId).map((row) => String(row.blocked_id)));
+    blockedByMemberIds = new Set((blocksResult.data || []).filter((row) => row.blocked_id === currentUserId).map((row) => String(row.blocker_id)));
+    if (activeChatView === 'private') renderPrivateMembers(document.getElementById('chatSearch').value);
+  }
+
+  function memberIsAdmin(member) {
+    return member && (member.role === 'owner' || member.role === 'admin');
+  }
+
+  function privateMessagingBlocked(member) {
+    if (!member) return false;
+    return blockedMemberIds.has(String(member.id)) || blockedByMemberIds.has(String(member.id));
+  }
+
+  function updatePrivateComposerState() {
+    const form = document.getElementById('privateMessageForm');
+    if (!activePrivateMember) { form.hidden = true; return; }
+    const blocked = privateMessagingBlocked(activePrivateMember);
+    form.hidden = blocked;
+    document.getElementById('privateTypingIndicator').textContent = blocked
+      ? (blockedMemberIds.has(String(activePrivateMember.id)) ? 'You blocked this member. Unblock them from Chat information to send messages.' : 'Messaging is unavailable for this conversation.')
+      : '';
+  }
+
   async function loadPrivateMembers() {
     if (privateMembers.length) return;
     const result = await memberClient.rpc('list_chat_members');
@@ -1196,6 +1249,8 @@
       button.appendChild(avatar); button.appendChild(identity);
       const unread = privateInbox.filter((msg) => msg.sender_id === member.id && msg.recipient_id === currentUserId && !msg.read_at).length;
       if (unread) { const badge = document.createElement('span'); badge.className = 'private-unread'; badge.textContent = unread; button.appendChild(badge); }
+      if (blockedMemberIds.has(String(member.id))) { const blocked = document.createElement('span'); blocked.className = 'blocked-label'; blocked.textContent = 'Blocked'; button.appendChild(blocked); }
+      else { const presence = document.createElement('span'); presence.className = 'presence-dot' + (onlineMemberIds.has(String(member.id)) ? ' online' : ''); presence.title = onlineMemberIds.has(String(member.id)) ? 'Online now' : 'Offline'; button.appendChild(presence); }
       button.addEventListener('click', () => selectPrivateMember(member));
       list.appendChild(button);
     });
@@ -1215,7 +1270,7 @@
     setActiveChatView('private');
     document.getElementById('roomTitle').textContent = profileName(member);
     document.getElementById('roomSubtitle').textContent = 'Private conversation';
-    document.getElementById('privateMessageForm').hidden = false;
+    updatePrivateComposerState();
     renderPrivateMembers(document.getElementById('chatSearch').value);
     await loadPrivateConversation();
   }
@@ -1281,6 +1336,7 @@
 
   document.getElementById('privateMessageForm').addEventListener('submit', async (event) => {
     event.preventDefault(); if (!activePrivateMember) return;
+    if (privateMessagingBlocked(activePrivateMember)) { updatePrivateComposerState(); return; }
     const field = document.getElementById('privateMessageBody'); const text = field.value.trim(); if (!text && !privateStagedAttachments.length) return;
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body});
@@ -1420,7 +1476,7 @@
 
   function openForwardDialog(payload) {
     forwardedPayload = payload; const list = document.getElementById('forwardMemberList'); list.innerHTML = '';
-    privateMembers.forEach((member) => {
+    privateMembers.filter((member) => !privateMessagingBlocked(member)).forEach((member) => {
       const button = document.createElement('button'); button.type = 'button'; button.className = 'dialog-member';
       const avatar = document.createElement('span'); avatar.className = 'member-avatar'; avatar.textContent = profileName(member).charAt(0).toUpperCase();
       const name = document.createElement('span'); name.textContent = profileName(member); button.appendChild(avatar); button.appendChild(name);
@@ -1446,11 +1502,35 @@
   });
   document.getElementById('chatInfoButton').addEventListener('click',()=>{
     const title = document.getElementById('chatInfoTitle'); const body = document.getElementById('chatInfoBody'); body.innerHTML = '';
-    if (activeChatView === 'private' && activePrivateMember) { title.textContent = profileName(activePrivateMember); body.innerHTML = '<p>Private conversation with an approved member.</p>'; }
+    if (activeChatView === 'private' && activePrivateMember) {
+      title.textContent = profileName(activePrivateMember);
+      const status = document.createElement('p');
+      status.textContent = onlineMemberIds.has(String(activePrivateMember.id)) ? 'Online now' : 'Offline';
+      body.appendChild(status);
+      if (memberIsAdmin(activePrivateMember)) {
+        const note = document.createElement('p'); note.textContent = 'Administrators cannot be blocked.'; body.appendChild(note);
+      } else {
+        const blockButton = document.createElement('button'); blockButton.type = 'button'; blockButton.className = 'block-member-button';
+        const isBlocked = blockedMemberIds.has(String(activePrivateMember.id));
+        blockButton.textContent = isBlocked ? 'Unblock member' : 'Block member';
+        if (isBlocked) blockButton.classList.add('unblock');
+        blockButton.addEventListener('click', async () => {
+          blockButton.disabled = true;
+          const result = isBlocked
+            ? await memberClient.from('chat_blocks').delete().eq('blocker_id',currentUserId).eq('blocked_id',activePrivateMember.id)
+            : await memberClient.from('chat_blocks').insert({blocker_id:currentUserId,blocked_id:activePrivateMember.id});
+          if (result.error) alert('Could not change this block: ' + result.error.message);
+          await refreshPresenceAndBlocks();
+          updatePrivateComposerState();
+          document.getElementById('chatInfoDialog').close();
+        });
+        body.appendChild(blockButton);
+      }
+    }
     else { const topic = chatTopics.find((item)=>String(item.id)===String(currentTopicId)); title.textContent = topic ? topic.title : 'Group chat';
-      const members = topic && topic.title !== 'General (everyone)' ? privateMembers.filter((member)=>member.jewish_year===topic.title) : privateMembers;
+      const members = privateMembers;
       const heading = document.createElement('p'); heading.textContent = (members.length + 1) + ' approved members'; body.appendChild(heading);
-      [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);row.appendChild(avatar);row.appendChild(name);body.appendChild(row); }); }
+      [currentProfile].concat(members).forEach((member)=>{ const row=document.createElement('div');row.className='dialog-member';const avatar=document.createElement('span');avatar.className='member-avatar';avatar.textContent=profileName(member).charAt(0).toUpperCase();const name=document.createElement('span');name.textContent=profileName(member);const presence=document.createElement('span');presence.className='presence-dot'+(onlineMemberIds.has(String(member.id))?' online':'');presence.title=onlineMemberIds.has(String(member.id))?'Online now':'Offline';row.appendChild(avatar);row.appendChild(name);row.appendChild(presence);body.appendChild(row); }); }
     document.getElementById('chatInfoDialog').showModal();
   });
 
@@ -1663,12 +1743,15 @@
     await loadTopics(profile);
     await loadPrivateMembers();
     await loadChatPreferences();
+    await updateMyPresence();
+    await refreshPresenceAndBlocks();
     showChatHome();
     startLiveChatUpdates();
     if (location.hash === '#photos') document.getElementById('tabPhotos').click();
     setInterval(() => { if (currentTopicId !== null && !document.hidden && !document.getElementById('discussionSection').hidden) loadPosts(); }, 20000);
     setInterval(async () => { if (!document.hidden) { await refreshPrivateInbox(); if (activeChatView === 'private') { renderPrivateMembers(document.getElementById('chatSearch').value); if (activePrivateMember) await loadPrivateConversation(); } } }, 20000);
     setInterval(loadTypingIndicators,2000);
+    setInterval(async () => { if (!document.hidden) { await updateMyPresence(); await refreshPresenceAndBlocks(); } },30000);
   })();
 </script>
 </body>
