@@ -288,8 +288,8 @@
   .chat-home-card button { width:100%; background:#0b57d0; }
   .home-conversation-list { display:flex; flex:1; min-height:0; flex-direction:column; gap:2px; overflow-y:auto; padding:0 3px 8px; }
   .home-conversation-list[hidden] { display:none; }
-  .home-conversation-list button { display:flex; align-items:center; gap:11px; width:100%; min-height:66px; padding:9px 10px; color:var(--ink); background:transparent; border:1px solid transparent; border-radius:15px; text-align:left; }
-  .home-conversation-list button:hover { border-color:#dbe5ec; background:#f3f7fa; }
+  .home-conversation-list button { display:flex; align-items:center; gap:11px; width:100%; min-height:66px; padding:9px 10px; color:var(--ink); background:transparent; border:0; border-bottom:1px solid #e4e9ed; border-radius:0; text-align:left; }
+  .home-conversation-list button:hover { background:#f3f7fa; border-radius:12px; }
   .home-chat-avatar { display:grid; width:42px; height:42px; flex:0 0 42px; place-items:center; border-radius:50%; color:#fff; background:linear-gradient(145deg,#0b57d0,#147e91); font-weight:800; }
   .home-chat-avatar.group { border-radius:13px; background:linear-gradient(145deg,#159d87,#0b5f59); }
   .home-chat-summary { min-width:0; flex:1; }
@@ -679,6 +679,7 @@
     .chat-app-sidebar .section-tab.active { font-size:0; }
     .new-chat-primary { width:52px; padding:0; justify-content:center; }
     .new-chat-primary strong { display:none; }
+    .sidebar-live-section { display:none; }
     .presence-select { width:52px; min-height:40px; padding:0; }
     .chat-room-header { flex-wrap:wrap; }
     .room-identity { flex:1; }
@@ -729,7 +730,7 @@
     --kasho-shadow:0 10px 30px rgba(15,42,67,.08);
   }
   .chat-page .chat-app-layout {
-    grid-template-columns:236px 336px minmax(480px,1fr);
+    grid-template-columns:250px minmax(420px,680px) minmax(440px,1fr);
     background:#e9eff4;
   }
   .chat-app-sidebar {
@@ -746,6 +747,22 @@
   .chat-app-sidebar .presence-select option { color:#102a43; background:#fff; }
   .new-chat-primary { color:#0b5f59; background:#fff; box-shadow:0 9px 24px rgba(0,0,0,.18); }
   .new-chat-primary:hover { background:#f3fffb; }
+  .sidebar-live-section { margin:5px 0 1px; }
+  .sidebar-live-heading { display:flex; align-items:center; gap:7px; width:100%; min-height:34px!important; padding:6px 11px; color:#fff; background:transparent; border:0; border-radius:12px; text-align:left; font-size:12px; font-weight:800; }
+  .sidebar-live-heading:hover { background:rgba(255,255,255,.1); }
+  .sidebar-live-heading .chevron { display:inline-block; font-size:11px; transition:transform .16s ease; }
+  .sidebar-live-heading[aria-expanded="false"] .chevron { transform:rotate(-90deg); }
+  .sidebar-live-list { display:flex; flex-direction:column; gap:1px; }
+  .sidebar-live-list[hidden] { display:none; }
+  .sidebar-live-list button { display:flex; align-items:center; gap:9px; width:100%; min-height:34px!important; padding:4px 10px 4px 16px; overflow:hidden; color:rgba(255,255,255,.9); background:transparent; border:0; border-radius:17px; text-align:left; font-size:13px; }
+  .sidebar-live-list button:hover { background:rgba(255,255,255,.12); }
+  .sidebar-live-list button.active { color:#fff; background:rgba(255,255,255,.18); }
+  .sidebar-mini-avatar { display:grid; width:25px; height:25px; flex:0 0 25px; place-items:center; border-radius:50%; color:#fff; background:linear-gradient(145deg,#159d87,#0b57d0); font-size:10px; font-weight:800; }
+  .sidebar-mini-avatar.space { border-radius:8px; background:rgba(255,255,255,.18); }
+  .sidebar-live-name { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .sidebar-live-list .sidebar-unread { min-width:18px; margin-left:auto; padding:1px 5px; border-radius:999px; color:#0d4e55; background:#9ff0dc; text-align:center; font-size:10px; font-weight:900; }
+  .sidebar-show-all { color:#b9f4e7!important; font-weight:800; }
+  @media (min-width:1121px) { .chat-app-sidebar .desktop-legacy-tab { display:none; } }
 
   .chat-list-pane {
     z-index:2;
@@ -942,10 +959,17 @@
         <button type="button" class="section-tab" id="tabMentions"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8"/><path d="M15 9v5a2 2 0 0 0 4 0v-2a7 7 0 1 0-2 5"/></svg>Mentions</button>
         <button type="button" class="section-tab" id="tabStarred"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Starred</button>
         <button type="button" class="section-tab" id="tabFavorites"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m12 3 2.7 5.5 6.1.9-4.4 4.3 1 6.1-5.4-2.9-5.4 2.9 1-6.1-4.4-4.3 6.1-.9L12 3Z"/></svg>Favorite chats</button>
-        <div class="chat-nav-label">Conversations</div>
-        <button type="button" class="section-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
-        <button type="button" class="section-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
         <button type="button" class="section-tab" id="tabShared"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h6l2 2h8v12H4V5Z"/></svg>Files & links</button>
+        <button type="button" class="section-tab desktop-legacy-tab" id="tabDiscussion"><svg class="nav-icon" viewBox="0 0 24 24"><path d="M4 5h16v11H8l-4 4V5Z"/><path d="M8 9h8M8 12h5"/></svg>Group chats</button>
+        <button type="button" class="section-tab desktop-legacy-tab" id="tabPrivate"><svg class="nav-icon" viewBox="0 0 24 24"><circle cx="9" cy="8" r="3"/><path d="M3.5 19c.5-3.5 2.4-5 5.5-5s5 1.5 5.5 5M16 8h5M18.5 5.5v5"/></svg>Private messages</button>
+        <div class="sidebar-live-section">
+          <button type="button" class="sidebar-live-heading" id="sidebarPrivateToggle" aria-expanded="true"><span class="chevron" aria-hidden="true">⌄</span>Direct messages</button>
+          <div class="sidebar-live-list" id="sidebarPrivateList"></div>
+        </div>
+        <div class="sidebar-live-section">
+          <button type="button" class="sidebar-live-heading" id="sidebarSpacesToggle" aria-expanded="true"><span class="chevron" aria-hidden="true">⌄</span>Spaces</button>
+          <div class="sidebar-live-list" id="sidebarSpacesList"></div>
+        </div>
         <div class="chat-nav-spacer"></div>
         <select class="presence-select" id="presenceStatus" aria-label="Your chat status"><option value="available">● Available</option><option value="busy">● Busy</option><option value="away">● Away</option></select>
         <button type="button" class="chat-nav-link sidebar-setting" id="onlinePrivacyToggle">Online status: Visible</button>
@@ -1170,6 +1194,7 @@
       list.appendChild(button);
       updateUnreadBadge(topic.id, button);
     });
+    renderSidebarNavigation();
   }
 
   function setActiveChatView(view) {
@@ -1187,6 +1212,7 @@
     document.getElementById('chatListSubtitle').textContent = view === 'home' ? 'Your recent conversations' : view === 'private' ? 'Search any approved member' : 'Your available rooms';
     document.getElementById('showArchivedButton').hidden = view !== 'private';
     document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
+    renderSidebarNavigation();
     updateMobileWorkspace(view);
     updateRoomTools();
   }
@@ -1260,6 +1286,46 @@
       button.addEventListener('click',item.open); list.appendChild(button);
     });
     if (!items.length) list.innerHTML = '<p class="chat-empty">No conversations yet.</p>';
+  }
+
+  function renderSidebarNavigation() {
+    const privateList = document.getElementById('sidebarPrivateList');
+    const spacesList = document.getElementById('sidebarSpacesList');
+    if (!privateList || !spacesList) return;
+    privateList.innerHTML = '';
+    spacesList.innerHTML = '';
+
+    const seenMembers = new Set();
+    privateInbox.forEach((message) => {
+      const otherId = String(message.sender_id === currentUserId ? message.recipient_id : message.sender_id);
+      if (seenMembers.has(otherId)) return;
+      const member = privateMembers.find((item) => String(item.id) === otherId);
+      if (!member) return;
+      seenMembers.add(otherId);
+      const button = document.createElement('button'); button.type = 'button';
+      if (activePrivateMember && String(activePrivateMember.id) === otherId && activeChatView === 'private') button.classList.add('active');
+      const avatar = document.createElement('span'); avatar.className = 'sidebar-mini-avatar'; avatar.textContent = profileName(member).trim().charAt(0).toUpperCase() || '?';
+      const name = document.createElement('span'); name.className = 'sidebar-live-name'; name.textContent = profileName(member);
+      button.appendChild(avatar); button.appendChild(name);
+      const unread = privateInbox.filter((item) => String(item.sender_id) === otherId && item.recipient_id === currentUserId && !item.read_at).length;
+      if (unread) { const badge=document.createElement('span');badge.className='sidebar-unread';badge.textContent=unread>99?'99+':String(unread);button.appendChild(badge); }
+      button.addEventListener('click',()=>selectPrivateMember(member)); privateList.appendChild(button);
+    });
+    const showAll = document.createElement('button'); showAll.type = 'button'; showAll.className = 'sidebar-show-all';
+    showAll.innerHTML = '<span class="sidebar-mini-avatar">＋</span><span class="sidebar-live-name">Show all people</span>';
+    showAll.addEventListener('click',async()=>{await openPrivateMessages();document.getElementById('chatSearch').focus();}); privateList.appendChild(showAll);
+
+    chatTopics.forEach((topic) => {
+      const source = document.querySelector('#topicList button[data-topic-id="'+CSS.escape(String(topic.id))+'"]');
+      if (!source) return;
+      const button = document.createElement('button'); button.type = 'button';
+      if (String(currentTopicId) === String(topic.id) && activeChatView === 'discussion') button.classList.add('active');
+      const avatar = document.createElement('span'); avatar.className = 'sidebar-mini-avatar space'; avatar.textContent = topic.title.trim().charAt(0).toUpperCase() || '#';
+      const name = document.createElement('span'); name.className = 'sidebar-live-name'; name.textContent = topic.title;
+      button.appendChild(avatar); button.appendChild(name);
+      const unread = source.querySelector('.unread-badge'); if (unread) { const badge=document.createElement('span');badge.className='sidebar-unread';badge.textContent=unread.textContent;button.appendChild(badge); }
+      button.addEventListener('click',()=>source.click()); spacesList.appendChild(button);
+    });
   }
 
   function preferenceFor(type,id) { return chatPreferences.find((pref) => pref.target_type === type && String(pref.target_id) === String(id)); }
@@ -2063,7 +2129,7 @@
 
   async function refreshPrivateInbox() {
     const result = await memberClient.from('private_messages').select('*').or('sender_id.eq.' + currentUserId + ',recipient_id.eq.' + currentUserId).order('created_at',{ascending:false}).limit(500);
-    if (!result.error) { privateInbox = result.data || []; updatePrivateUnreadCount(); if (activeChatView === 'home') renderHomeConversations(); }
+    if (!result.error) { privateInbox = result.data || []; updatePrivateUnreadCount(); renderSidebarNavigation(); if (activeChatView === 'home') renderHomeConversations(); }
   }
 
   function updatePrivateUnreadCount() {
@@ -2158,6 +2224,7 @@
       list.appendChild(button);
     });
     if (!visible.length) list.innerHTML = '<p>No members found.</p>';
+    renderSidebarNavigation();
   }
 
   async function openPrivateMessages() {
@@ -2510,6 +2577,11 @@
     if (selected) selected.click();
   });
   document.getElementById('tabPrivate').addEventListener('click', openPrivateMessages);
+  [['sidebarPrivateToggle','sidebarPrivateList'],['sidebarSpacesToggle','sidebarSpacesList']].forEach(([toggleId,listId])=>{
+    document.getElementById(toggleId).addEventListener('click',()=>{
+      const toggle=document.getElementById(toggleId);const list=document.getElementById(listId);const expanded=toggle.getAttribute('aria-expanded')==='true';toggle.setAttribute('aria-expanded',String(!expanded));list.hidden=expanded;
+    });
+  });
   document.getElementById('mobileBackButton').addEventListener('click',()=>{
     saveCurrentDraft();
     document.body.classList.remove('mobile-chat-open');
