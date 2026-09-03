@@ -286,6 +286,25 @@
   .chat-home-card h3 { margin:0 0 7px; }
   .chat-home-card p { margin:0 0 15px; color:var(--muted); }
   .chat-home-card button { width:100%; background:#0b57d0; }
+  .home-conversation-list { display:flex; flex:1; min-height:0; flex-direction:column; gap:2px; overflow-y:auto; padding:0 3px 8px; }
+  .home-conversation-list[hidden] { display:none; }
+  .home-conversation-list button { display:flex; align-items:center; gap:11px; width:100%; min-height:66px; padding:9px 10px; color:var(--ink); background:transparent; border:1px solid transparent; border-radius:15px; text-align:left; }
+  .home-conversation-list button:hover { border-color:#dbe5ec; background:#f3f7fa; }
+  .home-chat-avatar { display:grid; width:42px; height:42px; flex:0 0 42px; place-items:center; border-radius:50%; color:#fff; background:linear-gradient(145deg,#0b57d0,#147e91); font-weight:800; }
+  .home-chat-avatar.group { border-radius:13px; background:linear-gradient(145deg,#159d87,#0b5f59); }
+  .home-chat-summary { min-width:0; flex:1; }
+  .home-chat-top { display:flex; align-items:center; justify-content:space-between; gap:8px; }
+  .home-chat-top strong { overflow:hidden; text-overflow:ellipsis; white-space:nowrap; }
+  .home-chat-top time { flex:0 0 auto; color:#747775; font-size:10px; }
+  .home-chat-preview { display:block; overflow:hidden; margin-top:2px; color:#5f6368; font-size:12px; text-overflow:ellipsis; white-space:nowrap; }
+  .chat-home-empty { display:grid; flex:1; min-height:0; place-content:center; justify-items:center; padding:32px; color:#536773; text-align:center; }
+  .chat-home-empty-art { position:relative; width:126px; height:96px; margin-bottom:18px; }
+  .chat-home-empty-art::before,.chat-home-empty-art::after { content:""; position:absolute; border-radius:22px; box-shadow:0 12px 30px rgba(15,42,67,.10); }
+  .chat-home-empty-art::before { inset:5px 25px 28px 5px; border:2px solid #78cbbb; background:#dff6f0; }
+  .chat-home-empty-art::after { inset:28px 5px 5px 44px; border:2px solid #91b9ea; background:#e5effd; }
+  .chat-home-empty-art span { position:absolute; z-index:2; left:50%; top:38%; color:#0f766e; font-size:35px; transform:translate(-50%,-50%); }
+  .chat-home-empty h2 { margin:0 0 7px; color:#243746; font-size:21px; }
+  .chat-home-empty p { max-width:360px; margin:0; font-size:14px; }
   .member-list { display:flex; flex-direction:column; gap:5px; overflow:auto; max-height:calc(100vh - 135px); }
   .member-list[hidden] { display:none; }
   .member-list button { display:flex; align-items:center; gap:10px; width:100%; min-height:56px; padding:8px 10px; color:var(--ink); background:transparent; border:0; border-radius:11px; text-align:left; }
@@ -549,7 +568,7 @@
   .icon-button:active { transform:scale(.94); }
   .mobile-back-button { display:none; }
 
-  .chat-home-view { padding:clamp(22px,4vw,52px); background:#fff; }
+  .chat-home-view { display:flex; padding:0; background:var(--kasho-chat-bg); }
   .chat-home-welcome { max-width:720px; margin:0 auto 24px; }
   .chat-home-welcome h2 { font-size:32px; letter-spacing:-.9px; }
   .chat-home-grid { max-width:900px; margin:auto; gap:14px; }
@@ -938,7 +957,8 @@
         <p id="chatListSubtitle">Your available rooms</p>
         <button type="button" class="new-group-button" id="newGroupButton" hidden>+ New group room</button>
         <button type="button" class="new-group-button" id="showArchivedButton" hidden>Show archived chats</button>
-        <div class="topic-list" id="topicList"></div>
+        <div class="home-conversation-list" id="homeConversationList"></div>
+        <div class="topic-list" id="topicList" hidden></div>
         <div class="member-list" id="privateMemberList" hidden></div>
       </aside>
       <section class="chat-room-main">
@@ -964,11 +984,10 @@
         </div>
 
         <div class="chat-home-view" id="homeSection">
-          <div class="chat-home-welcome"><h2>Welcome to Kasho Chat</h2><p>Choose a room or start a private conversation.</p></div>
-          <div class="chat-home-grid">
-            <div class="chat-home-card"><h3>Group chats</h3><p>Open General, your year room, and rooms shared by an admin.</p><button type="button" id="homeOpenGroups">Open group chats</button></div>
-            <div class="chat-home-card"><h3>Private messages</h3><p>Search all approved members and start a conversation.</p><button type="button" id="homeOpenPrivate">Find a member</button></div>
-            <div class="chat-home-card"><h3>Search</h3><p>Find messages, shared links, and uploaded files.</p><button type="button" id="homeFocusSearch">Search chat</button></div>
+          <div class="chat-home-empty">
+            <div class="chat-home-empty-art" aria-hidden="true"><span>☰</span></div>
+            <h2>No conversation selected</h2>
+            <p>Choose a conversation from Home to read messages and reply.</p>
           </div>
         </div>
 
@@ -1095,7 +1114,7 @@
     avatar.style.borderRadius=type==='private'?'50%':'14px';
   }
   function updateMobileWorkspace(view) {
-    const open=view==='home'||view==='discussion'||view==='searchResults'||(view==='private'&&!!activePrivateMember);
+    const open=view==='discussion'||view==='searchResults'||(view==='private'&&!!activePrivateMember);
     document.body.classList.toggle('mobile-chat-open',open);
   }
   function enableListKeyboardNavigation(list){list.addEventListener('keydown',(event)=>{if(!['ArrowDown','ArrowUp','Home','End'].includes(event.key))return;const buttons=Array.from(list.querySelectorAll('button:not([hidden])'));if(!buttons.length)return;const current=buttons.indexOf(document.activeElement);let next=current;if(event.key==='ArrowDown')next=Math.min(buttons.length-1,current+1);if(event.key==='ArrowUp')next=Math.max(0,current-1);if(event.key==='Home')next=0;if(event.key==='End')next=buttons.length-1;event.preventDefault();buttons[Math.max(0,next)].focus();});}
@@ -1144,6 +1163,8 @@
       const preview = document.createElement('span'); preview.className = 'topic-last-message';
       if (recent) { const parsed = parseBody(recent.body); const sender = recent.author_id === currentUserId ? 'You' : profileName(recent.profiles); preview.textContent = sender + ': ' + (parsed.text || parsed.sticker || ((parsed.attachments || []).length ? 'Attachment' : 'New message')); }
       else preview.textContent = 'No messages yet';
+      button.dataset.lastActivity = recent ? recent.created_at : '';
+      button.dataset.preview = preview.textContent;
       summary.appendChild(preview); button.appendChild(summary);
       button.addEventListener('click', () => selectTopic(topic.id, button));
       list.appendChild(button);
@@ -1156,13 +1177,14 @@
     ['homeSection','discussionSection','privateSection','searchResultsSection'].forEach((id) => {
       document.getElementById(id).hidden = id !== view + 'Section';
     });
-    document.getElementById('topicList').hidden = view === 'private';
+    document.getElementById('homeConversationList').hidden = view !== 'home';
+    document.getElementById('topicList').hidden = view !== 'discussion';
     document.getElementById('privateMemberList').hidden = view !== 'private';
     document.querySelectorAll('.chat-app-sidebar .section-tab').forEach((button) => button.classList.remove('active'));
     const navId = view === 'home' ? 'tabHome' : view === 'discussion' ? 'tabDiscussion' : view === 'private' ? 'tabPrivate' : null;
     if (navId) document.getElementById(navId).classList.add('active');
-    document.getElementById('chatListTitle').textContent = view === 'private' ? 'People' : 'Chats';
-    document.getElementById('chatListSubtitle').textContent = view === 'private' ? 'Search any approved member' : 'Your available rooms';
+    document.getElementById('chatListTitle').textContent = view === 'home' ? 'Home' : view === 'private' ? 'People' : 'Group chats';
+    document.getElementById('chatListSubtitle').textContent = view === 'home' ? 'Your recent conversations' : view === 'private' ? 'Search any approved member' : 'Your available rooms';
     document.getElementById('showArchivedButton').hidden = view !== 'private';
     document.getElementById('newGroupButton').hidden = !(view === 'discussion' && currentProfile && (currentProfile.role === 'owner' || currentProfile.role === 'admin'));
     updateMobileWorkspace(view);
@@ -1177,6 +1199,67 @@
     activeSearchFilter = 'all';
     document.querySelectorAll('[data-search-filter]').forEach((button) => button.classList.toggle('active', button.dataset.searchFilter === 'all'));
     updateRoomIdentity('Kasho Chat','home');
+    renderHomeConversations();
+  }
+
+  function homeConversationTime(value) {
+    if (!value) return '';
+    const date = new Date(value);
+    return date.toDateString() === new Date().toDateString() ? formatChatTime(value) : formatChatShortDate(value);
+  }
+
+  function renderHomeConversations() {
+    const list = document.getElementById('homeConversationList');
+    if (!list) return;
+    const items = [];
+    document.querySelectorAll('#topicList button[data-topic-id]').forEach((source) => {
+      const topic = chatTopics.find((item) => String(item.id) === String(source.dataset.topicId));
+      if (!topic) return;
+      items.push({
+        kind:'group',
+        id:topic.id,
+        title:topic.title,
+        preview:source.dataset.preview || 'No messages yet',
+        createdAt:source.dataset.lastActivity || '',
+        unread:source.querySelector('.unread-badge') ? source.querySelector('.unread-badge').textContent : '',
+        open:()=>source.click()
+      });
+    });
+    const seenMembers = new Set();
+    privateInbox.forEach((message) => {
+      const otherId = String(message.sender_id === currentUserId ? message.recipient_id : message.sender_id);
+      if (seenMembers.has(otherId)) return;
+      const member = privateMembers.find((item) => String(item.id) === otherId);
+      if (!member) return;
+      seenMembers.add(otherId);
+      const parsed = parsePrivateBody(message.body);
+      const unread = privateInbox.filter((item) => String(item.sender_id) === otherId && item.recipient_id === currentUserId && !item.read_at).length;
+      items.push({
+        kind:'private',
+        id:member.id,
+        title:profileName(member),
+        preview:(message.sender_id === currentUserId ? 'You: ' : '') + (parsed.text || ((parsed.attachments || []).length ? 'Attachment' : 'New message')),
+        createdAt:message.created_at,
+        unread:unread ? String(unread) : '',
+        open:()=>selectPrivateMember(member)
+      });
+    });
+    items.sort((a,b) => new Date(b.createdAt || 0) - new Date(a.createdAt || 0));
+    list.innerHTML = '';
+    items.forEach((item) => {
+      const button = document.createElement('button'); button.type = 'button';
+      const avatar = document.createElement('span'); avatar.className = 'home-chat-avatar' + (item.kind === 'group' ? ' group' : ''); avatar.textContent = item.title.trim().charAt(0).toUpperCase() || '?';
+      const summary = document.createElement('span'); summary.className = 'home-chat-summary';
+      const top = document.createElement('span'); top.className = 'home-chat-top';
+      const title = document.createElement('strong'); title.textContent = item.title;
+      const time = document.createElement('time'); time.textContent = homeConversationTime(item.createdAt);
+      const preview = document.createElement('span'); preview.className = 'home-chat-preview'; preview.textContent = item.preview;
+      top.appendChild(title); top.appendChild(time); summary.appendChild(top); summary.appendChild(preview);
+      button.appendChild(avatar); button.appendChild(summary);
+      if (item.unread) { const badge=document.createElement('span');badge.className='unread-badge';badge.textContent=item.unread;button.appendChild(badge);button.classList.add('has-unread'); }
+      button.addEventListener('click',item.open); list.appendChild(button);
+    });
+    if (!items.length) list.innerHTML = '<p class="chat-empty">No conversations yet.</p>';
   }
 
   function preferenceFor(type,id) { return chatPreferences.find((pref) => pref.target_type === type && String(pref.target_id) === String(id)); }
@@ -1977,7 +2060,7 @@
 
   async function refreshPrivateInbox() {
     const result = await memberClient.from('private_messages').select('*').or('sender_id.eq.' + currentUserId + ',recipient_id.eq.' + currentUserId).order('created_at',{ascending:false}).limit(500);
-    if (!result.error) { privateInbox = result.data || []; updatePrivateUnreadCount(); }
+    if (!result.error) { privateInbox = result.data || []; updatePrivateUnreadCount(); if (activeChatView === 'home') renderHomeConversations(); }
   }
 
   function updatePrivateUnreadCount() {
@@ -2424,9 +2507,6 @@
     if (selected) selected.click();
   });
   document.getElementById('tabPrivate').addEventListener('click', openPrivateMessages);
-  document.getElementById('homeOpenGroups').addEventListener('click', () => document.getElementById('tabDiscussion').click());
-  document.getElementById('homeOpenPrivate').addEventListener('click', () => document.getElementById('tabPrivate').click());
-  document.getElementById('homeFocusSearch').addEventListener('click', () => document.getElementById('chatSearch').focus());
   document.getElementById('mobileBackButton').addEventListener('click',()=>{
     saveCurrentDraft();
     document.body.classList.remove('mobile-chat-open');
