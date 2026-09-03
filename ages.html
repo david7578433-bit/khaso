@@ -1008,7 +1008,7 @@
     <div class="reply-preview" id="replyPreview" hidden><span id="replyPreviewText"></span><button type="button" id="cancelReply">Cancel</button></div>
     <div class="mention-dropdown" id="mentionDropdownWrap">
       <div class="mention-dropdown-list" id="mentionDropdownList" hidden></div>
-      <form id="postForm">
+      <form id="postForm" action="javascript:void(0)" onsubmit="return false">
         <div class="chat-input-row">
           <input type="file" id="chatFileInput" accept="image/*,application/pdf" multiple hidden>
           <button type="button" class="attach-btn" id="attachToggleBtn" aria-label="Attach files" title="Attach files"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
@@ -1029,7 +1029,7 @@
           <div class="private-emoji-panel" id="privateEmojiPanel" hidden></div>
           <div class="private-staged" id="privateStagedAttachments"></div>
           <div class="private-reply-preview" id="privateReplyPreview" hidden><span id="privateReplyPreviewText"></span><button type="button" id="cancelPrivateReply">Cancel</button></div>
-          <form class="private-compose" id="privateMessageForm" hidden>
+          <form class="private-compose" id="privateMessageForm" action="javascript:void(0)" onsubmit="return false" hidden>
             <input type="file" id="privateFileInput" accept="image/*,application/pdf,audio/*" multiple hidden>
             <button type="button" class="icon-button" id="privateAttachButton" aria-label="Attach image, PDF, or audio"><svg class="nav-icon" viewBox="0 0 24 24"><path d="m8 12 6-6a4 4 0 0 1 6 6l-8 8a6 6 0 0 1-8-8l8-8"/></svg></button>
             <button type="button" class="icon-button" id="voiceRecordButton" aria-label="Record voice message"><svg class="nav-icon" viewBox="0 0 24 24"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M6 11a6 6 0 0 0 12 0M12 17v4M9 21h6"/></svg></button>
@@ -1331,16 +1331,19 @@
     chatRealtime = memberClient.channel('khaso-chat-updates')
       .on('postgres_changes', {event:'*',schema:'public',table:'posts'}, async (change) => {
         const topicId = change.new && change.new.topic_id ? change.new.topic_id : change.old && change.old.topic_id;
+        const ownInsert = change.eventType === 'INSERT' && change.new && change.new.author_id === currentUserId;
         if (change.eventType === 'INSERT' && change.new.author_id !== currentUserId) { const topic = chatTopics.find((item)=>String(item.id)===String(topicId)); const member=privateMembers.find((item)=>String(item.id)===String(change.new.author_id));const parsed=parseBody(change.new.body);notifyNewMessage((member?profileName(member):'Member')+' · '+(topic?topic.title:'Group chat'),parsed.text||parsed.sticker||((parsed.attachments||[]).length?'Attachment':'New message'),'topic',topicId); }
-        if (activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts({preservePosition:true,newMessage:change.eventType==='INSERT'});
+        if (!ownInsert && activeChatView === 'discussion' && String(topicId) === String(currentTopicId)) loadPosts({preservePosition:true,newMessage:change.eventType==='INSERT'});
+        else if (ownInsert) return;
         else { const button=document.querySelector('#topicList button[data-topic-id="'+CSS.escape(String(topicId))+'"]');if(button)updateUnreadBadge(topicId,button); }
       })
       .on('postgres_changes', {event:'*',schema:'public',table:'private_messages'}, async (change) => {
         const row = change.new && change.new.sender_id ? change.new : change.old || {};
         if (row.sender_id !== currentUserId && row.recipient_id !== currentUserId) return;
+        const ownInsert = change.eventType === 'INSERT' && row.sender_id === currentUserId;
         if (change.eventType === 'INSERT' && row.sender_id !== currentUserId) { const member = privateMembers.find((item)=>item.id===row.sender_id); notifyNewMessage(member ? profileName(member) : 'Private message',parsePrivateBody(row.body).text,'private',row.sender_id); }
         await refreshPrivateInbox();
-        if (activeChatView === 'private') {
+        if (!ownInsert && activeChatView === 'private') {
           renderPrivateMembers(document.getElementById('chatSearch').value);
           if (activePrivateMember && (row.sender_id === activePrivateMember.id || row.recipient_id === activePrivateMember.id)) loadPrivateConversation({preservePosition:true,newMessage:change.eventType==='INSERT'});
         }
@@ -1820,7 +1823,7 @@
     replyToPostId = null;
     document.getElementById('replyPreview').hidden = true;
     statusEl.textContent = '';
-    await loadPosts();
+    await loadPosts({preservePosition:true});
     return true;
   }
 
@@ -2296,7 +2299,7 @@
     const body = JSON.stringify({text,attachments:privateStagedAttachments.slice(),forwarded:false});
     const result = await memberClient.from('private_messages').insert({sender_id:currentUserId,recipient_id:activePrivateMember.id,body,reply_to_id:privateReplyToId});
     sendingPrivateMessage=false;
-    if (!result.error) { field.value = '';autoGrow(field);clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation(); }
+    if (!result.error) { field.value = '';autoGrow(field);clearDraft('private',activePrivateMember.id); privateStagedAttachments = []; privateReplyToId = null; document.getElementById('privateReplyPreview').hidden = true; renderPrivateStaged(); await loadPrivateConversation({preservePosition:true}); }
     else { updateComposerButtons(); renderRetry(document.getElementById('privateTypingIndicator'),'Could not send the message.',()=>document.getElementById('privateMessageForm').requestSubmit()); }
   });
   document.getElementById('cancelPrivateReply').addEventListener('click',()=>{privateReplyToId=null;document.getElementById('privateReplyPreview').hidden=true;});
