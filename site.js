@@ -2,7 +2,7 @@
   function applyLanguage(language) {
     const isYiddish = language === 'yi';
     document.documentElement.lang = isYiddish ? 'yi' : 'en';
-    
+    document.documentElement.dir = isYiddish ? 'rtl' : 'ltr';
 
     document.querySelectorAll('[data-lang]').forEach((element) => {
       element.hidden = element.dataset.lang !== language;
@@ -17,7 +17,7 @@
       'Yeshiva': 'ישיבה', 'Botei Medrash': 'בתי מדרשים', 'News': 'נייעס',
       'Simchas': 'שמחות', 'Editorial': 'רעדאקציע', 'Community': 'קהילה',
       'Kasho Chat': 'קאשוי שמועס', 'Pictures': 'בילדער', 'Zmanim': 'זמנים',
-      'Recordings': 'רעקארדירונגען',
+      'Recordings': 'רעקארדירונגען', 'Business': 'געשעפט', 'Ages': 'יארגאנג',
       'Log In': 'לאגין', 'Account': 'קאנטע'
     };
     document.querySelectorAll('nav a, footer a').forEach((link) => {
@@ -43,126 +43,152 @@
   document.addEventListener('DOMContentLoaded', () => {
     let savedLanguage = 'en';
     try { savedLanguage = localStorage.getItem('siteLanguage') === 'yi' ? 'yi' : 'en'; } catch (_) {}
-    initSiteDrawer();
+    initHeader();
     applyLanguage(savedLanguage);
+    document.querySelectorAll('[data-year]').forEach((el) => { el.textContent = String(new Date().getFullYear()); });
+    initToday();
     applySiteAccess();
   });
 
-  function initSiteDrawer() {
-    const footer = document.querySelector('footer');
-    if (!footer || footer.classList.contains('site-footer-drawer')) return;
 
-    footer.innerHTML = `
-      <strong class="site-menu-title"><span data-lang="en">Website Menu</span><span data-lang="yi" hidden>וועבזייטל מעניו</span></strong>
-      <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
-      <details class="site-menu-group">
-        <summary><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></summary>
-        <div class="site-menu-submenu">
-          <a href="ages-hub.html"><span data-lang="en">Ages Home</span><span data-lang="yi" hidden>יארגאנג היים</span></a>
-          <a href="ages.html"><span data-lang="en">Chat</span><span data-lang="yi" hidden>שמועס</span></a>
-          <a href="age-photos.html"><span data-lang="en">Photos</span><span data-lang="yi" hidden>בילדער</span></a>
-          <a href="phone-book.html"><span data-lang="en">Phone Book</span><span data-lang="yi" hidden>טעלעפאן בוך</span></a>
-        </div>
-      </details>
-      <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
-      <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
-      <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
-      <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
-      <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
-      <details class="site-menu-group">
-        <summary><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></summary>
-        <div class="site-menu-submenu">
-          <a href="contact.html"><span data-lang="en">Contact Home</span><span data-lang="yi" hidden>קאנטאקט היים</span></a>
-          <a href="contact-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a>
-          <a href="contact-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a>
-        </div>
-      </details>
-      <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
-      <details class="site-menu-group">
-        <summary><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></summary>
-        <div class="site-menu-submenu">
-          <a href="botei-medrash.html"><span data-lang="en">All Botei Medrash</span><span data-lang="yi" hidden>אלע בתי מדרשים</span></a>
-          <a href="beis-medrash-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a>
-          <a href="beis-medrash-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a>
-          <a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a>
-        </div>
-      </details>
-      <a href="pictures.html"><span data-lang="en">Public Pictures</span><span data-lang="yi" hidden>פובליק בילדער</span></a>
-      <a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
-      <a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
-      <a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
-      <a href="login.html"><span data-lang="en">Account</span><span data-lang="yi" hidden>קאנטע</span></a>
-      <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
-      <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
-    `;
 
-    const style = document.createElement('style');
-    style.textContent = `
-      body.site-drawer-enabled { padding-bottom: 0 !important; }
-      body.site-drawer-enabled main { padding-bottom: 44px; }
-      body.site-drawer-enabled .main { padding-bottom: 34px !important; }
-      body.site-drawer-enabled nav:not(.admin-quicknav) { display:none !important; }
-      body.site-drawer-enabled .sidebar > .lang-button { display:none !important; }
-      .site-menu-button { position:fixed; top:14px; left:14px; z-index:1002; width:46px; height:46px; padding:0; display:grid; place-items:center; border:1px solid rgba(255,255,255,.45); border-radius:12px; background:#203447; color:white; box-shadow:0 5px 18px rgba(20,35,50,.24); font-size:24px; line-height:1; }
-      .site-menu-button:hover,.site-menu-button:focus-visible { background:#0f7f6d; }
-      .site-menu-overlay { position:fixed; inset:0; z-index:999; background:rgba(18,32,45,.42); opacity:0; pointer-events:none; transition:opacity .2s ease; }
-      .site-menu-overlay.open { opacity:1; pointer-events:auto; }
-      footer.site-footer-drawer { position:fixed !important; top:0 !important; bottom:0 !important; left:0 !important; right:auto !important; z-index:1001 !important; width:min(340px,88vw) !important; height:100dvh !important; padding:82px 24px 30px !important; display:flex !important; flex-direction:column !important; flex-wrap:nowrap !important; justify-content:flex-start !important; align-items:stretch !important; gap:5px !important; overflow-y:auto !important; background:#203447 !important; box-shadow:8px 0 28px rgba(20,35,50,.28) !important; transform:translateX(-105%); transition:transform .22s ease; }
-      footer.site-footer-drawer.open { transform:translateX(0); }
-      .site-menu-title { display:block; padding:0 12px 12px; color:white; font:700 19px/1.3 "Assistant","Segoe UI",Arial,sans-serif; }
-      footer.site-footer-drawer a,footer.site-footer-drawer .lang-button { width:100% !important; padding:11px 12px !important; margin:0 !important; border:0 !important; border-radius:8px !important; color:white !important; background:transparent !important; text-align:left !important; text-decoration:none !important; font:600 16px/1.35 "Assistant","Segoe UI",Arial,sans-serif !important; }
-      footer.site-footer-drawer a:hover,footer.site-footer-drawer a:focus-visible,footer.site-footer-drawer .lang-button:hover { background:rgba(255,255,255,.12) !important; text-decoration:none !important; }
-      footer.site-footer-drawer a[aria-current="page"] { background:rgba(26,176,151,.3) !important; }
-      .site-menu-group { width:100%; margin:0; color:white; }
-      .site-menu-group summary { position:relative; padding:11px 34px 11px 12px; border-radius:8px; color:white; cursor:pointer; list-style:none; font:700 16px/1.35 "Assistant","Segoe UI",Arial,sans-serif; }
-      .site-menu-group summary::-webkit-details-marker { display:none; }
-      .site-menu-group summary::after { content:'›'; position:absolute; right:13px; top:9px; font-size:22px; transition:transform .15s ease; }
-      .site-menu-group[open] summary::after { transform:rotate(90deg); }
-      .site-menu-group summary:hover,.site-menu-group summary:focus-visible { background:rgba(255,255,255,.12); }
-      .site-menu-submenu { display:grid; gap:2px; padding:3px 0 6px 14px; border-left:2px solid rgba(255,255,255,.2); margin-left:12px; }
-      footer.site-footer-drawer .site-menu-submenu a { padding:9px 10px !important; font-size:15px !important; }
-      @media (max-width:620px) { .site-menu-button { top:10px; left:10px; width:42px; height:42px; } footer.site-footer-drawer { position:fixed !important; padding-top:70px !important; } }
-    `;
-    document.head.appendChild(style);
-    document.body.classList.add('site-drawer-enabled');
-    footer.classList.add('site-footer-drawer');
+  // ---------- Header: drawer menu (tablet/phone) and dropdowns (desktop) ----------
+  function initHeader() {
+    const header = document.querySelector('.site-header');
+    if (!header) return;
+    const nav = header.querySelector('.primary-nav');
+    const toggle = header.querySelector('.menu-toggle');
+    const overlay = document.querySelector('.nav-overlay');
+    const drawerQuery = window.matchMedia('(max-width: 1099px)');
+    const isDrawer = () => header.classList.contains('site-header--floating') || drawerQuery.matches;
 
-    const currentPage = location.pathname.split('/').pop() || 'index.html';
-    footer.querySelectorAll('a[href]').forEach((link) => {
-      if (link.getAttribute('href').split('?')[0] === currentPage) {
-        link.setAttribute('aria-current', 'page');
-        const group = link.closest('details');
-        if (group) group.open = true;
-      }
-    });
-
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'site-menu-button';
-    button.setAttribute('aria-label', 'Open website menu');
-    button.setAttribute('aria-expanded', 'false');
-    button.textContent = '☰';
-    const overlay = document.createElement('div');
-    overlay.className = 'site-menu-overlay';
-    overlay.hidden = true;
-    document.body.appendChild(overlay);
-    document.body.appendChild(button);
-
-    function setOpen(open) {
-      footer.classList.toggle('open', open);
-      overlay.hidden = false;
-      requestAnimationFrame(() => overlay.classList.toggle('open', open));
-      button.textContent = open ? '✕' : '☰';
-      button.setAttribute('aria-label', open ? 'Close website menu' : 'Open website menu');
-      button.setAttribute('aria-expanded', String(open));
-      if (!open) setTimeout(() => { if (!overlay.classList.contains('open')) overlay.hidden = true; }, 220);
+    function closeSubs(except) {
+      header.querySelectorAll('.has-sub.open').forEach((item) => {
+        if (item === except) return;
+        item.classList.remove('open');
+        const button = item.querySelector('.nav-parent');
+        if (button) button.setAttribute('aria-expanded', 'false');
+      });
     }
 
-    button.addEventListener('click', () => setOpen(!footer.classList.contains('open')));
-    overlay.addEventListener('click', () => setOpen(false));
-    footer.addEventListener('click', (event) => { if (event.target.closest('a')) setOpen(false); });
-    document.addEventListener('keydown', (event) => { if (event.key === 'Escape') setOpen(false); });
+    function setOpen(open) {
+      document.body.classList.toggle('nav-open', open);
+      if (toggle) {
+        toggle.setAttribute('aria-expanded', String(open));
+        const label = toggle.querySelector('.visually-hidden');
+        if (label) label.textContent = open ? 'Close menu' : 'Menu';
+      }
+      if (overlay) overlay.hidden = !open;
+      if (open) {
+        const current = nav.querySelector('.has-sub.is-current');
+        if (current) { current.classList.add('open'); current.querySelector('.nav-parent').setAttribute('aria-expanded', 'true'); }
+        const first = nav.querySelector('a, button');
+        if (first) setTimeout(() => first.focus({ preventScroll: true }), 60);
+      }
+    }
+
+    if (toggle) toggle.addEventListener('click', () => setOpen(!document.body.classList.contains('nav-open')));
+    if (overlay) overlay.addEventListener('click', () => setOpen(false));
+
+    header.querySelectorAll('.nav-parent').forEach((button) => {
+      const item = button.parentElement;
+      button.addEventListener('click', (event) => {
+        event.stopPropagation();
+        const open = !item.classList.contains('open');
+        if (!isDrawer()) closeSubs(item);
+        item.classList.toggle('open', open);
+        button.setAttribute('aria-expanded', String(open));
+      });
+      // Desktop: keep aria-expanded in step with hover.
+      item.addEventListener('mouseenter', () => { if (!isDrawer()) button.setAttribute('aria-expanded', 'true'); });
+      item.addEventListener('mouseleave', () => {
+        if (isDrawer()) return;
+        item.classList.remove('open');
+        button.setAttribute('aria-expanded', 'false');
+      });
+      item.addEventListener('focusout', (event) => {
+        if (!isDrawer() && !item.contains(event.relatedTarget)) { item.classList.remove('open'); button.setAttribute('aria-expanded', 'false'); }
+      });
+    });
+
+    document.addEventListener('click', (event) => { if (!isDrawer() && !header.contains(event.target)) closeSubs(); });
+    document.addEventListener('keydown', (event) => {
+      if (event.key !== 'Escape') return;
+      const openItem = header.querySelector('.has-sub.open');
+      if (document.body.classList.contains('nav-open')) { setOpen(false); if (toggle) toggle.focus(); }
+      else if (openItem) { closeSubs(); openItem.querySelector('.nav-parent').focus(); }
+    });
+    nav.addEventListener('click', (event) => { if (event.target.closest('a') && isDrawer()) setOpen(false); });
+    const onChange = () => { if (!isDrawer()) setOpen(false); closeSubs(); };
+    if (drawerQuery.addEventListener) drawerQuery.addEventListener('change', onChange);
   }
+
+  // ---------- Today's date line (Hebrew date, civil date, this week's parsha) ----------
+  const YI_DAYS = ['זונטאג', 'מאנטאג', 'דינסטאג', 'מיטוואך', 'דאנערשטאג', 'פרייטאג', 'שבת קודש'];
+  const YI_MONTHS = ['יאנואר', 'פעברואר', 'מערץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אויגוסט', 'סעפטעמבער', 'אקטאבער', 'נאוועמבער', 'דעצעמבער'];
+
+  function nyDateParts(date) {
+    const parts = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', year: 'numeric', month: 'numeric', day: 'numeric', weekday: 'short' })
+      .formatToParts(date || new Date()).forEach((p) => { parts[p.type] = p.value; });
+    const days = { Sun: 0, Mon: 1, Tue: 2, Wed: 3, Thu: 4, Fri: 5, Sat: 6 };
+    return { y: Number(parts.year), m: Number(parts.month), d: Number(parts.day), wd: days[parts.weekday] };
+  }
+
+  function civilDate(lang) {
+    const t = nyDateParts();
+    if (lang === 'yi') return YI_DAYS[t.wd] + ', ' + t.d + ' ' + YI_MONTHS[t.m - 1] + ' ' + t.y;
+    return new Date(Date.UTC(t.y, t.m - 1, t.d, 12)).toLocaleDateString('en-US', { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  }
+
+  function hebrewDateFallback() {
+    try {
+      return new Intl.DateTimeFormat('he-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'America/New_York' }).format(new Date());
+    } catch (_) { return ''; }
+  }
+
+  function parshaLabel(today, lang) {
+    if (!today || !today.parshaEn) return '';
+    return lang === 'yi' ? (today.parshaHe || '') : today.parshaEn.replace(/^Parashat\s+/, 'Parshas ');
+  }
+
+  async function loadToday() {
+    const t = nyDateParts();
+    const key = 'kasho-today-' + t.y + '-' + t.m + '-' + t.d;
+    try { const cached = JSON.parse(localStorage.getItem(key) || 'null'); if (cached) return cached; } catch (_) {}
+    const today = {};
+    try {
+      const conv = await fetch('https://www.hebcal.com/converter?cfg=json&g2h=1&gy=' + t.y + '&gm=' + t.m + '&gd=' + t.d).then((r) => r.ok ? r.json() : null);
+      if (conv && conv.heDateParts) today.hebrew = conv.heDateParts.d + ' ' + conv.heDateParts.m + ' ' + conv.heDateParts.y;
+      if (conv) today.hebrewEn = conv.hd + ' ' + conv.hm + ' ' + conv.hy;
+    } catch (_) {}
+    try {
+      const week = await fetch('https://www.hebcal.com/shabbat?cfg=json&zip=11211&M=on').then((r) => r.ok ? r.json() : null);
+      const parsha = week && (week.items || []).find((item) => item.category === 'parashat');
+      if (parsha) { today.parshaEn = parsha.title; today.parshaHe = parsha.hebrew; }
+    } catch (_) {}
+    if (today.hebrew) { try { localStorage.setItem(key, JSON.stringify(today)); } catch (_) {} }
+    return today;
+  }
+
+  let todayInfo = null;
+  function renderToday() {
+    const lang = document.documentElement.lang === 'yi' ? 'yi' : 'en';
+    const heb = (todayInfo && todayInfo.hebrew) || hebrewDateFallback();
+    document.querySelectorAll('[data-hebrew-date]').forEach((el) => { el.textContent = heb; el.setAttribute('lang', 'he'); });
+    document.querySelectorAll('[data-greg-date]').forEach((el) => { el.textContent = civilDate(lang); });
+    document.querySelectorAll('[data-parsha]').forEach((el) => { el.textContent = parshaLabel(todayInfo, lang); });
+  }
+
+  async function initToday() {
+    if (!document.querySelector('[data-hebrew-date], [data-greg-date], [data-parsha]')) return;
+    renderToday();
+    todayInfo = await loadToday();
+    renderToday();
+    document.addEventListener('site-language-change', renderToday);
+  }
+
+  window.KashoSite = { nyDateParts, civilDate, YI_DAYS, YI_MONTHS };
 
   async function applySiteAccess() {
     const projectUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';

@@ -1,561 +1,375 @@
 <!doctype html>
-<html lang="en">
+<html id="top" lang="en">
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Community Home | ברכת שמים קאשוי</title>
+<meta name="description" content="Hisachdus Avreichim Birchas Shamayim Kashau — the Kasho (Kashau) chassidic community in Williamsburg, Monsey and Kiryas Joel: news, simchas, zmanim, botei medrash and contacts.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ברכת שמים קאשוי · Kasho Community">
+<meta property="og:title" content="Kasho Community | ברכת שמים קאשוי">
+<meta property="og:description" content="Hisachdus Avreichim Birchas Shamayim Kashau — the Kasho (Kashau) chassidic community in Williamsburg, Monsey and Kiryas Joel: news, simchas, zmanim, botei medrash and contacts.">
+<meta property="og:image" content="https://david7578433-bit.github.io/khaso/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://david7578433-bit.github.io/khaso/">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<!--site-head:start-->
+<meta name="theme-color" content="#1b2d3e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@400;500;700;800&family=Assistant:wght@400;600;700;800&display=swap" rel="stylesheet">
-<style>
-  :root {
-    --navy-deep: #16293b;
-    --ink: #2a3540;
-    --teal: #1c9c8a;
-    --paper: #ffffff;
-    --background-a: #fdf6ec;
-    --background-b: #eaf3f0;
-    --border: #dde8e3;
-    --box-a: #2c5f78;
-    --box-b: #2c9484;
-  }
-
-
-  * { box-sizing: border-box; }
-
-
-  body {
-    margin: 0;
-    font-family: "Assistant", "Segoe UI", Arial, sans-serif;
-    background: linear-gradient(160deg, var(--background-a), var(--background-b) 60%, #e7f1f6);
-    color: var(--ink);
-  }
-
-
-  [data-lang][hidden] { display: none !important; }
-
-
-  .hebrew, .name-block, .lang-button {
-    font-family: "Frank Ruhl Libre", "Assistant", serif;
-  }
-
-
-  .layout {
-    display: flex;
-    flex-direction: row-reverse;
-    min-height: 100vh;
-  }
-
-
-  .sidebar {
-    width: 340px;
-    flex-shrink: 0;
-    background: linear-gradient(180deg, var(--navy-deep), var(--teal) 160%);
-    color: white;
-    padding: 36px 22px;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    text-align: center;
-  }
-
-
-  .sidebar img {
-    width: 240px;
-    height: auto;
-    filter: brightness(1.9) contrast(1.05) drop-shadow(0 3px 8px rgba(0,0,0,.25));
-    margin-bottom: 14px;
-  }
-
-
-  .name-block { direction: rtl; display: flex; flex-direction: column; align-items: center; }
-  .name-block div { line-height: 1; margin: 0; padding: 0; }
-  .n2 { font-size: 23px; font-weight: 500; opacity: .92; }
-  .n3 { font-size: 19px; font-weight: 400; opacity: .85; margin-top: 2px; }
-  .n1 { font-size: 76px; font-weight: 700; margin-top: -20px; }
-  .n4 { font-size: 13px; font-weight: 400; opacity: .72; margin-top: 10px; }
-
-
-  .sidebar-spacer { flex: 1; min-height: 20px; max-height: 160px; }
-
-
-  .lang-button {
-    padding: 14px 34px;
-    border: 0;
-    border-radius: 999px;
-    background: var(--teal);
-    color: white;
-    font-size: 23px;
-    font-weight: 600;
-    cursor: pointer;
-  }
-
-  .sidebar > .lang-button { margin-bottom: 72px; }
-
-
-  .main {
-    flex: 1;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    padding-bottom: 64px;
-  }
-
-
-  .side-menu {
-    display: flex;
-    flex-direction: column;
-    gap: 4px;
-    width: 100%;
-    margin-top: 22px;
-    padding-top: 18px;
-    border-top: 1px solid rgba(255,255,255,.25);
-  }
-
-
-  .side-menu a {
-    color: white;
-    text-decoration: none;
-    font-size: 17px;
-    font-weight: 600;
-    padding: 10px 8px;
-    border-radius: 8px;
-  }
-
-
-  .side-menu a:hover,
-  .side-menu a:focus-visible {
-    background: rgba(255,255,255,.14);
-  }
-
-
-  .topbar {
-    display: flex;
-    justify-content: flex-end;
-    padding: 14px 26px 4px;
-  }
-
-
-  .login-btn {
-    padding: 10px 22px;
-    border-radius: 8px;
-    background: var(--teal);
-    color: white;
-    font-weight: 700;
-    text-decoration: none;
-    font-size: 14px;
-  }
-
-
-  .account-menu { position: relative; }
-
-
-  .account-toggle {
-    border: 0;
-    cursor: pointer;
-    font-family: inherit;
-  }
-
-
-  .dropdown-menu {
-    position: absolute;
-    top: 100%;
-    right: 0;
-    margin-top: 8px;
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    box-shadow: 0 10px 26px rgba(20, 60, 70, .18);
-    padding: 6px;
-    min-width: 150px;
-    z-index: 30;
-  }
-
-
-  .dropdown-menu a,
-  .dropdown-menu button {
-    display: block;
-    width: 100%;
-    background: none;
-    color: var(--ink);
-    font-weight: 600;
-    font-size: 14px;
-    padding: 10px 12px;
-    border-radius: 8px;
-    text-align: center;
-    cursor: pointer;
-    border: 0;
-    text-decoration: none;
-    box-sizing: border-box;
-  }
-
-
-  .dropdown-menu a:hover,
-  .dropdown-menu button:hover {
-    background: var(--background-b);
-  }
-
-
-  .boxes-wrap {
-    padding: 8px 52px 0;
-  }
-
-
-  .boxes {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 24px;
-    max-width: 1040px;
-    margin: 0 auto;
-  }
-
-
-  .box.coming-soon {
-    background: linear-gradient(135deg, #96a5ac, #7c8b93 150%);
-    opacity: .85;
-  }
-
-
-  .box {
-    border: 0;
-    border-radius: 16px;
-    background: linear-gradient(135deg, var(--box-a), var(--box-b) 150%);
-    box-shadow: 0 8px 20px rgba(20, 60, 70, .18);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    min-height: 124px;
-    font-size: 22px;
-    font-weight: 700;
-    color: white;
-    text-decoration: none;
-    text-align: center;
-    padding: 18px;
-    transition: transform .12s, box-shadow .12s;
-  }
-
-
-  .box:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 12px 26px rgba(20, 60, 70, .26);
-  }
-
-
-  .hero-row {
-    display: flex;
-    flex-wrap: nowrap;
-    justify-content: center;
-    align-items: stretch;
-    gap: 26px;
-    width: calc(100% - 104px);
-    max-width: 1040px;
-    margin: 30px auto 0;
-  }
-
-
-  .hero {
-    padding: 34px 32px;
-    width: 100%;
-    flex: 1 1 0;
-    min-width: 0;
-    max-width: none;
-    min-height: 195px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-top: 5px solid var(--teal);
-    border-radius: 16px;
-    box-shadow: 0 10px 28px rgba(30, 50, 68, .12);
-    text-align: center;
-    transition: transform .12s, box-shadow .12s;
-  }
-
-
-  .hero:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 14px 32px rgba(30, 50, 68, .18);
-  }
-
-
-  .hero[hidden] {
-    display: none;
-  }
-
-
-  .hero h2 {
-    margin: 0 0 10px;
-    font-size: 19px;
-    color: var(--navy-deep);
-  }
-
-
-  .hero p {
-    margin: 0;
-    color: var(--ink);
-    font-size: 16px;
-    line-height: 1.45;
-  }
-
-
-  .image-announcement {
-    width: 100%;
-    margin: 0;
-    padding: 0;
-    display: block;
-    background: transparent;
-    border: 0;
-    border-radius: 10px;
-    text-decoration: none;
-  }
-
-
-  .image-announcement-hero {
-    padding: 8px;
-    justify-content: flex-start;
-  }
-
-
-  .image-announcement img {
-    display: block;
-    width: 100%;
-    height: auto;
-    border-radius: 9px;
-  }
-
-
-  .simchas-hero {
-    justify-content: flex-start;
-    text-align: left;
-  }
-
-
-  .simchas-hero > h2 {
-    text-align: center;
-    font-size: 25px;
-    margin-bottom: 4px;
-  }
-
-
-  .simcha-home-item {
-    padding: 18px 4px;
-    border-bottom: 1px solid var(--border);
-  }
-
-
-  .simcha-home-item:last-child {
-    border-bottom: 0;
-  }
-
-
-  .simcha-home-item h3 {
-    margin: 0 0 6px;
-    color: var(--navy-deep);
-    font-size: 18px;
-  }
-
-
-  .ad-strip {
-    width: calc(100% - 104px);
-    max-width: 1040px;
-    margin: 18px auto 0;
-    padding: 14px 24px;
-    background: var(--paper);
-    border: 1px solid var(--border);
-    border-radius: 12px;
-    box-shadow: 0 6px 16px rgba(30, 50, 68, .1);
-    display: flex;
-    align-items: center;
-    gap: 14px;
-    text-decoration: none;
-    color: var(--ink);
-    transition: transform .12s, box-shadow .12s;
-  }
-
-  .ad-strip:hover {
-    transform: translateY(-1px);
-    box-shadow: 0 10px 22px rgba(30, 50, 68, .16);
-  }
-
-  .ad-strip .ad-tag {
-    flex-shrink: 0;
-    font-size: 11px;
-    font-weight: 800;
-    letter-spacing: .05em;
-    text-transform: uppercase;
-    color: var(--teal);
-    border: 1px solid var(--teal);
-    border-radius: 999px;
-    padding: 3px 9px;
-  }
-
-  .ad-strip .ad-text { flex: 1; min-width: 0; }
-  .ad-strip .ad-text strong { display: block; font-size: 15px; }
-  .ad-strip .ad-text span { display: block; font-size: 13px; color: var(--muted, #6b7c8c); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-
-  footer {
-    position: fixed;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    z-index: 20;
-    background: var(--navy-deep);
-    color: rgba(255,255,255,.85);
-    padding: 14px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    gap: 8px 20px;
-    flex-wrap: wrap;
-    font-size: 14px;
-    box-shadow: 0 -2px 8px rgba(0,0,0,.15);
-  }
-
-
-  footer a {
-    color: rgba(255,255,255,.85);
-    text-decoration: none;
-    font-weight: 600;
-  }
-
-
-  footer a:hover { color: white; text-decoration: underline; }
-
-
-  footer .lang-button {
-    background: none;
-    border: 0;
-    padding: 0;
-    border-radius: 0;
-    color: rgba(255,255,255,.85);
-    font-family: "Frank Ruhl Libre", "Assistant", serif;
-    font-size: 17px;
-    font-weight: 600;
-  }
-
-
-  footer .lang-button:hover { color: white; text-decoration: underline; }
-
-
-  .admin-link {
-    display: block;
-    width: max-content;
-    margin: 26px auto 0;
-    color: var(--muted, #6b7c8c);
-    font-size: 12px;
-    text-decoration: none;
-  }
-
-
-  @media (max-width: 780px) {
-    .layout { flex-direction: column; }
-    .sidebar { width: 100%; }
-    .sidebar > .lang-button { margin-bottom: 0; }
-    .boxes { grid-template-columns: repeat(2, 1fr); max-width: 460px; }
-    .hero-row { flex-wrap: wrap; }
-    .hero { max-width: 440px; }
-    .ad-strip { width: calc(100% - 40px); flex-wrap: wrap; }
-  }
-</style>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;800&family=Heebo:wght@400;500;600;700&display=swap">
+<!--site-head:end-->
+<link rel="stylesheet" href="style.css?v=20261026-2">
 </head>
-<body>
-
-
-<div class="layout">
-  <aside class="sidebar">
-    <img src="./logo.png?v=2" alt="ברכת שמים קאשוי">
-    <div class="name-block">
-      <div class="n2">התאחדות אברכים</div>
-      <div class="n3">ברכת שמים</div>
-      <div class="n1">קאשוי</div>
-      <div class="n4">בנשיאות כ"ק מרן אדמו"ר שליט"א</div>
+<body class="home">
+<!--site-header:start-->
+<a class="skip-link" href="#main"><span data-lang="en">Skip to content</span><span data-lang="yi" hidden>שפרינגט צום אינהאלט</span></a>
+<header class="site-header">
+  <div class="topstrip">
+    <div class="wrap topstrip-inner">
+      <p class="today-line"><span class="today-heb" data-hebrew-date></span><span class="today-greg" data-greg-date></span><span class="today-parsha" data-parsha></span></p>
+      <div class="topstrip-actions">
+        <a class="topstrip-link" href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
+        <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+      </div>
     </div>
-    <nav class="side-menu">
-      <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
-      <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
-      <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
-    </nav>
-    <div class="sidebar-spacer"></div>
-    <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
-  </aside>
+  </div>
+  <div class="mainbar">
+    <div class="wrap mainbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="logo-mark.png" width="48" height="55" alt="">
+        <span class="brand-text"><span class="brand-name" lang="he">ברכת שמים קאשוי</span><span class="brand-sub"><span data-lang="en">Kasho Community</span><span data-lang="yi" hidden>התאחדות אברכים קאשוי</span></span></span>
+      </a>
+      <nav class="primary-nav" id="primaryNav" aria-label="Main">
+        <ul class="nav-list">
+        <li class="nav-home"><a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li>
+        <li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-1"><span data-lang="en">News &amp; Simchas</span><span data-lang="yi" hidden>נייעס און שמחות</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-1"><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="editorial.html"><span data-lang="en">Send something in</span><span data-lang="yi" hidden>שיקט עפעס אריין</span></a></li></ul></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-2"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-2"><li><a href="botei-medrash.html"><span data-lang="en">All botei medrash</span><span data-lang="yi" hidden>אלע בתי מדרשים</span></a></li><li><a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a></li><li><a href="beis-medrash-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="beis-medrash-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
+        <li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li>
+        <li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li>
+        <li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-6"><span data-lang="en">More</span><span data-lang="yi" hidden>מער</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-6"><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business directory</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages (members)</span><span data-lang="yi" hidden>יארגאנג (מעמבערס)</span></a></li><li><a href="ages.html"><span data-lang="en">Kasho Chat</span><span data-lang="yi" hidden>קאשוי שמועס</span></a></li></ul></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-7"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-7"><li><a href="contact.html"><span data-lang="en">Contact us</span><span data-lang="yi" hidden>קאנטאקט</span></a></li><li><a href="contact-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="contact-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
+        </ul>
+        <div class="drawer-extra">
+          <button class="lang-button drawer-lang" type="button" onclick="toggleLang()">אידיש</button>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <div class="account-menu" id="accountMenu"><a class="header-login" href="login.html" id="loginLink"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a><button type="button" class="header-login account-toggle" id="accountToggle" hidden>Account ▾</button><div class="dropdown-menu" id="dropdownMenu" hidden><a href="login.html">My Profile</a><a href="admin.html" id="adminMenuLink" hidden>Admin Dashboard</a><button type="button" id="signOutBtn">Sign Out</button></div></div>
+        <button type="button" class="menu-toggle" aria-controls="primaryNav" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span><span class="visually-hidden">Menu</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay" hidden></div>
+<!--site-header:end-->
+<main id="main">
+  <section class="home-hero">
+    <div class="wrap hero-grid">
+      <div class="hero-copy">
+        <p class="hero-eyebrow" lang="he">התאחדות אברכים ברכת שמים קאשוי</p>
+        <h1><span data-lang="en">Kasho Community</span><span data-lang="yi" hidden>קהילת קאשוי</span></h1>
+        <p class="hero-lead" data-lang="en">Hisachdus Avreichim Birchas Shamayim Kashau is the community of the Kashau (Kasho) Rebbe shlit״a, with botei medrash in Williamsburg, Monsey and Kiryas Joel.</p>
+        <p class="hero-lead" data-lang="yi" hidden>התאחדות אברכים ברכת שמים קאשוי איז די קהילה פון כ״ק מרן אדמו״ר מקאשוי שליט״א, מיט בתי מדרשים אין וויליאמסבורג, מאנסי און קרית יואל.</p>
+        <div class="hero-actions">
+          <a class="button button-gold" href="#botei"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5a2 2 0 0 1 4 0v5M9 11.5h.01M15 11.5h.01"/></svg><span data-lang="en">Our botei medrash</span><span data-lang="yi" hidden>אונדזערע בתי מדרשים</span></a>
+          <a class="button button-outline-light" href="#zmanim"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/></svg><span data-lang="en">Today's zmanim</span><span data-lang="yi" hidden>היינטיגע זמנים</span></a>
+        </div>
+      </div>
+      <aside class="today-card" aria-label="Today">
+        <p class="today-card-label"><span data-lang="en">Today</span><span data-lang="yi" hidden>היינט</span></p>
+        <p class="today-card-heb" data-hebrew-date></p>
+        <p class="today-card-greg" data-greg-date></p>
+        <div class="shabbos-box" id="shabbosBox" hidden>
+          <p class="shabbos-title"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21h6M10 21V11h4v10"/><path d="M12 8c1.4 0 2-1 2-2.2C14 4.3 12 2.5 12 2.5S10 4.3 10 5.8C10 7 10.6 8 12 8Z"/></svg><span id="shabbosParsha"></span></p>
+          <table class="shabbos-table">
+            <thead><tr><th scope="col"><span class="visually-hidden">Location</span></th><th scope="col"><span data-lang="en">Candles</span><span data-lang="yi" hidden>ליכט צינדן</span></th><th scope="col"><span data-lang="en">Havdalah</span><span data-lang="yi" hidden>הבדלה</span></th></tr></thead>
+            <tbody id="shabbosRows"></tbody>
+          </table>
+          <p class="shabbos-note"><span data-lang="en">Candle lighting 18 minutes before sunset · times from Hebcal</span><span data-lang="yi" hidden>ליכט צינדן 18 מינוט פאר שקיעה · צייטן פון Hebcal</span></p>
+        </div>
+      </aside>
+    </div>
+  </section>
 
+  <nav class="quick-links wrap" aria-label="Site sections">
+      <a class="quick-tile" href="news.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2V5Z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></span><span class="quick-desc"><span data-lang="en">Community updates</span><span data-lang="yi" hidden>נייעס פון דער קהילה</span></span></span>
+      </a>
+      <a class="quick-tile" href="simchas.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l-1 7a3 3 0 0 1-6 0L8 3Z"/><path d="M12 13v6M8.5 21h7"/><path d="M19 4l1.5-1.5M20 8h2M5 4 3.5 2.5M4 8H2"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></span><span class="quick-desc"><span data-lang="en">Mazel tov announcements</span><span data-lang="yi" hidden>מזל טוב מודעות</span></span></span>
+      </a>
+      <a class="quick-tile" href="zmanim.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></span><span class="quick-desc"><span data-lang="en">Daily halachic times</span><span data-lang="yi" hidden>טעגליכע זמנים</span></span></span>
+      </a>
+      <a class="quick-tile" href="botei-medrash.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5a2 2 0 0 1 4 0v5M9 11.5h.01M15 11.5h.01"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></span><span class="quick-desc"><span data-lang="en">Three locations</span><span data-lang="yi" hidden>דריי לאקאציעס</span></span></span>
+      </a>
+      <a class="quick-tile" href="yeshiva.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5.5A2.5 2.5 0 0 1 6.5 3H20v15H6.5A2.5 2.5 0 0 0 4 20.5v-15Z"/><path d="M4 20.5A2.5 2.5 0 0 0 6.5 23H20v-5M9 8h7M9 11.5h5"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></span><span class="quick-desc"><span data-lang="en">Ktana, Gedola & camp</span><span data-lang="yi" hidden>קטנה, גדולה און קעמפ</span></span></span>
+      </a>
+      <a class="quick-tile" href="pictures.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></span><span class="quick-desc"><span data-lang="en">Photo albums</span><span data-lang="yi" hidden>בילדער אלבומען</span></span></span>
+      </a>
+      <a class="quick-tile" href="recordings.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="7" rx="1.5"/><rect x="16.5" y="14" width="4.5" height="7" rx="1.5"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></span><span class="quick-desc"><span data-lang="en">Divrei Kodesh archive</span><span data-lang="yi" hidden>דברות קודש ארכיוו</span></span></span>
+      </a>
+      <a class="quick-tile" href="business.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2M3 12.5h18M10.5 12.5v2h3v-2"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></span><span class="quick-desc"><span data-lang="en">Community directory</span><span data-lang="yi" hidden>געשעפטן פון דער קהילה</span></span></span>
+      </a>
+  </nav>
 
-  <div class="main">
-    <div class="topbar">
-      <div class="account-menu" id="accountMenu">
-        <a class="login-btn" href="login.html" id="loginLink"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
-        <button type="button" class="login-btn account-toggle" id="accountToggle" hidden>Account ▾</button>
-        <div class="dropdown-menu" id="dropdownMenu" hidden>
-          <a href="login.html">My Profile</a>
-          <a href="admin.html" id="adminMenuLink" hidden>Admin Dashboard</a>
-          <button type="button" id="signOutBtn">Sign Out</button>
+  <div class="wrap home-grid">
+    <div class="home-col-main">
+      <article class="home-card notice-card" id="heroBox" aria-labelledby="noticeHeading">
+      <div class="section-head-row"><p class="eyebrow"><span data-lang="en">Notice board</span><span data-lang="yi" hidden>מודעות</span></p><h2 id="noticeHeading"><span data-lang="en">Latest announcement</span><span data-lang="yi" hidden>לעצטע מודעה</span></h2></div>
+      <p class="notice-summary" data-lang="en">The Kashau Rebbe shlit״a will be in Monsey on Wednesday of Parshas Nitzavim–Vayeilech, with a special opportunity to come in for a brocha before the Yomim Noraim. Entry from 7:00 PM at our beis medrash, 48 Susanne Dr. Maariv at 9:45.</p>
+      <div class="notice-text" lang="he" dir="rtl">
+        <p class="notice-line notice-small">בס״ד</p>
+        <p class="notice-line notice-big">ברכנוכם מבית ה׳</p>
+        <p class="notice-line notice-strong">כבוד קדושת מרן אדמו״ר שליט״א</p>
+        <p class="notice-line">אשר יופיע בעז״ה בעיר״ש מאנסי יצ״ו</p>
+        <p class="notice-line">ביום ד׳ פר׳ נצבים וילך הבעל״ט</p>
+        <p class="notice-line notice-strong">להכנס אל הקודש פנימה</p>
+        <p class="notice-line">להתברך לקראת ימי הרחמים והרצון הבעל״ט</p>
+        <p class="notice-line notice-strong">זמני כניסה: משעה 7:00 אחה״צ</p>
+        <p class="notice-line">בבית מדרשנו המפואר · <span dir="ltr">48 Susanne Dr.</span></p>
+        <p class="notice-line">מעריב בשעה 9:45</p>
+        <p class="notice-line notice-small">בברכת כתיבה וחתימה טובה</p>
+      </div>
+      <details class="notice-original">
+        <summary><span data-lang="en">View original notice</span><span data-lang="yi" hidden>זעט די ארגינעלע מודעה</span></summary>
+        <a href="announcement-kavod-kedusha.png" target="_blank" rel="noopener"><img src="announcement-kavod-kedusha.png" width="345" height="543" loading="lazy" alt="Original printed notice (Hebrew): the Kashau Rebbe's visit to Monsey, entry from 7:00 PM at 48 Susanne Dr."></a>
+      </details>
+    
+      </article>
+    </div>
+    <aside class="home-col-side">
+      <section class="home-card zmanim-widget" id="zmanim" aria-labelledby="zmanimHeading">
+        <div class="widget-head">
+          <h2 id="zmanimHeading"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/></svg><span data-lang="en">Today's zmanim</span><span data-lang="yi" hidden>היינטיגע זמנים</span></h2>
+          <p class="widget-date" id="homeZmanimDate"></p>
+        </div>
+        <div class="loc-tabs" role="tablist" aria-label="Location">
+          <button type="button" role="tab" class="loc-tab" data-zip="11211" data-key="williamsburg" aria-selected="true"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></button>
+          <button type="button" role="tab" class="loc-tab" data-zip="10952" data-key="monsey" aria-selected="false"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></button>
+          <button type="button" role="tab" class="loc-tab" data-zip="10950" data-key="kiryas_joel" aria-selected="false"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></button>
+        </div>
+        <dl class="zman-list" id="homeZmanim" role="tabpanel" aria-live="polite"><div class="zman-loading"><span data-lang="en">Loading…</span><span data-lang="yi" hidden>לאדט…</span></div></dl>
+        <a class="widget-more" href="zmanim.html"><span data-lang="en">All zmanim, more cities &amp; your location</span><span data-lang="yi" hidden>אלע זמנים, מער שטעט און אייער לאקאציע</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </section>
+      <section class="home-card simchas-hero" id="heroBox2" hidden aria-live="polite">
+        <h2><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3h8l-1 7a3 3 0 0 1-6 0L8 3Z"/><path d="M12 13v6M8.5 21h7"/><path d="M19 4l1.5-1.5M20 8h2M5 4 3.5 2.5M4 8H2"/></svg><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></h2>
+        <div id="homeSimchasList"></div>
+        <a class="widget-more" href="simchas.html"><span data-lang="en">All simchas</span><span data-lang="yi" hidden>אלע שמחות</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </section>
+    </aside>
+  </div>
+
+  <a class="ad-strip wrap" id="adStrip" href="business.html" hidden>
+    <span class="ad-tag">Business</span>
+    <span class="ad-text"><strong id="adStripName"></strong><span id="adStripDesc"></span></span>
+  </a>
+
+  <section class="home-section" id="botei" aria-labelledby="boteiHeading">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span data-lang="en">Where to find us</span><span data-lang="yi" hidden>וואו מען געפינט אונז</span></p>
+        <h2 id="boteiHeading"><span data-lang="en">Our Botei Medrash</span><span data-lang="yi" hidden>אונדזערע בתי מדרשים</span></h2>
+      </div>
+      <div class="grid-3 places">
+      <article class="place-card">
+        <span class="place-kicker"><span data-lang="en">Brooklyn, NY</span><span data-lang="yi" hidden>ברוקלין</span></span>
+        <h3><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></h3>
+        <address dir="ltr">Williamsburg, Brooklyn</address>
+        <div class="place-links"><a href="https://maps.app.goo.gl/ar7pwFsceBPGCH8WA" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="beis-medrash-williamsburg.html" class="place-more"><span data-lang="en">Details</span><span data-lang="yi" hidden>מער אינפא</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="place-card">
+        <span class="place-kicker"><span data-lang="en">Rockland County, NY</span><span data-lang="yi" hidden>ראקלענד קאונטי</span></span>
+        <h3><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></h3>
+        <address dir="ltr">48 Suzanne Dr, Spring Valley, NY 10977</address>
+        <div class="place-links"><a href="https://www.google.com/maps/place/48+Suzanne+Dr,+Spring+Valley,+NY+10977" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="tel:+13476932536" dir="ltr"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11 11 0 0 0 7.2 7.2l1.4-2.1 4.2 1.6V19a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3 5.7 2 2 0 0 1 5 3.5Z"/></svg>347-693-2536</a><a href="mailto:kashomonseyny@gmail.com"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg><span data-lang="en">Email</span><span data-lang="yi" hidden>אימעיל</span></a><a href="beis-medrash-monsey.html" class="place-more"><span data-lang="en">Details</span><span data-lang="yi" hidden>מער אינפא</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      <article class="place-card">
+        <span class="place-kicker"><span data-lang="en">Orange County, NY</span><span data-lang="yi" hidden>אראנזש קאונטי</span></span>
+        <h3><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></h3>
+        <address dir="ltr">2 Shinev Ct, Kiryas Joel, NY 10950</address>
+        <div class="place-links"><a href="https://www.google.com/maps/place/Kasho+Monroe" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="tel:+18456370960" dir="ltr"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 3.5h3.2l1.6 4.2-2.1 1.4a11 11 0 0 0 7.2 7.2l1.4-2.1 4.2 1.6V19a2 2 0 0 1-2.2 2A16.5 16.5 0 0 1 3 5.7 2 2 0 0 1 5 3.5Z"/></svg>845-637-0960</a><a href="mailto:kashomonroeny@gmail.com"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="5" width="18" height="14" rx="2"/><path d="m3.5 6.5 8.5 6.5 8.5-6.5"/></svg><span data-lang="en">Email</span><span data-lang="yi" hidden>אימעיל</span></a><a href="beis-medrash-kiryas-joel.html" class="place-more"><span data-lang="en">Details</span><span data-lang="yi" hidden>מער אינפא</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+      </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section about-band" aria-labelledby="aboutHeading">
+    <div class="wrap about-grid">
+      <div class="about-copy">
+        <p class="eyebrow"><span data-lang="en">Our history</span><span data-lang="yi" hidden>אונדזער היסטאריע</span></p>
+        <h2 id="aboutHeading"><span data-lang="en">From Kassa to Kiryas Kashau</span><span data-lang="yi" hidden>פון קאשא ביז קרית קאשוי</span></h2>
+        <p data-lang="en">Our community takes its name from Kashau, the Yiddish name for Kassa (Košice). It was founded by <bdi lang="he">הרה״צ כ״ק מרן אדמו״ר ר׳ רפאל בלום זצ״ל</bdi>; his son, <bdi lang="he">כ״ק מרן ר׳ אליעזר חיים בלום זי״ע</bdi>, continued his legacy, and today our community is led by <bdi lang="he">כ״ק מרן אדמו״ר שליט״א ר׳ אברהם שלמה בלום</bdi>.</p>
+        <p data-lang="yi" hidden>אונדזער קהילה טראגט דעם נאמען קאשוי, דער אידישער נאמען פאר קאשא (קעשיץ). זי איז געגרינדעט געווארן דורך הרה״צ כ״ק מרן אדמו״ר ר׳ רפאל בלום זצ״ל; זיין זון, כ״ק מרן ר׳ אליעזר חיים בלום זי״ע, האט פארזעצט זיין ירושה, און היינט ווערט אונדזער קהילה געפירט דורך כ״ק מרן אדמו״ר שליט״א ר׳ אברהם שלמה בלום.</p>
+        <a class="button button-ghost" href="about.html"><span data-lang="en">Read our history</span><span data-lang="yi" hidden>לייענט אונדזער היסטאריע</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
+      </div>
+      <ol class="timeline">
+          <li><span class="tl-year"><span data-lang="en">Before WWII</span><span data-lang="yi" hidden>פארן קריג</span></span><span class="tl-text"><span data-lang="en">A yeshiva in Kassa (Košice)</span><span data-lang="yi" hidden>א ישיבה אין קאשא (קעשיץ)</span></span></li>
+          <li><span class="tl-year"><span data-lang="en">1945</span><span data-lang="yi" hidden>1945</span></span><span class="tl-text"><span data-lang="en">The Rebbe zt״l returns to Kassa after the Holocaust</span><span data-lang="yi" hidden>דער רבי זצ״ל קומט צוריק קיין קאשא נאך דעם חורבן</span></span></li>
+          <li><span class="tl-year"><span data-lang="en">1948</span><span data-lang="yi" hidden>1948</span></span><span class="tl-text"><span data-lang="en">Settles in Brooklyn and founds the Kashau congregation in Williamsburg</span><span data-lang="yi" hidden>באזעצט זיך אין ברוקלין און גרינדעט די קאשוער קהילה אין וויליאמסבורג</span></span></li>
+          <li><span class="tl-year"><span data-lang="en">1977</span><span data-lang="yi" hidden>1977</span></span><span class="tl-text"><span data-lang="en">Kahal Adas Kasho in Bedford Hills, NY — Kiryas Kashau</span><span data-lang="yi" hidden>קהל עדת קאשא אין בעדפארד הילס — קרית קאשוי</span></span></li>
+          <li><span class="tl-year"><span data-lang="en">Today</span><span data-lang="yi" hidden>היינט</span></span><span class="tl-text"><span data-lang="en">Botei medrash in Williamsburg, Monsey and Kiryas Joel</span><span data-lang="yi" hidden>בתי מדרשים אין וויליאמסבורג, מאנסי און קרית יואל</span></span></li>
+      </ol>
+    </div>
+  </section>
+
+  <section class="home-section" aria-labelledby="mosdosHeading">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span data-lang="en">Torah and chinuch</span><span data-lang="yi" hidden>תורה און חינוך</span></p>
+        <h2 id="mosdosHeading"><span data-lang="en">Our Yeshivos</span><span data-lang="yi" hidden>אונדזערע ישיבות</span></h2>
+      </div>
+      <div class="grid-3">
+        <article class="place-card">
+          <span class="place-kicker"><span data-lang="en">Brooklyn, NY</span><span data-lang="yi" hidden>ברוקלין</span></span>
+          <h3><span data-lang="en">Yeshiva Ktana</span><span data-lang="yi" hidden>ישיבה קטנה</span></h3>
+          <address dir="ltr">101 Spencer St, Brooklyn, NY 11205</address>
+          <div class="place-links"><a href="https://maps.app.goo.gl/SycLw7Z2A8M9nt5L6" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="gallery.html?cat=yeshiva_ktana"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/></svg><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></div>
+        </article>
+        <article class="place-card">
+          <span class="place-kicker"><span data-lang="en">Brooklyn, NY</span><span data-lang="yi" hidden>ברוקלין</span></span>
+          <h3><span data-lang="en">Yeshiva Gedola</span><span data-lang="yi" hidden>ישיבה גדולה</span></h3>
+          <address dir="ltr">590 Smith St, Brooklyn, NY 11231</address>
+          <div class="place-links"><a href="https://maps.app.goo.gl/xutiDLJT4o1CxHdf7" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="gallery.html?cat=yeshiva_gedola"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/></svg><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></div>
+        </article>
+        <article class="place-card place-card-photo">
+          <img class="place-photo" src="camp.png" alt="Camp building" loading="lazy" width="993" height="730">
+          <h3><span data-lang="en">Camp</span><span data-lang="yi" hidden>קעמפ</span></h3>
+          <div class="place-links"><a href="https://maps.app.goo.gl/37A4JEuLBmW2F4jZA" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 21s7-6.3 7-12a7 7 0 1 0-14 0c0 5.7 7 12 7 12Z"/><circle cx="12" cy="9" r="2.5"/></svg><span data-lang="en">Map</span><span data-lang="yi" hidden>מאפע</span></a><a href="yeshiva.html"><span data-lang="en">Details</span><span data-lang="yi" hidden>מער אינפא</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a></div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <section class="home-section cta-section" aria-label="Get involved">
+    <div class="wrap grid-2">
+      <div class="cta-card cta-donate">
+        <span class="cta-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M12 20s-7.5-4.6-9.2-9.4A4.8 4.8 0 0 1 12 6.6a4.8 4.8 0 0 1 9.2 4C19.5 15.4 12 20 12 20Z"/></svg></span>
+        <div>
+          <h2><span data-lang="en">Support the kehilla</span><span data-lang="yi" hidden>שטיצט די קהילה</span></h2>
+          <p data-lang="en">Give your generous donation online, or call the Monsey beis medrash.</p>
+          <p data-lang="yi" hidden>צו געבן אייער ברייט הארציגע נדבה, קליקט דא אדער רופט דעם בית מדרש אין מאנסי.</p>
+          <div class="cta-actions">
+            <a class="button button-gold" href="https://donate.donorfuse.com/cc4029" target="_blank" rel="noopener"><span data-lang="en">Donate online</span><span data-lang="yi" hidden>נדבה אנליין</span></a>
+            <a class="button button-outline-light" href="contact.html"><span data-lang="en">Contact us</span><span data-lang="yi" hidden>קאנטאקט</span></a>
+          </div>
+        </div>
+      </div>
+      <div class="cta-card cta-share">
+        <span class="cta-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 20h4L19 9a2.8 2.8 0 0 0-4-4L4 16v4Z"/><path d="m13.5 6.5 4 4"/></svg></span>
+        <div>
+          <h2><span data-lang="en">Share news or a simcha</span><span data-lang="yi" hidden>שיקט אריין נייעס אדער א שמחה</span></h2>
+          <p data-lang="en">Send in an announcement for the site. An admin reviews every item before it is posted.</p>
+          <p data-lang="yi" hidden>שיקט אריין א מודעה פארן וועבזייטל. אן אדמין קוקט דורך יעדע זאך איידער עס ווערט געפאסט.</p>
+          <div class="cta-actions">
+            <a class="button" href="editorial.html"><span data-lang="en">Send something in</span><span data-lang="yi" hidden>שיקט עפעס אריין</span></a>
+          </div>
         </div>
       </div>
     </div>
-    <div class="boxes-wrap">
-      <div class="boxes">
-        <a class="box" href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
-        <a class="box" href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
-        <a class="box" href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
-        <a class="box" href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
-        <a class="box" href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-        <a class="box" href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
-        <a class="box" href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
-        <a class="box" href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
-        <a class="box" href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
-      </div>
+  </section>
+</main>
+<!--site-footer:start-->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img class="footer-mark" src="logo-light.png" width="64" height="73" alt="">
+      <p class="footer-name" lang="he">התאחדות אברכים ברכת שמים קאשוי</p>
+      <p data-lang="en">The community of the Kashau (Kasho) Rebbe shlit״a, with botei medrash in Williamsburg, Monsey and Kiryas Joel.</p>
+      <p data-lang="yi" hidden>די קהילה פון כ״ק מרן אדמו״ר מקאשוי שליט״א, מיט בתי מדרשים אין וויליאמסבורג, מאנסי און קרית יואל.</p>
     </div>
-    <div class="hero-row">
-    <div class="hero image-announcement-hero" id="heroBox">
-      <a class="image-announcement" href="announcement-kavod-kedusha.png" target="_blank" rel="noopener" aria-label="Open announcement full size">
-        <img src="announcement-kavod-kedusha.png" alt="Announcement about strengthening holiness and appointing Rabbi Moshe Mendel HaCohen Katz as moreh tzedek in the new beis medrash in Williamsburg">
-      </a>
+    <nav class="footer-col" aria-label="Footer">
+      <h2><span data-lang="en">Explore</span><span data-lang="yi" hidden>זייטלעך</span></h2>
+      <ul class="footer-links"><li><a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li><li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="editorial.html"><span data-lang="en">Submit news</span><span data-lang="yi" hidden>שיקט אריין</span></a></li><li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li><li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a></li><li><a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a></li></ul>
+    </nav>
+    <div class="footer-col">
+      <h2><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></h2>
+      <ul class="footer-places">
+        <li><a href="beis-medrash-williamsburg.html"><strong><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></strong></a><span dir="ltr">Williamsburg, Brooklyn</span></li>
+        <li><a href="beis-medrash-monsey.html"><strong><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></strong></a><span dir="ltr">48 Suzanne Dr, Spring Valley, NY 10977</span></li>
+        <li><a href="beis-medrash-kiryas-joel.html"><strong><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></strong></a><span dir="ltr">2 Shinev Ct, Kiryas Joel, NY 10950</span></li>
+      </ul>
     </div>
-    <div class="hero simchas-hero" id="heroBox2" hidden aria-live="polite" dir="auto">
-      <h2>Simchas</h2>
-      <div id="homeSimchasList"></div>
+    <div class="footer-col">
+      <h2><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></h2>
+      <ul class="footer-contact">
+        <li><strong><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></strong>
+          <a href="tel:+13476932536" dir="ltr">347-693-2536</a>
+          <a href="mailto:kashomonseyny@gmail.com" dir="ltr">kashomonseyny@gmail.com</a></li>
+        <li><strong><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></strong>
+          <a href="tel:+18456370960" dir="ltr">845-637-0960</a>
+          <a href="mailto:kashomonroeny@gmail.com" dir="ltr">kashomonroeny@gmail.com</a></li>
+      </ul>
+      <a class="button button-gold footer-donate" href="https://donate.donorfuse.com/cc4029" target="_blank" rel="noopener"><span data-lang="en">Donate online</span><span data-lang="yi" hidden>נדבה אנליין</span></a>
     </div>
-    </div>
-    <a class="ad-strip" id="adStrip" href="business.html" hidden>
-      <span class="ad-tag">Business</span>
-      <span class="ad-text"><strong id="adStripName"></strong><span id="adStripDesc"></span></span>
-    </a>
   </div>
-</div>
-
-
-<footer>
-  <a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
-  <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
-  <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
-  <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
-  <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a>
-  <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
-  <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
-  <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
-  <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
-  <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
-  <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+  <div class="footer-bottom">
+    <div class="wrap footer-bottom-inner">
+      <p>© <span data-year>2026</span> <span data-lang="en">Hisachdus Avreichim Birchas Shamayim Kashau</span><span data-lang="yi" hidden>התאחדות אברכים ברכת שמים קאשוי</span></p>
+      <p class="footer-bottom-links">
+        <a href="login.html"><span data-lang="en">Members log in</span><span data-lang="yi" hidden>מעמבערס לאגין</span></a>
+        <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
+        <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+        <a href="#top" class="to-top"><span data-lang="en">Back to top ↑</span><span data-lang="yi" hidden>ארויף ↑</span></a>
+      </p>
+    </div>
+  </div>
 </footer>
-
-
-<script src="site.js?v=20260901-2" defer></script>
+<!--site-footer:end-->
+<script src="widgets.js?v=20261026-2" defer></script>
+<script src="site.js?v=20261026-2" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
-  const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const supabaseClient = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
+  function showMemberFeaturesOffline() {
+    const list = document.getElementById('homeSimchasList');
+    if (!list) return;
+    list.innerHTML = '<p class="offline-note"><span data-lang="en">Member features are temporarily offline.</span><span data-lang="yi">מעמבער פונקציעס זענען צייטווייליג נישט פאראן.</span></p>';
+    const isYiddish = document.documentElement.lang === 'yi';
+    list.querySelectorAll('[data-lang]').forEach((el) => { el.hidden = el.dataset.lang !== (isYiddish ? 'yi' : 'en'); });
+    document.getElementById('heroBox2').hidden = false;
+  }
 
   async function loadHomeUpdates() {
-    const simchaResult = await supabaseClient
-      .from('submissions')
-      .select('title, body')
-      .eq('category', 'simcha')
-      .eq('approved', true)
-      .order('created_at', { ascending: false });
+    if (!supabaseClient) { showMemberFeaturesOffline(); return; }
+    let simchaResult;
+    try {
+      simchaResult = await supabaseClient
+        .from('submissions')
+        .select('title, body')
+        .eq('category', 'simcha')
+        .eq('approved', true)
+        .order('created_at', { ascending: false });
+    } catch (_) {
+      simchaResult = { error: true };
+    }
+
+    if (simchaResult.error) {
+      showMemberFeaturesOffline();
+      return;
+    }
 
     if (simchaResult.data && simchaResult.data.length) {
       const list = document.getElementById('homeSimchasList');
@@ -577,6 +391,7 @@
 
   loadHomeUpdates();
   async function loadFeaturedBusinesses() {
+    if (!supabaseClient) return;
     const { data, error } = await supabaseClient
       .from('businesses')
       .select('name, description, featured, created_at')
@@ -613,6 +428,7 @@
 
 
   (async () => {
+    if (!supabaseClient) return;
     const { data: { session } } = await supabaseClient.auth.getSession();
     const loginLink = document.getElementById('loginLink');
     const accountToggle = document.getElementById('accountToggle');
