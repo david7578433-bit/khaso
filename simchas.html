@@ -4,6 +4,16 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Simchas | ברכת שמים קאשוי</title>
+<meta name="description" content="Simchas — Hisachdus Avreichim Birchas Shamayim Kashau, the Kasho chassidic community in Williamsburg, Monsey and Kiryas Joel.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ברכת שמים קאשוי · Kasho Community">
+<meta property="og:title" content="Simchas | ברכת שמים קאשוי">
+<meta property="og:description" content="Simchas — Hisachdus Avreichim Birchas Shamayim Kashau, the Kasho chassidic community in Williamsburg, Monsey and Kiryas Joel.">
+<meta property="og:image" content="https://david7578433-bit.github.io/khaso/logo.png">
+<meta property="og:url" content="https://david7578433-bit.github.io/khaso/simchas.html">
+<meta name="twitter:card" content="summary">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css">
 <script src="site.js?v=20260901-2" defer></script>
 </head>
@@ -17,12 +27,18 @@
 
 <nav>
   <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+  <a href="simchas.html" aria-current="page"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Kasho Chat</a>
-  <a href="community.html" data-testing-feature>Community</a>
+  <a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
+  <a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
+  <a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
+  <a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
+  <a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </nav>
@@ -39,7 +55,7 @@
     <input id="simchaSearch" type="search" placeholder="Search names, type, date or location…">
   </section>
   <div id="simchasList"></div>
-  <section class="card" id="emptyState">
+  <section class="card" id="emptyState" hidden>
     <p data-lang="en">No simchas posted yet. Check back soon.</p>
     <p data-lang="yi" hidden>נאך קיין שמחות נישט. קומט צוריק באלד.</p>
   </section>
@@ -62,16 +78,19 @@
 
 <footer>
   <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
+  <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
+  <a href="simchas.html" aria-current="page"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
+  <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
   <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
   <a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a>
   <a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a>
   <a href="botei-medrash.html"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></a>
-  <a href="ages.html">Kasho Chat</a>
+  <a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
+  <a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
+  <a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
+  <a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
+  <a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a>
   <a href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
-  <a href="news.html">News</a>
-  <a href="simchas.html">Simchas</a>
-  <a href="community.html" data-testing-feature>Community</a>
-  <a href="editorial.html">Editorial</a>
   <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
 </footer>
 
@@ -79,7 +98,7 @@
 <script>
   const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
   const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
-  const client = window.supabase.createClient(supabaseUrl, supabaseKey);
+  const client = window.supabase ? window.supabase.createClient(supabaseUrl, supabaseKey) : null;
 
   let allSimchas = [];
 
@@ -138,7 +157,7 @@
     const card = document.createElement('section');
     card.className = 'card';
     const message = document.createElement('p');
-    message.textContent = 'Simchas could not load. Please check your connection and try again.';
+    message.textContent = document.documentElement.lang === 'yi' ? 'מעמבער פונקציעס זענען צייטווייליג נישט פאראן.' : 'Member features are temporarily offline.';
     const retry = document.createElement('button');
     retry.type = 'button';
     retry.textContent = 'Try Again';
@@ -149,12 +168,16 @@
   }
 
   async function loadSimchas() {
-    const { data, error } = await client
+    if (!client) { showSimchasError(); return; }
+    let data, error;
+    try {
+      ({ data, error } = await client
       .from('submissions')
       .select('id, title, body, created_at, event_type, event_date, location_name, address, map_url')
       .eq('category', 'simcha')
       .eq('approved', true)
-      .order('created_at', { ascending: false });
+      .order('created_at', { ascending: false }));
+    } catch (caught) { error = caught; }
 
     if (error) {
       showSimchasError();

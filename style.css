@@ -269,7 +269,9 @@ button:disabled { opacity: .6; cursor: wait; }
 
 @media (max-width: 620px) {
   header { padding: 24px 14px 28px; }
-  .site-logo { width: 120px; margin-bottom: 10px; }
+  header { padding: 58px 14px 18px; }
+  .site-logo { width: 72px; margin-bottom: 6px; }
+  header h1 { font-size: 1.6rem; }
   nav { gap: 4px 14px; padding: 9px 10px; }
   nav a { font-size: 14px; padding: 9px 4px; }
   .lang-button { padding: 7px 12px; }

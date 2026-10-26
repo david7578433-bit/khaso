@@ -2,7 +2,7 @@
   function applyLanguage(language) {
     const isYiddish = language === 'yi';
     document.documentElement.lang = isYiddish ? 'yi' : 'en';
-    
+    document.documentElement.dir = isYiddish ? 'rtl' : 'ltr';
 
     document.querySelectorAll('[data-lang]').forEach((element) => {
       element.hidden = element.dataset.lang !== language;
@@ -17,7 +17,7 @@
       'Yeshiva': 'ישיבה', 'Botei Medrash': 'בתי מדרשים', 'News': 'נייעס',
       'Simchas': 'שמחות', 'Editorial': 'רעדאקציע', 'Community': 'קהילה',
       'Kasho Chat': 'קאשוי שמועס', 'Pictures': 'בילדער', 'Zmanim': 'זמנים',
-      'Recordings': 'רעקארדירונגען',
+      'Recordings': 'רעקארדירונגען', 'Business': 'געשעפט', 'Ages': 'יארגאנג',
       'Log In': 'לאגין', 'Account': 'קאנטע'
     };
     document.querySelectorAll('nav a, footer a').forEach((link) => {
@@ -44,9 +44,28 @@
     let savedLanguage = 'en';
     try { savedLanguage = localStorage.getItem('siteLanguage') === 'yi' ? 'yi' : 'en'; } catch (_) {}
     initSiteDrawer();
+    initContactLine();
     applyLanguage(savedLanguage);
     applySiteAccess();
   });
+
+
+  // One contact line at the foot of every page (same data as the Contact pages).
+  function initContactLine() {
+    if (document.querySelector('.site-contact-line')) return;
+    const line = document.createElement('div');
+    line.className = 'site-contact-line';
+    line.setAttribute('role', 'contentinfo');
+    line.innerHTML = `
+      <strong><span data-lang="en">Contact us</span><span data-lang="yi" hidden>קאנטאקט</span></strong>
+      <span class="branch-contact"><span data-lang="en">Monsey:</span><span data-lang="yi" hidden>מאנסי:</span>
+        <a href="tel:+13476932536" dir="ltr">347-693-2536</a><span class="sep">·</span><a href="mailto:kashomonseyny@gmail.com" dir="ltr">kashomonseyny@gmail.com</a></span>
+      <span class="branch-contact"><span data-lang="en">Kiryas Joel:</span><span data-lang="yi" hidden>קרית יואל:</span>
+        <a href="tel:+18456370960" dir="ltr">845-637-0960</a><span class="sep">·</span><a href="mailto:kashomonroeny@gmail.com" dir="ltr">kashomonroeny@gmail.com</a></span>`;
+    const footer = document.querySelector('footer');
+    if (footer && footer.parentNode) footer.parentNode.insertBefore(line, footer);
+    else document.body.appendChild(line);
+  }
 
   function initSiteDrawer() {
     const footer = document.querySelector('footer');
@@ -55,18 +74,8 @@
     footer.innerHTML = `
       <strong class="site-menu-title"><span data-lang="en">Website Menu</span><span data-lang="yi" hidden>וועבזייטל מעניו</span></strong>
       <a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a>
-      <details class="site-menu-group">
-        <summary><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></summary>
-        <div class="site-menu-submenu">
-          <a href="ages-hub.html"><span data-lang="en">Ages Home</span><span data-lang="yi" hidden>יארגאנג היים</span></a>
-          <a href="ages.html"><span data-lang="en">Chat</span><span data-lang="yi" hidden>שמועס</span></a>
-          <a href="age-photos.html"><span data-lang="en">Photos</span><span data-lang="yi" hidden>בילדער</span></a>
-          <a href="phone-book.html"><span data-lang="en">Phone Book</span><span data-lang="yi" hidden>טעלעפאן בוך</span></a>
-        </div>
-      </details>
       <a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a>
       <a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a>
-      <a href="community.html" data-testing-feature><span data-lang="en">Community</span><span data-lang="yi" hidden>קהילה</span></a>
       <a href="editorial.html"><span data-lang="en">Editorial</span><span data-lang="yi" hidden>רעדאקציע</span></a>
       <a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a>
       <details class="site-menu-group">
@@ -87,10 +96,19 @@
           <a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a>
         </div>
       </details>
-      <a href="pictures.html"><span data-lang="en">Public Pictures</span><span data-lang="yi" hidden>פובליק בילדער</span></a>
+      <a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a>
       <a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
       <a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפט</span></a>
       <a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a>
+      <details class="site-menu-group">
+        <summary><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></summary>
+        <div class="site-menu-submenu">
+          <a href="ages-hub.html"><span data-lang="en">Ages Home</span><span data-lang="yi" hidden>יארגאנג היים</span></a>
+          <a href="ages.html"><span data-lang="en">Chat</span><span data-lang="yi" hidden>שמועס</span></a>
+          <a href="age-photos.html"><span data-lang="en">Photos</span><span data-lang="yi" hidden>בילדער</span></a>
+          <a href="phone-book.html"><span data-lang="en">Phone Book</span><span data-lang="yi" hidden>טעלעפאן בוך</span></a>
+        </div>
+      </details>
       <a href="login.html"><span data-lang="en">Account</span><span data-lang="yi" hidden>קאנטע</span></a>
       <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
       <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
@@ -122,6 +140,22 @@
       .site-menu-submenu { display:grid; gap:2px; padding:3px 0 6px 14px; border-left:2px solid rgba(255,255,255,.2); margin-left:12px; }
       footer.site-footer-drawer .site-menu-submenu a { padding:9px 10px !important; font-size:15px !important; }
       @media (max-width:620px) { .site-menu-button { top:10px; left:10px; width:42px; height:42px; } footer.site-footer-drawer { position:fixed !important; padding-top:70px !important; } }
+      html[dir="rtl"] .site-menu-button { left:auto; right:14px; }
+      html[dir="rtl"] footer.site-footer-drawer { left:auto !important; right:0 !important; box-shadow:-8px 0 28px rgba(20,35,50,.28) !important; transform:translateX(105%); }
+      html[dir="rtl"] footer.site-footer-drawer.open { transform:translateX(0); }
+      html[dir="rtl"] footer.site-footer-drawer a, html[dir="rtl"] footer.site-footer-drawer .lang-button { text-align:right !important; }
+      html[dir="rtl"] .site-menu-group summary { padding:11px 12px 11px 34px; }
+      html[dir="rtl"] .site-menu-group summary::after { content:'‹'; right:auto; left:13px; }
+      html[dir="rtl"] .site-menu-group[open] summary::after { transform:rotate(-90deg); }
+      html[dir="rtl"] .site-menu-submenu { padding:3px 14px 6px 0; border-left:0; border-right:2px solid rgba(255,255,255,.2); margin-left:0; margin-right:12px; }
+      html[dir="rtl"] label { text-align:right; }
+      .site-contact-line { position:relative; z-index:1; margin:0; padding:18px 16px 22px; background:#203447; color:rgba(255,255,255,.86); text-align:center; font:500 14px/1.7 "Assistant","Segoe UI",Arial,sans-serif; }
+      .site-contact-line strong { color:white; font-weight:700; }
+      .site-contact-line a { color:#9fe3d6; font-weight:700; text-decoration:none; white-space:nowrap; }
+      .site-contact-line a:hover, .site-contact-line a:focus-visible { color:white; text-decoration:underline; }
+      .site-contact-line .sep { opacity:.5; margin:0 6px; }
+      .site-contact-line .branch-contact { display:inline-block; margin:0 10px; }
+      @media (max-width:620px) { html[dir="rtl"] .site-menu-button { left:auto; right:10px; } .site-contact-line .branch-contact { display:block; margin:2px 0; } }
     `;
     document.head.appendChild(style);
     document.body.classList.add('site-drawer-enabled');
