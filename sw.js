@@ -3,7 +3,7 @@
 // Our own CSS/JS/images: served from cache and refreshed in the background.
 // Hebcal (zmanim/dates): network first; a copy is kept for a few hours only, for offline use.
 // The member database (Supabase) is never touched by this worker.
-const ASSET_VERSION = '20261027-5';
+const ASSET_VERSION = '20261027-6';
 const SHELL = 'kasho-shell-' + ASSET_VERSION;
 const RUNTIME = 'kasho-runtime-v1';
 const API = 'kasho-api-v1';

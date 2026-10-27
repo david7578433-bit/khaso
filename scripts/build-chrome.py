@@ -8,7 +8,7 @@ admin.html is skipped on purpose (it has its own layout and does not load site.j
 import html, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ASSET_VERSION = "20261027-5"
+ASSET_VERSION = "20261027-6"
 SKIP = {"admin.html"}
 BARE = {"offline.html"}     # service-worker offline fallback: no chrome
 FLOATING = {"ages.html"}          # full-screen chat app: menu button only, no page band/footer
