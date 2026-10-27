@@ -8,8 +8,9 @@ admin.html is skipped on purpose (it has its own layout and does not load site.j
 import html, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ASSET_VERSION = "20261027-1"
+ASSET_VERSION = "20261027-2"
 SKIP = {"admin.html"}
+BARE = {"offline.html"}     # service-worker offline fallback: no chrome
 FLOATING = {"ages.html"}          # full-screen chat app: menu button only, no page band/footer
 
 def L(en, yi):
@@ -28,11 +29,13 @@ NAV = [
         ("beis-medrash-monsey.html", "Monsey", "מאנסי"),
         ("beis-medrash-kiryas-joel.html", "Kiryas Joel", "קרית יואל"),
     ]),
+    ("shabbos.html", "Shabbos", "שבת קודש", None),
+    ("zmanim.html", "Zmanim", "זמנים", None),
     ("invitations.html", "Invitations", "הזמנות", None),
     ("yeshiva.html", "Yeshiva", "ישיבה", None),
-    ("zmanim.html", "Zmanim", "זמנים", None),
-    ("pictures.html", "Pictures", "בילדער", None),
     (None, "More", "מער", [
+        ("yahrzeit.html", "Yahrzeit calendar", "יארצייט קאלענדאר"),
+        ("pictures.html", "Pictures", "בילדער"),
         ("recordings.html", "Recordings", "רעקארדירונגען"),
         ("business.html", "Business directory", "געשעפטן"),
         ("ages-hub.html", "Ages (members)", "יארגאנג (מעמבערס)"),
@@ -73,6 +76,8 @@ SUBTITLE = {
     "business.html": ("Businesses in our community", "געשעפטן פון אונדזער קהילה"),
     "ages-hub.html": ("Members area for each year", "מעמבערס טייל פאר יעדן יארגאנג"),
     "invitations.html": ("Beautiful invitations for every simcha — share on WhatsApp or print", "שיינע הזמנות פאר יעדע שמחה — שיקט אויף וואטסאפ אדער דרוקט"),
+    "shabbos.html": ("Parsha, Shabbos times and Divrei Torah for this week", "פרשה, זמני שבת און דברי תורה פאר די וואך"),
+    "yahrzeit.html": ("Find the yahrzeit for the next 10 years and add reminders to your calendar", "געפינט דעם יארצייט פאר די קומענדיגע 10 יאר און לייגט צו דערמאנונגען אין אייער קאלענדאר"),
     "login.html": ("Sign in to member features", "לאגט אריין פאר מעמבער פונקציעס"),
 }
 
@@ -81,7 +86,8 @@ FOOTER_LINKS = [
     ("news.html", "News", "נייעס"), ("simchas.html", "Simchas", "שמחות"),
     ("invitations.html", "Simcha invitations", "הזמנות"),
     ("editorial.html", "Submit news", "שיקט אריין"), ("yeshiva.html", "Yeshiva", "ישיבה"),
-    ("zmanim.html", "Zmanim", "זמנים"), ("pictures.html", "Pictures", "בילדער"),
+    ("shabbos.html", "Shabbos", "שבת קודש"), ("zmanim.html", "Zmanim", "זמנים"),
+    ("yahrzeit.html", "Yahrzeit calendar", "יארצייט קאלענדאר"), ("pictures.html", "Pictures", "בילדער"),
     ("recordings.html", "Recordings", "רעקארדירונגען"), ("business.html", "Business", "געשעפטן"),
     ("ages-hub.html", "Ages", "יארגאנג"), ("contact.html", "Contact", "קאנטאקט"),
 ]
@@ -128,6 +134,7 @@ def header_html(page):
     <div class="wrap topstrip-inner">
       <p class="today-line"><span class="today-heb" data-hebrew-date></span><span class="today-greg" data-greg-date></span><span class="today-parsha" data-parsha></span></p>
       <div class="topstrip-actions">
+        <a class="topstrip-link" href="shabbos.html">{L("Shabbos", "שבת")}</a>
         <a class="topstrip-link" href="zmanim.html">{L("Zmanim", "זמנים")}</a>
         <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
       </div>
@@ -218,6 +225,7 @@ def footer_html(page):
       <p>© <span data-year>2026</span> {L("Hisachdus Avreichim Birchas Shamayim Kashau", "התאחדות אברכים ברכת שמים קאשוי")}</p>
       <p class="footer-bottom-links">
         <a href="login.html">{L("Members log in", "מעמבערס לאגין")}</a>
+        <button type="button" class="link-button" data-install-app hidden>{L("Install the app", "אינסטאלירט די אפ")}</button>
         <a href="admin.html" data-admin-menu hidden>{L("Admin Dashboard", "אדמין צענטער")}</a>
         <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
         <a href="#top" class="to-top">{L("Back to top ↑", "ארויף ↑")}</a>
@@ -232,7 +240,13 @@ FONT_LINKS = """<!--site-head:start-->
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;800&family=Heebo:wght@400;500;600;700&display=swap">
-<!--site-head:end-->"""
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kasho">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="pwa.js?v=__ASSET_VERSION__" defer></script>
+<!--site-head:end-->""".replace("__ASSET_VERSION__", ASSET_VERSION)
 
 def replace_block(text, name, new):
     pat = re.compile(rf"<!--site-{name}:start-->.*?<!--site-{name}:end-->", re.S)
@@ -244,6 +258,14 @@ def process(path):
     page = path.name
     text = path.read_text(encoding="utf-8")
     orig = text
+    if page in BARE:
+        # Minimal page (no header/footer): only keep its asset versions current.
+        text = re.sub(r'href="style\.css(?:\?v=[^"]*)?"', f'href="style.css?v={ASSET_VERSION}"', text)
+        text = re.sub(r'src="site\.js(?:\?v=[^"]*)?"', f'src="site.js?v={ASSET_VERSION}"', text)
+        if text != orig:
+            path.write_text(text, encoding="utf-8")
+            return True
+        return False
 
     # <head>: fonts, theme colour, cache-busted assets, share image.
     text, ok = replace_block(text, "head", FONT_LINKS)
@@ -254,6 +276,8 @@ def process(path):
         text = text.replace("</head>", FONT_LINKS + "\n</head>", 1)
     text = re.sub(r'href="style\.css(?:\?v=[^"]*)?"', f'href="style.css?v={ASSET_VERSION}"', text)
     text = re.sub(r'src="site\.js(?:\?v=[^"]*)?"', f'src="site.js?v={ASSET_VERSION}"', text)
+    for asset in ("widgets.js", "share-zmanim.js", "yahrzeit.js", "shabbos.js"):
+        text = re.sub(rf'src="{re.escape(asset)}(?:\?v=[^"]*)?"', f'src="{asset}?v={ASSET_VERSION}"', text)
     text = text.replace('content="https://david7578433-bit.github.io/khaso/logo.png"', 'content="https://david7578433-bit.github.io/khaso/og-card.png"')
     if 'property="og:image:width"' not in text and "og-card.png" in text:
         text = text.replace('og-card.png">', 'og-card.png">\n<meta property="og:image:width" content="1200">\n<meta property="og:image:height" content="630">', 1)
@@ -295,7 +319,17 @@ def process(path):
         return True
     return False
 
+def update_service_worker():
+    sw = ROOT / "sw.js"
+    if not sw.exists():
+        return
+    text = sw.read_text(encoding="utf-8")
+    new = re.sub(r"const ASSET_VERSION = '[^']*';", f"const ASSET_VERSION = '{ASSET_VERSION}';", text, count=1)
+    if new != text:
+        sw.write_text(new, encoding="utf-8")
+
 def main():
+    update_service_worker()
     changed = []
     for path in sorted(ROOT.glob("*.html")):
         if path.name in SKIP:

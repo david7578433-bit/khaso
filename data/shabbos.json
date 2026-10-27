@@ -1,0 +1,15 @@
+{
+  "_how_to_edit": "Each week, put this week's Divrei Torah / shiur in \"items\". Every field except \"title\" is optional. Use title/text for English and title_yi/text_yi for Yiddish (the page shows whichever matches the visitor's language and falls back to the other). \"pdf\" and \"audio\" are links (a file in this repo such as \"data/files/lech-lecha.pdf\", or a full https:// address). Leave \"items\" as [] and the page shows an elegant 'Coming this week' note.",
+  "_example_item": {
+    "title": "Title of the dvar Torah or shiur",
+    "title_yi": "קעפל אויף אידיש",
+    "by": "Name of the speaker (optional)",
+    "by_yi": "",
+    "text": "Plain text. A blank line starts a new paragraph.",
+    "text_yi": "",
+    "pdf": "",
+    "audio": ""
+  },
+  "parsha": "",
+  "items": []
+}

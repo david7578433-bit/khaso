@@ -58,11 +58,14 @@
     document.querySelectorAll('.loc-tab').forEach((tab) => tab.setAttribute('aria-selected', String(tab.dataset.key === current)));
     const data = cache[current];
     if (dateLine && window.KashoSite) dateLine.textContent = window.KashoSite.civilDate(yi() ? 'yi' : 'en');
+    if (data === 'error' || !data) { window.KashoZmanimState = null; document.dispatchEvent(new CustomEvent('kasho-zmanim-ready')); }
     if (data === 'error') {
       list.replaceChildren(el('div', 'zman-error', yi() ? 'מען קען יעצט נישט לאדן די זמנים. פרובירט שפעטער.' : "Couldn't load today's zmanim. Please try again shortly."));
       return;
     }
     if (!data) { list.replaceChildren(el('div', 'zman-loading', yi() ? 'לאדט…' : 'Loading…')); return; }
+    window.KashoZmanimState = { key: current, placeEn: PLACES[current].en, placeYi: PLACES[current].yi, date: (data.date && String(data.date).slice(0, 10)) || todayISO(), timeZone: TZ, times: data.times || {} };
+    document.dispatchEvent(new CustomEvent('kasho-zmanim-ready'));
     const now = Date.now();
     let nextMarked = false;
     const rows = ROWS.map(([key, en, he]) => {

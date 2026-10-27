@@ -188,7 +188,7 @@
     document.addEventListener('site-language-change', renderToday);
   }
 
-  window.KashoSite = { nyDateParts, civilDate, YI_DAYS, YI_MONTHS };
+  window.KashoSite = { nyDateParts, civilDate, YI_DAYS, YI_MONTHS, loadToday };
 
   async function applySiteAccess() {
     const projectUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';

@@ -21,8 +21,14 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;800&family=Heebo:wght@400;500;600;700&display=swap">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kasho">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="pwa.js?v=20261027-2" defer></script>
 <!--site-head:end-->
-<link rel="stylesheet" href="style.css?v=20261027-1">
+<link rel="stylesheet" href="style.css?v=20261027-2">
 </head>
 <body class="home">
 <!--site-header:start-->
@@ -32,6 +38,7 @@
     <div class="wrap topstrip-inner">
       <p class="today-line"><span class="today-heb" data-hebrew-date></span><span class="today-greg" data-greg-date></span><span class="today-parsha" data-parsha></span></p>
       <div class="topstrip-actions">
+        <a class="topstrip-link" href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת</span></a>
         <a class="topstrip-link" href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
         <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
       </div>
@@ -49,11 +56,11 @@
         <li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li>
         <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-1"><span data-lang="en">News &amp; Simchas</span><span data-lang="yi" hidden>נייעס און שמחות</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-1"><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="editorial.html"><span data-lang="en">Send something in</span><span data-lang="yi" hidden>שיקט עפעס אריין</span></a></li></ul></li>
         <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-2"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-2"><li><a href="botei-medrash.html"><span data-lang="en">All botei medrash</span><span data-lang="yi" hidden>אלע בתי מדרשים</span></a></li><li><a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a></li><li><a href="beis-medrash-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="beis-medrash-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
+        <li><a href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת קודש</span></a></li>
+        <li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li>
         <li class="nav-invite"><a href="invitations.html"><span data-lang="en">Invitations</span><span data-lang="yi" hidden>הזמנות</span></a></li>
         <li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li>
-        <li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li>
-        <li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li>
-        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-7"><span data-lang="en">More</span><span data-lang="yi" hidden>מער</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-7"><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business directory</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages (members)</span><span data-lang="yi" hidden>יארגאנג (מעמבערס)</span></a></li><li><a href="ages.html"><span data-lang="en">Kasho Chat</span><span data-lang="yi" hidden>קאשוי שמועס</span></a></li></ul></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-7"><span data-lang="en">More</span><span data-lang="yi" hidden>מער</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-7"><li><a href="yahrzeit.html"><span data-lang="en">Yahrzeit calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business directory</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages (members)</span><span data-lang="yi" hidden>יארגאנג (מעמבערס)</span></a></li><li><a href="ages.html"><span data-lang="en">Kasho Chat</span><span data-lang="yi" hidden>קאשוי שמועס</span></a></li></ul></li>
         <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-8"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-8"><li><a href="contact.html"><span data-lang="en">Contact us</span><span data-lang="yi" hidden>קאנטאקט</span></a></li><li><a href="contact-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="contact-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
         </ul>
         <div class="drawer-extra">
@@ -93,12 +100,17 @@
             <tbody id="shabbosRows"></tbody>
           </table>
           <p class="shabbos-note"><span data-lang="en">Candle lighting 18 minutes before sunset · times from Hebcal</span><span data-lang="yi" hidden>ליכט צינדן 18 מינוט פאר שקיעה · צייטן פון Hebcal</span></p>
+          <a class="shabbos-link" href="shabbos.html"><span data-lang="en">Shabbos zmanim &amp; Divrei Torah</span><span data-lang="yi" hidden>זמני שבת און דברי תורה</span> <span aria-hidden="true" class="arrow">→</span></a>
         </div>
       </aside>
     </div>
   </section>
 
   <nav class="quick-links wrap" aria-label="Site sections">
+      <a class="quick-tile" href="shabbos.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M9 21V11h6v10"/><path d="M12 8c1.5 0 2.2-1.1 2.2-2.3C14.2 4.1 12 2.5 12 2.5S9.8 4.1 9.8 5.7C9.8 6.9 10.5 8 12 8Z"/><path d="M5 21v-6M19 21v-6"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת קודש</span></span><span class="quick-desc"><span data-lang="en">Parsha &amp; Shabbos times</span><span data-lang="yi" hidden>פרשה און זמני שבת</span></span></span>
+      </a>
       <a class="quick-tile" href="news.html">
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h13v14H6a2 2 0 0 1-2-2V5Z"/><path d="M17 9h3v8a2 2 0 0 1-2 2"/><path d="M7.5 9h6M7.5 12.5h6M7.5 16h4"/></svg></span>
         <span class="quick-text"><span class="quick-title"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></span><span class="quick-desc"><span data-lang="en">Community updates</span><span data-lang="yi" hidden>נייעס פון דער קהילה</span></span></span>
@@ -110,6 +122,10 @@
       <a class="quick-tile" href="zmanim.html">
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="13" r="8"/><path d="M12 9v4l2.5 2.5M9 2.5h6"/></svg></span>
         <span class="quick-text"><span class="quick-title"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></span><span class="quick-desc"><span data-lang="en">Daily halachic times</span><span data-lang="yi" hidden>טעגליכע זמנים</span></span></span>
+      </a>
+      <a class="quick-tile" href="yahrzeit.html">
+        <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 13.2c.9 0 1.3-.7 1.3-1.3 0-.9-1.3-1.9-1.3-1.9s-1.3 1-1.3 1.9c0 .6.4 1.3 1.3 1.3ZM11 18h2v-4h-2z"/></svg></span>
+        <span class="quick-text"><span class="quick-title"><span data-lang="en">Yahrzeit</span><span data-lang="yi" hidden>יארצייט</span></span><span class="quick-desc"><span data-lang="en">Dates &amp; reminders</span><span data-lang="yi" hidden>דאטעס און דערמאנונגען</span></span></span>
       </a>
       <a class="quick-tile" href="botei-medrash.html">
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M3 21h18M5 21V10l7-5 7 5v11"/><path d="M10 21v-5a2 2 0 0 1 4 0v5M9 11.5h.01M15 11.5h.01"/></svg></span>
@@ -123,11 +139,11 @@
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4.5" width="18" height="15" rx="2.5"/><circle cx="8.5" cy="9.5" r="1.7"/><path d="m4 18 5-5 4 4 2.5-2.5L20 19"/></svg></span>
         <span class="quick-text"><span class="quick-title"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></span><span class="quick-desc"><span data-lang="en">Photo albums</span><span data-lang="yi" hidden>בילדער אלבומען</span></span></span>
       </a>
-      <a class="quick-tile" href="recordings.html">
+      <a class="quick-tile quick-tile--extra" href="recordings.html">
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M4 15v-3a8 8 0 0 1 16 0v3"/><rect x="3" y="14" width="4.5" height="7" rx="1.5"/><rect x="16.5" y="14" width="4.5" height="7" rx="1.5"/></svg></span>
         <span class="quick-text"><span class="quick-title"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></span><span class="quick-desc"><span data-lang="en">Divrei Kodesh archive</span><span data-lang="yi" hidden>דברות קודש ארכיוו</span></span></span>
       </a>
-      <a class="quick-tile" href="business.html">
+      <a class="quick-tile quick-tile--extra" href="business.html">
         <span class="quick-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="7" width="18" height="13" rx="2"/><path d="M8.5 7V5a2 2 0 0 1 2-2h3a2 2 0 0 1 2 2v2M3 12.5h18M10.5 12.5v2h3v-2"/></svg></span>
         <span class="quick-text"><span class="quick-title"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></span><span class="quick-desc"><span data-lang="en">Community directory</span><span data-lang="yi" hidden>געשעפטן פון דער קהילה</span></span></span>
       </a>
@@ -145,6 +161,44 @@
       <figure class="invite-promo-art"><img src="invitations-promo.webp" width="760" height="640" alt="" loading="lazy" decoding="async"></figure>
     </div>
   </section>
+
+  <section class="home-section weekly-band" aria-labelledby="weeklyHeading">
+    <div class="wrap">
+      <div class="section-head">
+        <p class="eyebrow"><span data-lang="en">Every week</span><span data-lang="yi" hidden>יעדע וואך</span></p>
+        <h2 id="weeklyHeading"><span data-lang="en">Shabbos, yahrzeits &amp; Kasho on your phone</span><span data-lang="yi" hidden>שבת, יארצייטן און קאשוי אויף אייער טעלעפאן</span></h2>
+      </div>
+      <div class="grid-3 weekly-grid">
+        <article class="feature-card feature-shabbos">
+          <span class="feature-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M8 21h8M9 21V11h6v10"/><path d="M12 8c1.5 0 2.2-1.1 2.2-2.3C14.2 4.1 12 2.5 12 2.5S9.8 4.1 9.8 5.7C9.8 6.9 10.5 8 12 8Z"/><path d="M5 21v-6M19 21v-6"/></svg></span>
+          <p class="feature-kicker"><span data-lang="en">This week</span><span data-lang="yi" hidden>די וואך</span> <span data-parsha></span></p>
+          <h3><span data-lang="en">Shabbos Kodesh</span><span data-lang="yi" hidden>שבת קודש</span></h3>
+          <p data-lang="en">Candle lighting and havdalah for Williamsburg, Monsey and Kiryas Joel, the Shabbos zmanim, and the Divrei Torah of the week — ready to print for the table.</p>
+          <p data-lang="yi" hidden>ליכט צינדן און הבדלה פאר וויליאמסבורג, מאנסי און קרית יואל, די זמני שבת, און די דברי תורה פון דער וואך — גרייט צו דרוקן פארן טיש.</p>
+          <a class="button" href="shabbos.html"><span data-lang="en">Open the Shabbos page</span><span data-lang="yi" hidden>עפנט דעם שבת זייטל</span></a>
+        </article>
+        <article class="feature-card feature-yahrzeit">
+          <span class="feature-icon"><svg class="ico" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4"/><path d="M12 13.2c.9 0 1.3-.7 1.3-1.3 0-.9-1.3-1.9-1.3-1.9s-1.3 1-1.3 1.9c0 .6.4 1.3 1.3 1.3ZM11 18h2v-4h-2z"/></svg></span>
+          <p class="feature-kicker"><span data-lang="en">Free · private</span><span data-lang="yi" hidden>אומזיסט · פריוואט</span></p>
+          <h3><span data-lang="en">Yahrzeit calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></h3>
+          <p data-lang="en">Enter the date of passing and see the yahrzeit for the next 10 years, with the evening it begins. Add reminders to your phone’s calendar in one tap.</p>
+          <p data-lang="yi" hidden>שרייבט אריין דעם טאג פון פטירה און זעט דעם יארצייט פאר די קומענדיגע 10 יאר, מיט דעם אוונט ווען ער הייבט זיך אן. לייגט צו דערמאנונגען אין אייער קאלענדאר מיט איין קליק.</p>
+          <a class="button" href="yahrzeit.html"><span data-lang="en">Find a yahrzeit</span><span data-lang="yi" hidden>געפינט א יארצייט</span></a>
+        </article>
+        <article class="feature-card feature-app">
+          <span class="feature-icon feature-icon-app"><img src="icons/icon-192.png" width="44" height="44" alt=""></span>
+          <p class="feature-kicker"><span data-lang="en">Like an app</span><span data-lang="yi" hidden>ווי אן אפ</span></p>
+          <h3><span data-lang="en">Kasho on your home screen</span><span data-lang="yi" hidden>קאשוי אויף אייער טעלעפאן</span></h3>
+          <p data-lang="en">Put the site on your phone’s home screen: zmanim, Shabbos times and the yahrzeit calendar open with one tap, even with a weak connection.</p>
+          <p data-lang="yi" hidden>לייגט צו דעם וועבזייטל אויף אייער טעלעפאן: זמנים, זמני שבת און דער יארצייט קאלענדאר עפענען זיך מיט איין קליק, אפילו מיט א שוואכן סיגנאל.</p>
+          <button type="button" class="button button-gold" data-install-app hidden><span data-lang="en">Add to home screen</span><span data-lang="yi" hidden>לייגט צו אויפן טעלעפאן</span></button>
+          <p class="feature-note" data-install-fallback><span data-lang="en">Open this site on your phone (Chrome on Android, Safari on iPhone) to add it to your home screen.</span><span data-lang="yi" hidden>עפנט דעם וועבזייטל אויף אייער טעלעפאן (Chrome אויף אנדראיד, Safari אויף אייפאון) כדי עס צוצולייגן.</span></p>
+          <p class="feature-note" data-installed-note hidden><span data-lang="en">✓ You’re using the Kasho app.</span><span data-lang="yi" hidden>✓ איר נוצט די קאשוי אפ.</span></p>
+        </article>
+      </div>
+    </div>
+  </section>
+
 
   <div class="wrap home-grid">
     <div class="home-col-main">
@@ -183,6 +237,7 @@
           <button type="button" role="tab" class="loc-tab" data-zip="10950" data-key="kiryas_joel" aria-selected="false"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></button>
         </div>
         <dl class="zman-list" id="homeZmanim" role="tabpanel" aria-live="polite"><div class="zman-loading"><span data-lang="en">Loading…</span><span data-lang="yi" hidden>לאדט…</span></div></dl>
+        <button type="button" class="button button-gold share-zmanim-btn" data-share-zmanim disabled><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="5" r="2.5"/><circle cx="6" cy="12" r="2.5"/><circle cx="18" cy="19" r="2.5"/><path d="m8.2 10.8 7.6-4.4M8.2 13.2l7.6 4.4"/></svg><span data-lang="en">Share today's zmanim</span><span data-lang="yi" hidden>שיקט די היינטיגע זמנים</span></button>
         <a class="widget-more" href="zmanim.html"><span data-lang="en">All zmanim, more cities &amp; your location</span><span data-lang="yi" hidden>אלע זמנים, מער שטעט און אייער לאקאציע</span> <svg class="ico-sm flip-rtl" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M13 6l6 6-6 6"/></svg></a>
       </section>
       <section class="home-card simchas-hero" id="heroBox2" hidden aria-live="polite">
@@ -314,7 +369,7 @@
     </div>
     <nav class="footer-col" aria-label="Footer">
       <h2><span data-lang="en">Explore</span><span data-lang="yi" hidden>זייטלעך</span></h2>
-      <ul class="footer-links"><li><a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li><li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="invitations.html"><span data-lang="en">Simcha invitations</span><span data-lang="yi" hidden>הזמנות</span></a></li><li><a href="editorial.html"><span data-lang="en">Submit news</span><span data-lang="yi" hidden>שיקט אריין</span></a></li><li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li><li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a></li><li><a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a></li></ul>
+      <ul class="footer-links"><li><a href="index.html" aria-current="page"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li><li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="invitations.html"><span data-lang="en">Simcha invitations</span><span data-lang="yi" hidden>הזמנות</span></a></li><li><a href="editorial.html"><span data-lang="en">Submit news</span><span data-lang="yi" hidden>שיקט אריין</span></a></li><li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li><li><a href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת קודש</span></a></li><li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li><li><a href="yahrzeit.html"><span data-lang="en">Yahrzeit calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a></li><li><a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a></li></ul>
     </nav>
     <div class="footer-col">
       <h2><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></h2>
@@ -342,6 +397,7 @@
       <p>© <span data-year>2026</span> <span data-lang="en">Hisachdus Avreichim Birchas Shamayim Kashau</span><span data-lang="yi" hidden>התאחדות אברכים ברכת שמים קאשוי</span></p>
       <p class="footer-bottom-links">
         <a href="login.html"><span data-lang="en">Members log in</span><span data-lang="yi" hidden>מעמבערס לאגין</span></a>
+        <button type="button" class="link-button" data-install-app hidden><span data-lang="en">Install the app</span><span data-lang="yi" hidden>אינסטאלירט די אפ</span></button>
         <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
         <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
         <a href="#top" class="to-top"><span data-lang="en">Back to top ↑</span><span data-lang="yi" hidden>ארויף ↑</span></a>
@@ -350,8 +406,9 @@
   </div>
 </footer>
 <!--site-footer:end-->
-<script src="widgets.js?v=20261026-2" defer></script>
-<script src="site.js?v=20261027-1" defer></script>
+<script src="widgets.js?v=20261027-2" defer></script>
+<script src="share-zmanim.js?v=20261027-2" defer></script>
+<script src="site.js?v=20261027-2" defer></script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script>
   const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';

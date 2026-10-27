@@ -1,0 +1,31 @@
+# Keeps the free Supabase project awake: Supabase pauses free projects after about a week with no requests.
+# Once a day this makes one small read of the public site_settings table with the public (publishable) key
+# that the website itself already uses. It never fails the job; it only prints the HTTP status.
+name: Supabase keep-alive
+
+on:
+  schedule:
+    - cron: '17 9 * * *'   # every day at 09:17 UTC
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+
+jobs:
+  ping:
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    steps:
+      - name: Ping Supabase
+        env:
+          SUPABASE_URL: https://dzlxyglrefyzebjrlgtl.supabase.co
+          SUPABASE_PUBLISHABLE_KEY: sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La
+        run: |
+          status=$(curl -s -o /dev/null -w "%{http_code}" --max-time 30 \
+            "$SUPABASE_URL/rest/v1/site_settings?select=*&limit=1" \
+            -H "apikey: $SUPABASE_PUBLISHABLE_KEY" \
+            -H "Authorization: Bearer $SUPABASE_PUBLISHABLE_KEY" || echo "000")
+          echo "Supabase responded with HTTP $status"
+          if [ "$status" != "200" ]; then
+            echo "::warning::Supabase keep-alive got HTTP $status (the job does not fail on this)."
+          fi

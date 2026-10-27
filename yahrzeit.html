@@ -1,0 +1,244 @@
+<!doctype html>
+<html id="top" lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Yahrzeit Calendar · יארצייט | ברכת שמים קאשוי</title>
+<meta name="description" content="Find the yahrzeit for the next 10 years from the English or Hebrew date of passing, with the evening it begins and calendar reminders. Private — nothing is sent anywhere.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="ברכת שמים קאשוי · Kasho Community">
+<meta property="og:title" content="Yahrzeit Calendar · יארצייט | ברכת שמים קאשוי">
+<meta property="og:description" content="Find the yahrzeit for the next 10 years from the English or Hebrew date of passing, with the evening it begins and calendar reminders. Private — nothing is sent anywhere.">
+<meta property="og:image" content="https://david7578433-bit.github.io/khaso/og-card.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://david7578433-bit.github.io/khaso/yahrzeit.html">
+<meta name="twitter:card" content="summary_large_image">
+<link rel="icon" type="image/png" href="favicon.png">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<link rel="stylesheet" href="style.css?v=20261027-2">
+<script src="site.js?v=20261027-2" defer></script>
+<!--site-head:start-->
+<meta name="theme-color" content="#1b2d3e">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Frank+Ruhl+Libre:wght@500;700;800&family=Heebo:wght@400;500;600;700&display=swap">
+<link rel="manifest" href="manifest.webmanifest">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Kasho">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<script src="pwa.js?v=20261027-2" defer></script>
+<!--site-head:end-->
+</head>
+<body>
+<!--site-header:start-->
+<a class="skip-link" href="#main"><span data-lang="en">Skip to content</span><span data-lang="yi" hidden>שפרינגט צום אינהאלט</span></a>
+<header class="site-header">
+  <div class="topstrip">
+    <div class="wrap topstrip-inner">
+      <p class="today-line"><span class="today-heb" data-hebrew-date></span><span class="today-greg" data-greg-date></span><span class="today-parsha" data-parsha></span></p>
+      <div class="topstrip-actions">
+        <a class="topstrip-link" href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת</span></a>
+        <a class="topstrip-link" href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a>
+        <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+      </div>
+    </div>
+  </div>
+  <div class="mainbar">
+    <div class="wrap mainbar-inner">
+      <a class="brand" href="index.html">
+        <img class="brand-mark" src="logo-mark.png" width="48" height="55" alt="">
+        <span class="brand-text"><span class="brand-name" lang="he">ברכת שמים קאשוי</span><span class="brand-sub"><span data-lang="en">Kasho Community</span><span data-lang="yi" hidden>התאחדות אברכים קאשוי</span></span></span>
+      </a>
+      <nav class="primary-nav" id="primaryNav" aria-label="Main">
+        <ul class="nav-list">
+        <li class="nav-home"><a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li>
+        <li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-1"><span data-lang="en">News &amp; Simchas</span><span data-lang="yi" hidden>נייעס און שמחות</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-1"><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="editorial.html"><span data-lang="en">Send something in</span><span data-lang="yi" hidden>שיקט עפעס אריין</span></a></li></ul></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-2"><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-2"><li><a href="botei-medrash.html"><span data-lang="en">All botei medrash</span><span data-lang="yi" hidden>אלע בתי מדרשים</span></a></li><li><a href="beis-medrash-williamsburg.html"><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></a></li><li><a href="beis-medrash-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="beis-medrash-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
+        <li><a href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת קודש</span></a></li>
+        <li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li>
+        <li class="nav-invite"><a href="invitations.html"><span data-lang="en">Invitations</span><span data-lang="yi" hidden>הזמנות</span></a></li>
+        <li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li>
+        <li class="has-sub is-current"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-7"><span data-lang="en">More</span><span data-lang="yi" hidden>מער</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-7"><li><a href="yahrzeit.html" aria-current="page"><span data-lang="en">Yahrzeit calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business directory</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages (members)</span><span data-lang="yi" hidden>יארגאנג (מעמבערס)</span></a></li><li><a href="ages.html"><span data-lang="en">Kasho Chat</span><span data-lang="yi" hidden>קאשוי שמועס</span></a></li></ul></li>
+        <li class="has-sub"><button type="button" class="nav-parent" aria-expanded="false" aria-controls="sub-8"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span><svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg></button><ul class="sub-menu" id="sub-8"><li><a href="contact.html"><span data-lang="en">Contact us</span><span data-lang="yi" hidden>קאנטאקט</span></a></li><li><a href="contact-monsey.html"><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></a></li><li><a href="contact-kiryas-joel.html"><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></a></li></ul></li>
+        </ul>
+        <div class="drawer-extra">
+          <button class="lang-button drawer-lang" type="button" onclick="toggleLang()">אידיש</button>
+        </div>
+      </nav>
+      <div class="header-actions">
+        <a class="header-login" href="login.html"><span data-lang="en">Log In</span><span data-lang="yi" hidden>לאגין</span></a>
+        <button type="button" class="menu-toggle" aria-controls="primaryNav" aria-expanded="false"><span class="menu-icon" aria-hidden="true"></span><span class="visually-hidden">Menu</span></button>
+      </div>
+    </div>
+  </div>
+</header>
+<div class="nav-overlay" hidden></div>
+<!--site-header:end-->
+<!--site-hero:start-->
+<section class="page-hero">
+  <div class="wrap">
+    <nav class="breadcrumb" aria-label="Breadcrumb"><a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></nav>
+    <h1><span data-lang="en">Yahrzeit Calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></h1>
+    <p class="page-sub"><span data-lang="en">Find the yahrzeit for the next 10 years and add reminders to your calendar</span><span data-lang="yi" hidden>געפינט דעם יארצייט פאר די קומענדיגע 10 יאר און לייגט צו דערמאנונגען אין אייער קאלענדאר</span></p>
+  </div>
+</section>
+<!--site-hero:end-->
+<main id="main" class="yahrzeit-page">
+  <div class="yz-layout">
+    <section class="card yz-form-card" aria-labelledby="yzFormHeading">
+      <h2 id="yzFormHeading"><span data-lang="en">Enter the details</span><span data-lang="yi" hidden>שרייבט אריין די פרטים</span></h2>
+      <form id="yzForm" novalidate>
+        <div class="yz-field">
+          <label for="yzName"><span data-lang="en">Name</span><span data-lang="yi" hidden>נאמען</span></label>
+          <input id="yzName" name="name" type="text" autocomplete="off" maxlength="120" data-ph-en="e.g. Ploni ben Ploni" data-ph-yi="למשל: פלוני בן פלוני" placeholder="e.g. Ploni ben Ploni">
+        </div>
+
+        <fieldset class="yz-field yz-seg" id="yzModeGroup">
+          <legend><span data-lang="en">Date of passing</span><span data-lang="yi" hidden>טאג פון פטירה</span></legend>
+          <div class="seg">
+            <input type="radio" name="mode" id="yzModeGreg" value="greg" checked><label for="yzModeGreg"><span data-lang="en">English date</span><span data-lang="yi" hidden>ענגלישע דאטום</span></label>
+            <input type="radio" name="mode" id="yzModeHeb" value="heb"><label for="yzModeHeb"><span data-lang="en">Hebrew date</span><span data-lang="yi" hidden>אידישע דאטום</span></label>
+          </div>
+        </fieldset>
+
+        <div id="yzGregFields">
+          <div class="yz-field">
+            <label for="yzGreg"><span data-lang="en">Date</span><span data-lang="yi" hidden>דאטום</span></label>
+            <input id="yzGreg" name="greg" type="date" min="1800-01-01" dir="ltr">
+          </div>
+          <fieldset class="yz-field yz-seg">
+            <legend><span data-lang="en">Time of passing</span><span data-lang="yi" hidden>ווען</span></legend>
+            <div class="seg seg-2">
+              <input type="radio" name="sunset" id="yzBefore" value="before" checked><label for="yzBefore"><span data-lang="en">Before sunset</span><span data-lang="yi" hidden>פאר שקיעה</span><small><span data-lang="en">during the day</span><span data-lang="yi" hidden>בייטאג</span></small></label>
+              <input type="radio" name="sunset" id="yzAfter" value="after"><label for="yzAfter"><span data-lang="en">After sunset</span><span data-lang="yi" hidden>נאך שקיעה</span><small><span data-lang="en">in the evening / night</span><span data-lang="yi" hidden>ביינאכט</span></small></label>
+            </div>
+            <p class="yz-help"><span data-lang="en">After sunset, the Hebrew date has already moved to the next day.</span><span data-lang="yi" hidden>נאך שקיעה איז שוין דער קומענדיגער אידישער טאג.</span></p>
+          </fieldset>
+        </div>
+
+        <div id="yzHebFields" hidden>
+          <div class="yz-heb-row">
+            <div class="yz-field">
+              <label for="yzHDay"><span data-lang="en">Day</span><span data-lang="yi" hidden>טאג</span></label>
+              <select id="yzHDay" name="hday"></select>
+            </div>
+            <div class="yz-field yz-grow">
+              <label for="yzHMonth"><span data-lang="en">Month</span><span data-lang="yi" hidden>חודש</span></label>
+              <select id="yzHMonth" name="hmonth"></select>
+            </div>
+            <div class="yz-field">
+              <label for="yzHYear"><span data-lang="en">Year</span><span data-lang="yi" hidden>יאר</span></label>
+              <input id="yzHYear" name="hyear" type="number" inputmode="numeric" min="5500" max="6000" placeholder="5784" dir="ltr">
+            </div>
+          </div>
+          <p class="yz-help"><span data-lang="en">Year as a number, e.g. 5784 (= תשפ״ד).</span><span data-lang="yi" hidden>דאס יאר אלס נומער, למשל 5784 (= תשפ״ד).</span> <span id="yzHYearHe" class="yz-year-he" lang="he"></span></p>
+        </div>
+
+        <p class="yz-preview" id="yzPreview" aria-live="polite" hidden></p>
+        <p class="yz-error" id="yzError" role="alert" hidden></p>
+        <button type="submit" class="button button-gold yz-submit"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg><span data-lang="en">Show yahrzeit dates</span><span data-lang="yi" hidden>ווייזט די יארצייט דאטעס</span></button>
+      </form>
+      <p class="yz-privacy"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="5" y="10.5" width="14" height="10" rx="2"/><path d="M8 10.5V7.5a4 4 0 0 1 8 0v3"/></svg><span data-lang="en">Private: everything is calculated on your device. Nothing you type is sent to us or anyone else.</span><span data-lang="yi" hidden>פריוואט: אלעס ווערט אויסגערעכנט אויף אייער טעלעפאן. גארנישט וואס איר שרייבט ווערט געשיקט צו אונז אדער צו אנדערע.</span></p>
+    </section>
+
+    <div class="yz-side">
+      <section class="card yz-result" id="yzResult" hidden aria-labelledby="yzResultName">
+        <p class="eyebrow"><span data-lang="en">Yahrzeit</span><span data-lang="yi" hidden>יארצייט</span></p>
+        <h2 id="yzResultName"></h2>
+        <p class="yz-summary" id="yzSummary"></p>
+        <ol class="yz-years" id="yzYears"></ol>
+        <p class="yz-adar-note" id="yzAdarNote" hidden></p>
+        <div class="yz-actions no-print">
+          <button type="button" class="button button-gold" id="yzIcs"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><rect x="3.5" y="5" width="17" height="15.5" rx="2.5"/><path d="M3.5 10h17M8 3v4M16 3v4M12 13v5M9.5 15.5h5"/></svg><span data-lang="en">Add all to my calendar</span><span data-lang="yi" hidden>לייגט אלעס צו אין קאלענדאר</span></button>
+          <button type="button" class="button" id="yzSave"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M6 3h12v18l-6-4-6 4z"/></svg><span data-lang="en">Save on this phone</span><span data-lang="yi" hidden>היט אפ אויף דעם טעלעפאן</span></button>
+          <a class="button button-ghost" id="yzWhatsApp" href="#" target="_blank" rel="noopener"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="currentColor"><path d="M12 2a10 10 0 0 0-8.6 15.1L2 22l5-1.3A10 10 0 1 0 12 2Zm0 18.2a8.2 8.2 0 0 1-4.2-1.2l-.3-.2-3 .8.8-2.9-.2-.3A8.2 8.2 0 1 1 12 20.2Zm4.5-6.1c-.2-.1-1.5-.7-1.7-.8s-.4-.1-.6.1-.7.8-.8 1-.3.2-.5.1a6.7 6.7 0 0 1-3.3-2.9c-.2-.4.2-.4.7-1.3a.4.4 0 0 0 0-.4l-.8-1.8c-.2-.5-.4-.4-.6-.4h-.5a1 1 0 0 0-.7.3 3 3 0 0 0-.9 2.2 5.2 5.2 0 0 0 1.1 2.7 11.8 11.8 0 0 0 4.5 4c1.7.7 2.3.8 3.2.6a2.7 2.7 0 0 0 1.8-1.2 2.2 2.2 0 0 0 .1-1.3c0-.1-.2-.2-.4-.3Z"/></svg><span data-lang="en">Send the dates</span><span data-lang="yi" hidden>שיקט די דאטעס</span></a>
+          <button type="button" class="button button-ghost" onclick="window.print()"><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M7 9V3h10v6"/><rect x="3" y="9" width="18" height="8" rx="2"/><path d="M7 14h10v7H7z"/></svg><span data-lang="en">Print</span><span data-lang="yi" hidden>דרוקן</span></button>
+        </div>
+        <p class="yz-help no-print"><span data-lang="en">The calendar file has a reminder the evening before (5 PM) and on the day (8 AM). It opens in your phone’s calendar (iPhone, Android, Outlook).</span><span data-lang="yi" hidden>דער קאלענדאר טעקע האט א דערמאנונג דעם אוונט פריער (5 אזייגער) און אינדערפרי (8 אזייגער). עס עפנט זיך אין אייער טעלעפאנ׳ס קאלענדאר.</span></p>
+        <p class="yz-saved-msg" id="yzSavedMsg" role="status" hidden></p>
+      </section>
+
+      <section class="card yz-intro" id="yzIntro">
+        <h2><span data-lang="en">How it works</span><span data-lang="yi" hidden>ווי עס ארבעט</span></h2>
+        <ol class="yz-steps">
+          <li><span data-lang="en">Enter the name and the date of passing — the English date (and whether it was before or after sunset), or the Hebrew date.</span><span data-lang="yi" hidden>שרייבט אריין דעם נאמען און דעם טאג פון פטירה — די ענגלישע דאטום (און צי עס איז געווען פאר אדער נאך שקיעה), אדער די אידישע דאטום.</span></li>
+          <li><span data-lang="en">See the yahrzeit for the next 10 years, with the evening it begins.</span><span data-lang="yi" hidden>זעט דעם יארצייט פאר די קומענדיגע 10 יאר, מיט דעם אוונט ווען ער הייבט זיך אן.</span></li>
+          <li><span data-lang="en">Add them all to your calendar with reminders, or save the list on this phone.</span><span data-lang="yi" hidden>לייגט זיי צו אין אייער קאלענדאר מיט דערמאנונגען, אדער היט אפ די ליסטע אויף דעם טעלעפאן.</span></li>
+        </ol>
+      </section>
+
+      <section class="card yz-saved" id="yzSavedCard" hidden aria-labelledby="yzSavedHeading">
+        <h2 id="yzSavedHeading"><span data-lang="en">Saved on this phone</span><span data-lang="yi" hidden>אפגעהיטן אויף דעם טעלעפאן</span></h2>
+        <ul class="yz-saved-list" id="yzSavedList"></ul>
+        <p class="yz-help"><span data-lang="en">This list is stored only in this browser on this device. It is not sent anywhere, and it is not on any other phone or computer. Clearing your browser data removes it.</span><span data-lang="yi" hidden>די ליסטע איז אפגעהיטן נאר אין דעם בראוזער אויף דעם טעלעפאן. זי ווערט נישט געשיקט ערגעץ, און זי איז נישט אויף קיין אנדערע טעלעפאן אדער קאמפיוטער. ווען מען מעקט אויס די בראוזער דאטא, גייט זי אוועק.</span></p>
+      </section>
+    </div>
+  </div>
+
+  <details class="card yz-rules">
+    <summary><span data-lang="en">How the yahrzeit date is calculated</span><span data-lang="yi" hidden>ווי דער יארצייט ווערט אויסגערעכנט</span></summary>
+    <ul>
+      <li><span data-lang="en">The yahrzeit is the Hebrew date of passing each year. It begins at nightfall the evening before.</span><span data-lang="yi" hidden>דער יארצייט איז יעדעס יאר אויף דער אידישער דאטום פון דער פטירה. ער הייבט זיך אן ביי נאכט דעם אוונט פריער.</span></li>
+      <li><span data-lang="en">Passing in Adar of a regular year: in a leap year the date falls in both Adar I and Adar II. Customs differ — many keep both. Both dates are shown; ask your Rav.</span><span data-lang="yi" hidden>א פטירה אין אדר פון א פשוט׳ע יאר: אין א שנה מעוברת פאלט עס אין אדר א׳ און אין אדר ב׳. די מנהגים זענען פארשידן — אסאך האלטן ביידע. ביידע דאטעס ווערן געוויזן; פרעגט אייער רב.</span></li>
+      <li><span data-lang="en">Passing in Adar I or Adar II of a leap year: kept in that Adar in leap years, and in Adar in regular years.</span><span data-lang="yi" hidden>א פטירה אין אדר א׳ אדער אדר ב׳ פון א שנה מעוברת: מען האלט עס אין יענעם אדר אין א שנה מעוברת, און אין אדר אין א פשוט׳ע יאר.</span></li>
+      <li><span data-lang="en">30 Cheshvan or 30 Kislev (months that are sometimes 29 days) and 30 Adar I follow the standard rules, as calculated by the Hebcal calendar library.</span><span data-lang="yi" hidden>ל׳ חשון אדער ל׳ כסלו (חדשים וואס זענען אמאל 29 טעג) און ל׳ אדר א׳ גייען לויט די געווענליכע כללים, ווי אויסגערעכנט דורך דעם Hebcal קאלענדאר.</span></li>
+    </ul>
+  </details>
+</main>
+
+<!--site-footer:start-->
+<footer class="site-footer">
+  <div class="wrap footer-grid">
+    <div class="footer-brand">
+      <img class="footer-mark" src="logo-light.png" width="64" height="73" alt="">
+      <p class="footer-name" lang="he">התאחדות אברכים ברכת שמים קאשוי</p>
+      <p data-lang="en">The community of the Kashau (Kasho) Rebbe shlit״a, with botei medrash in Williamsburg, Monsey and Kiryas Joel.</p>
+      <p data-lang="yi" hidden>די קהילה פון כ״ק מרן אדמו״ר מקאשוי שליט״א, מיט בתי מדרשים אין וויליאמסבורג, מאנסי און קרית יואל.</p>
+      <a class="footer-invite" href="invitations.html"><span data-lang="en">✦ Make a simcha invitation</span><span data-lang="yi" hidden>✦ מאכט א הזמנה צו א שמחה</span></a>
+    </div>
+    <nav class="footer-col" aria-label="Footer">
+      <h2><span data-lang="en">Explore</span><span data-lang="yi" hidden>זייטלעך</span></h2>
+      <ul class="footer-links"><li><a href="index.html"><span data-lang="en">Home</span><span data-lang="yi" hidden>היים</span></a></li><li><a href="about.html"><span data-lang="en">About</span><span data-lang="yi" hidden>וועגן אונדז</span></a></li><li><a href="news.html"><span data-lang="en">News</span><span data-lang="yi" hidden>נייעס</span></a></li><li><a href="simchas.html"><span data-lang="en">Simchas</span><span data-lang="yi" hidden>שמחות</span></a></li><li><a href="invitations.html"><span data-lang="en">Simcha invitations</span><span data-lang="yi" hidden>הזמנות</span></a></li><li><a href="editorial.html"><span data-lang="en">Submit news</span><span data-lang="yi" hidden>שיקט אריין</span></a></li><li><a href="yeshiva.html"><span data-lang="en">Yeshiva</span><span data-lang="yi" hidden>ישיבה</span></a></li><li><a href="shabbos.html"><span data-lang="en">Shabbos</span><span data-lang="yi" hidden>שבת קודש</span></a></li><li><a href="zmanim.html"><span data-lang="en">Zmanim</span><span data-lang="yi" hidden>זמנים</span></a></li><li><a href="yahrzeit.html" aria-current="page"><span data-lang="en">Yahrzeit calendar</span><span data-lang="yi" hidden>יארצייט קאלענדאר</span></a></li><li><a href="pictures.html"><span data-lang="en">Pictures</span><span data-lang="yi" hidden>בילדער</span></a></li><li><a href="recordings.html"><span data-lang="en">Recordings</span><span data-lang="yi" hidden>רעקארדירונגען</span></a></li><li><a href="business.html"><span data-lang="en">Business</span><span data-lang="yi" hidden>געשעפטן</span></a></li><li><a href="ages-hub.html"><span data-lang="en">Ages</span><span data-lang="yi" hidden>יארגאנג</span></a></li><li><a href="contact.html"><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></a></li></ul>
+    </nav>
+    <div class="footer-col">
+      <h2><span data-lang="en">Botei Medrash</span><span data-lang="yi" hidden>בתי מדרשים</span></h2>
+      <ul class="footer-places">
+        <li><a href="beis-medrash-williamsburg.html"><strong><span data-lang="en">Williamsburg</span><span data-lang="yi" hidden>וויליאמסבורג</span></strong></a><span dir="ltr">Williamsburg, Brooklyn</span></li>
+        <li><a href="beis-medrash-monsey.html"><strong><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></strong></a><span dir="ltr">48 Suzanne Dr, Spring Valley, NY 10977</span></li>
+        <li><a href="beis-medrash-kiryas-joel.html"><strong><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></strong></a><span dir="ltr">2 Shinev Ct, Kiryas Joel, NY 10950</span></li>
+      </ul>
+    </div>
+    <div class="footer-col">
+      <h2><span data-lang="en">Contact</span><span data-lang="yi" hidden>קאנטאקט</span></h2>
+      <ul class="footer-contact">
+        <li><strong><span data-lang="en">Monsey</span><span data-lang="yi" hidden>מאנסי</span></strong>
+          <a href="tel:+13476932536" dir="ltr">347-693-2536</a>
+          <a href="mailto:kashomonseyny@gmail.com" dir="ltr">kashomonseyny@gmail.com</a></li>
+        <li><strong><span data-lang="en">Kiryas Joel</span><span data-lang="yi" hidden>קרית יואל</span></strong>
+          <a href="tel:+18456370960" dir="ltr">845-637-0960</a>
+          <a href="mailto:kashomonroeny@gmail.com" dir="ltr">kashomonroeny@gmail.com</a></li>
+      </ul>
+      <a class="button button-gold footer-donate" href="https://donate.donorfuse.com/cc4029" target="_blank" rel="noopener"><span data-lang="en">Donate online</span><span data-lang="yi" hidden>נדבה אנליין</span></a>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <div class="wrap footer-bottom-inner">
+      <p>© <span data-year>2026</span> <span data-lang="en">Hisachdus Avreichim Birchas Shamayim Kashau</span><span data-lang="yi" hidden>התאחדות אברכים ברכת שמים קאשוי</span></p>
+      <p class="footer-bottom-links">
+        <a href="login.html"><span data-lang="en">Members log in</span><span data-lang="yi" hidden>מעמבערס לאגין</span></a>
+        <button type="button" class="link-button" data-install-app hidden><span data-lang="en">Install the app</span><span data-lang="yi" hidden>אינסטאלירט די אפ</span></button>
+        <a href="admin.html" data-admin-menu hidden><span data-lang="en">Admin Dashboard</span><span data-lang="yi" hidden>אדמין צענטער</span></a>
+        <button class="lang-button" type="button" onclick="toggleLang()">אידיש</button>
+        <a href="#top" class="to-top"><span data-lang="en">Back to top ↑</span><span data-lang="yi" hidden>ארויף ↑</span></a>
+      </p>
+    </div>
+  </div>
+</footer>
+<!--site-footer:end-->
+<script src="vendor/hebcal-core.min.js" defer></script>
+<script src="yahrzeit.js?v=20261027-2" defer></script>
+</body>
+</html>

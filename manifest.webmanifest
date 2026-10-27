@@ -1,0 +1,80 @@
+{
+  "name": "Kasho · קאשוי",
+  "short_name": "Kasho",
+  "description": "The Kasho (Kashau) community: zmanim, Shabbos times, yahrzeit calendar, simcha invitations and news.",
+  "id": "./",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#faf7f1",
+  "theme_color": "#1b2d3e",
+  "lang": "en",
+  "dir": "auto",
+  "orientation": "any",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "icons/icon-maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    }
+  ],
+  "shortcuts": [
+    {
+      "name": "Zmanim · זמנים",
+      "short_name": "Zmanim",
+      "url": "zmanim.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Shabbos · שבת קודש",
+      "short_name": "Shabbos",
+      "url": "shabbos.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Yahrzeit calendar · יארצייט",
+      "short_name": "Yahrzeit",
+      "url": "yahrzeit.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Simcha invitations · הזמנות",
+      "short_name": "Invitations",
+      "url": "invitations.html",
+      "icons": [
+        {
+          "src": "icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
+}
