@@ -208,5 +208,6 @@
     threadChannel=memberClient.channel('kasho-thread-'+postId).on('postgres_changes',{event:'*',schema:'public',table:'posts'},(change)=>{const row=change.new||change.old||{};if(String(row.reply_to_id)===String(postId)||String(row.id)===String(postId))loadThread(true);}).subscribe();
   })();
 </script>
+<script data-goatcounter="https://kehalkasho.goatcounter.com/count" async src="//gc.zgo.at/count.js"></script>
 </body>
 </html>
