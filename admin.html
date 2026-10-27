@@ -179,6 +179,7 @@
       <nav class="admin-quicknav" aria-label="Admin sections">
         <span class="admin-nav-label">Overview</span>
         <a href="#section-dashboard">Dashboard</a>
+        <a href="#section-visitors">Website Visitors</a>
         <a href="#section-online">Who Is Online</a>
         <a href="#section-site-settings">Testing Mode</a>
         <span class="admin-nav-label">Community</span>
@@ -205,6 +206,31 @@
       <div class="section-item" id="section-dashboard">
         <h2>Dashboard</h2>
         <div class="stats-grid" id="dashboardStats"><p>Loading…</p></div>
+      </div>
+
+      <div class="section-item" id="section-visitors">
+        <h2>Website Visitors</h2>
+        <p class="meta">Visitor numbers for the whole site. No cookies, no personal info — just counts.</p>
+        <div class="stats-grid" id="visitorStats"><p>Loading…</p></div>
+        <p><a class="button" href="https://kehalkasho.goatcounter.com" target="_blank" rel="noopener">Open full visitor stats ↗</a></p>
+        <iframe id="visitorFrame" title="Website visitors" src="about:blank" data-src="https://kehalkasho.goatcounter.com" loading="lazy" style="width:100%;height:900px;border:1px solid #ddd;border-radius:12px;background:#fff"></iframe>
+        <script>
+        (function(){
+          var box=document.getElementById('visitorStats'), fr=document.getElementById('visitorFrame');
+          function card(n,l){return '<div class="stat"><strong>'+n+'</strong><span>'+l+'</span></div>';}
+          function load(){
+            if(fr && fr.src==='about:blank') fr.src=fr.getAttribute('data-src');
+            Promise.all(['TOTAL'].map(function(p){return fetch('https://kehalkasho.goatcounter.com/counter/'+p+'.json').then(function(r){return r.ok?r.json():{count:'0',count_unique:'0'};}).catch(function(){return null;});}))
+            .then(function(r){var t=r[0]; if(!t){box.innerHTML='<p>Could not load numbers right now.</p>';return;}
+              box.innerHTML=card(t.count,'Total page views')+card(t.count_unique,'Visitors');});
+          }
+          var ed=document.getElementById('editor');
+          if(ed && !ed.classList.contains('is-visible') && window.MutationObserver){
+            var mo=new MutationObserver(function(){ if(ed.classList.contains('is-visible')){mo.disconnect();load();} });
+            mo.observe(ed,{attributes:true,attributeFilter:['class']});
+          } else load();
+        })();
+        </script>
       </div>
 
       <div class="section-item" id="section-online">
