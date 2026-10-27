@@ -8,7 +8,7 @@ admin.html is skipped on purpose (it has its own layout and does not load site.j
 import html, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ASSET_VERSION = "20261026-2"
+ASSET_VERSION = "20261027-1"
 SKIP = {"admin.html"}
 FLOATING = {"ages.html"}          # full-screen chat app: menu button only, no page band/footer
 
@@ -28,6 +28,7 @@ NAV = [
         ("beis-medrash-monsey.html", "Monsey", "מאנסי"),
         ("beis-medrash-kiryas-joel.html", "Kiryas Joel", "קרית יואל"),
     ]),
+    ("invitations.html", "Invitations", "הזמנות", None),
     ("yeshiva.html", "Yeshiva", "ישיבה", None),
     ("zmanim.html", "Zmanim", "זמנים", None),
     ("pictures.html", "Pictures", "בילדער", None),
@@ -71,12 +72,14 @@ SUBTITLE = {
     "recordings.html": ("Divrei Kodesh and recordings", "דברות קודש און רעקארדירונגען"),
     "business.html": ("Businesses in our community", "געשעפטן פון אונדזער קהילה"),
     "ages-hub.html": ("Members area for each year", "מעמבערס טייל פאר יעדן יארגאנג"),
+    "invitations.html": ("Beautiful invitations for every simcha — share on WhatsApp or print", "שיינע הזמנות פאר יעדע שמחה — שיקט אויף וואטסאפ אדער דרוקט"),
     "login.html": ("Sign in to member features", "לאגט אריין פאר מעמבער פונקציעס"),
 }
 
 FOOTER_LINKS = [
     ("index.html", "Home", "היים"), ("about.html", "About", "וועגן אונדז"),
     ("news.html", "News", "נייעס"), ("simchas.html", "Simchas", "שמחות"),
+    ("invitations.html", "Simcha invitations", "הזמנות"),
     ("editorial.html", "Submit news", "שיקט אריין"), ("yeshiva.html", "Yeshiva", "ישיבה"),
     ("zmanim.html", "Zmanim", "זמנים"), ("pictures.html", "Pictures", "בילדער"),
     ("recordings.html", "Recordings", "רעקארדירונגען"), ("business.html", "Business", "געשעפטן"),
@@ -92,7 +95,8 @@ def nav_html(page):
     items = [f'<li class="nav-home"><a href="index.html"{cur("index.html", page)}>{L("Home", "היים")}</a></li>']
     for i, (href, en, yi, sub) in enumerate(NAV):
         if not sub:
-            items.append(f'<li><a href="{href}"{cur(href, page)}>{L(en, yi)}</a></li>')
+            cls = ' class="nav-invite"' if href == "invitations.html" else ""
+            items.append(f'<li{cls}><a href="{href}"{cur(href, page)}>{L(en, yi)}</a></li>')
             continue
         active = any(h == page for h, _, _ in sub)
         links = "".join(f'<li><a href="{h}"{cur(h, page)}>{L(e, y)}</a></li>' for h, e, y in sub)
@@ -182,6 +186,7 @@ def footer_html(page):
       <p class="footer-name" lang="he">התאחדות אברכים ברכת שמים קאשוי</p>
       <p data-lang="en">The community of the Kashau (Kasho) Rebbe shlit״a, with botei medrash in Williamsburg, Monsey and Kiryas Joel.</p>
       <p data-lang="yi" hidden>די קהילה פון כ״ק מרן אדמו״ר מקאשוי שליט״א, מיט בתי מדרשים אין וויליאמסבורג, מאנסי און קרית יואל.</p>
+      <a class="footer-invite" href="invitations.html">{L("✦ Make a simcha invitation", "✦ מאכט א הזמנה צו א שמחה")}</a>
     </div>
     <nav class="footer-col" aria-label="Footer">
       <h2>{L("Explore", "זייטלעך")}</h2>

@@ -1,0 +1,1105 @@
+/* Kasho Simcha Invitations — fully client-side.
+   Cards are drawn on a <canvas> (the live preview, the PNG, the PDF and the print copy are the same drawing).
+   A shared invitation lives entirely in the link (#i=...): nothing is stored on any server. */
+(function () {
+  'use strict';
+
+  const W = 1500, H = 2100;                 // 5 × 7 in at 300 dpi
+  // Read before site.js stores its default, so a first-time guest sees a Yiddish invitation page in Yiddish.
+  let SAVED_LANG = null; try { SAVED_LANG = localStorage.getItem('siteLanguage'); } catch (_) {}
+  const HE = /[\u0590-\u05FF]/;
+
+  // ---------------------------------------------------------------- simcha types
+  const TYPES = {
+    chasuna: {
+      label: { en: 'Chasuna', yi: 'חתונה' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שמחת הנישואין', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחת נישואי צאצאינו היקרים', p: 'החתן', c: 'עב״ג', s: 'הכלה', hosts: 'המזמינים' },
+      en: { open: 'With gratitude to Hashem', title: 'Wedding', invite: 'We joyfully invite you and your family to share in the simcha of the marriage of our dear children', p: 'The Chosson', c: '&', s: 'The Kallah', hosts: 'With joy, the families' },
+      two: true, hosts2: true, fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, s: { en: 'Kallah’s name', yi: 'נאמען פון דער כלה' }, h1: { en: 'Chosson’s parents', yi: 'עלטערן פונעם חתן' }, h2: { en: 'Kallah’s parents', yi: 'עלטערן פון דער כלה' } },
+      hours: 5
+    },
+    vort: {
+      label: { en: 'Vort · Tenoyim', yi: 'ווארט · תנאים' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שמחת התנאים', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחתנו לרגל התקשרות צאצאינו היקרים', p: 'החתן', c: 'עב״ג', s: 'הכלה', hosts: 'המזמינים' },
+      en: { open: 'With gratitude to Hashem', title: 'Vort', invite: 'We are delighted to invite you to celebrate the engagement of our dear children', p: 'The Chosson', c: '&', s: 'The Kallah', hosts: 'With joy, the families' },
+      two: true, hosts2: true, fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, s: { en: 'Kallah’s name', yi: 'נאמען פון דער כלה' }, h1: { en: 'Chosson’s parents', yi: 'עלטערן פונעם חתן' }, h2: { en: 'Kallah’s parents', yi: 'עלטערן פון דער כלה' } },
+      hours: 3
+    },
+    barmitzvah: {
+      label: { en: 'Bar Mitzvah', yi: 'בר מצוה' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שמחת בר מצוה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לסעודת מצוה לרגל הכנס בננו היקר לעול המצוות', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Bar Mitzvah', invite: 'We are honored to invite you and your family to the seudas mitzvah as our dear son enters the age of mitzvos', p: '', hosts: 'With joy, his parents' },
+      fields: { p: { en: 'Bar mitzvah bochur’s name', yi: 'נאמען פונעם בר מצוה בחור' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 4
+    },
+    bris: {
+      label: { en: 'Bris', yi: 'ברית' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'ברית מילה', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בסעודת ברית מילה של בננו היקר שיכנס אי״ה בבריתו של אברהם אבינו', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Bris Milah', invite: 'We invite you to join us at the bris milah of our dear son', p: '', hosts: 'With joy, the parents' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
+    kiddush: {
+      label: { en: 'Kiddush', yi: 'קידוש' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'קידוש', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לקידוש לכבוד הולדת בתנו תחי׳', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Kiddush', invite: 'Please join us for a kiddush in honor of the birth of our daughter', p: '', hosts: 'With joy, the parents' },
+      fields: { p: { en: 'Baby’s name (optional)', yi: 'נאמען פונעם מיידעלע (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
+    upsherin: {
+      label: { en: 'Upsherin', yi: 'חלאקה' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שמחת חלאקה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחת חלאקה של בננו היקר', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Upsherin', invite: 'Please join us at the upsherin of our dear son', p: '', hosts: 'With joy, his parents' },
+      fields: { p: { en: 'Child’s name', yi: 'נאמען פונעם קינד' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
+    shevabrachos: {
+      label: { en: 'Sheva Brachos', yi: 'שבע ברכות' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שבע ברכות', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לסעודת שבע ברכות לכבוד החתן והכלה', p: 'החתן', c: 'עב״ג', s: 'הכלה', hosts: 'המכבדים' },
+      en: { open: 'With gratitude to Hashem', title: 'Sheva Brachos', invite: 'You are warmly invited to a sheva brachos seudah in honor of the chosson and kallah', p: 'The Chosson', c: '&', s: 'The Kallah', hosts: 'Hosted by' },
+      two: true, fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, s: { en: 'Kallah’s name', yi: 'נאמען פון דער כלה' }, h1: { en: 'Hosts', yi: 'די מכבדים' } },
+      hours: 3
+    },
+    siyum: {
+      label: { en: 'Siyum', yi: 'סיום' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'סיום מסכת', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בסעודת מצוה לרגל סיום המסכת', p: 'המסיים', hosts: 'המזמינים' },
+      en: { open: 'With gratitude to Hashem', title: 'Siyum', invite: 'We invite you to a seudas mitzvah celebrating the siyum of the masechta', p: 'The Mesayem', hosts: 'Hosted by' },
+      masechta: true, fields: { p: { en: 'Mesayem (who is making the siyum)', yi: 'דער מסיים' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3
+    },
+    general: {
+      label: { en: 'Other simcha', yi: 'אנדערע שמחה' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'הזמנה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחתנו', p: '', hosts: 'המזמינים' },
+      en: { open: 'With gratitude to Hashem', title: 'You’re Invited', invite: 'Please join us for our simcha', p: '', hosts: 'With joy' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3
+    }
+  };
+
+  // ---------------------------------------------------------------- designs
+  // Each design: palette + background + frame painter. Fonts: display (titles/names) and body, per card language.
+  const DESIGNS = [
+    { id: 'royal', type: 'chasuna', name: { en: 'Royal Navy & Gold', yi: 'קעניגליך בלוי מיט גאלד' },
+      bg: ['#13233a', '#1d3352'], ink: '#efe2c4', title: '#d8b878', nm: '#f6e9c9', muted: '#c8b48c', line: '#c9a868',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cinzel', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'royal' },
+    { id: 'ivory', type: 'vort', name: { en: 'Ivory Filigree', yi: 'עלפנביין פיליגראן' },
+      bg: ['#fbf6ea', '#f3eadb'], ink: '#2b2a33', title: '#8a6a3f', nm: '#1f2d3a', muted: '#7d6d55', line: '#a88457',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cormorant Garamond', 700], by: ['David Libre', 400], be: ['Cormorant Garamond', 500], frame: 'filigree' },
+    { id: 'arch', type: 'barmitzvah', name: { en: 'Jerusalem Arch', yi: 'ירושלים בויגן' },
+      bg: ['#eef2ee', '#e2e9e4'], ink: '#233532', title: '#156a5d', nm: '#1b2d3e', muted: '#5b6f69', line: '#a8875a',
+      fy: ['Suez One', 400], fe: ['Cinzel', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'arch' },
+    { id: 'sky', type: 'bris', name: { en: 'Silver Sky', yi: 'זילבערנער הימל' },
+      bg: ['#f3f7fb', '#dfe9f3'], ink: '#22344a', title: '#2d5b86', nm: '#1b2d3e', muted: '#5d7088', line: '#8aa3bd',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cormorant Garamond', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'sky' },
+    { id: 'pearl', type: 'kiddush', name: { en: 'Pearl & Rose Gold', yi: 'פערל מיט ראזע גאלד' },
+      bg: ['#fffaf6', '#f8ece6'], ink: '#3a2f33', title: '#a5675a', nm: '#3a2730', muted: '#8e7570', line: '#c49283',
+      fy: ['Bellefair', 400], fe: ['Cormorant Garamond', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'floral' },
+    { id: 'garden', type: 'upsherin', name: { en: 'Olive Branch', yi: 'אליוו צווייג' },
+      bg: ['#fbfcf7', '#eef2e3'], ink: '#2c3826', title: '#4e6b34', nm: '#26331f', muted: '#6b7a5c', line: '#7f9a5e',
+      fy: ['Suez One', 400], fe: ['Cinzel', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'vine' },
+    { id: 'wine', type: 'shevabrachos', name: { en: 'Burgundy Ornate', yi: 'בורגונדי מיט גאלד' },
+      bg: ['#4a1624', '#64202f'], ink: '#f3e3cf', title: '#e1bf83', nm: '#fbefd9', muted: '#d9b9a0', line: '#d2ad6c',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cinzel', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'ornate' },
+    { id: 'scroll', type: 'siyum', name: { en: 'Parchment Scroll', yi: 'קלף מגילה' },
+      bg: ['#f4e8cc', '#e9d7ae'], ink: '#3b2a17', title: '#6b3f1d', nm: '#2e2010', muted: '#77603e', line: '#8a6a3f',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cinzel', 700], by: ['David Libre', 400], be: ['Cormorant Garamond', 500], frame: 'scroll' },
+    { id: 'classic', type: 'general', name: { en: 'Classic Black & Gold', yi: 'קלאסיש שווארץ מיט גאלד' },
+      bg: ['#ffffff', '#f7f5f0'], ink: '#1d1d1f', title: '#1d1d1f', nm: '#111111', muted: '#6a655c', line: '#b08d57',
+      fy: ['Frank Ruhl Libre', 900], fe: ['Cinzel', 700], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], frame: 'classic' }
+  ];
+  const designById = (id) => DESIGNS.find((d) => d.id === id) || DESIGNS[0];
+
+  // ---------------------------------------------------------------- Hebrew calendar (offline, via Intl)
+  const HMONTH = { Tishri: ['תשרי', 'Tishrei'], Heshvan: ['מרחשון', 'Cheshvan'], Kislev: ['כסלו', 'Kislev'], Tevet: ['טבת', 'Teves'], Shevat: ['שבט', 'Shevat'],
+    Adar: ['אדר', 'Adar'], 'Adar I': ['אדר א׳', 'Adar I'], 'Adar II': ['אדר ב׳', 'Adar II'], Nisan: ['ניסן', 'Nissan'], Iyar: ['אייר', 'Iyar'], Sivan: ['סיון', 'Sivan'],
+    Tamuz: ['תמוז', 'Tammuz'], Av: ['מנחם אב', 'Av'], Elul: ['אלול', 'Elul'] };
+  const YI_WEEKDAY = ['יום א׳', 'יום ב׳', 'יום ג׳', 'יום ד׳', 'יום ה׳', 'יום ו׳', 'מוצאי שבת קודש'];
+  const EN_WEEKDAY = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Motzei Shabbos'];
+
+  function gematria(n) {
+    const ones = ['', 'א', 'ב', 'ג', 'ד', 'ה', 'ו', 'ז', 'ח', 'ט'];
+    const tens = ['', 'י', 'כ', 'ל', 'מ', 'נ', 'ס', 'ע', 'פ', 'צ'];
+    const hundreds = ['', 'ק', 'ר', 'ש', 'ת', 'תק', 'תר', 'תש', 'תת', 'תתק'];
+    n = n % 1000;
+    let s = hundreds[Math.floor(n / 100)];
+    let rest = n % 100;
+    if (rest === 15) s += 'טו';
+    else if (rest === 16) s += 'טז';
+    else s += tens[Math.floor(rest / 10)] + ones[rest % 10];
+    return s.length > 1 ? s.slice(0, -1) + '״' + s.slice(-1) : s + '׳';
+  }
+
+  function parseISO(iso) {
+    const m = /^(\d{4})-(\d{2})-(\d{2})$/.exec(iso || '');
+    return m ? { y: +m[1], m: +m[2], d: +m[3] } : null;
+  }
+
+  function hebrewParts(iso) {
+    const g = parseISO(iso);
+    if (!g) return null;
+    try {
+      const parts = {};
+      new Intl.DateTimeFormat('en-u-ca-hebrew', { day: 'numeric', month: 'long', year: 'numeric', timeZone: 'UTC' })
+        .formatToParts(new Date(Date.UTC(g.y, g.m - 1, g.d, 12))).forEach((p) => { parts[p.type] = p.value; });
+      const month = HMONTH[parts.month] || [parts.month, parts.month];
+      const day = parseInt(parts.day, 10), year = parseInt(parts.year, 10);
+      return { yi: gematria(day) + ' ' + month[0] + ' ' + gematria(year), en: day + ' ' + month[1] + ' ' + year };
+    } catch (_) { return null; }
+  }
+
+  function weekday(iso) {
+    const g = parseISO(iso);
+    return g ? new Date(Date.UTC(g.y, g.m - 1, g.d)).getUTCDay() : -1;
+  }
+
+  function civilLong(iso, lang) {
+    const g = parseISO(iso);
+    if (!g) return '';
+    const date = new Date(Date.UTC(g.y, g.m - 1, g.d, 12));
+    if (lang === 'yi') {
+      const months = ['יאנואר', 'פעברואר', 'מערץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אויגוסט', 'סעפטעמבער', 'אקטאבער', 'נאוועמבער', 'דעצעמבער'];
+      return g.d + ' ' + months[g.m - 1] + ' ' + g.y;
+    }
+    return date.toLocaleDateString('en-US', { month: 'long', day: 'numeric', year: 'numeric', timeZone: 'UTC' });
+  }
+
+  function timeLabel(hhmm, lang) {
+    const m = /^(\d{1,2}):(\d{2})$/.exec(hhmm || '');
+    if (!m) return '';
+    let h = +m[1];
+    const min = m[2];
+    if (lang === 'yi') return 'בשעה ' + (h % 12 || 12) + ':' + min;
+    const ap = h >= 12 ? 'PM' : 'AM';
+    return (h % 12 || 12) + ':' + min + ' ' + ap;
+  }
+
+  // Parsha of the week, from Hebcal's free API (only used while making a card; the result is stored in the link).
+  const parshaCache = {};
+  async function fetchParsha(iso) {
+    const g = parseISO(iso);
+    if (!g) return null;
+    if (iso in parshaCache) return parshaCache[iso];
+    try {
+      const ctrl = typeof AbortController !== 'undefined' ? new AbortController() : null;
+      const timer = ctrl && setTimeout(() => ctrl.abort(), 6000);
+      const res = await fetch('https://www.hebcal.com/shabbat?cfg=json&zip=11211&M=on&gy=' + g.y + '&gm=' + g.m + '&gd=' + g.d, ctrl ? { signal: ctrl.signal } : {});
+      if (timer) clearTimeout(timer);
+      const json = res.ok ? await res.json() : null;
+      const item = json && (json.items || []).find((i) => i.category === 'parashat');
+      parshaCache[iso] = item ? { yi: (item.hebrew || '').replace(/^פרשת\s*/, ''), en: item.title.replace(/^Parashat\s+/, '') } : null;
+    } catch (_) { parshaCache[iso] = null; }
+    return parshaCache[iso];
+  }
+
+  function dayLine(data, lang) {
+    const wd = weekday(data.dt);
+    if (wd < 0) return '';
+    const pr = data.pr && data.pr[lang === 'yi' ? 0 : 1];
+    // Saturday: a morning kiddush is on Shabbos itself; anything from late afternoon on is motzei Shabbos.
+    const hour = /^(\d{1,2}):/.test(data.tm || '') ? parseInt(data.tm, 10) : -1;
+    const motzei = wd === 6 && hour >= 16;
+    if (lang === 'yi') {
+      if (wd === 6) return (motzei ? 'מוצאי שבת קודש' : 'שבת קודש') + (pr ? ' פרשת ' + pr : '');
+      return YI_WEEKDAY[wd] + (pr ? ' לסדר ' + pr : '');
+    }
+    if (wd === 6) return (motzei ? 'Motzei Shabbos' : 'Shabbos') + (pr ? ', Parshas ' + pr : '');
+    return EN_WEEKDAY[wd] + (pr ? ', Parshas ' + pr : '');
+  }
+
+  // ---------------------------------------------------------------- fonts
+  const fontReady = {};
+  function ensureFonts(design) {
+    const key = design.id;
+    if (fontReady[key]) return fontReady[key];
+    const specs = [design.fy, design.fe, design.by, design.be];
+    const loads = specs.map(([fam, wt]) => (document.fonts && document.fonts.load)
+      ? document.fonts.load(wt + ' 40px "' + fam + '"', 'אבג Abc').catch(() => null) : Promise.resolve());
+    if (document.fonts && document.fonts.load) {
+      loads.push(document.fonts.load('italic 500 40px "Cormorant Garamond"', 'Abc').catch(() => null));
+    }
+    const timeout = new Promise((r) => setTimeout(r, 4000));
+    fontReady[key] = Promise.race([Promise.all(loads), timeout]);
+    return fontReady[key];
+  }
+
+  // ---------------------------------------------------------------- drawing helpers
+  function font(ctx, spec, size, italic) {
+    ctx.font = (italic ? 'italic ' : '') + spec[1] + ' ' + Math.round(size) + 'px "' + spec[0] + '", "Frank Ruhl Libre", "Times New Roman", serif';
+  }
+  function dirOf(text) { return HE.test(text) ? 'rtl' : 'ltr'; }
+
+  function wrapLines(ctx, text, maxW) {
+    const out = [];
+    String(text).split(/\n/).forEach((para) => {
+      const words = para.trim().split(/\s+/).filter(Boolean);
+      let line = '';
+      words.forEach((w) => {
+        const test = line ? line + ' ' + w : w;
+        if (ctx.measureText(test).width <= maxW || !line) line = test;
+        else { out.push(line); line = w; }
+      });
+      if (line) out.push(line);
+    });
+    return out;
+  }
+
+  function rng(seed) { let s = seed >>> 0; return () => ((s = (s * 1664525 + 1013904223) >>> 0) / 4294967296); }
+
+  function grain(ctx, color, alpha, count, seed) {
+    const r = rng(seed);
+    ctx.save(); ctx.fillStyle = color; ctx.globalAlpha = alpha;
+    for (let i = 0; i < count; i++) { ctx.fillRect(r() * W, r() * H, 1.6 + r() * 2.2, 1.6 + r() * 2.2); }
+    ctx.restore();
+  }
+
+  function rectStroke(ctx, inset, width, color, radius) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = width;
+    const x = inset, y = inset, w = W - inset * 2, h = H - inset * 2;
+    ctx.beginPath();
+    if (radius) roundRectPath(ctx, x, y, w, h, radius); else ctx.rect(x, y, w, h);
+    ctx.stroke(); ctx.restore();
+  }
+  function roundRectPath(ctx, x, y, w, h, r) {
+    ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+    ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+  }
+
+  function spiral(ctx, cx, cy, r, turns, start, dir) {
+    ctx.moveTo(cx + Math.cos(start) * r, cy + Math.sin(start) * r);
+    const steps = 40 * turns;
+    for (let i = 1; i <= steps; i++) {
+      const t = i / steps;
+      const a = start + dir * t * turns * Math.PI * 2;
+      const rr = r * (1 - t * 0.82);
+      ctx.lineTo(cx + Math.cos(a) * rr, cy + Math.sin(a) * rr);
+    }
+  }
+
+  // An ornamental corner, drawn in a local frame where the corner is (0,0) and the arms run +x / +y.
+  function cornerScroll(ctx, x, y, sx, sy, s, color, lw) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(sx, sy);
+    ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = lw; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, s); ctx.bezierCurveTo(0, s * 0.42, s * 0.42, 0, s, 0); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(s * 0.16, s * 0.78); ctx.bezierCurveTo(s * 0.16, s * 0.34, s * 0.34, s * 0.16, s * 0.78, s * 0.16); ctx.stroke();
+    ctx.beginPath(); spiral(ctx, s * 1.08, s * 0.1, s * 0.1, 1.1, Math.PI, 1); ctx.stroke();
+    ctx.beginPath(); spiral(ctx, s * 0.1, s * 1.08, s * 0.1, 1.1, -Math.PI / 2, -1); ctx.stroke();
+    ctx.beginPath(); ctx.ellipse(s * 0.3, s * 0.3, s * 0.11, s * 0.05, Math.PI / 4, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(s * 0.47, s * 0.47, s * 0.025, 0, Math.PI * 2); ctx.fill();
+    ctx.beginPath(); ctx.arc(s * 0.08, s * 0.08, s * 0.035, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function rosette(ctx, cx, cy, r, petals, color, fill) {
+    ctx.save(); ctx.translate(cx, cy); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = Math.max(1.5, r * 0.07);
+    for (let i = 0; i < petals; i++) {
+      ctx.save(); ctx.rotate((i / petals) * Math.PI * 2);
+      ctx.beginPath(); ctx.ellipse(0, -r * 0.55, r * 0.2, r * 0.45, 0, 0, Math.PI * 2);
+      if (fill) ctx.fill(); else ctx.stroke();
+      ctx.restore();
+    }
+    ctx.beginPath(); ctx.arc(0, 0, r * 0.16, 0, Math.PI * 2); ctx.fill();
+    ctx.restore();
+  }
+
+  function sparkle(ctx, cx, cy, r, color) {
+    ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+    ctx.moveTo(cx, cy - r);
+    ctx.quadraticCurveTo(cx + r * 0.14, cy - r * 0.14, cx + r, cy);
+    ctx.quadraticCurveTo(cx + r * 0.14, cy + r * 0.14, cx, cy + r);
+    ctx.quadraticCurveTo(cx - r * 0.14, cy + r * 0.14, cx - r, cy);
+    ctx.quadraticCurveTo(cx - r * 0.14, cy - r * 0.14, cx, cy - r);
+    ctx.fill(); ctx.restore();
+  }
+
+  function leaf(ctx, x, y, len, angle, color, filled) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.fillStyle = color; ctx.strokeStyle = color; ctx.lineWidth = Math.max(1.4, len * 0.05);
+    ctx.beginPath(); ctx.moveTo(0, 0);
+    ctx.quadraticCurveTo(len * 0.5, -len * 0.32, len, 0);
+    ctx.quadraticCurveTo(len * 0.5, len * 0.32, 0, 0);
+    if (filled === false) ctx.stroke(); else ctx.fill();
+    ctx.restore();
+  }
+
+  function sprig(ctx, x, y, angle, len, color, berry) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(angle);
+    ctx.strokeStyle = color; ctx.lineWidth = 3.2; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(len * 0.5, -len * 0.16, len, 0); ctx.stroke();
+    for (let i = 1; i <= 6; i++) {
+      const t = i / 7; const px = len * t; const py = -len * 0.16 * 4 * t * (1 - t) * 0.5;
+      const size = len * (0.2 - t * 0.09);
+      leaf(ctx, px, py, size, -0.9 + (i % 2) * 0.05, color);
+      leaf(ctx, px, py, size * 0.92, 0.9, color);
+    }
+    leaf(ctx, len, 0, len * 0.12, 0, color);
+    if (berry) {
+      ctx.fillStyle = berry;
+      [[0.3, -0.12], [0.55, 0.11], [0.75, -0.1]].forEach(([t, o]) => { ctx.beginPath(); ctx.arc(len * t, len * o, len * 0.025, 0, Math.PI * 2); ctx.fill(); });
+    }
+    ctx.restore();
+  }
+
+  function divider(ctx, style, cx, cy, w, color) {
+    ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = 2.4; ctx.lineCap = 'round';
+    const half = w / 2;
+    const line = (a, b) => { ctx.beginPath(); ctx.moveTo(a, cy); ctx.lineTo(b, cy); ctx.stroke(); };
+    if (style === 'sparkle') {
+      line(cx - half, cx - 40); line(cx + 40, cx + half);
+      sparkle(ctx, cx, cy, 24, color); sparkle(ctx, cx - 58, cy, 9, color); sparkle(ctx, cx + 58, cy, 9, color);
+    } else if (style === 'leaf') {
+      line(cx - half, cx - 30); line(cx + 30, cx + half);
+      leaf(ctx, cx - 4, cy, 46, Math.PI + 0.35, color); leaf(ctx, cx + 4, cy, 46, -0.35, color);
+      ctx.beginPath(); ctx.arc(cx, cy, 6, 0, Math.PI * 2); ctx.fill();
+    } else if (style === 'rosette') {
+      line(cx - half, cx - 36); line(cx + 36, cx + half);
+      rosette(ctx, cx, cy, 26, 8, color, false);
+    } else if (style === 'flourish') {
+      line(cx - half + 40, cx - 44); line(cx + 44, cx + half - 40);
+      ctx.beginPath(); spiral(ctx, cx - 30, cy - 2, 16, 1, 0, -1); ctx.stroke();
+      ctx.beginPath(); spiral(ctx, cx + 30, cy - 2, 16, 1, Math.PI, 1); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx, cy - 16); ctx.lineTo(cx + 9, cy); ctx.lineTo(cx, cy + 16); ctx.lineTo(cx - 9, cy); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.arc(cx - half + 26, cy, 5, 0, Math.PI * 2); ctx.arc(cx + half - 26, cy, 5, 0, Math.PI * 2); ctx.fill();
+    } else if (style === 'deco') {
+      line(cx - half, cx - 34); line(cx + 34, cx + half);
+      ctx.lineWidth = 1.4; line(cx - half * 0.7, cx - 34); ctx.save(); ctx.translate(0, 10); line(cx + 34, cx + half * 0.7); ctx.restore();
+      ctx.beginPath(); ctx.moveTo(cx, cy - 18); ctx.lineTo(cx + 18, cy); ctx.lineTo(cx, cy + 18); ctx.lineTo(cx - 18, cy); ctx.closePath(); ctx.fill();
+    } else { // diamond
+      line(cx - half, cx - 30); line(cx + 30, cx + half);
+      ctx.beginPath(); ctx.moveTo(cx, cy - 15); ctx.lineTo(cx + 15, cy); ctx.lineTo(cx, cy + 15); ctx.lineTo(cx - 15, cy); ctx.closePath(); ctx.fill();
+      [-48, 48].forEach((o) => { ctx.beginPath(); ctx.moveTo(cx + o, cy - 7); ctx.lineTo(cx + o + 7, cy); ctx.lineTo(cx + o, cy + 7); ctx.lineTo(cx + o - 7, cy); ctx.closePath(); ctx.fill(); });
+    }
+    ctx.restore();
+  }
+
+  function bgFill(ctx, d, kind) {
+    let g;
+    if (kind === 'radial') { g = ctx.createRadialGradient(W / 2, H * 0.42, 80, W / 2, H / 2, H * 0.75); g.addColorStop(0, d.bg[1]); g.addColorStop(1, d.bg[0]); }
+    else { g = ctx.createLinearGradient(0, 0, W * 0.3, H); g.addColorStop(0, d.bg[0]); g.addColorStop(1, d.bg[1]); }
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+  }
+
+  // ---------------------------------------------------------------- frames
+  // Each painter draws background + frame and returns the content box and the בס״ד position.
+  const FRAMES = {
+    royal(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      grain(ctx, '#ffffff', 0.035, 2600, 7);
+      rectStroke(ctx, 52, 4, d.line); rectStroke(ctx, 74, 1.5, d.line);
+      const s = 170;
+      cornerScroll(ctx, 92, 92, 1, 1, s, d.line, 3.2); cornerScroll(ctx, W - 92, 92, -1, 1, s, d.line, 3.2);
+      cornerScroll(ctx, 92, H - 92, 1, -1, s, d.line, 3.2); cornerScroll(ctx, W - 92, H - 92, -1, -1, s, d.line, 3.2);
+      // crown
+      ctx.save(); ctx.fillStyle = d.line; ctx.strokeStyle = d.line; ctx.lineWidth = 3;
+      const cx = W / 2, by = 236, cw = 150;
+      ctx.beginPath(); ctx.moveTo(cx - cw / 2, by); ctx.lineTo(cx - cw / 2 - 8, by - 62); ctx.lineTo(cx - cw / 4, by - 30); ctx.lineTo(cx, by - 80);
+      ctx.lineTo(cx + cw / 4, by - 30); ctx.lineTo(cx + cw / 2 + 8, by - 62); ctx.lineTo(cx + cw / 2, by); ctx.closePath(); ctx.stroke();
+      ctx.fillRect(cx - cw / 2, by + 6, cw, 9);
+      [[cx - cw / 2 - 8, by - 62], [cx, by - 80], [cx + cw / 2 + 8, by - 62]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y - 10, 8, 0, Math.PI * 2); ctx.fill(); });
+      ctx.restore();
+      return { x: 230, y: 300, w: W - 460, h: H - 300 - 230, bsd: [W - 145, 335], div: 'flourish' };
+    },
+    filigree(ctx, d) {
+      bgFill(ctx, d);
+      grain(ctx, '#8a6a3f', 0.05, 3800, 11);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 2.4;
+      const inset = 70, step = 42, r = 13;
+      for (let x = inset + step / 2; x < W - inset; x += step) { ctx.beginPath(); ctx.arc(x, inset, r, Math.PI, 0); ctx.stroke(); ctx.beginPath(); ctx.arc(x, H - inset, r, 0, Math.PI); ctx.stroke(); }
+      for (let y = inset + step / 2; y < H - inset; y += step) { ctx.beginPath(); ctx.arc(inset, y, r, Math.PI / 2, Math.PI * 1.5); ctx.stroke(); ctx.beginPath(); ctx.arc(W - inset, y, r, -Math.PI / 2, Math.PI / 2); ctx.stroke(); }
+      ctx.restore();
+      rectStroke(ctx, inset, 2.4, d.line); rectStroke(ctx, 104, 1.4, d.line);
+      [[104, 104], [W - 104, 104], [104, H - 104], [W - 104, H - 104]].forEach(([x, y]) => {
+        ctx.save(); ctx.fillStyle = d.bg[0]; ctx.beginPath(); ctx.arc(x, y, 40, 0, Math.PI * 2); ctx.fill(); ctx.restore();
+        rosette(ctx, x, y, 34, 8, d.line, false);
+      });
+      // top fleuron
+      ctx.save(); const cx = W / 2, cy = 200;
+      leaf(ctx, cx, cy, 70, -Math.PI / 2, d.line); leaf(ctx, cx, cy, 62, -Math.PI / 2 - 0.75, d.line); leaf(ctx, cx, cy, 62, -Math.PI / 2 + 0.75, d.line);
+      ctx.fillStyle = d.line; ctx.beginPath(); ctx.arc(cx, cy + 6, 9, 0, Math.PI * 2); ctx.fill();
+      ctx.strokeStyle = d.line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx - 200, cy + 22); ctx.lineTo(cx + 200, cy + 22); ctx.stroke(); ctx.restore();
+      return { x: 210, y: 280, w: W - 420, h: H - 280 - 210, bsd: [W - 170, 175], div: 'rosette' };
+    },
+    arch(ctx, d) {
+      bgFill(ctx, d);
+      grain(ctx, '#234', 0.03, 2400, 3);
+      const L = 170, R = W - 170, spring = 760, rad = (R - L) / 2, cx = W / 2, base = H - 130;
+      const archPath = (inset) => {
+        ctx.beginPath(); ctx.moveTo(L + inset, base - inset); ctx.lineTo(L + inset, spring);
+        ctx.arc(cx, spring, rad - inset, Math.PI, 0); ctx.lineTo(R - inset, base - inset); ctx.closePath();
+      };
+      ctx.save(); archPath(0); ctx.fillStyle = 'rgba(255,255,255,0.72)'; ctx.fill(); ctx.restore();
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 5; archPath(0); ctx.stroke(); ctx.lineWidth = 1.8; archPath(22); ctx.stroke(); ctx.restore();
+      // keystone + capitals + plinth
+      ctx.save(); ctx.fillStyle = d.line;
+      ctx.beginPath(); ctx.moveTo(cx - 26, spring - rad - 18); ctx.lineTo(cx + 26, spring - rad - 18); ctx.lineTo(cx + 18, spring - rad + 40); ctx.lineTo(cx - 18, spring - rad + 40); ctx.closePath(); ctx.fill();
+      [L, R].forEach((x) => { ctx.fillRect(x - 26, spring - 8, 52, 14); ctx.fillRect(x - 20, spring + 10, 40, 6); ctx.fillRect(x - 30, base - 8, 60, 16); });
+      ctx.fillRect(L - 50, base + 14, R - L + 100, 4);
+      ctx.restore();
+      rosette(ctx, 110, 110, 34, 8, d.line, false); rosette(ctx, W - 110, 110, 34, 8, d.line, false);
+      return { x: 270, y: 420, w: W - 540, h: base - 420 - 90, bsd: [W - 110, 220], div: 'diamond' };
+    },
+    sky(ctx, d) {
+      bgFill(ctx, d);
+      ctx.save(); const g = ctx.createRadialGradient(W / 2, 0, 50, W / 2, 0, H * 0.7); g.addColorStop(0, 'rgba(255,255,255,0.9)'); g.addColorStop(1, 'rgba(255,255,255,0)'); ctx.fillStyle = g; ctx.fillRect(0, 0, W, H); ctx.restore();
+      rectStroke(ctx, 58, 3, d.line, 46); rectStroke(ctx, 80, 1.4, d.line, 34);
+      const r = rng(5);
+      [[W / 2, 190, 34], [W / 2 - 90, 220, 14], [W / 2 + 90, 220, 14], [W / 2 - 160, 175, 9], [W / 2 + 160, 175, 9]].forEach(([x, y, s]) => sparkle(ctx, x, y, s, d.line));
+      for (let i = 0; i < 26; i++) {
+        const side = i % 2 ? 1 : -1; const x = W / 2 + side * (520 + r() * 120); const y = 150 + r() * (H - 300);
+        if (r() > 0.45) sparkle(ctx, x, y, 6 + r() * 12, d.line); else { ctx.save(); ctx.fillStyle = d.line; ctx.globalAlpha = 0.6; ctx.beginPath(); ctx.arc(x, y, 3 + r() * 3, 0, Math.PI * 2); ctx.fill(); ctx.restore(); }
+      }
+      return { x: 220, y: 290, w: W - 440, h: H - 290 - 200, bsd: [W - 150, 160], div: 'sparkle' };
+    },
+    floral(ctx, d) {
+      bgFill(ctx, d);
+      grain(ctx, '#a5675a', 0.03, 2400, 17);
+      rectStroke(ctx, 72, 2.2, d.line);
+      rectStroke(ctx, 90, 1, d.line);
+      sprig(ctx, 110, 260, -0.55, 330, d.line, d.title); sprig(ctx, 250, 110, 0.15, 300, d.line, d.title);
+      sprig(ctx, W - 110, H - 260, Math.PI - 0.55, 330, d.line, d.title); sprig(ctx, W - 250, H - 110, Math.PI + 0.15, 300, d.line, d.title);
+      return { x: 220, y: 300, w: W - 440, h: H - 300 - 260, bsd: [W - 160, 170], div: 'leaf' };
+    },
+    vine(ctx, d) {
+      bgFill(ctx, d);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.lineCap = 'round';
+      const inset = 92, amp = 14, period = 120;
+      const edge = (x0, y0, x1, y1, seed) => {
+        const len = Math.hypot(x1 - x0, y1 - y0), ux = (x1 - x0) / len, uy = (y1 - y0) / len, nx = -uy, ny = ux;
+        ctx.beginPath();
+        for (let t = 0; t <= len; t += 4) { const o = amp * Math.sin((t / period) * Math.PI * 2); const px = x0 + ux * t + nx * o, py = y0 + uy * t + ny * o; t ? ctx.lineTo(px, py) : ctx.moveTo(px, py); }
+        ctx.stroke();
+        for (let t = period / 4, k = 0; t < len - 20; t += period / 2, k++) {
+          const side = k % 2 ? 1 : -1; const px = x0 + ux * t + nx * amp * side, py = y0 + uy * t + ny * amp * side;
+          const base = Math.atan2(uy, ux); leaf(ctx, px, py, 40, base + side * (k % 3 ? 1.0 : 1.25), d.line);
+        }
+      };
+      edge(inset + 40, inset, W - inset - 40, inset); edge(W - inset, inset + 40, W - inset, H - inset - 40);
+      edge(W - inset - 40, H - inset, inset + 40, H - inset); edge(inset, H - inset - 40, inset, inset + 40);
+      ctx.restore();
+      [[inset, inset], [W - inset, inset], [inset, H - inset], [W - inset, H - inset]].forEach(([x, y]) => rosette(ctx, x, y, 30, 6, d.title, true));
+      ctx.save(); [W / 2 - 60, W / 2, W / 2 + 60].forEach((x, i) => leaf(ctx, x, 220, i === 1 ? 64 : 48, -Math.PI / 2 + (i - 1) * 0.5, d.title)); ctx.restore();
+      return { x: 220, y: 290, w: W - 440, h: H - 290 - 210, bsd: [W - 175, 175], div: 'leaf' };
+    },
+    ornate(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      grain(ctx, '#ffffff', 0.03, 2400, 23);
+      rectStroke(ctx, 50, 3, d.line); rectStroke(ctx, 104, 3, d.line);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 2; const mid = 77, step = 40, s = 14;
+      const diamond = (x, y) => { ctx.beginPath(); ctx.moveTo(x, y - s); ctx.lineTo(x + s, y); ctx.lineTo(x, y + s); ctx.lineTo(x - s, y); ctx.closePath(); ctx.stroke(); };
+      for (let x = mid + step; x < W - mid - 20; x += step) { diamond(x, mid); diamond(x, H - mid); }
+      for (let y = mid + step; y < H - mid - 20; y += step) { diamond(mid, y); diamond(W - mid, y); }
+      ctx.restore();
+      [[mid, mid], [W - mid, mid], [mid, H - mid], [W - mid, H - mid]].forEach(([x, y]) => {
+        ctx.save(); ctx.fillStyle = d.bg[0]; ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.beginPath(); ctx.arc(x, y, 44, 0, Math.PI * 2); ctx.fill(); ctx.stroke(); ctx.restore();
+        rosette(ctx, x, y, 34, 8, d.line, true);
+      });
+      cornerScroll(ctx, 128, 128, 1, 1, 120, d.line, 2.4); cornerScroll(ctx, W - 128, 128, -1, 1, 120, d.line, 2.4);
+      cornerScroll(ctx, 128, H - 128, 1, -1, 120, d.line, 2.4); cornerScroll(ctx, W - 128, H - 128, -1, -1, 120, d.line, 2.4);
+      rosette(ctx, W / 2, 205, 40, 12, d.line, false);
+      return { x: 240, y: 300, w: W - 480, h: H - 300 - 240, bsd: [W - 175, 310], div: 'diamond' };
+    },
+    scroll(ctx, d) {
+      bgFill(ctx, d);
+      ctx.save(); const v = ctx.createRadialGradient(W / 2, H / 2, H * 0.25, W / 2, H / 2, H * 0.72); v.addColorStop(0, 'rgba(255,248,230,0)'); v.addColorStop(1, 'rgba(120,80,30,0.28)'); ctx.fillStyle = v; ctx.fillRect(0, 0, W, H); ctx.restore();
+      grain(ctx, '#6b3f1d', 0.06, 5200, 31);
+      const roller = (y) => {
+        const g = ctx.createLinearGradient(0, y - 38, 0, y + 38); g.addColorStop(0, '#4a2c14'); g.addColorStop(0.35, '#a0713f'); g.addColorStop(0.55, '#c9985c'); g.addColorStop(1, '#3b220e');
+        ctx.save(); ctx.fillStyle = g; ctx.fillRect(60, y - 34, W - 120, 68);
+        [[38, y], [W - 38, y]].forEach(([x, yy]) => { const k = ctx.createRadialGradient(x - 8, yy - 10, 4, x, yy, 46); k.addColorStop(0, '#d9ab6c'); k.addColorStop(1, '#4a2c14'); ctx.fillStyle = k; ctx.beginPath(); ctx.arc(x, yy, 44, 0, Math.PI * 2); ctx.fill(); });
+        ctx.restore();
+        ctx.save(); const sh = ctx.createLinearGradient(0, y, 0, y + (y < H / 2 ? 60 : -60)); sh.addColorStop(0, 'rgba(70,40,10,0.35)'); sh.addColorStop(1, 'rgba(70,40,10,0)'); ctx.fillStyle = sh; ctx.fillRect(60, y < H / 2 ? y + 34 : y - 94, W - 120, 60); ctx.restore();
+      };
+      roller(78); roller(H - 78);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 2.6; ctx.strokeRect(140, 190, W - 280, H - 380); ctx.lineWidth = 1.2; ctx.strokeRect(158, 208, W - 316, H - 416); ctx.restore();
+      [[158, 208], [W - 158, 208], [158, H - 208], [W - 158, H - 208]].forEach(([x, y]) => { ctx.save(); ctx.fillStyle = d.line; ctx.translate(x, y); ctx.rotate(Math.PI / 4); ctx.fillRect(-10, -10, 20, 20); ctx.restore(); });
+      return { x: 240, y: 300, w: W - 480, h: H - 300 - 290, bsd: [W - 210, 260], div: 'diamond' };
+    },
+    classic(ctx, d) {
+      bgFill(ctx, d);
+      rectStroke(ctx, 66, 3, '#1d1d1f'); rectStroke(ctx, 84, 1.2, '#1d1d1f');
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 3;
+      const c = (x, y, sx, sy) => { for (let i = 0; i < 3; i++) { const o = 108 + i * 16, l = 120 - i * 30; ctx.beginPath(); ctx.moveTo(x + sx * o, y + sy * (o + l)); ctx.lineTo(x + sx * o, y + sy * o); ctx.lineTo(x + sx * (o + l), y + sy * o); ctx.stroke(); } };
+      c(0, 0, 1, 1); c(W, 0, -1, 1); c(0, H, 1, -1); c(W, H, -1, -1);
+      ctx.restore();
+      divider(ctx, 'deco', W / 2, 190, 360, d.line); divider(ctx, 'deco', W / 2, H - 190, 360, d.line);
+      return { x: 230, y: 280, w: W - 460, h: H - 280 - 270, bsd: [W - 160, 290], div: 'deco' };
+    }
+  };
+
+  // ---------------------------------------------------------------- card content
+  function words(data) {
+    const type = TYPES[data.t] || TYPES.general;
+    const lang = data.l === 'en' ? 'en' : 'yi';
+    return { type, lang, w: type[lang] };
+  }
+
+  function titleText(data) {
+    const { type, w } = words(data);
+    if (data.ti) return data.ti;
+    if (type.masechta && data.m) return (data.l === 'en' ? 'Siyum Maseches ' : 'סיום מסכת ') + data.m;
+    return w.title;
+  }
+
+  function buildBlocks(data, d, box) {
+    const { type, lang, w } = words(data);
+    const yi = lang === 'yi';
+    const disp = yi ? d.fy : d.fe, body = yi ? d.by : d.be;
+    const maxW = box.w;
+    const B = [];
+    const t = (text, spec, size, color, gap, opts) => { if (text && String(text).trim()) B.push(Object.assign({ kind: 'text', text: String(text).trim(), spec, size, color, gap, maxW }, opts || {})); };
+    t(w.open, body, 40, d.muted, 26, { italic: !yi });
+    t(titleText(data), disp, yi ? 132 : 104, d.title, 18, { lh: 1.12, track: yi ? 0 : 6 });
+    B.push({ kind: 'div', h: 56, gap: 22 });
+    t(data.w || w.invite, body, 46, d.ink, 44, { maxW: Math.min(maxW, 1000), lh: 1.42 });
+    if (data.p) {
+      t(w.p, body, 36, d.muted, 4, { italic: !yi });
+      t(data.p, disp, yi ? 110 : 92, d.nm, type.two ? 14 : 40, { lh: 1.12 });
+    }
+    if (type.two && data.s) {
+      if (data.p) t(w.c, body, yi ? 44 : 56, d.title, 14, { italic: !yi });
+      t(w.s, body, 36, d.muted, 4, { italic: !yi });
+      t(data.s, disp, yi ? 110 : 92, d.nm, 40, { lh: 1.12 });
+    }
+    B.push({ kind: 'div', h: 56, gap: 30 });
+    const hd = data.hd || (hebrewParts(data.dt) || {})[lang];
+    t(dayLine(data, lang), body, 44, d.ink, 10);
+    t(hd, disp, yi ? 72 : 62, d.title, 8, { track: 0 });
+    if (data.dt) t(civilLong(data.dt, yi ? 'yi' : 'en'), body, 36, d.muted, 18);
+    t(timeLabel(data.tm, lang), body, 46, d.ink, 30, { weight: 700 });
+    t(data.v, disp, yi ? 64 : 56, d.nm, 8, { lh: 1.15 });
+    t(data.a, body, 38, d.muted, 26);
+    t(data.n, body, 38, d.ink, 30, { italic: !yi && !HE.test(data.n || ''), lh: 1.38, maxW: Math.min(maxW, 980) });
+    if (data.h1 || data.h2) {
+      B.push({ kind: 'div', h: 40, gap: 26, small: true });
+      t(w.hosts, body, 34, d.muted, 10, { italic: !yi });
+      if (type.hosts2 && data.h1 && data.h2) B.push({ kind: 'cols', a: data.h1, b: data.h2, spec: disp, size: yi ? 52 : 44, color: d.nm, gap: 0, maxW });
+      else t(data.h1 || data.h2, disp, yi ? 52 : 44, d.nm, 0, { lh: 1.2 });
+    }
+    return B;
+  }
+
+  function measure(ctx, B, s) {
+    let total = 0;
+    B.forEach((b, i) => {
+      const last = i === B.length - 1;
+      if (b.kind === 'div') { b._h = b.h * s; }
+      else if (b.kind === 'cols') {
+        font(ctx, b.spec, b.size * s);
+        const colW = b.maxW / 2 - 30 * s;
+        b._a = wrapLines(ctx, b.a, colW); b._b = wrapLines(ctx, b.b, colW);
+        b._lh = b.size * s * 1.2; b._h = Math.max(b._a.length, b._b.length) * b._lh;
+      } else {
+        font(ctx, b.weight ? [b.spec[0], Math.max(b.spec[1], b.weight)] : b.spec, b.size * s, b.italic);
+        b._lines = wrapLines(ctx, b.text, b.maxW);
+        // a single word wider than the line (long name) shrinks itself
+        b._fs = b.size * s;
+        const widest = Math.max.apply(null, b._lines.map((l) => ctx.measureText(l).width));
+        if (widest > b.maxW) b._fs = b._fs * b.maxW / widest;
+        b._lh = b._fs * (b.lh || 1.3); b._h = b._lines.length * b._lh;
+      }
+      total += b._h + (last ? 0 : b.gap * s);
+    });
+    return total;
+  }
+
+  function drawBlocks(ctx, B, d, box, divStyle) {
+    let s = 1, total = measure(ctx, B, s);
+    if (total < box.h * 0.8) { s = Math.min(1.2, (box.h * 0.86) / total); total = measure(ctx, B, s); }
+    for (let i = 0; i < 12 && total > box.h; i++) { s *= Math.max(0.8, (box.h / total) * 0.99); total = measure(ctx, B, s); }
+    let y = box.y + Math.max(0, (box.h - total) / 2);
+    const cx = box.x + box.w / 2;
+    ctx.textAlign = 'center'; ctx.textBaseline = 'middle';
+    B.forEach((b) => {
+      if (b.kind === 'div') {
+        divider(ctx, divStyle, cx, y + b._h / 2, (b.small ? 220 : 420) * s, d.line);
+      } else if (b.kind === 'cols') {
+        font(ctx, b.spec, b.size * s); ctx.fillStyle = b.color;
+        const rtl = HE.test(b.a + b.b);
+        const qx = b.maxW / 4;
+        const ax = rtl ? cx + qx : cx - qx, bx = rtl ? cx - qx : cx + qx;
+        b._a.forEach((l, i) => { ctx.direction = dirOf(l); ctx.fillText(l, ax, y + b._lh * (i + 0.5)); });
+        b._b.forEach((l, i) => { ctx.direction = dirOf(l); ctx.fillText(l, bx, y + b._lh * (i + 0.5)); });
+        ctx.save(); ctx.strokeStyle = d.line; ctx.globalAlpha = 0.6; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(cx, y + 6); ctx.lineTo(cx, y + b._h - 6); ctx.stroke(); ctx.restore();
+      } else {
+        font(ctx, b.weight ? [b.spec[0], Math.max(b.spec[1], b.weight)] : b.spec, b._fs, b.italic);
+        ctx.fillStyle = b.color;
+        if ('letterSpacing' in ctx) ctx.letterSpacing = b.track ? Math.round(b.track * s) + 'px' : '0px';
+        b._lines.forEach((l, i) => { ctx.direction = dirOf(l); ctx.fillText(l, cx, y + b._lh * (i + 0.5)); });
+        if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
+      }
+      y += b._h + b.gap * s;
+    });
+  }
+
+  function paint(ctx, data) {
+    const d = designById(data.d);
+    ctx.save();
+    const box = FRAMES[d.frame](ctx, d);
+    ctx.restore();
+    // בס״ד
+    ctx.save(); font(ctx, d.by, 34); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+    ctx.fillText('בס״ד', box.bsd[0], box.bsd[1]); ctx.restore();
+    ctx.save();
+    drawBlocks(ctx, buildBlocks(data, d, box), d, box, box.div);
+    ctx.restore();
+  }
+
+  // Renders the card into `canvas` at `scale` (1 = 1500×2100). Resolves when drawn.
+  async function render(canvas, data, scale) {
+    const d = designById(data.d);
+    await ensureFonts(d);
+    scale = scale || 1;
+    canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);
+    const ctx = canvas.getContext('2d');
+    ctx.setTransform(scale, 0, 0, scale, 0, 0);
+    ctx.clearRect(0, 0, W, H);
+    paint(ctx, data);
+    return canvas;
+  }
+
+  // ---------------------------------------------------------------- link encoding
+  const KEYS = ['t', 'd', 'l', 'p', 's', 'm', 'h1', 'h2', 'dt', 'hd', 'pr', 'tm', 'v', 'a', 'n', 'r', 'w', 'ti'];
+  function clean(data) {
+    const out = {};
+    KEYS.forEach((k) => { const v = data[k]; if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.join(''))) return; out[k] = typeof v === 'string' ? v.slice(0, 600) : v; });
+    return out;
+  }
+  function b64url(bytes) {
+    let bin = ''; for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode.apply(null, bytes.subarray(i, i + 0x8000));
+    return btoa(bin).replace(/\+/g, '-').replace(/\//g, '_').replace(/=+$/, '');
+  }
+  function unb64url(s) {
+    s = s.replace(/-/g, '+').replace(/_/g, '/'); while (s.length % 4) s += '=';
+    const bin = atob(s); const out = new Uint8Array(bin.length); for (let i = 0; i < bin.length; i++) out[i] = bin.charCodeAt(i); return out;
+  }
+  async function streamBytes(bytes, Stream, fmt) {
+    const res = new Response(new Blob([bytes]).stream().pipeThrough(new Stream(fmt)));
+    return new Uint8Array(await res.arrayBuffer());
+  }
+  async function encode(data) {
+    const json = new TextEncoder().encode(JSON.stringify(clean(data)));
+    if (typeof CompressionStream !== 'undefined') {
+      try { return 'z' + b64url(await streamBytes(json, CompressionStream, 'deflate-raw')); } catch (_) {}
+    }
+    return 'u' + b64url(json);
+  }
+  async function decode(token) {
+    if (!token) return null;
+    const kind = token[0], body = token.slice(1);
+    let bytes = unb64url(body);
+    if (kind === 'z') bytes = await streamBytes(bytes, DecompressionStream, 'deflate-raw');
+    else if (kind !== 'u') return null;
+    const obj = JSON.parse(new TextDecoder().decode(bytes));
+    return obj && typeof obj === 'object' ? clean(obj) : null;
+  }
+  function viewUrl(token) { return new URL('invite.html#i=' + token, location.href).href; }
+
+  // ---------------------------------------------------------------- exports
+  function canvasBlob(canvas, type, q) { return new Promise((res) => canvas.toBlob(res, type, q)); }
+
+  function fileBase(data) {
+    const label = (TYPES[data.t] || TYPES.general).label.en.replace(/[^A-Za-z0-9]+/g, '-');
+    const names = [data.p, data.s].filter(Boolean).join(' ').replace(/[^A-Za-z0-9\s-]/g, '').trim().replace(/\s+/g, '-');
+    return ['Kasho-Invitation', label, names].filter(Boolean).join('-').replace(/-+/g, '-').replace(/-$/, '');
+  }
+
+  function saveBlob(blob, name) {
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a'); a.href = url; a.download = name; a.rel = 'noopener';
+    document.body.appendChild(a); a.click(); a.remove();
+    setTimeout(() => URL.revokeObjectURL(url), 30000);
+  }
+
+  async function fullCanvas(data) { return render(document.createElement('canvas'), data, 1); }
+
+  async function pngBlob(data) { return canvasBlob(await fullCanvas(data), 'image/png'); }
+
+  // A one-page 5×7 in PDF holding the card as a JPEG — written by hand, no library needed.
+  async function pdfBlob(data) {
+    const canvas = await fullCanvas(data);
+    const jpg = new Uint8Array(await (await canvasBlob(canvas, 'image/jpeg', 0.95)).arrayBuffer());
+    const enc = new TextEncoder();
+    const parts = []; const offsets = []; let len = 0;
+    const push = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); len += b.length; };
+    const obj = (n, body) => { offsets[n] = len; push(n + ' 0 obj\n'); body(); push('\nendobj\n'); };
+    const content = 'q 360 0 0 504 0 0 cm /Im0 Do Q';
+    push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
+    obj(1, () => push('<< /Type /Catalog /Pages 2 0 R >>'));
+    obj(2, () => push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>'));
+    obj(3, () => push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 360 504] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>'));
+    obj(4, () => { push('<< /Type /XObject /Subtype /Image /Width ' + canvas.width + ' /Height ' + canvas.height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n'); push(jpg); push('\nendstream'); });
+    obj(5, () => push('<< /Length ' + content.length + ' >>\nstream\n' + content + '\nendstream'));
+    const xref = len;
+    let x = 'xref\n0 6\n0000000000 65535 f \n';
+    for (let i = 1; i <= 5; i++) x += String(offsets[i]).padStart(10, '0') + ' 00000 n \n';
+    push(x + 'trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
+    return new Blob(parts, { type: 'application/pdf' });
+  }
+
+  async function printCard(data) {
+    const canvas = await fullCanvas(data);
+    let holder = document.getElementById('invitePrint');
+    if (!holder) { holder = document.createElement('div'); holder.id = 'invitePrint'; holder.className = 'invite-print'; document.body.appendChild(holder); }
+    holder.innerHTML = '';
+    const img = new Image(); img.alt = ''; img.src = canvas.toDataURL('image/png');
+    holder.appendChild(img);
+    await (img.decode ? img.decode().catch(() => null) : null);
+    document.body.classList.add('printing-invite');
+    const done = () => { document.body.classList.remove('printing-invite'); window.removeEventListener('afterprint', done); };
+    window.addEventListener('afterprint', done);
+    window.print();
+    setTimeout(done, 1500);
+  }
+
+  // ---- calendar
+  function nyOffset(ms) {
+    const p = {};
+    new Intl.DateTimeFormat('en-US', { timeZone: 'America/New_York', hourCycle: 'h23', year: 'numeric', month: 'numeric', day: 'numeric', hour: 'numeric', minute: 'numeric' })
+      .formatToParts(new Date(ms)).forEach((x) => { p[x.type] = x.value; });
+    return Date.UTC(+p.year, +p.month - 1, +p.day, +p.hour % 24, +p.minute) - ms;
+  }
+  function eventTimes(data) {
+    const g = parseISO(data.dt); if (!g) return null;
+    const t = /^(\d{1,2}):(\d{2})$/.exec(data.tm || '');
+    if (!t) return { allDay: true, g };
+    const wall = Date.UTC(g.y, g.m - 1, g.d, +t[1], +t[2]);
+    let utc = wall - nyOffset(wall); utc = wall - nyOffset(utc);
+    const hours = (TYPES[data.t] || TYPES.general).hours || 3;
+    return { allDay: false, start: new Date(utc), end: new Date(utc + hours * 3600000), g };
+  }
+  const icsStamp = (d) => d.toISOString().replace(/[-:]/g, '').replace(/\.\d{3}/, '');
+  const ymd = (g, add) => { const d = new Date(Date.UTC(g.y, g.m - 1, g.d + (add || 0))); return d.toISOString().slice(0, 10).replace(/-/g, ''); };
+  function summary(data) {
+    const names = [data.p, words(data).type.two ? data.s : ''].filter(Boolean).join(data.l === 'en' ? ' & ' : ' ו');
+    return titleText(data) + (names ? ' · ' + names : '');
+  }
+  function place(data) { return [data.v, data.a].filter(Boolean).join(', '); }
+  function icsEscape(s) { return String(s || '').replace(/\\/g, '\\\\').replace(/\n/g, '\\n').replace(/([,;])/g, '\\$1'); }
+  function icsFold(line) {
+    const out = []; let cur = ''; let bytes = 0; const enc = new TextEncoder();
+    for (const ch of line) { const b = enc.encode(ch).length; if (bytes + b > 73) { out.push(cur); cur = ' '; bytes = 1; } cur += ch; bytes += b; }
+    out.push(cur); return out.join('\r\n');
+  }
+  function icsText(data, link) {
+    const t = eventTimes(data); if (!t) return null;
+    const lines = ['BEGIN:VCALENDAR', 'VERSION:2.0', 'PRODID:-//Kasho Community//Simcha Invitations//EN', 'CALSCALE:GREGORIAN', 'METHOD:PUBLISH', 'BEGIN:VEVENT',
+      'UID:' + Date.now().toString(36) + Math.random().toString(36).slice(2, 8) + '@kasho-invitations', 'DTSTAMP:' + icsStamp(new Date())];
+    if (t.allDay) { lines.push('DTSTART;VALUE=DATE:' + ymd(t.g), 'DTEND;VALUE=DATE:' + ymd(t.g, 1)); }
+    else { lines.push('DTSTART:' + icsStamp(t.start), 'DTEND:' + icsStamp(t.end)); }
+    lines.push('SUMMARY:' + icsEscape(summary(data)));
+    if (place(data)) lines.push('LOCATION:' + icsEscape(place(data)));
+    const desc = [data.hd || (hebrewParts(data.dt) || {})[data.l === 'en' ? 'en' : 'yi'], data.n, link].filter(Boolean).join('\n');
+    if (desc) lines.push('DESCRIPTION:' + icsEscape(desc));
+    if (link) lines.push('URL:' + link);
+    lines.push('END:VEVENT', 'END:VCALENDAR');
+    return lines.map(icsFold).join('\r\n') + '\r\n';
+  }
+  function googleCalUrl(data, link) {
+    const t = eventTimes(data); if (!t) return '';
+    const dates = t.allDay ? ymd(t.g) + '/' + ymd(t.g, 1) : icsStamp(t.start) + '/' + icsStamp(t.end);
+    const q = new URLSearchParams({ action: 'TEMPLATE', text: summary(data), dates, details: [data.n, link].filter(Boolean).join('\n'), location: place(data) });
+    return 'https://calendar.google.com/calendar/render?' + q.toString();
+  }
+  function mapsUrl(data) { const q = place(data); return q ? 'https://www.google.com/maps/search/?api=1&query=' + encodeURIComponent(q) : ''; }
+  function wazeUrl(data) { const q = data.a || data.v; return q ? 'https://waze.com/ul?navigate=yes&q=' + encodeURIComponent(q) : ''; }
+  function phoneDigits(p) { let d = String(p || '').replace(/\D/g, ''); if (d.length === 10) d = '1' + d; return d.length >= 11 ? d : ''; }
+  function shareText(data, link) {
+    const yi = data.l !== 'en';
+    const when = [dayLine(data, data.l === 'en' ? 'en' : 'yi'), data.hd || (hebrewParts(data.dt) || {})[yi ? 'yi' : 'en'], timeLabel(data.tm, yi ? 'yi' : 'en')].filter(Boolean).join(' · ');
+    const head = yi ? 'איר זענט הערצליך איינגעלאדן! ' : 'You’re invited! ';
+    return head + summary(data) + (when ? '\n' + when : '') + (place(data) ? '\n' + place(data) : '') + '\n\n' + (yi ? 'די הזמנה: ' : 'Invitation: ') + link;
+  }
+  function rsvpUrl(data) {
+    const digits = phoneDigits(data.r); if (!digits) return '';
+    const yi = data.l !== 'en';
+    const msg = (yi ? 'מזל טוב! איך בין מקבל די הזמנה צו ' : 'Mazel tov! Replying to your invitation for ') + summary(data) + (yi ? ' — אי״ה וועלן מיר קומען.' : ' — we hope to be there, b’ezras Hashem.');
+    return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(msg);
+  }
+
+  // ---------------------------------------------------------------- shared UI bits
+  const $ = (sel, root) => (root || document).querySelector(sel);
+  const $$ = (sel, root) => Array.from((root || document).querySelectorAll(sel));
+  const siteLang = () => (document.documentElement.lang === 'yi' ? 'yi' : 'en');
+  function both(el, en, yi) {
+    if (!el) return;
+    el.innerHTML = '';
+    const a = document.createElement('span'); a.dataset.lang = 'en'; a.textContent = en;
+    const b = document.createElement('span'); b.dataset.lang = 'yi'; b.textContent = yi;
+    a.hidden = siteLang() !== 'en'; b.hidden = siteLang() !== 'yi';
+    el.append(a, b);
+  }
+  function flash(el, en, yi) {
+    if (!el) return;
+    both(el, en, yi); el.classList.add('show');
+    clearTimeout(el._t); el._t = setTimeout(() => el.classList.remove('show'), 2600);
+  }
+  async function copyText(text) {
+    try { await navigator.clipboard.writeText(text); return true; } catch (_) {}
+    const ta = document.createElement('textarea'); ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
+    ta.remove(); return ok;
+  }
+  function todayISO(addDays, weekdayWanted) {
+    const d = new Date(); d.setDate(d.getDate() + (addDays || 0));
+    if (weekdayWanted !== undefined) while (d.getDay() !== weekdayWanted) d.setDate(d.getDate() + 1);
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  }
+
+  // Sample wording for the gallery thumbnails only (placeholders, not real people).
+  function sample(design, lang) {
+    const yi = lang === 'yi';
+    const base = { d: design.id, t: design.type, l: lang, dt: todayISO(21, 2), tm: '19:30',
+      v: yi ? 'אולם השמחות' : 'The Simcha Hall', a: yi ? 'שם האולם און אדרעס' : 'Hall address' };
+    const S = {
+      chasuna: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', s: yi ? 'חיה מרים' : 'Chaya Miriam', h1: yi ? 'ר׳ יעקב כהן' : 'Mr. & Mrs. Yaakov Cohen', h2: yi ? 'ר׳ דוד לוי' : 'Mr. & Mrs. Dovid Levy' },
+      vort: { p: yi ? 'משה אהרן' : 'Moshe Aharon', s: yi ? 'רחל לאה' : 'Rochel Leah', h1: yi ? 'ר׳ יצחק גרין' : 'Mr. & Mrs. Yitzchok Green', h2: yi ? 'ר׳ שלמה ווייס' : 'Mr. & Mrs. Shlomo Weiss' },
+      barmitzvah: { p: yi ? 'מנחם מענדל' : 'Menachem Mendel', h1: yi ? 'ר׳ אברהם שווארץ' : 'Mr. & Mrs. Avrohom Schwartz' },
+      bris: { h1: yi ? 'ר׳ יוסף קליין' : 'Mr. & Mrs. Yosef Klein', tm: '08:30' },
+      kiddush: { h1: yi ? 'ר׳ חיים בערגער' : 'Mr. & Mrs. Chaim Berger', tm: '11:30' },
+      upsherin: { p: yi ? 'יואל' : 'Yoel', h1: yi ? 'ר׳ משה פריעד' : 'Mr. & Mrs. Moshe Fried', tm: '17:00' },
+      shevabrachos: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', s: yi ? 'חיה מרים' : 'Chaya Miriam', h1: yi ? 'משפחת רוזנבערג' : 'The Rosenberg Family' },
+      siyum: { m: yi ? 'ברכות' : 'Brachos', p: yi ? 'ר׳ נפתלי הערץ' : 'Reb Naftali Hertz', h1: yi ? 'משפחת דייטש' : 'The Deutsch Family', tm: '20:00' },
+      general: { h1: yi ? 'משפחת פרידמאן' : 'The Friedman Family' }
+    };
+    return Object.assign(base, S[design.type] || {});
+  }
+
+  // ---------------------------------------------------------------- editor page
+  const DRAFT = 'kasho-invite-draft-v1';
+  function initEditor() {
+    const root = $('#invEditor'); if (!root) return;
+    const canvas = $('#invCanvas'); const status = $('#invStatus');
+    let state = null;
+    try { state = JSON.parse(localStorage.getItem(DRAFT) || 'null'); } catch (_) {}
+    const fromSample = (d, t, l) => Object.assign(sample({ id: d, type: t }, l), { ps: 1, sm: 1 });
+    if (!state || typeof state !== 'object') state = fromSample('royal', 'chasuna', 'yi');
+    if (state.ps === undefined) state.ps = 1;
+    // While the form still holds the sample wording, switching design/simcha/language swaps in matching samples.
+    const reSample = () => { if (state.sm) state = fromSample(state.d, state.t, state.l === 'en' ? 'en' : 'yi'); };
+
+    const m = /^#make=([a-z]+)(?:&t=([a-z]+))?/.exec(location.hash);
+    if (m) { const d = designById(m[1]); state.d = d.id; state.t = (m[2] && TYPES[m[2]]) ? m[2] : d.type; reSample(); }
+
+    // gallery
+    const gallery = $('#invGallery'); let sampleLang = 'yi';
+    async function drawGallery() {
+      if (!gallery) return;
+      for (const d of DESIGNS) {
+        const cv = gallery.querySelector('canvas[data-design="' + d.id + '"]');
+        if (cv) await render(cv, sample(d, sampleLang), 0.24);
+      }
+    }
+    if (gallery) {
+      gallery.innerHTML = '';
+      DESIGNS.forEach((d) => {
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-tile'; b.dataset.design = d.id; b.dataset.type = d.type;
+        const cv = document.createElement('canvas'); cv.dataset.design = d.id; cv.width = 360; cv.height = 504; cv.setAttribute('aria-hidden', 'true');
+        const cap = document.createElement('span'); cap.className = 'inv-tile-cap';
+        const ty = document.createElement('span'); ty.className = 'inv-tile-type'; both(ty, TYPES[d.type].label.en, TYPES[d.type].label.yi);
+        const nm = document.createElement('span'); nm.className = 'inv-tile-name'; both(nm, d.name.en, d.name.yi);
+        const go = document.createElement('span'); go.className = 'inv-tile-go'; both(go, 'Use this design →', 'נעמט די דיזיין ←');
+        cap.append(ty, nm, go); b.append(cv, cap);
+        b.addEventListener('click', () => {
+          state.d = d.id; state.t = d.type; if (state.sm) { state.l = sampleLang; reSample(); } syncForm(); update(); parsha();
+          history.replaceState(null, '', '#make=' + d.id);
+          $('#invEditorTop').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          setTimeout(() => { const f = $('#fP'); if (f && !f.closest('[hidden]')) f.focus({ preventScroll: true }); }, 500);
+        });
+        gallery.appendChild(b);
+      });
+      drawGallery();
+      $$('[data-sample-lang]').forEach((btn) => btn.addEventListener('click', () => {
+        sampleLang = btn.dataset.sampleLang;
+        $$('[data-sample-lang]').forEach((x) => x.setAttribute('aria-pressed', String(x === btn)));
+        drawGallery();
+      }));
+      $$('[data-filter]').forEach((chip) => chip.addEventListener('click', () => {
+        const f = chip.dataset.filter;
+        $$('[data-filter]').forEach((x) => x.setAttribute('aria-pressed', String(x === chip)));
+        $$('.inv-tile', gallery).forEach((tile) => { tile.hidden = f !== 'all' && tile.dataset.type !== f; });
+      }));
+    }
+
+    // design swatches + type select
+    const sw = $('#invSwatches');
+    DESIGNS.forEach((d) => {
+      const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-swatch'; b.dataset.design = d.id;
+      b.style.setProperty('--sw-a', d.bg[0]); b.style.setProperty('--sw-b', d.line);
+      b.setAttribute('aria-label', d.name.en); b.title = d.name.en;
+      b.addEventListener('click', () => { state.d = d.id; syncForm(); update(); });
+      sw.appendChild(b);
+    });
+    const typeSel = $('#fType');
+    Object.keys(TYPES).forEach((k) => {
+      const o = document.createElement('option'); o.value = k; o.textContent = TYPES[k].label.en + ' · ' + TYPES[k].label.yi; typeSel.appendChild(o);
+    });
+
+    const FIELDS = { fP: 'p', fS: 's', fM: 'm', fH1: 'h1', fH2: 'h2', fDate: 'dt', fHd: 'hd', fTime: 'tm', fVenue: 'v', fAddr: 'a', fNote: 'n', fRsvp: 'r', fTitle: 'ti', fWording: 'w' };
+
+    function syncForm() {
+      const type = TYPES[state.t] || TYPES.general; const { w } = words(state);
+      typeSel.value = state.t;
+      $$('.inv-swatch', sw).forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.design === state.d)));
+      const dn = designById(state.d).name; both($('#invDesignName'), dn.en, dn.yi);
+      $$('[name="cardLang"]').forEach((r) => { r.checked = r.value === state.l; });
+      Object.keys(FIELDS).forEach((id) => { const el = document.getElementById(id); if (el && document.activeElement !== el) el.value = state[FIELDS[id]] || ''; });
+      $('#fParsha').checked = !!state.ps;
+      const lab = (id, f) => { const l = $('label[for="' + id + '"] .lbl'); if (l && f) both(l, f.en, f.yi); };
+      lab('fP', type.fields.p); lab('fS', type.fields.s); lab('fH1', type.fields.h1); lab('fH2', type.fields.h2);
+      $('#rowS').hidden = !type.two; $('#rowH2').hidden = !type.hosts2; $('#rowM').hidden = !type.masechta;
+      $('#fTitle').placeholder = w.title; $('#fWording').placeholder = w.invite;
+      const isYi = state.l !== 'en';
+      ['fP', 'fS', 'fM', 'fH1', 'fH2', 'fVenue', 'fNote', 'fTitle', 'fWording', 'fHd'].forEach((id) => { const el = document.getElementById(id); if (el) el.dir = 'auto'; });
+      root.dataset.cardLang = isYi ? 'yi' : 'en';
+      $('#invSampleNote').hidden = !state.sm;
+      hebHint();
+    }
+
+    function hebHint() {
+      const hp = hebrewParts(state.dt);
+      const hint = $('#hdAuto');
+      if (hp) { both(hint, 'Hebrew date: ' + hp.en + ' · ' + hp.yi, 'עברי׳שע דאטום: ' + hp.yi); $('#fHd').placeholder = state.l === 'en' ? hp.en : hp.yi; }
+      else { both(hint, 'Pick the date and the Hebrew date fills in by itself.', 'קלויבט א דאטום, דער אידישער דאטום ווערט אויסגעפילט אליין.'); $('#fHd').placeholder = ''; }
+    }
+
+    let timer = null, drawing = false, again = false;
+    async function draw() {
+      if (drawing) { again = true; return; }
+      drawing = true;
+      try { await render(canvas, state, 0.5); } finally { drawing = false; }
+      if (again) { again = false; draw(); }
+    }
+    let lastToken = '';
+    async function refreshLink() {
+      lastToken = await encode(state);
+      const link = viewUrl(lastToken);
+      $('#invLink').value = link;
+      $('#btnOpen').href = link;
+      return link;
+    }
+    function save() { try { localStorage.setItem(DRAFT, JSON.stringify(state)); } catch (_) {} }
+    function update() {
+      clearTimeout(timer);
+      timer = setTimeout(() => { draw(); refreshLink(); save(); }, 90);
+    }
+    async function parsha() {
+      if (!state.ps || !state.dt) { if (state.pr) { delete state.pr; update(); } return; }
+      const want = state.dt; const p = await fetchParsha(want);
+      if (state.dt !== want) return;
+      if (p) state.pr = [p.yi, p.en]; else delete state.pr;
+      update();
+    }
+
+    root.addEventListener('input', (e) => {
+      const id = e.target.id;
+      if (FIELDS[id]) { state[FIELDS[id]] = e.target.value; if (state.sm) { state.sm = 0; syncForm(); } if (id === 'fDate') { hebHint(); parsha(); } update(); }
+    });
+    root.addEventListener('change', (e) => {
+      if (e.target.id === 'fType') { state.t = e.target.value; reSample(); syncForm(); update(); parsha(); }
+      if (e.target.name === 'cardLang') { state.l = e.target.value; reSample(); syncForm(); update(); parsha(); }
+      if (e.target.id === 'fParsha') { state.ps = e.target.checked ? 1 : 0; parsha(); }
+      if (e.target.id === 'fDate') { hebHint(); parsha(); }
+    });
+    $('#btnResetWording').addEventListener('click', () => { state.w = ''; state.ti = ''; syncForm(); update(); });
+    $('#btnClear').addEventListener('click', () => {
+      const keep = { d: state.d, t: state.t, l: state.l, ps: state.ps, sm: 0 };
+      state = keep; syncForm(); update();
+      flash(status, 'Cleared — start fresh.', 'אויסגעמעקט.');
+    });
+
+    const busy = async (btn, fn) => { btn.disabled = true; try { await fn(); } catch (err) { console.warn(err); flash(status, 'Something went wrong — please try again.', 'עפעס האט נישט געארבעט, פרובירט נאכאמאל.'); } finally { btn.disabled = false; } };
+    $('#btnPng').addEventListener('click', (e) => busy(e.currentTarget, async () => { saveBlob(await pngBlob(state), fileBase(state) + '.png'); flash(status, 'Image downloaded.', 'די בילד איז אראפגעלאדן.'); }));
+    $('#btnPdf').addEventListener('click', (e) => busy(e.currentTarget, async () => { saveBlob(await pdfBlob(state), fileBase(state) + '.pdf'); flash(status, 'PDF downloaded.', 'דער PDF איז אראפגעלאדן.'); }));
+    $('#btnPrint').addEventListener('click', (e) => busy(e.currentTarget, () => printCard(state)));
+    $('#btnCopy').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+      const link = await refreshLink();
+      const ok = await copyText(link);
+      if (ok) flash(status, 'Link copied — paste it anywhere.', 'דער לינק איז קאפירט.'); else { $('#invLink').select(); flash(status, 'Select the link and copy it.', 'קאפירט דעם לינק.'); }
+    }));
+    $('#btnWa').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+      const link = await refreshLink();
+      window.open('https://wa.me/?text=' + encodeURIComponent(shareText(state, link)), '_blank', 'noopener');
+    }));
+    const shareBtn = $('#btnShareImg');
+    if (navigator.canShare && navigator.share) {
+      try { if (navigator.canShare({ files: [new File([new Blob(['x'])], 'x.png', { type: 'image/png' })] })) shareBtn.hidden = false; } catch (_) {}
+    }
+    shareBtn.addEventListener('click', (e) => busy(e.currentTarget, async () => {
+      const link = await refreshLink();
+      const file = new File([await pngBlob(state)], fileBase(state) + '.png', { type: 'image/png' });
+      try { await navigator.share({ files: [file], text: shareText(state, link) }); } catch (err) { if (err && err.name !== 'AbortError') throw err; }
+    }));
+    $('#invLink').addEventListener('focus', (e) => e.target.select());
+
+    // Phone: a floating "preview & share" button while the form is on screen and the card is not.
+    const jump = $('#invJump');
+    if (jump && 'IntersectionObserver' in window) {
+      let formIn = false, prevIn = false;
+      const set = () => { jump.hidden = !(formIn && !prevIn); };
+      new IntersectionObserver((es) => { es.forEach((e) => { if (e.target.id === 'invPreview') prevIn = e.isIntersecting; else formIn = e.isIntersecting; }); set(); }, { threshold: 0.05 })
+        .observe($('.inv-form')) ;
+      new IntersectionObserver((es) => { prevIn = es[0].isIntersecting; set(); }, { threshold: 0.15 }).observe($('#invPreview'));
+    }
+
+    if (!state.dt) state.dt = '';
+    syncForm(); draw(); refreshLink(); if (state.dt && state.ps && !state.pr) parsha();
+    document.addEventListener('site-language-change', () => { syncForm(); });
+    window.addEventListener('hashchange', () => {
+      const mm = /^#make=([a-z]+)/.exec(location.hash);
+      if (mm) { const d = designById(mm[1]); state.d = d.id; state.t = d.type; reSample(); syncForm(); update(); }
+    });
+  }
+
+  // ---------------------------------------------------------------- shared invitation view
+  async function initView() {
+    const root = $('#invView'); if (!root) return;
+    const m = /[#&]i=([A-Za-z0-9_-]+)/.exec(location.hash);
+    let data = null;
+    try { data = m ? await decode(m[1]) : null; } catch (_) { data = null; }
+    if (!data || !data.d) { $('#viewEmpty').hidden = false; $('#viewLoading').hidden = true; return; }
+    if (!TYPES[data.t]) data.t = 'general';
+    if (!SAVED_LANG && data.l !== 'en' && siteLang() !== 'yi' && window.toggleLang) window.toggleLang();
+
+    const canvas = $('#viewCanvas');
+    await render(canvas, data, 0.6);
+    $('#viewLoading').hidden = true; $('#viewMain').hidden = false;
+    requestAnimationFrame(() => root.classList.add('is-ready'));
+    canvas.setAttribute('aria-label', summary(data));
+    const link = location.href.split('#')[0] + '#i=' + m[1];
+    document.title = summary(data) + ' | Kasho';
+
+    const yiCard = data.l !== 'en';
+    $('#vTitle').textContent = summary(data); $('#vTitle').dir = 'auto';
+    const hp = hebrewParts(data.dt) || {};
+    const dateLine = [dayLine(data, yiCard ? 'yi' : 'en'), data.hd || hp[yiCard ? 'yi' : 'en']].filter(Boolean).join(' · ');
+    const setRow = (id, text, sub) => {
+      const row = document.getElementById(id); if (!row) return;
+      if (!text) { row.hidden = true; return; }
+      row.querySelector('.v-main').textContent = text; row.querySelector('.v-main').dir = 'auto';
+      const s = row.querySelector('.v-sub'); if (s) { s.textContent = sub || ''; s.dir = 'auto'; }
+    };
+    setRow('vDate', dateLine, data.dt ? civilLong(data.dt, yiCard ? 'yi' : 'en') : '');
+    setRow('vTime', timeLabel(data.tm, 'en'), '');
+    setRow('vPlace', data.v || data.a, data.v ? data.a : '');
+    setRow('vNote', data.n, '');
+
+    const t = eventTimes(data);
+    const cal = $('#vCal'), gcal = $('#vGcal');
+    if (t) {
+      gcal.href = googleCalUrl(data, link);
+      cal.addEventListener('click', () => { const ics = icsText(data, link); saveBlob(new Blob([ics], { type: 'text/calendar;charset=utf-8' }), fileBase(data) + '.ics'); });
+    } else { cal.hidden = true; gcal.hidden = true; }
+    const maps = mapsUrl(data), waze = wazeUrl(data);
+    if (maps) $('#vMaps').href = maps; else $('#vMaps').hidden = true;
+    if (waze) $('#vWaze').href = waze; else $('#vWaze').hidden = true;
+    const rs = rsvpUrl(data);
+    if (rs) { $('#vRsvp').href = rs; $('#vRsvp').hidden = false; }
+    $('#vPng').addEventListener('click', async (e) => { e.currentTarget.disabled = true; try { saveBlob(await pngBlob(data), fileBase(data) + '.png'); } finally { e.currentTarget.disabled = false; } });
+    $('#vShare').href = 'https://wa.me/?text=' + encodeURIComponent(shareText(data, link));
+    $('#vMake').href = 'invitations.html#make=' + designById(data.d).id + '&t=' + data.t;
+  }
+
+  window.KashoInvites = { TYPES, DESIGNS, render, encode, decode, hebrewParts, gematria, icsText, googleCalUrl, pdfBlob, pngBlob, sample, designById, viewUrl };
+
+  function start() { initEditor(); initView(); }
+  if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
+})();

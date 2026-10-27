@@ -741,3 +741,35 @@ html[lang="yi"] .contact-heading { letter-spacing: 0; text-transform: none; }
 .place-links .map-link { margin-top: 0; }
 @media (max-width: 680px) { .camp-feature { grid-template-columns: 1fr; gap: 12px; } }
 @media (max-width: 960px) { .page-layout.details-first .page-aside { order: 0; } }
+
+/* ---------- Simcha invitations: home banner, menu and footer links ---------- */
+.invite-promo .inv-kicker { margin: 0 0 6px; font-weight: 700; font-size: .82rem; letter-spacing: .08em; text-transform: uppercase; }
+html[lang="yi"] .invite-promo .inv-kicker { letter-spacing: 0; font-size: .95rem; }
+.invite-promo { padding: 8px 0 34px; }
+.invite-promo-card { position: relative; overflow: hidden; display: grid; grid-template-columns: minmax(0, 1.2fr) minmax(0, .8fr); align-items: center; gap: 24px;
+  padding: 34px 40px; border-radius: 20px; color: #fff;
+  background: radial-gradient(700px 300px at 90% 120%, rgba(184,149,95,.45), transparent 60%), linear-gradient(120deg, var(--navy) 0%, var(--navy-2) 65%, #1f4a57 100%); box-shadow: var(--shadow-md, 0 10px 30px rgba(20,30,45,.18)); }
+.invite-promo-card h2 { margin: 4px 0 8px; color: #fff; font-size: clamp(1.5rem, 1.1rem + 1.4vw, 2.2rem); }
+.invite-promo-card p { margin: 0 0 18px; color: rgba(255,255,255,.82); font-size: 1.05rem; max-width: 560px; }
+.invite-promo-card .inv-kicker { color: #e1c48f; }
+.invite-promo-card .button { margin: 0 0 8px; }
+.invite-promo-art { margin: -10px 0 -40px; justify-self: center; }
+.invite-promo-art img { display: block; width: min(380px, 100%); height: auto; filter: drop-shadow(0 18px 30px rgba(0,0,0,.35)); }
+.nav-invite > a { color: var(--gold) !important; font-weight: 700; }
+.footer-invite { display: inline-flex; margin-top: 10px; color: #e1c48f; font-weight: 600; }
+
+@media (max-width: 860px) {
+  .invite-promo-card { grid-template-columns: 1fr; padding: 26px 22px 0; text-align: start; }
+  .invite-promo-art { margin: 0 auto -6px; }
+  .invite-promo-art img { width: min(300px, 86%); }
+}
+
+/* Desktop header on narrower laptops (1100–1359px): keep the whole menu on one line. */
+@media (min-width: 1100px) and (max-width: 1359px) {
+  .mainbar-inner { gap: 14px; }
+  .nav-list > li > a, .nav-parent { padding: 9px 8px; font-size: 14.5px; }
+  html[lang="yi"] .nav-list > li > a, html[lang="yi"] .nav-parent { font-size: 15.5px; }
+}
+@media (min-width: 1100px) and (max-width: 1239px) {
+  .brand-text { display: none; }
+}
