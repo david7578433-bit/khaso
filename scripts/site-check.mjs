@@ -38,7 +38,7 @@ for (const file of htmlFiles) {
 
   for (const match of html.matchAll(/(?:href|src)=["']([^"'#?]+)(?:[?#][^"']*)?["']/g)) {
     const target = match[1];
-    if (/^(?:https?:|data:|mailto:|tel:|javascript:)/.test(target)) continue;
+    if (/^(?:https?:|\/\/|data:|mailto:|tel:|javascript:|sms:|about:)/.test(target)) continue;
     if (!fs.existsSync(path.resolve(root, target))) failures.push(`${file}: missing local file ${target}`);
   }
 }

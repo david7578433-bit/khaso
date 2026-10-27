@@ -1,0 +1,50 @@
+/* Standalone chrome for the public invitations maker (header, hero, footer). */
+:root { --sx-ivory: #fbf8f2; --sx-gold-line: linear-gradient(90deg, transparent, #c9a86a 20%, #e9cf95 50%, #c9a86a 80%, transparent); }
+body > header.sx-header { padding: 0; text-align: start; color: var(--ink); background: rgba(251, 248, 242, .95); }
+.sx-header { position: sticky; top: 0; z-index: 50; background: rgba(251, 248, 242, .95); -webkit-backdrop-filter: saturate(1.4) blur(10px); backdrop-filter: saturate(1.4) blur(10px); }
+.sx-header::after { content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 1px; background: var(--sx-gold-line); }
+.sx-header-inner { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 68px; }
+.sx-brand { display: inline-flex; align-items: center; gap: 12px; text-decoration: none; color: var(--navy); min-width: 0; }
+.sx-brand:hover .sx-brand-name { color: var(--navy-2); }
+.sx-mark { width: 42px; height: 42px; flex: 0 0 auto; }
+.sx-brand-text { display: flex; flex-direction: column; line-height: 1.1; min-width: 0; }
+.sx-brand-name { font-family: "Cormorant Garamond", var(--font-display); font-weight: 700; font-size: 1.42rem; letter-spacing: .02em; color: var(--navy); white-space: nowrap; }
+html[lang="yi"] .sx-brand-name { font-family: var(--font-display); font-weight: 700; font-size: 1.36rem; letter-spacing: 0; }
+.sx-brand-sub { font-family: var(--font-display); font-size: .86rem; color: var(--gold); margin-top: 3px; white-space: nowrap; }
+html[lang="yi"] .sx-brand-sub { font-family: "Cormorant Garamond", var(--font-display); font-size: .92rem; letter-spacing: .06em; font-weight: 500; }
+.sx-langs { display: flex; align-items: center; gap: 8px; }
+.sx-lang.lang-button { appearance: none; border: 1px solid #d9c49b; background: #fff; color: var(--navy); border-radius: 999px; padding: 8px 18px; font: 600 .95rem var(--font-body); cursor: pointer; box-shadow: 0 1px 2px rgba(27,45,62,.06); transition: background .15s, border-color .15s, box-shadow .15s; min-height: 40px; }
+.sx-lang.lang-button:hover { background: var(--gold-soft); border-color: var(--gold-2); }
+.sx-lang.lang-button:focus-visible, .sx-footer-lang:focus-visible, .sx-brand:focus-visible, .sx-credit a:focus-visible { outline: 3px solid var(--gold-2); outline-offset: 3px; }
+
+.sx-hero { text-align: center; padding: 40px 0 46px; }
+.sx-hero h1 { font-family: "Cormorant Garamond", var(--font-display); font-weight: 700; letter-spacing: .015em; font-size: clamp(2.1rem, 1.5rem + 2.6vw, 3.3rem); }
+html[lang="yi"] .sx-hero h1 { font-family: var(--font-display); letter-spacing: 0; }
+.sx-hero .page-sub { margin-left: auto; margin-right: auto; text-wrap: balance; }
+.sx-hero-orn { display: flex; align-items: center; justify-content: center; gap: 12px; margin: 0; color: #e9cf95; font-size: 15px; }
+.sx-hero-orn span { display: block; width: 64px; height: 1px; background: linear-gradient(90deg, transparent, #e9cf95); }
+.sx-hero-orn span:last-child { transform: scaleX(-1); }
+
+.sx-footer { margin-top: 0; background: var(--navy); color: rgba(255,255,255,.82); position: relative; }
+.sx-footer::before { content: ""; position: absolute; left: 0; right: 0; top: 0; height: 2px; background: var(--sx-gold-line); }
+.sx-footer-inner { display: flex; flex-direction: column; align-items: center; text-align: center; gap: 6px; padding: 34px 0 30px; }
+.sx-footer .sx-mark { width: 36px; height: 36px; margin-bottom: 4px; }
+.sx-footer-name { margin: 0; font-family: "Cormorant Garamond", var(--font-display); font-weight: 700; font-size: 1.3rem; color: #fff; letter-spacing: .02em; }
+html[lang="yi"] .sx-footer-name { font-family: var(--font-display); letter-spacing: 0; }
+.sx-credit { margin: 4px 0 0; font-size: 1rem; }
+.sx-credit a { color: #e9d6b4; text-decoration: none; border-bottom: 1px solid rgba(233,214,180,.35); padding-bottom: 1px; }
+.sx-credit a:hover { color: #fff; border-bottom-color: #fff; }
+.sx-heart { color: #e07a7a; }
+.sx-footer-small { margin: 6px 0 0; font-size: .85rem; color: rgba(255,255,255,.6); }
+.sx-footer-lang.link-button { background: none; border: 0; padding: 0; color: #e9d6b4; font: inherit; cursor: pointer; text-decoration: underline; text-underline-offset: 3px; }
+@media (max-width: 560px) {
+  .sx-header-inner { min-height: 60px; }
+  .sx-mark { width: 36px; height: 36px; }
+  .sx-brand-name { font-size: 1.22rem; }
+  html[lang="yi"] .sx-brand-name { font-size: 1.2rem; }
+  .sx-brand-sub { font-size: .8rem; }
+  .sx-lang.lang-button { padding: 7px 14px; font-size: .9rem; }
+  .sx-hero { padding: 26px 0 30px; }
+  .sx-hero-orn span { width: 44px; }
+}
+@media print { .sx-header, .sx-footer, .sx-hero { display: none !important; } }

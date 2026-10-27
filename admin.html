@@ -86,6 +86,7 @@
     #section-announcements,
     #section-all-members,
     #section-photos,
+    #section-community-designs,
     #section-messages,
     #section-submissions,
     #section-businesses,
@@ -135,6 +136,24 @@
     .admin-list-actions { display:flex; gap:7px; flex-wrap:wrap; }
     .form-grid { display:grid; grid-template-columns:1fr 1fr; gap:10px; }
     .form-grid .wide { grid-column:1 / -1; }
+    .cd-toolbar { display:flex; gap:10px; flex-wrap:wrap; align-items:center; margin:6px 0 10px; }
+    .cd-toolbar select { width:auto; margin:0; }
+    .cd-note { color:var(--muted); font-size:13px; margin:4px 0 8px; }
+    .cd-grid { display:grid; grid-template-columns:repeat(auto-fill,minmax(200px,1fr)); gap:14px; }
+    .cd-card { border:1px solid var(--border); border-radius:10px; padding:10px; display:flex; flex-direction:column; gap:6px; background:#fff; }
+    .cd-thumb { width:100%; aspect-ratio:5 / 7; object-fit:cover; border-radius:6px; background:#f4f7f8; display:block; }
+    .cd-thumb.cd-empty { display:flex; align-items:center; justify-content:center; color:var(--muted); font-size:12px; }
+    .cd-title { font-weight:700; margin:0; overflow-wrap:anywhere; }
+    .cd-meta { color:var(--muted); font-size:12.5px; margin:0; line-height:1.45; }
+    .cd-badge { display:inline-block; font-size:11.5px; font-weight:800; border-radius:999px; padding:2px 9px; }
+    .cd-badge.pending { background:#fff5dc; color:#8a5a00; }
+    .cd-badge.approved { background:#e3f6ee; color:#16704f; }
+    .cd-badge.rejected { background:#fde8e6; color:#a5281b; }
+    .cd-badge.live { background:#e6f0fb; color:#1f4f86; }
+    .cd-actions { display:flex; gap:6px; flex-wrap:wrap; margin-top:auto; }
+    .cd-actions button { padding:6px 10px; font-size:13px; }
+    .cd-actions .cd-reject { background:#b8402f; border-color:#b8402f; color:#fff; }
+    .cd-actions .cd-delete { background:#fff; color:#a5281b; border:1px solid #e3b5ae; }
     @media (max-width:900px) {
       main { padding-left:12px; padding-right:12px; }
       .admin-card { padding:14px; }
@@ -195,6 +214,7 @@
         <a href="#section-reports">Reports</a>
         <a href="#section-activity">Activity</a>
         <a href="#section-photos">Photos</a>
+        <a href="#section-community-designs">Community Designs</a>
         <a href="#section-messages">Messages</a>
         <a href="#section-submissions">Submissions</a>
         <a href="#section-businesses">Businesses</a>
@@ -378,6 +398,19 @@
       <h2>Pending Photos</h2>
       <div id="pendingPhotos"></div>
       </div>
+      <div class="section-item" id="section-community-designs">
+      <h2>Community Designs · <span lang="yi" dir="rtl">דיזיינס פון דער קהילה</span></h2>
+      <p class="cd-note" id="communityDesignsRule"></p>
+      <div class="cd-toolbar">
+        <label for="communityDesignsFilter" style="margin:0;">Show · <span lang="yi" dir="rtl">ווייז</span></label>
+        <select id="communityDesignsFilter">
+          <option value="pending">Waiting for review · ווארט אויף א קוק</option>
+          <option value="all">All recent · אלע לעצטע</option>
+        </select>
+        <button type="button" class="secondary" id="communityDesignsRefresh">Refresh · <span lang="yi" dir="rtl">דערפריש</span></button>
+      </div>
+      <div id="communityDesignsList"><p>Loading…</p></div>
+      </div>
       <div class="section-item" id="section-messages">
       <h2>Messages to Admin</h2>
       <div id="adminMessagesList" style="display:flex; flex-direction:column; gap:12px; margin-top:10px;"></div>
@@ -425,10 +458,12 @@
   </section></main>
 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script src="community-designs.js?v=20261027-cd1"></script>
   <script>
     const supabaseUrl = 'https://dzlxyglrefyzebjrlgtl.supabase.co';
     const supabaseKey = 'sb_publishable_Lz7HJgOFTKNAkjlQIhplFQ_4bIAZ3La';
     const supabaseClient = window.supabase.createClient(supabaseUrl, supabaseKey);
+    if (window.KashoCommunity) window.KashoCommunity.useClient(supabaseClient);
     let currentAnnouncementId = null;
     let currentAnnouncementId2 = null;
     let onlineRefreshTimer = null;
@@ -1280,6 +1315,161 @@
       await loadGalleryManage();
     });
 
+    // ---- Community Designs (Design Studio → public gallery; see community-designs.sql) ----
+    const CD_STATUS_LABEL = {
+      pending: 'Waiting · ווארט',
+      approved: 'Approved · באשטעטיגט',
+      rejected: 'Rejected · אפגעווארפן'
+    };
+
+    function cdDate(value) {
+      if (!value) return '—';
+      const date = new Date(value);
+      return isNaN(date) ? '—' : date.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' });
+    }
+
+    async function loadCommunityDesigns() {
+      const list = document.getElementById('communityDesignsList');
+      const rule = document.getElementById('communityDesignsRule');
+      const filter = document.getElementById('communityDesignsFilter');
+      if (!list) return;
+      const kc = window.KashoCommunity;
+      if (rule) {
+        rule.textContent = kc && kc.REQUIRE_APPROVAL
+          ? 'New designs go public only after you approve them. · נייע דיזיינס ווערן ארויסגעשטעלט נאר נאכן באשטעטיגן.'
+          : 'New designs go public by themselves 3 days after they are made, unless you reject them. · נייע דיזיינס ווערן ארויסגעשטעלט 3 טעג נאכדעם, סיידן איר ווארפט עס אפ.';
+      }
+      if (!kc) { list.innerHTML = '<p>Community designs could not load right now. · עס האט נישט געקענט לאדענען.</p>'; return; }
+      list.innerHTML = '<p>Loading…</p>';
+      const showAll = filter && filter.value === 'all';
+      let rows = [];
+      try { rows = await kc.pending({ all: showAll, limit: 120 }); } catch (_) { rows = []; }
+      if (kc.lastError === 'missing_table') {
+        list.innerHTML = '<p><strong>Run community-designs.sql in Supabase first.</strong> Then refresh this page.<br><span lang="yi" dir="rtl">לאזט לויפן community-designs.sql אין Supabase, און דערנאך דערפרישט די בלאט.</span></p>';
+        return;
+      }
+      if (kc.lastError) {
+        list.innerHTML = '<p>Community designs could not load right now. Try Refresh. · <span lang="yi" dir="rtl">עס האט נישט געקענט לאדענען, פרובירט נאכאמאל.</span></p>';
+        return;
+      }
+      if (!rows.length) {
+        list.innerHTML = showAll
+          ? '<p>No community designs yet. · <span lang="yi" dir="rtl">נאך קיין דיזיינס.</span></p>'
+          : '<p>Nothing waiting for review. · <span lang="yi" dir="rtl">גארנישט ווארט.</span></p>';
+        return;
+      }
+      const grid = document.createElement('div');
+      grid.className = 'cd-grid';
+      const now = Date.now();
+      rows.forEach((row) => {
+        const card = document.createElement('div');
+        card.className = 'cd-card';
+
+        if (row.thumb && /^data:image\//.test(row.thumb)) {
+          const img = document.createElement('img');
+          img.className = 'cd-thumb';
+          img.src = row.thumb;
+          img.alt = row.title || 'Community design';
+          img.loading = 'lazy';
+          card.appendChild(img);
+        } else {
+          const empty = document.createElement('div');
+          empty.className = 'cd-thumb cd-empty';
+          empty.textContent = 'No preview · קיין בילד';
+          card.appendChild(empty);
+        }
+
+        const title = document.createElement('p');
+        title.className = 'cd-title';
+        title.textContent = row.title || 'Untitled design';
+        card.appendChild(title);
+
+        const badges = document.createElement('div');
+        const badge = document.createElement('span');
+        badge.className = 'cd-badge ' + (row.status || 'pending');
+        badge.textContent = CD_STATUS_LABEL[row.status] || row.status || '';
+        badges.appendChild(badge);
+        const publishTime = new Date(row.publish_at).getTime();
+        const isLive = !isNaN(publishTime) && publishTime <= now &&
+          (kc.REQUIRE_APPROVAL ? row.status === 'approved' : row.status !== 'rejected');
+        if (isLive) {
+          const live = document.createElement('span');
+          live.className = 'cd-badge live';
+          live.style.marginLeft = '5px';
+          live.textContent = 'Public · עפנטלעך';
+          badges.appendChild(live);
+        }
+        card.appendChild(badges);
+
+        const meta = document.createElement('p');
+        meta.className = 'cd-meta';
+        const goesLive = (kc.REQUIRE_APPROVAL && row.status !== 'approved') || row.status === 'rejected'
+          ? 'not public' : (isLive ? 'public since ' : 'goes public ') + cdDate(row.publish_at);
+        meta.textContent = [
+          (row.simcha_type ? 'Simcha: ' + row.simcha_type : null),
+          (row.site === 'public' ? 'Public site' : 'Kasho site'),
+          'Made ' + cdDate(row.created_at),
+          goesLive
+        ].filter(Boolean).join(' · ');
+        card.appendChild(meta);
+
+        const actions = document.createElement('div');
+        actions.className = 'cd-actions';
+        const makeButton = (label, cls, handler) => {
+          const button = document.createElement('button');
+          button.type = 'button';
+          if (cls) button.className = cls;
+          button.textContent = label;
+          button.addEventListener('click', async () => {
+            const all = actions.querySelectorAll('button');
+            all.forEach((b) => { b.disabled = true; });
+            const ok = await handler();
+            if (ok === 'cancel') { all.forEach((b) => { b.disabled = false; }); return; }
+            if (!ok) {
+              all.forEach((b) => { b.disabled = false; });
+              setStatus('Could not update that design. Are you still logged in as an admin?', true);
+              return;
+            }
+            setStatus('Design updated.');
+            await loadCommunityDesigns();
+            try { await loadDashboard(); } catch (_) {}
+          });
+          actions.appendChild(button);
+        };
+        if (row.status !== 'approved') {
+          makeButton('Approve · באשטעטיגן', '', async () => {
+            const ok = await kc.setStatus(row.id, 'approved');
+            if (ok) { try { await logAdminAction('approve_design', 'community_design', row.id, {}); } catch (_) {} }
+            return ok;
+          });
+        }
+        if (row.status !== 'rejected') {
+          makeButton('Reject · אפווארפן', 'cd-reject', async () => {
+            const ok = await kc.setStatus(row.id, 'rejected');
+            if (ok) { try { await logAdminAction('reject_design', 'community_design', row.id, {}); } catch (_) {} }
+            return ok;
+          });
+        }
+        makeButton('Delete · אויסמעקן', 'cd-delete', async () => {
+          if (!confirm('Delete this design for good? · אויסמעקן אויף אייביג?')) return 'cancel';
+          const ok = await kc.remove(row.id);
+          if (ok) { try { await logAdminAction('delete_design', 'community_design', row.id, {}); } catch (_) {} }
+          return ok;
+        });
+        card.appendChild(actions);
+        grid.appendChild(card);
+      });
+      list.innerHTML = '';
+      list.appendChild(grid);
+    }
+
+    (function wireCommunityDesigns() {
+      const filter = document.getElementById('communityDesignsFilter');
+      const refresh = document.getElementById('communityDesignsRefresh');
+      if (filter) filter.addEventListener('change', () => { loadCommunityDesigns(); });
+      if (refresh) refresh.addEventListener('click', () => { loadCommunityDesigns(); });
+    })();
+
     async function logAdminAction(action, targetType, targetId, details) {
       const { data: { session } } = await supabaseClient.auth.getSession();
       if (!session) return;
@@ -1298,6 +1488,7 @@
         ['Pending Members', 'profiles', ['approved', false]],
         ['Messages', 'posts', null],
         ['Pending Photos', 'photo_uploads', ['status', 'pending']],
+        ['Pending Designs', 'community_designs', ['status', 'pending']],
         ['Submissions', 'submissions', ['approved', false]],
         ['Pending Businesses', 'businesses', ['approved', false]],
         ['Suggestions', 'suggestions', ['status', 'new']]
@@ -1539,6 +1730,7 @@
       await loadPendingMembers();
       await loadAllMembers();
       await loadPendingPhotos();
+      await loadCommunityDesigns();
       await loadAdminMessages();
       await loadSubmissions();
       await loadBusinesses();

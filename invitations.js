@@ -39,6 +39,27 @@
       fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
       hours: 2
     },
+    shalomzachor: {
+      label: { en: 'Shalom Zachor', yi: 'שלום זכר' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'שלום זכר', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בשמחת השלום זכר לרגל הולדת בננו היקר נ״י', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Shalom Zachor', invite: 'Please join us at the shalom zachor in honor of the birth of our dear son', p: '', hosts: 'With joy, the parents' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
+    vachnacht: {
+      label: { en: 'Vach Nacht', yi: 'וואך נאכט' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'וואך נאכט', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בשמחת הוואך נאכט בליל ערב הברית של בננו היקר נ״י', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Vach Nacht', invite: 'Please join us at the vach nacht, the night before the bris of our dear son', p: '', hosts: 'With joy, the parents' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
+    pidyonhaben: {
+      label: { en: 'Pidyon Haben', yi: 'פדיון הבן' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'פדיון הבן', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בסעודת מצוה לרגל פדיון הבן של בננו הבכור נ״י', p: '', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Pidyon Haben', invite: 'We invite you and your family to the seudas mitzvah of the pidyon haben of our firstborn son', p: '', hosts: 'With joy, the parents' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 2
+    },
     kiddush: {
       label: { en: 'Kiddush', yi: 'קידוש' },
       yi: { open: 'בשבח והודיה להשי״ת', title: 'קידוש', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לקידוש לכבוד הולדת בתנו תחי׳', p: '', hosts: 'ההורים המאושרים' },
@@ -217,6 +238,40 @@
     made.forEach((m) => DESIGNS.push(m.d));
   })();
   const FAMILY_NAMES = {}; FAMILIES.forEach((f) => { FAMILY_NAMES[f.frame] = f.name; });
+
+  // ---- photo scenes (Oct 2026): a styled still-life photograph with a blank card in it; the invitation text is set live on the card.
+  // r = the card's text area as fractions of the 5×7 picture [x, y, w, h]; o = 1 when the text sits on an open backdrop (wall, sky, arch).
+  const SCENE_PAL = {"navy":{"ink":"#22314f","title":"#9a7330","nm":"#1b2a48","muted":"#5f6474","line":"#b08d4a","bg":["#f4efe6","#e9e1d2"]},"burg":{"ink":"#3a1f24","title":"#9a7330","nm":"#5a1424","muted":"#76655d","line":"#a8843f","bg":["#f4ede4","#e8dccd"]},"green":{"ink":"#1f3a30","title":"#9a7330","nm":"#183a2c","muted":"#5c685f","line":"#a8843f","bg":["#f2efe6","#e3e0d2"]},"blue":{"ink":"#23406a","title":"#2c5288","nm":"#1d3b66","muted":"#5a6b85","line":"#7f9cc4","bg":["#eef3f9","#dde7f3"]},"rose":{"ink":"#4a2e36","title":"#a5675b","nm":"#5b2a3a","muted":"#83686d","line":"#c49a8a","bg":["#f8eeee","#efdfdf"]},"dark":{"ink":"#f1e6cf","title":"#e2c47c","nm":"#fbf1dc","muted":"#cdbd9b","line":"#d6b46a","bg":["#1d2333","#2b3247"]},"brown":{"ink":"#3b2a1a","title":"#9a7330","nm":"#4a2e14","muted":"#76695a","line":"#a8843f","bg":["#f2ebdf","#e6dac6"]},"plum":{"ink":"#3c3150","title":"#8a6a3a","nm":"#3a2a52","muted":"#6d6578","line":"#a8843f","bg":["#f2eee9","#e2dcd6"]}};
+  const SCENES = [{"k":"velvet","t":"chasuna","also":["vort","shevabrachos","general"],"c":"teal","p":"navy","f":"gold","fs":"classic","en":"Teal Velvet & Pearls","yi":"טערקיז סאמעט מיט פערל","o":0,"r":[0.171,0.155,0.658,0.667]},{"k":"navygold","t":"barmitzvah","also":["chasuna","vort","general"],"c":"navy","p":"dark","f":"lightgold","fs":"classic","en":"Royal Navy · Gold Frame","yi":"בלוי מיט גאלדענע ראם","o":1,"r":[0.225,0.074,0.667,0.688]},{"k":"sky","t":"bris","also":["vachnacht","shalomzachor","upsherin","pidyonhaben"],"c":"blue","p":"blue","f":"blue","fs":"bold","en":"Balloons in the Sky","yi":"באלאנען אין הימל","o":1,"r":[0.08,0.04,0.84,0.56]},{"k":"burgundy","t":"chasuna","also":["vort","shevabrachos","barmitzvah"],"c":"burgundy","p":"burg","f":"gold","fs":"classic","en":"Burgundy Velvet & Gold","yi":"בורגונדי סאמעט מיט גאלד","o":0,"r":[0.196,0.173,0.646,0.658]},{"k":"shalomzachor","t":"shalomzachor","also":["general"],"c":"cream","p":"brown","f":"gold","fs":"bold","en":"Shalom Zachor Table","yi":"שלום זכר טיש","o":0,"r":[0.167,0.208,0.667,0.589]},{"k":"marble","t":"chasuna","also":["vort","shevabrachos","general"],"c":"white","p":"navy","f":"gold","fs":"soft","en":"White Roses on Marble","yi":"ווייסע רויזן אויף מירמל","o":0,"r":[0.163,0.202,0.679,0.637]},{"k":"baroque","t":"barmitzvah","also":["chasuna","siyum","general"],"c":"navy","p":"brown","f":"gold","fs":"classic","en":"Gold Baroque Frame","yi":"גאלדענע באראקע ראם","o":1,"r":[0.146,0.191,0.708,0.598]},{"k":"vachnacht","t":"vachnacht","also":["bris","shalomzachor","upsherin"],"c":"blue","p":"blue","f":"blue","fs":"bold","en":"Teddy & Blue Blanket","yi":"בערל מיט בלויע דעקל","o":0,"r":[0.2,0.16,0.64,0.64]},{"k":"blush","t":"kiddush","also":["vort","chasuna","shevabrachos"],"c":"pink","p":"rose","f":"rose","fs":"soft","en":"Blush Silk & Roses","yi":"ראזע זייד מיט רויזן","o":0,"r":[0.15,0.164,0.692,0.67]},{"k":"barmitzvahblack","t":"barmitzvah","also":["siyum","general"],"c":"black","p":"dark","f":"lightgold","fs":"classic","en":"Black Velvet & Gold","yi":"שווארץ סאמעט מיט גאלד","o":0,"r":[0.167,0.164,0.667,0.661]},{"k":"frosted","t":"bris","also":["kiddush","vachnacht","pidyonhaben","general"],"c":"blue","p":"blue","f":"blue","fs":"soft","en":"Frosted Glass Arch","yi":"גלאז בויגן אין די וואלקנס","o":1,"r":[0.22,0.25,0.56,0.52]},{"k":"emerald","t":"chasuna","also":["general","siyum","chanukashabayis"],"c":"green","p":"green","f":"gold","fs":"classic","en":"Emerald Velvet","yi":"שמאראגד סאמעט","o":0,"r":[0.113,0.14,0.775,0.72]},{"k":"lace","t":"kiddush","also":["vort","chasuna","general"],"c":"cream","p":"green","f":"gold","fs":"soft","en":"Lace & Silk Bow","yi":"שפיץ מיט זייד","o":0,"r":[0.183,0.173,0.65,0.631]},{"k":"maroon","t":"barmitzvah","also":["chasuna","general"],"c":"burgundy","p":"dark","f":"lightgold","fs":"classic","en":"Maroon Columns","yi":"מארון מיט זיילן","o":1,"r":[0.2,0.07,0.6,0.66]},{"k":"kotel","t":"general","also":["siyum","barmitzvah","chanukashabayis","upsherin"],"c":"cream","p":"brown","f":"gold","fs":"scribe","en":"Jerusalem Stone Plaque","yi":"ירושלים שטיין טאוול","o":1,"r":[0.117,0.131,0.779,0.676]},{"k":"nursery","t":"vachnacht","also":["bris","shalomzachor"],"c":"blue","p":"blue","f":"blue","fs":"bold","en":"Nursery Corner","yi":"קינדער צימער","o":1,"r":[0.08,0.035,0.84,0.4]},{"k":"pidyon","t":"pidyonhaben","also":["bris","general"],"c":"navy","p":"navy","f":"silver","fs":"classic","en":"Silver Coins","yi":"זילבערנע מטבעות","o":0,"r":[0.146,0.176,0.708,0.655]},{"k":"navyrose","t":"chasuna","also":["vort","barmitzvah","general"],"c":"navy","p":"dark","f":"lightgold","fs":"classic","en":"Navy Card & White Rose","yi":"בלוי קארטל מיט ווייסע רויז","o":0,"r":[0.179,0.14,0.662,0.577]},{"k":"marblearch","t":"barmitzvah","also":["chasuna","siyum","general"],"c":"cream","p":"brown","f":"gold","fs":"classic","en":"Marble Arch","yi":"מירמל בויגן","o":1,"r":[0.25,0.28,0.5,0.5]},{"k":"kiddush","t":"kiddush","also":["general","shevabrachos"],"c":"white","p":"burg","f":"gold","fs":"soft","en":"Kiddush Wine & Roses","yi":"קידוש וויין מיט רויזן","o":0,"r":[0.208,0.188,0.588,0.592]},{"k":"icyarch","t":"chasuna","also":["vort","shevabrachos","bris"],"c":"blue","p":"navy","f":"silver","fs":"soft","en":"Icy Blue Arch & Candles","yi":"בלויער בויגן מיט ליכט","o":1,"r":[0.22,0.25,0.56,0.5]},{"k":"upsherin","t":"upsherin","also":["general"],"c":"white","p":"navy","f":"blue","fs":"bold","en":"Tzitzis & Yarmulka","yi":"ציצית מיט יארמלקע","o":0,"r":[0.171,0.158,0.654,0.628]},{"k":"keys","t":"chanukashabayis","also":["general"],"c":"white","p":"green","f":"gold","fs":"classic","en":"Keys & Olive Branch","yi":"שליסלען מיט אליוו צווייג","o":0,"r":[0.17,0.2,0.66,0.6]},{"k":"siyum","t":"siyum","also":["barmitzvah","general"],"c":"green","p":"green","f":"gold","fs":"scribe","en":"Stack of Seforim","yi":"ספרים","o":0,"r":[0.167,0.196,0.667,0.625]},{"k":"peony","t":"chasuna","also":["vort","shevabrachos","kiddush"],"c":"cream","p":"rose","f":"rose","fs":"soft","en":"Champagne Peonies","yi":"שאמפאן מיט בלומען","o":0,"r":[0.133,0.152,0.717,0.684]},{"k":"vort","t":"vort","also":["chasuna","shevabrachos"],"c":"black","p":"navy","f":"gold","fs":"classic","en":"Black Marble & Orchids","yi":"שווארצער מירמל מיט ארכידעען","o":0,"r":[0.221,0.179,0.608,0.619]},{"k":"navyseal","t":"chasuna","also":["vort","barmitzvah","general"],"c":"navy","p":"navy","f":"gold","fs":"classic","en":"Navy Linen & Gold Seal","yi":"בלוי מיט גאלדענעם זיגל","o":0,"r":[0.133,0.152,0.725,0.681]},{"k":"briscream","t":"bris","also":["vachnacht","shalomzachor","pidyonhaben"],"c":"cream","p":"blue","f":"blue","fs":"soft","en":"Wicker Bassinet","yi":"וויגל","o":0,"r":[0.175,0.202,0.642,0.604]},{"k":"hydrangea","t":"bris","also":["shalomzachor","vachnacht","vort","kiddush"],"c":"blue","p":"blue","f":"blue","fs":"soft","en":"Hydrangea Blue","yi":"בלויע בלומען","o":0,"r":[0.15,0.149,0.696,0.625]},{"k":"sculpted","t":"chasuna","also":["vort","kiddush","shevabrachos"],"c":"cream","p":"brown","f":"gold","fs":"soft","en":"Cream Sculpted Roses","yi":"קרעם רויזן","o":0,"r":[0.138,0.173,0.725,0.676]},{"k":"barmitzvahwood","t":"barmitzvah","also":["siyum","general"],"c":"cream","p":"brown","f":"gold","fs":"classic","en":"Seforim & Silver Becher","yi":"ספרים מיט זילבערנעם בעכער","o":0,"r":[0.167,0.179,0.667,0.646]},{"k":"easel","t":"general","also":["chasuna","vort","kiddush"],"c":"white","p":"brown","f":"gold","fs":"soft","en":"Sunlit Easel","yi":"גאלדענע ראם אין זון","o":1,"r":[0.196,0.152,0.617,0.491]},{"k":"kosel","t":"general","also":["siyum","chanukashabayis","barmitzvah","upsherin"],"c":"cream","p":"brown","f":"gold","fs":"scribe","en":"Yerushalayim Stone","yi":"ירושלים שטיין","o":0,"r":[0.192,0.143,0.679,0.711]},{"k":"linen","t":"general","also":["chasuna","vort","kiddush"],"c":"cream","p":"brown","f":"gold","fs":"classic","en":"Linen & Gold Tassel","yi":"לייוונט מיט גאלד","o":0,"r":[0.154,0.161,0.692,0.702]},{"k":"olive","t":"general","also":["chanukashabayis","siyum","kiddush"],"c":"cream","p":"green","f":"gold","fs":"scribe","en":"Olive Branch","yi":"אליוו צווייג","o":0,"r":[0.158,0.158,0.713,0.702]},{"k":"lavender","t":"general","also":["kiddush","chanukashabayis"],"c":"purple","p":"plum","f":"gold","fs":"scribe","en":"Lavender on Slate","yi":"לאוואנדע אויף שיפער","o":0,"r":[0.15,0.15,0.7,0.69]},{"k":"studio","t":"general","also":["chanukashabayis","vort","kiddush"],"c":"cream","p":"brown","f":"gold","fs":"scribe","en":"Beige Studio & Olive","yi":"בעזש מיט אליוו","o":1,"r":[0.07,0.05,0.56,0.56]}];
+  SCENES.forEach((s) => {
+    const p = SCENE_PAL[s.p], fs = FONTSETS[s.fs] || FONTSETS.classic;
+    DESIGNS.push({ id: 'scene-' + s.k, type: s.t, also: s.also, isNew: true, isScene: true, family: 'scene', scene: s, color: s.c, dark: s.p === 'dark',
+      name: { en: s.en, yi: s.yi }, bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, foil: s.f,
+      fy: fs.fy, fe: fs.fe, by: fs.by, be: fs.be, frame: 'scene' });
+  });
+  FAMILY_NAMES.scene = { en: 'Photo scene', yi: 'פאטא סצענע' };
+  const sceneImgs = {};
+  function sceneSrc(key, small) { return 'images/inv-scenes/' + key + (small ? '-s' : '') + '.webp'; }
+  function loadScene(key, small) {
+    const id = key + (small ? '-s' : '');
+    if (!sceneImgs[id]) {
+      sceneImgs[id] = new Promise((res) => {
+        const im = new Image(); im.decoding = 'async';
+        im.onload = () => res(im);
+        im.onerror = () => { delete sceneImgs[id]; res(null); };
+        im.src = sceneSrc(key, small);
+      });
+    }
+    return sceneImgs[id];
+  }
+  // metallic foil for scene titles: [colour, stop, …] top-to-bottom across one line of type
+  const FOIL = {
+    gold: ['#6f4e14', 0, '#b88c38', 0.3, '#ecd38a', 0.48, '#c79a45', 0.62, '#7a5718', 1],
+    lightgold: ['#b08537', 0, '#efd690', 0.4, '#fff3cc', 0.52, '#d9b366', 0.68, '#a07730', 1],
+    rose: ['#874a40', 0, '#c98a7b', 0.35, '#f1cbbd', 0.5, '#b97a6b', 0.66, '#7a3f35', 1],
+    blue: ['#1c3a6b', 0, '#3f6aa8', 0.35, '#8db0e0', 0.5, '#3b64a2', 0.66, '#1a3564', 1],
+    silver: ['#4d5463', 0, '#9aa3b1', 0.35, '#f2f4f7', 0.5, '#8c95a3', 0.66, '#454c5a', 1]
+  };
 
   // ---------------------------------------------------------------- Hebrew calendar (offline, via Intl)
   const HMONTH = { Tishri: ['תשרי', 'Tishrei'], Heshvan: ['מרחשון', 'Cheshvan'], Kislev: ['כסלו', 'Kislev'], Tevet: ['טבת', 'Teves'], Shevat: ['שבט', 'Shevat'],
@@ -1147,6 +1202,24 @@
   };
 
   // ---------------------------------------------------------------- card content
+  FRAMES.scene = function (ctx, d, data, img) {
+    const s = d.scene;
+    if (img) {
+      const r = Math.max(W / img.naturalWidth, H / img.naturalHeight), iw = img.naturalWidth * r, ih = img.naturalHeight * r;
+      ctx.drawImage(img, (W - iw) / 2, (H - ih) / 2, iw, ih);
+    } else bgFill(ctx, d, 'radial');
+    const x = s.r[0] * W, y = s.r[1] * H, w = s.r[2] * W, h = s.r[3] * H;
+    if (s.o) { // open backdrop: a soft veil behind the type keeps it legible on texture
+      const g = ctx.createRadialGradient(x + w / 2, y + h / 2, Math.min(w, h) * 0.2, x + w / 2, y + h / 2, Math.max(w, h) * 0.62);
+      const c = d.dark ? '10,8,6' : '255,253,248';
+      g.addColorStop(0, 'rgba(' + c + ',' + (d.dark ? 0.28 : 0.42) + ')'); g.addColorStop(1, 'rgba(' + c + ',0)');
+      ctx.fillStyle = g; ctx.fillRect(x - w * 0.1, y - h * 0.08, w * 1.2, h * 1.16);
+    }
+    const ix = s.o ? 0.05 : 0.1, iy = s.o ? 0.035 : 0.07;
+    const top = y + h * iy;
+    return { x: x + w * ix, y: top + 46, w: w * (1 - 2 * ix), h: h * (1 - 2 * iy) - 46, bsd: [x + w * (1 - ix) - 34, top + 12], div: 'flourish' };
+  };
+
   function words(data) {
     const type = TYPES[data.t] || TYPES.general;
     const lang = data.l === 'en' ? 'en' : 'yi';
@@ -1168,7 +1241,7 @@
     const B = [];
     const t = (text, spec, size, color, gap, opts) => { if (text && String(text).trim()) B.push(Object.assign({ kind: 'text', text: String(text).trim(), spec, size, color, gap, maxW }, opts || {})); };
     t(w.open, body, 40, d.muted, 26, { italic: !yi });
-    t(titleText(data), disp, yi ? 132 : 104, d.title, 18, { lh: 1.12, track: yi ? 0 : 6 });
+    t(titleText(data), disp, (yi ? 132 : 104) * (d.isScene ? 1.12 : 1), d.title, 18, { lh: 1.12, track: yi ? 0 : 6, foil: d.foil, dark: d.dark });
     B.push({ kind: 'div', h: 56, gap: 22 });
     t(data.w || w.invite, body, 46, d.ink, 44, { maxW: Math.min(maxW, 1000), lh: 1.42 });
     if (data.p) {
@@ -1224,7 +1297,7 @@
 
   function drawBlocks(ctx, B, d, box, divStyle) {
     let s = 1, total = measure(ctx, B, s);
-    if (total < box.h * 0.8) { s = Math.min(1.2, (box.h * 0.86) / total); total = measure(ctx, B, s); }
+    if (total < box.h * 0.8) { s = Math.min(d.isScene ? 1.3 : 1.2, (box.h * 0.86) / total); total = measure(ctx, B, s); }
     for (let i = 0; i < 12 && total > box.h; i++) { s *= Math.max(0.8, (box.h / total) * 0.99); total = measure(ctx, B, s); }
     let y = box.y + Math.max(0, (box.h - total) / 2);
     const cx = box.x + box.w / 2;
@@ -1244,17 +1317,28 @@
         font(ctx, b.weight ? [b.spec[0], Math.max(b.spec[1], b.weight)] : b.spec, b._fs, b.italic);
         ctx.fillStyle = b.color;
         if ('letterSpacing' in ctx) ctx.letterSpacing = b.track ? Math.round(b.track * s) + 'px' : '0px';
-        b._lines.forEach((l, i) => { ctx.direction = dirOf(l); ctx.fillText(l, cx, y + b._lh * (i + 0.5)); });
+        b._lines.forEach((l, i) => {
+          ctx.direction = dirOf(l);
+          const ly = y + b._lh * (i + 0.5);
+          if (b.foil && FOIL[b.foil]) { // foil-stamped title: metallic gradient + a pressed-in shadow
+            const st = FOIL[b.foil], g = ctx.createLinearGradient(0, ly - b._fs * 0.55, 0, ly + b._fs * 0.45);
+            for (let k = 0; k < st.length; k += 2) g.addColorStop(st[k + 1], st[k]);
+            ctx.save();
+            ctx.shadowColor = b.dark ? 'rgba(0,0,0,0.55)' : 'rgba(70,50,20,0.30)'; ctx.shadowBlur = b._fs * 0.05; ctx.shadowOffsetY = b._fs * 0.025;
+            ctx.fillStyle = g; ctx.fillText(l, cx, ly);
+            ctx.restore();
+          } else ctx.fillText(l, cx, ly);
+        });
         if ('letterSpacing' in ctx) ctx.letterSpacing = '0px';
       }
       y += b._h + b.gap * s;
     });
   }
 
-  function paint(ctx, data) {
+  function paint(ctx, data, img) {
     const d = designById(data.d);
     ctx.save();
-    const box = FRAMES[d.frame](ctx, d, data);
+    const box = FRAMES[d.frame](ctx, d, data, img);
     ctx.restore();
     // בס״ד
     ctx.save(); font(ctx, d.by, 34); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
@@ -1267,13 +1351,13 @@
   // Renders the card into `canvas` at `scale` (1 = 1500×2100). Resolves when drawn.
   async function render(canvas, data, scale) {
     const d = designById(data.d);
-    await ensureFonts(d);
     scale = scale || 1;
+    const [, img] = await Promise.all([ensureFonts(d), d.scene ? loadScene(d.scene.k, scale < 0.3) : null]);
     canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);
     const ctx = canvas.getContext('2d');
     ctx.setTransform(scale, 0, 0, scale, 0, 0);
     ctx.clearRect(0, 0, W, H);
-    paint(ctx, data);
+    paint(ctx, data, img);
     return canvas;
   }
 
@@ -1332,28 +1416,72 @@
 
   async function fullCanvas(data) { return render(document.createElement('canvas'), data, 1); }
 
-  async function pngBlob(data) { return canvasBlob(await fullCanvas(data), 'image/png'); }
+  // Photo scenes and dark designs go out as JPEG (a PNG of a photograph is 5–8 MB); the light drawn designs stay PNG.
+  function photoLike(data) { const d = designById(data.d); return !!(d.isScene || d.dark); }
+  function imgExt(data) { return photoLike(data) ? '.jpg' : '.png'; }
+  function imgType(data) { return photoLike(data) ? 'image/jpeg' : 'image/png'; }
+  async function pngBlob(data) { const c = await fullCanvas(data); return photoLike(data) ? canvasBlob(c, 'image/jpeg', 0.9) : canvasBlob(c, 'image/png'); }
 
-  // A one-page 5×7 in PDF holding the card as a JPEG — written by hand, no library needed.
-  async function pdfBlob(data) {
-    const canvas = await fullCanvas(data);
-    const jpg = new Uint8Array(await (await canvasBlob(canvas, 'image/jpeg', 0.95)).arrayBuffer());
+  // PDFs written by hand (no library): the card as a full-resolution JPEG; the letter page adds a QR code to the online invitation.
+  function buildPdf(pageW, pageH, images) {
     const enc = new TextEncoder();
     const parts = []; const offsets = []; let len = 0;
     const push = (x) => { const b = typeof x === 'string' ? enc.encode(x) : x; parts.push(b); len += b.length; };
     const obj = (n, body) => { offsets[n] = len; push(n + ' 0 obj\n'); body(); push('\nendobj\n'); };
-    const content = 'q 360 0 0 504 0 0 cm /Im0 Do Q';
+    const content = images.map((im, i) => 'q ' + im.w + ' 0 0 ' + im.h + ' ' + im.x + ' ' + im.y + ' cm /Im' + i + ' Do Q').join('\n');
+    const xobjs = images.map((im, i) => '/Im' + i + ' ' + (5 + i) + ' 0 R').join(' ');
+    const n = 4 + images.length;
     push('%PDF-1.4\n%\xE2\xE3\xCF\xD3\n');
     obj(1, () => push('<< /Type /Catalog /Pages 2 0 R >>'));
     obj(2, () => push('<< /Type /Pages /Kids [3 0 R] /Count 1 >>'));
-    obj(3, () => push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 360 504] /Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>'));
-    obj(4, () => { push('<< /Type /XObject /Subtype /Image /Width ' + canvas.width + ' /Height ' + canvas.height + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + jpg.length + ' >>\nstream\n'); push(jpg); push('\nendstream'); });
-    obj(5, () => push('<< /Length ' + content.length + ' >>\nstream\n' + content + '\nendstream'));
+    obj(3, () => push('<< /Type /Page /Parent 2 0 R /MediaBox [0 0 ' + pageW + ' ' + pageH + '] /Resources << /XObject << ' + xobjs + ' >> >> /Contents 4 0 R >>'));
+    obj(4, () => push('<< /Length ' + content.length + ' >>\nstream\n' + content + '\nendstream'));
+    images.forEach((im, i) => obj(5 + i, () => { push('<< /Type /XObject /Subtype /Image /Width ' + im.pw + ' /Height ' + im.ph + ' /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /DCTDecode /Length ' + im.jpg.length + ' >>\nstream\n'); push(im.jpg); push('\nendstream'); }));
     const xref = len;
-    let x = 'xref\n0 6\n0000000000 65535 f \n';
-    for (let i = 1; i <= 5; i++) x += String(offsets[i]).padStart(10, '0') + ' 00000 n \n';
-    push(x + 'trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
+    let x = 'xref\n0 ' + (n + 1) + '\n0000000000 65535 f \n';
+    for (let i = 1; i <= n; i++) x += String(offsets[i]).padStart(10, '0') + ' 00000 n \n';
+    push(x + 'trailer\n<< /Size ' + (n + 1) + ' /Root 1 0 R >>\nstartxref\n' + xref + '\n%%EOF\n');
     return new Blob(parts, { type: 'application/pdf' });
+  }
+  async function jpegOf(canvas, q) { return new Uint8Array(await (await canvasBlob(canvas, 'image/jpeg', q)).arrayBuffer()); }
+  async function pdfBlob(data) {
+    const canvas = await fullCanvas(data);
+    return buildPdf(360, 504, [{ x: 0, y: 0, w: 360, h: 504, pw: canvas.width, ph: canvas.height, jpg: await jpegOf(canvas, 0.95) }]);
+  }
+  // QR code (vendored qrcode-generator, MIT) — loaded only when a letter PDF is made; nothing leaves the phone.
+  let qrLib = null;
+  function loadQr() {
+    if (window.qrcode) return Promise.resolve(window.qrcode);
+    if (!qrLib) qrLib = new Promise((res, rej) => { const s = document.createElement('script'); s.src = 'vendor/qrcode.js'; s.onload = () => res(window.qrcode); s.onerror = rej; document.head.appendChild(s); });
+    return qrLib;
+  }
+  async function qrPanel(link, lang) {
+    const qrcode = await loadQr();
+    const qr = qrcode(0, 'M'); qr.addData(link); qr.make();
+    const n = qr.getModuleCount(), quiet = 4, cell = Math.max(6, Math.floor(1000 / (n + quiet * 2)));
+    const side = (n + quiet * 2) * cell, capH = 230;
+    const c = document.createElement('canvas'); c.width = 1800; c.height = side + capH;
+    const ctx = c.getContext('2d'); ctx.fillStyle = '#fff'; ctx.fillRect(0, 0, c.width, c.height);
+    const ox = (c.width - side) / 2; ctx.fillStyle = '#111';
+    for (let r = 0; r < n; r++) for (let k = 0; k < n; k++) if (qr.isDark(r, k)) ctx.fillRect(ox + (k + quiet) * cell, (r + quiet) * cell, cell, cell);
+    await (document.fonts && document.fonts.load ? document.fonts.load('600 60px "Frank Ruhl Libre"', 'אבג').catch(() => null) : null);
+    ctx.textAlign = 'center'; ctx.fillStyle = '#3b3326';
+    ctx.font = '600 62px "Frank Ruhl Libre", serif'; ctx.direction = 'rtl';
+    ctx.fillText('סקענט פאר וועגווייזער, קאלענדאר און ענטפערן', c.width / 2, side + 80);
+    ctx.direction = 'ltr'; ctx.font = '500 52px "Cormorant Garamond", "Frank Ruhl Libre", serif';
+    ctx.fillText('Scan for directions, calendar & RSVP', c.width / 2, side + 170);
+    return c;
+  }
+  // US letter page: the 5×7 card centred at the top, the QR code to the online invitation underneath.
+  async function pdfLetterBlob(data, link) {
+    const card = await fullCanvas(data);
+    const imgs = [{ x: 126, y: 792 - 54 - 504, w: 360, h: 504, pw: card.width, ph: card.height, jpg: await jpegOf(card, 0.95) }];
+    if (link) {
+      const p = await qrPanel(link, data.l);
+      const w = 300, h = Math.round(w * p.height / p.width);
+      imgs.push({ x: (612 - w) / 2, y: 792 - 54 - 504 - 26 - h, w, h, pw: p.width, ph: p.height, jpg: await jpegOf(p, 0.92) });
+    }
+    return buildPdf(612, 792, imgs);
   }
 
   async function printCard(data) {
@@ -1481,6 +1609,9 @@
       barmitzvah: { p: yi ? 'מנחם מענדל' : 'Menachem Mendel', h1: yi ? 'ר׳ אברהם שווארץ' : 'Mr. & Mrs. Avrohom Schwartz' },
       bris: { h1: yi ? 'ר׳ יוסף קליין' : 'Mr. & Mrs. Yosef Klein', tm: '08:30' },
       kiddush: { h1: yi ? 'ר׳ חיים בערגער' : 'Mr. & Mrs. Chaim Berger', tm: '11:30' },
+      shalomzachor: { h1: yi ? 'ר׳ אהרן ליכטענשטיין' : 'Mr. & Mrs. Aharon Lichtenstein', tm: '21:00' },
+      vachnacht: { h1: yi ? 'ר׳ אהרן ליכטענשטיין' : 'Mr. & Mrs. Aharon Lichtenstein', tm: '20:00' },
+      pidyonhaben: { h1: yi ? 'ר׳ מרדכי הורוויץ' : 'Mr. & Mrs. Mordechai Horowitz', tm: '18:00' },
       upsherin: { p: yi ? 'יואל' : 'Yoel', h1: yi ? 'ר׳ משה פריעד' : 'Mr. & Mrs. Moshe Fried', tm: '17:00' },
       shevabrachos: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', s: yi ? 'חיה מרים' : 'Chaya Miriam', h1: yi ? 'משפחת רוזנבערג' : 'The Rosenberg Family' },
       siyum: { m: yi ? 'ברכות' : 'Brachos', p: yi ? 'ר׳ נפתלי הערץ' : 'Reb Naftali Hertz', h1: yi ? 'משפחת דייטש' : 'The Deutsch Family', tm: '20:00' },
@@ -1506,6 +1637,13 @@
     const m = /^#make=([a-z][a-z-]*)(?:&t=([a-z]+))?/.exec(location.hash);
     if (m) { const d = designById(m[1]); state.d = d.id; state.t = (m[2] && TYPES[m[2]]) ? m[2] : d.type; reSample(); }
 
+    // hero: three photo-scene invitations fanned out, drawn live in the page's language
+    const fan = $('#invHeroFan');
+    if (fan) {
+      const heroLang = siteLang() === 'en' ? 'en' : 'yi';
+      const picks = [['scene-sky', 'bris'], ['scene-velvet', 'chasuna'], ['scene-navygold', 'barmitzvah']];
+      $$('canvas', fan).forEach((c, i) => { const d = designById(picks[i][0]); render(c, Object.assign(sample(d, heroLang), { t: picks[i][1] }), 0.24).catch(() => {}); });
+    }
     // gallery — ~160 designs: filter by simcha / colour / search, rendered lazily as tiles scroll into view, "show more" pages
     const gallery = $('#invGallery'); let sampleLang = 'yi';
     const PAGE = 24;
@@ -1537,7 +1675,7 @@
       let match = 0, shown = 0;
       tiles.forEach((t) => {
         const d = t.d;
-        const ok = (gf.type === 'all' || t.types.includes(gf.type)) && (gf.color === 'all' || d.color === gf.color) && (!q || t.text.includes(q));
+        const ok = (gf.type === 'all' || (gf.type === 'scene' ? !!d.isScene : t.types.includes(gf.type))) && (gf.color === 'all' || d.color === gf.color) && (!q || t.text.includes(q));
         if (ok) match++;
         t.el.hidden = !(ok && shown < gf.limit);
         if (ok && shown < gf.limit) shown++;
@@ -1550,18 +1688,19 @@
     if (gallery) {
       gallery.innerHTML = '';
       // order: one of each new family first, then the originals, then the rest
-      const fresh = DESIGNS.filter((d) => d.isNew), orig = DESIGNS.filter((d) => !d.isNew);
+      const scenes = DESIGNS.filter((d) => d.isScene);
+      const fresh = DESIGNS.filter((d) => d.isNew && !d.isScene), orig = DESIGNS.filter((d) => !d.isNew);
       const firstRound = []; const seen = {};
       fresh.forEach((d) => { if (!seen[d.family]) { seen[d.family] = 1; firstRound.push(d); } });
-      const order = firstRound.concat(orig, fresh.filter((d) => firstRound.indexOf(d) < 0));
+      const order = scenes.concat(firstRound, orig, fresh.filter((d) => firstRound.indexOf(d) < 0));
       order.forEach((d, idx) => {
-        const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-tile'; b.dataset.design = d.id; b.dataset.type = d.type; b.dataset.idx = String(idx);
+        const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-tile' + (d.isScene ? ' inv-tile-scene' : ''); b.dataset.design = d.id; b.dataset.type = d.type; b.dataset.idx = String(idx);
         const types = [d.type].concat(d.also || []); b.dataset.types = types.join(' ');
         const cv = document.createElement('canvas'); cv.dataset.design = d.id; cv.width = 360; cv.height = 504; cv.setAttribute('aria-hidden', 'true'); cv.style.background = d.bg[0];
         const cap = document.createElement('span'); cap.className = 'inv-tile-cap';
         const ty = document.createElement('span'); ty.className = 'inv-tile-type'; both(ty, TYPES[d.type].label.en, TYPES[d.type].label.yi);
         const nm = document.createElement('span'); nm.className = 'inv-tile-name'; both(nm, d.name.en, d.name.yi);
-        const go = document.createElement('span'); go.className = 'inv-tile-go'; both(go, 'Use this design →', 'נעמט די דיזיין ←');
+        const go = document.createElement('span'); go.className = 'inv-tile-go'; if (d.isScene) both(go, 'Customize →', 'צוגרייטן ←'); else both(go, 'Use this design →', 'נעמט די דיזיין ←');
         cap.append(ty, nm, go); b.append(cv, cap);
         if (d.isNew) { const nb = document.createElement('span'); nb.className = 'inv-tile-new'; both(nb, 'New', 'נייע'); b.appendChild(nb); }
         b.addEventListener('click', () => {
@@ -1606,6 +1745,7 @@
       list.forEach((d) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-swatch'; b.dataset.design = d.id;
         b.style.setProperty('--sw-a', d.bg[0]); b.style.setProperty('--sw-b', d.line);
+        if (d.isScene) { b.classList.add('inv-swatch-photo'); b.style.backgroundImage = 'url(' + sceneSrc(d.scene.k, true) + ')'; b.title = d.name.en; }
         b.setAttribute('aria-label', d.name.en); b.title = d.name.en;
         b.setAttribute('aria-pressed', String(d.id === state.d));
         b.addEventListener('click', () => { state.d = d.id; syncForm(); update(); });
@@ -1693,8 +1833,9 @@
     });
 
     const busy = async (btn, fn) => { btn.disabled = true; try { await fn(); } catch (err) { console.warn(err); flash(status, 'Something went wrong — please try again.', 'עפעס האט נישט געארבעט, פרובירט נאכאמאל.'); } finally { btn.disabled = false; } };
-    $('#btnPng').addEventListener('click', (e) => busy(e.currentTarget, async () => { saveBlob(await pngBlob(state), fileBase(state) + '.png'); flash(status, 'Image downloaded.', 'די בילד איז אראפגעלאדן.'); }));
+    $('#btnPng').addEventListener('click', (e) => busy(e.currentTarget, async () => { saveBlob(await pngBlob(state), fileBase(state) + imgExt(state)); flash(status, 'Image downloaded.', 'די בילד איז אראפגעלאדן.'); }));
     $('#btnPdf').addEventListener('click', (e) => busy(e.currentTarget, async () => { saveBlob(await pdfBlob(state), fileBase(state) + '.pdf'); flash(status, 'PDF downloaded.', 'דער PDF איז אראפגעלאדן.'); }));
+    $('#btnPdfLetter').addEventListener('click', (e) => busy(e.currentTarget, async () => { const link = await refreshLink(); saveBlob(await pdfLetterBlob(state, link), fileBase(state) + '-letter.pdf'); flash(status, 'Letter PDF with QR code downloaded.', 'דער PDF מיטן QR קאוד איז אראפגעלאדן.'); }));
     $('#btnPrint').addEventListener('click', (e) => busy(e.currentTarget, () => printCard(state)));
     $('#btnCopy').addEventListener('click', (e) => busy(e.currentTarget, async () => {
       const link = await refreshLink();
@@ -1718,7 +1859,7 @@
     }
     shareBtn.addEventListener('click', (e) => busy(e.currentTarget, async () => {
       const link = await refreshLink();
-      const file = new File([await pngBlob(state)], fileBase(state) + '.png', { type: 'image/png' });
+      const file = new File([await pngBlob(state)], fileBase(state) + imgExt(state), { type: imgType(state) });
       try { await navigator.share({ files: [file], text: shareText(state, link) }); } catch (err) { if (err && err.name !== 'AbortError') throw err; }
     }));
     $('#invLink').addEventListener('focus', (e) => e.target.select());
@@ -1742,22 +1883,82 @@
     });
   }
 
+
+  // ---------------------------------------------------------------- invite view extras: envelope, countdown, mazel tov
+  function mazelMessage(data) {
+    const t = summary(data);
+    return data.l === 'en' ? 'Mazel Tov on the ' + t + '! Wishing you much nachas.' : 'מזל טוב צו ' + t + '! זאלט איר האבן אסאך נחת.';
+  }
+  function countdown(data) {
+    const el = $('#vCount'); if (!el) return;
+    const t = eventTimes(data); if (!t) return;
+    const yi = siteLang() === 'yi';
+    const tick = () => {
+      const now = new Date();
+      const start = t.allDay ? new Date(t.g.y, t.g.m - 1, t.g.d) : t.start;
+      const end = t.allDay ? new Date(t.g.y, t.g.m - 1, t.g.d + 1) : t.end;
+      if (now >= end) { el.hidden = true; return false; }
+      const today = now.getFullYear() === t.g.y && now.getMonth() === t.g.m - 1 && now.getDate() === t.g.d;
+      el.hidden = false;
+      if (now >= start || (t.allDay && today)) { el.textContent = yi ? 'די שמחה איז יעצט! מזל טוב' : 'The simcha is happening now — Mazel Tov!'; return true; }
+      const ms = start - now, days = Math.floor(ms / 86400000), hrs = Math.floor((ms % 86400000) / 3600000), mins = Math.floor((ms % 3600000) / 60000);
+      const parts = yi
+        ? [days ? days + (days === 1 ? ' טאג' : ' טעג') : '', hrs ? hrs + ' שעה' : '', !days ? mins + ' מינוט' : ''].filter(Boolean)
+        : [days ? days + (days === 1 ? ' day' : ' days') : '', hrs ? hrs + (hrs === 1 ? ' hour' : ' hours') : '', !days ? mins + (mins === 1 ? ' minute' : ' minutes') : ''].filter(Boolean);
+      el.innerHTML = '';
+      const lead = document.createElement('span'); lead.textContent = today ? (yi ? 'היינט! נאך' : 'Today! In') : (yi ? 'נאך' : 'In');
+      const b = document.createElement('b'); b.textContent = parts.join(yi ? ' און ' : ', ');
+      el.append(lead, b);
+      return true;
+    };
+    if (tick()) setInterval(tick, 30000);
+    document.addEventListener('site-language-change', () => { /* labels follow the page language on the next tick */ });
+  }
+  // The envelope: shown once when the link is opened, tap (or wait) to open, Skip always there; no animation for reduced motion.
+  function openEnvelope(canvas, data) {
+    const env = $('#invEnvelope'); if (!env) return;
+    const reduce = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    if (reduce || /[?&]noenv\b/.test(location.search)) return;
+    try { $('#envCard').src = canvas.toDataURL('image/jpeg', 0.82); } catch (_) {}
+    if (designById(data.d).dark) env.classList.add('is-dark');
+    env.hidden = false; document.documentElement.classList.add('env-lock');
+    let done = false, timer = null;
+    const finish = (fast) => {
+      if (done) return; done = true; clearTimeout(timer);
+      env.classList.add('is-open');
+      setTimeout(() => { env.classList.add('is-gone'); document.documentElement.classList.remove('env-lock'); }, fast ? 0 : 1500);
+      setTimeout(() => { env.hidden = true; }, fast ? 600 : 2200);
+    };
+    $('#envOpen').addEventListener('click', () => finish(false));
+    $('#envSkip').addEventListener('click', () => finish(true));
+    document.addEventListener('keydown', function k(e) { if (e.key === 'Escape') { finish(true); document.removeEventListener('keydown', k); } });
+    timer = setTimeout(() => finish(false), 3800);
+  }
+
   // ---------------------------------------------------------------- shared invitation view
   async function initView() {
     const root = $('#invView'); if (!root) return;
     const m = /[#&]i=([A-Za-z0-9_-]+)/.exec(location.hash);
-    let data = null;
+    const ms = /[#&]s=([A-Za-z0-9_-]+)/.exec(location.hash);
+    let data = null, studioDesign = null;
     try { data = m ? await decode(m[1]) : null; } catch (_) { data = null; }
+    // Design Studio links (#s=…): a free-form design; its event details travel in design.meta
+    if (!data && ms) { for (let k = 0; k < 60 && !window.KashoStudio; k++) await new Promise((r) => setTimeout(r, 50)); }
+    if (!data && ms && window.KashoStudio) {
+      try { studioDesign = await window.KashoStudio.decodeDesign(ms[1]); } catch (_) { studioDesign = null; }
+      if (studioDesign) data = Object.assign(clean(studioDesign.meta || {}), { d: 'scene-velvet' });
+    }
     if (!data || !data.d) { $('#viewEmpty').hidden = false; $('#viewLoading').hidden = true; return; }
     if (!TYPES[data.t]) data.t = 'general';
     if (!SAVED_LANG && data.l !== 'en' && siteLang() !== 'yi' && window.toggleLang) window.toggleLang();
 
     const canvas = $('#viewCanvas');
-    await render(canvas, data, 0.6);
+    if (studioDesign) await window.KashoStudio.render(canvas, studioDesign, 0.6); else await render(canvas, data, 0.6);
     $('#viewLoading').hidden = true; $('#viewMain').hidden = false;
     requestAnimationFrame(() => root.classList.add('is-ready'));
+    openEnvelope(canvas, data);
     canvas.setAttribute('aria-label', summary(data));
-    const link = location.href.split('#')[0] + '#i=' + m[1];
+    const link = location.href.split('#')[0] + (m ? '#i=' + m[1] : '#s=' + ms[1]);
     document.title = summary(data) + ' | Kasho';
 
     const yiCard = data.l !== 'en';
@@ -1789,7 +1990,10 @@
       $('#vRsvpCall').href = rs.call; $('#vRsvpCall').hidden = false;
       $('#vRsvpText').href = rs.text; $('#vRsvpText').hidden = false;
     }
-    $('#vPng').addEventListener('click', async (e) => { const btn = e.currentTarget; btn.disabled = true; try { saveBlob(await pngBlob(data), fileBase(data) + '.png'); } finally { btn.disabled = false; } });
+    const mz = phoneDigits(data.r);
+    if (mz && $('#vMazel')) { $('#vMazel').href = 'sms:+' + mz + '?&body=' + encodeURIComponent(mazelMessage(data)); $('#vMazel').hidden = false; }
+    countdown(data);
+    $('#vPng').addEventListener('click', async (e) => { const btn = e.currentTarget; btn.disabled = true; try { if (studioDesign) { const c = document.createElement('canvas'); await window.KashoStudio.render(c, studioDesign, 1); saveBlob(await canvasBlob(c, 'image/jpeg', 0.92), fileBase(data) + '.jpg'); } else saveBlob(await pngBlob(data), fileBase(data) + imgExt(data)); } finally { btn.disabled = false; } });
     const vStatus = $('#vStatus');
     $('#vShare').addEventListener('click', async () => {
       const text = shareText(data, link);
@@ -1804,10 +2008,14 @@
       const ok = await copyText(link);
       flash(vStatus, ok ? 'Link copied — paste it anywhere.' : 'Could not copy — please copy the page address.', ok ? 'דער לינק איז קאפירט.' : 'עס האט נישט געקענט קאפירן.');
     });
-    $('#vMake').href = 'invitations.html#make=' + designById(data.d).id + '&t=' + data.t;
+    $('#vMake').href = studioDesign ? 'invitations.html#studio' : 'invitations.html#make=' + designById(data.d).id + '&t=' + data.t;
   }
 
-  window.KashoInvites = { TYPES, DESIGNS, render, encode, decode, hebrewParts, gematria, icsText, googleCalUrl, pdfBlob, pngBlob, sample, designById, viewUrl };
+  // building blocks shared with the Design Studio (studio.js)
+  const KIT = { W, H, HE, FOIL, FONTSETS, loadScene, sceneSrc, divider, cornerScroll, rectStroke, magen, keser, sparkle, rosette, leaf, wrapLines, font, dirOf,
+    hebrewParts, civilLong, dayLine, timeLabel, titleText, words, saveBlob, buildPdf, jpegOf, canvasBlob, fileBase, streamBytes, b64url, unb64url, summary,
+    eventTimes, mazelMessage, countdown, openEnvelope, phoneDigits, rsvpLinks, mapsUrl, wazeUrl, googleCalUrl, icsText, copyText, flash, both, qrPanel, ensureFonts };
+  window.KashoInvites = { TYPES, DESIGNS, SCENES, pdfLetterBlob, KIT, render, encode, decode, hebrewParts, gematria, icsText, googleCalUrl, pdfBlob, pngBlob, sample, designById, viewUrl };
 
   function start() { initEditor(); initView(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();

@@ -17,11 +17,12 @@
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<link rel="stylesheet" href="style.css?v=20261027-6">
-<link rel="stylesheet" href="invitations.css?v=3">
-<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=David+Libre:wght@400;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Secular+One&family=Suez+One&display=swap">
-<script src="site.js?v=20261027-6" defer></script>
-<script src="invitations.js?v=3" defer></script>
+<link rel="stylesheet" href="style.css?v=20261027-7">
+<link rel="stylesheet" href="invitations.css?v=5">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=David+Libre:wght@400;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Secular+One&family=Suez+One&family=Karantina:wght@700&family=Amatic+SC:wght@700&family=Rubik:wght@400;800&family=Bona+Nova:wght@700&family=Noto+Rashi+Hebrew:wght@500&family=Heebo:wght@400;800&display=swap">
+<script src="site.js?v=20261027-7" defer></script>
+<script src="invitations.js?v=5" defer></script>
+<script src="studio.js?v=1" defer></script>
 <!--site-head:start-->
 <meta name="theme-color" content="#1b2d3e">
 <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -33,7 +34,7 @@
 <meta name="apple-mobile-web-app-capable" content="yes">
 <meta name="apple-mobile-web-app-title" content="Kasho">
 <meta name="apple-mobile-web-app-status-bar-style" content="default">
-<script src="pwa.js?v=20261027-6" defer></script>
+<script src="pwa.js?v=20261027-7" defer></script>
 <!--site-head:end-->
 </head>
 <body>
@@ -92,11 +93,25 @@
       <a class="button button-gold" href="invitations.html"><span data-lang="en">Make an invitation</span><span data-lang="yi" hidden>מאכט א הזמנה</span></a>
     </div>
 
+    <div class="inv-env" id="invEnvelope" hidden>
+      <button type="button" class="inv-env-skip" id="envSkip"><span data-lang="en">Skip</span><span data-lang="yi" hidden>איבערשפרינגען</span></button>
+      <div class="inv-env-stage">
+        <button type="button" class="inv-env-body" id="envOpen" aria-label="Open the invitation">
+          <span class="inv-env-back"></span>
+          <img class="inv-env-card" id="envCard" alt="">
+          <span class="inv-env-front"></span>
+          <span class="inv-env-flap"><span class="inv-env-liner"></span></span>
+          <span class="inv-env-seal"><svg viewBox="0 0 40 40" aria-hidden="true"><path d="M20 6l12 21H8zM20 34L8 13h24z"/></svg></span>
+        </button>
+        <p class="inv-env-hint"><span data-lang="en">Tap to open</span><span data-lang="yi" hidden>טאפט צו עפענען</span></p>
+      </div>
+    </div>
     <div class="inv-view-grid" id="viewMain" hidden>
       <div class="inv-view-card"><canvas id="viewCanvas" width="900" height="1260" role="img"></canvas></div>
       <div class="inv-view-info">
         <p class="inv-kicker"><span data-lang="en">You’re invited</span><span data-lang="yi" hidden>איר זענט איינגעלאדן</span></p>
         <h1 id="vTitle"></h1>
+        <p class="inv-countdown" id="vCount" hidden></p>
         <ul class="inv-facts">
           <li id="vDate"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 2v3M17 2v3M3 9h18M5 5h14a2 2 0 0 1 2 2v12a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z"/></svg><div><span class="v-main"></span><span class="v-sub"></span></div></li>
           <li id="vTime"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M12 7v5l3 2"/></svg><div><span class="v-main"></span></div></li>
@@ -110,6 +125,7 @@
           <a class="button button-ghost" id="vWaze" href="#" target="_blank" rel="noopener"><span data-lang="en">Waze</span><span data-lang="yi" hidden>וועיז</span></a>
           <a class="button inv-rsvp" id="vRsvpCall" href="#" hidden><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a2 2 0 0 1-2 2A16 16 0 0 1 3 6a2 2 0 0 1 2-2"/></svg><span data-lang="en">RSVP by phone</span><span data-lang="yi" hidden>ענטפערט דורכן טעלעפאן</span></a>
           <a class="button inv-rsvp" id="vRsvpText" href="#" hidden><svg class="ico-sm" viewBox="0 0 24 24" aria-hidden="true" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round"><path d="M4 5h16v11H9l-5 4z"/><path d="M8 9.5h8M8 12.5h5"/></svg><span data-lang="en">RSVP by text</span><span data-lang="yi" hidden>ענטפערט מיט א טעקסט</span></a>
+          <a class="button button-ghost inv-mazel" id="vMazel" href="#" hidden><span aria-hidden="true">✦ </span><span data-lang="en">Send a Mazel Tov</span><span data-lang="yi" hidden>שיקט א מזל טוב</span></a>
         </div>
         <div class="inv-view-secondary">
           <button type="button" class="inv-linkbtn" id="vPng"><span data-lang="en">Save the invitation image</span><span data-lang="yi" hidden>היט אפ די בילד</span></button>
