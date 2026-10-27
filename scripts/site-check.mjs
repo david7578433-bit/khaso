@@ -4,7 +4,7 @@ import vm from 'node:vm';
 
 const root = path.resolve(import.meta.dirname, '..');
 const htmlFiles = fs.readdirSync(root).filter((file) => file.endsWith('.html')).sort();
-const jsFiles = ['site.js', 'member-auth.js', 'photo-editor.js', 'widgets.js', 'invitations.js', 'pwa.js', 'share-zmanim.js', 'shabbos.js', 'yahrzeit.js', 'sw.js'];
+const jsFiles = ['site.js', 'member-auth.js', 'photo-editor.js', 'widgets.js', 'invitations.js', 'pwa.js', 'share-zmanim.js', 'shabbos.js', 'yahrzeit.js', 'kids.js', 'rides.js', 'sw.js'];
 const failures = [];
 let inlineScriptCount = 0;
 
@@ -24,6 +24,10 @@ for (const file of htmlFiles) {
 
   for (const match of html.matchAll(/<script([^>]*)>([\s\S]*?)<\/script>/gi)) {
     if (/\bsrc\s*=/.test(match[1])) continue;
+    if (/type\s*=\s*["']application\/ld\+json["']/i.test(match[1])) {
+      try { JSON.parse(match[2]); } catch (error) { failures.push(`${file}: invalid JSON-LD: ${error.message}`); }
+      continue;
+    }
     inlineScriptCount += 1;
     try {
       new vm.Script(match[2], { filename: `${file} inline script` });

@@ -1,0 +1,323 @@
+{
+  "_how_to_edit": "Quizzes are keyed by Hebcal's English parsha name (as in 'Parashat Vayera' without 'Parashat '): e.g. \"Lech-Lecha\", \"Vayera\", \"Chayei Sara\", \"Toldot\". Each question has English (q, options) and Yiddish (q_yi, options_yi) text; \"answer\" is the number of the correct option counting from 0. Weeks without a quiz show a 'coming soon' note.",
+  "quizzes": {
+    "Lech-Lecha": {
+      "title": "Parshas Lech Lecha",
+      "title_yi": "פרשת לך לך",
+      "questions": [
+        {
+          "q": "Where did Hashem tell Avram to go?",
+          "q_yi": "וואו האט השם געהייסן אברם גיין?",
+          "options": [
+            "To Mitzrayim",
+            "To the land Hashem would show him",
+            "To Bavel"
+          ],
+          "options_yi": [
+            "קיין מצרים",
+            "צום לאנד וואס השם וועט אים ווייזן",
+            "קיין בבל"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "Which nephew went with Avram?",
+          "q_yi": "וועלכער פלימעניק איז מיטגעגאנגען מיט אברם?",
+          "options": [
+            "Lot",
+            "Yishmael",
+            "Eliezer"
+          ],
+          "options_yi": [
+            "לוט",
+            "ישמעאל",
+            "אליעזר"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "How many kings did Avram fight to rescue Lot?",
+          "q_yi": "מיט וויפיל מלכים האט אברם מלחמה געהאלטן צו ראטעווען לוט?",
+          "options": [
+            "Two",
+            "Four",
+            "Seven"
+          ],
+          "options_yi": [
+            "צוויי",
+            "פיר",
+            "זיבן"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What new name did Hashem give Avram?",
+          "q_yi": "וואס פאר א נייעם נאמען האט השם געגעבן אברם?",
+          "options": [
+            "Avraham",
+            "Yitzchak",
+            "Yisroel"
+          ],
+          "options_yi": [
+            "אברהם",
+            "יצחק",
+            "ישראל"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "What new name did Hashem give Sarai?",
+          "q_yi": "וואס פאר א נייעם נאמען האט השם געגעבן שרי?",
+          "options": [
+            "Rivka",
+            "Rochel",
+            "Sarah"
+          ],
+          "options_yi": [
+            "רבקה",
+            "רחל",
+            "שרה"
+          ],
+          "answer": 2
+        },
+        {
+          "q": "Which mitzvah did Avraham receive at the end of the parsha?",
+          "q_yi": "וועלכע מצוה האט אברהם באקומען אין סוף פון דער פרשה?",
+          "options": [
+            "Shabbos",
+            "Bris milah",
+            "Tefillin"
+          ],
+          "options_yi": [
+            "שבת",
+            "ברית מילה",
+            "תפילין"
+          ],
+          "answer": 1
+        }
+      ]
+    },
+    "Vayera": {
+      "title": "Parshas Vayera",
+      "title_yi": "פרשת וירא",
+      "questions": [
+        {
+          "q": "How many guests (malachim) came to Avraham's tent?",
+          "q_yi": "וויפיל אורחים (מלאכים) זענען געקומען צו אברהמ׳ס געצעלט?",
+          "options": [
+            "Two",
+            "Three",
+            "Five"
+          ],
+          "options_yi": [
+            "צוויי",
+            "דריי",
+            "פינף"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What good news did the malachim bring?",
+          "q_yi": "וואס פאר א גוטע בשורה האבן די מלאכים געברענגט?",
+          "options": [
+            "Avraham and Sarah would have a son",
+            "It would rain soon",
+            "They would move to Mitzrayim"
+          ],
+          "options_yi": [
+            "אברהם און שרה וועלן האבן א זון",
+            "עס וועט באלד רעגענען",
+            "זיי וועלן אריבערפארן קיין מצרים"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Which city did Hashem destroy?",
+          "q_yi": "וועלכע שטאט האט השם חרוב געמאכט?",
+          "options": [
+            "Chevron",
+            "Sedom",
+            "Yerushalayim"
+          ],
+          "options_yi": [
+            "חברון",
+            "סדום",
+            "ירושלים"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What happened to Lot's wife when she looked back?",
+          "q_yi": "וואס איז געשען מיט לוט׳ס ווייב ווען זי האט זיך אומגעקוקט?",
+          "options": [
+            "She fell asleep",
+            "She became a pillar of salt",
+            "She ran back home"
+          ],
+          "options_yi": [
+            "זי איז איינגעשלאפן",
+            "זי איז געווארן א זייל פון זאלץ",
+            "זי איז צוריקגעלאפן אהיים"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What was the name of the son born to Avraham and Sarah?",
+          "q_yi": "ווי האט געהייסן דער זון פון אברהם און שרה?",
+          "options": [
+            "Yaakov",
+            "Yishmael",
+            "Yitzchak"
+          ],
+          "options_yi": [
+            "יעקב",
+            "ישמעאל",
+            "יצחק"
+          ],
+          "answer": 2
+        },
+        {
+          "q": "On which mountain was the Akeidah?",
+          "q_yi": "אויף וועלכן בארג איז געווען די עקידה?",
+          "options": [
+            "Har Sinai",
+            "Har HaMoriah",
+            "Har HaZeisim"
+          ],
+          "options_yi": [
+            "הר סיני",
+            "הר המוריה",
+            "הר הזיתים"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What did Avraham bring as a korban instead of Yitzchak?",
+          "q_yi": "וואס האט אברהם מקריב געווען אנשטאט יצחק?",
+          "options": [
+            "A ram (ayil)",
+            "A dove",
+            "An ox"
+          ],
+          "options_yi": [
+            "א איל (א ווידער)",
+            "א טויב",
+            "אן אקס"
+          ],
+          "answer": 0
+        }
+      ]
+    },
+    "Chayei Sara": {
+      "title": "Parshas Chayei Sarah",
+      "title_yi": "פרשת חיי שרה",
+      "questions": [
+        {
+          "q": "How old was Sarah when she passed away?",
+          "q_yi": "ווי אלט איז שרה געווען ווען זי איז נפטר געווארן?",
+          "options": [
+            "100",
+            "127",
+            "175"
+          ],
+          "options_yi": [
+            "100",
+            "127",
+            "175"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "Where was Sarah buried?",
+          "q_yi": "וואו איז שרה באגראבן געווארן?",
+          "options": [
+            "In Me'aras HaMachpelah",
+            "In Mitzrayim",
+            "In Sedom"
+          ],
+          "options_yi": [
+            "אין מערת המכפלה",
+            "אין מצרים",
+            "אין סדום"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "From whom did Avraham buy the Me'arah?",
+          "q_yi": "פון וועמען האט אברהם געקויפט די מערה?",
+          "options": [
+            "From Lavan",
+            "From Paroh",
+            "From Efron"
+          ],
+          "options_yi": [
+            "פון לבן",
+            "פון פרעה",
+            "פון עפרון"
+          ],
+          "answer": 2
+        },
+        {
+          "q": "Whom did Avraham send to find a wife for Yitzchak?",
+          "q_yi": "וועמען האט אברהם געשיקט צו געפינען א שידוך פאר יצחק?",
+          "options": [
+            "His servant Eliezer",
+            "Lot",
+            "Yishmael"
+          ],
+          "options_yi": [
+            "זיין קנעכט אליעזר",
+            "לוט",
+            "ישמעאל"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "How many camels did Eliezer take with him?",
+          "q_yi": "וויפיל קעמלען האט אליעזר מיטגענומען?",
+          "options": [
+            "Three",
+            "Ten",
+            "Twelve"
+          ],
+          "options_yi": [
+            "דריי",
+            "צען",
+            "צוועלף"
+          ],
+          "answer": 1
+        },
+        {
+          "q": "What sign did Eliezer ask for at the well?",
+          "q_yi": "וואס פאר א סימן האט אליעזר געבעטן ביים ברונעם?",
+          "options": [
+            "The girl would give water to him and to his camels",
+            "It would start to rain",
+            "A bird would fly by"
+          ],
+          "options_yi": [
+            "די מיידל וועט געבן וואסער פאר אים און פאר די קעמלען",
+            "עס וועט אנהייבן רעגענען",
+            "א פויגל וועט פארביי פליען"
+          ],
+          "answer": 0
+        },
+        {
+          "q": "Whom did Yitzchak marry?",
+          "q_yi": "מיט וועמען האט יצחק חתונה געהאט?",
+          "options": [
+            "Rochel",
+            "Rivka",
+            "Leah"
+          ],
+          "options_yi": [
+            "רחל",
+            "רבקה",
+            "לאה"
+          ],
+          "answer": 1
+        }
+      ]
+    }
+  }
+}

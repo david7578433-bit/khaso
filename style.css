@@ -1039,3 +1039,122 @@ html[lang="yi"] .sb-table tr.sb-group th { letter-spacing: 0; font-size: .95rem;
   .yz-year-side { flex-direction: row; justify-content: space-between; align-items: center; }
   .yz-year:not(.is-next) .yz-year-side { justify-content: flex-start; }
 }
+
+
+/* ---------- Footer link to the Chol Hamoed site ---------- */
+.footer-external { display: inline-block; margin-top: 8px; color: #e9d6b4; font-weight: 600; text-decoration: none; }
+.footer-external:hover { color: #fff; text-decoration: underline; }
+.footer-brand .footer-invite + .footer-external { margin-inline-start: 0; display: block; }
+.family-band { padding-top: 0; }
+.feature-kids .feature-icon { background: #fff4d6; color: #b07d12; }
+.feature-rides .feature-icon { background: #e8eef6; color: var(--navy-3); }
+.feature-cholhamoed { background: linear-gradient(160deg, #fff 55%, var(--accent-soft)); }
+.feature-cholhamoed .feature-icon { background: var(--accent-soft); color: var(--accent); }
+
+/* ---------- Kids' corner ---------- */
+.kids-page { max-width: 1100px; margin-inline: auto; }
+.kids-hero {
+  position: relative; overflow: hidden; display: flex; align-items: center; justify-content: space-between; gap: 20px;
+  margin-bottom: 26px; padding: clamp(24px, 4vw, 44px); border-radius: 24px; color: #fff;
+  background: radial-gradient(500px 240px at 90% 0%, rgba(255, 214, 120, .35), transparent 70%), linear-gradient(135deg, #1d4652, var(--navy-2));
+  box-shadow: var(--shadow-lg);
+}
+.kids-hero h2 { margin: 6px 0 8px; color: #fff; font-size: clamp(1.9rem, 1.3rem + 2.4vw, 2.8rem); }
+.kids-hero p { margin: 0; color: rgba(255,255,255,.88); font-size: 1.1rem; max-width: 34em; }
+.kids-kicker { color: #ffd98a !important; font-weight: 700; font-size: 13px !important; letter-spacing: .14em; text-transform: uppercase; }
+html[lang="yi"] .kids-kicker { letter-spacing: 0; font-size: 16px !important; }
+.kids-hero-actions { display: flex; flex-wrap: wrap; gap: 10px; margin-top: 20px; }
+.kids-hero-art { flex: 0 0 auto; width: 200px; color: #ffd98a; opacity: .95; }
+.kids-card { width: 100%; max-width: none; }
+.kids-card-head { display: flex; justify-content: space-between; align-items: flex-start; gap: 16px; flex-wrap: wrap; }
+.kids-card-head h2 { margin: 0; }
+.kids-stars { display: flex; gap: 2px; font-size: 1.7rem; line-height: 1; }
+.kstar { color: #e2dccf; transition: color .25s ease, transform .25s ease; }
+.kstar.is-on { color: #f2b51c; transform: scale(1.12); }
+.kids-sub { color: var(--muted); }
+.quiz-body { margin-top: 18px; }
+.quiz-loading { color: var(--muted); }
+.quiz-list { margin: 0; padding: 0; list-style: none; counter-reset: q; display: grid; gap: 16px; }
+.quiz-q { counter-increment: q; padding: 18px; border: 1px solid var(--border); border-radius: 16px; background: #fffdf8; }
+.quiz-q-text { margin: 0 0 12px !important; font: 700 1.2rem/1.4 var(--font-display); color: var(--navy); }
+.quiz-q-text::before { content: counter(q) ". "; color: var(--gold); }
+.quiz-opts { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 10px; }
+.quiz-opt { justify-content: flex-start; min-height: 52px; padding: 12px 16px; text-align: start; background: #fff; color: var(--ink); border: 2px solid var(--border); border-radius: 14px; font-size: 1.05rem; font-weight: 600; }
+.quiz-opt:hover:not([disabled]) { border-color: var(--gold-2); background: var(--gold-soft); color: var(--navy); }
+.quiz-opt[disabled] { cursor: default; opacity: .7; }
+.quiz-opt.is-right { opacity: 1; border-color: #2e9d62; background: #e7f6ee; color: #145c36; }
+.quiz-opt.is-right::after { content: " ✓"; margin-inline-start: auto; }
+.quiz-opt.is-wrong { opacity: 1; border-color: #e0a19a; background: #fdf0ee; color: #8a2a1e; }
+.quiz-feedback { margin: 10px 0 0 !important; font-weight: 600; }
+.quiz-feedback.good { color: #1d7a48; }
+.quiz-feedback.try { color: #8a5a12; }
+.quiz-done { margin-top: 20px; padding: 22px; text-align: center; border-radius: 16px; background: linear-gradient(180deg, #fff6dc, #fff); border: 1px solid #f0dca4; }
+.quiz-done-title { margin: 0 0 12px !important; font: 800 1.5rem/1.3 var(--font-display); color: var(--navy); }
+.quiz-empty { padding: 30px 18px; text-align: center; border-radius: 16px; background: linear-gradient(180deg, var(--cream), #fff); border: 1px dashed #d9c9ac; }
+.quiz-empty-orn { width: 140px; height: 26px; color: var(--gold-2); }
+.quiz-empty-title { margin: 8px 0 4px !important; font: 700 1.45rem/1.3 var(--font-display); color: var(--navy); }
+.quiz-other { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+.quiz-other-label { margin: 0 0 8px !important; font-weight: 600; color: var(--muted); }
+.quiz-other-list { display: flex; flex-wrap: wrap; gap: 8px; }
+.quiz-other-btn, .chip-btn { padding: 8px 14px; background: var(--cream); color: var(--navy); border: 1px solid var(--border); border-radius: 999px; font-weight: 600; }
+.quiz-other-btn:hover, .chip-btn:hover { background: var(--gold-soft); color: var(--navy); border-color: var(--gold-2); }
+.coloring-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 18px; margin-top: 16px; }
+.coloring-card { margin: 0; display: flex; flex-direction: column; border: 1px solid var(--border); border-radius: 16px; overflow: hidden; background: #fff; transition: transform .18s ease, box-shadow .18s ease; }
+.coloring-card:hover { transform: translateY(-2px); box-shadow: var(--shadow); }
+.coloring-art { padding: 14px; background: #fff; border-bottom: 1px solid var(--border); }
+.coloring-art svg { display: block; width: 100%; height: auto; aspect-ratio: 3 / 4; }
+.coloring-card figcaption { display: flex; align-items: center; justify-content: space-between; gap: 8px; padding: 12px 14px; background: var(--cream); }
+.coloring-name { font: 700 1.1rem/1.2 var(--font-display); color: var(--navy); }
+.coloring-print-btn { padding: 8px 14px; }
+.coloring-print { display: none; }
+@media (max-width: 860px) { .coloring-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); } .kids-hero-art { width: 130px; } }
+@media (max-width: 680px) {
+  .kids-hero { flex-direction: column; align-items: flex-start; border-radius: 18px; margin-bottom: 18px; }
+  .kids-hero-art { position: absolute; inset-inline-end: 12px; top: 12px; width: 90px; opacity: .45; }
+  .kids-hero-actions .button { flex: 1 1 auto; }
+  .coloring-grid { gap: 12px; }
+  .coloring-card figcaption { flex-direction: column; align-items: stretch; text-align: center; }
+  .quiz-opts { grid-template-columns: 1fr; }
+}
+@media print {
+  body.printing-coloring > *:not(main), body.printing-coloring main > *:not(.coloring-print) { display: none !important; }
+  body.printing-coloring main { padding: 0 !important; }
+  body.printing-coloring .coloring-print { display: block !important; text-align: center; }
+  body.printing-coloring .coloring-print svg { width: 100%; height: 225mm; }
+  .coloring-print-foot { margin: 4mm 0 0; font-size: 10pt; color: #555; }
+  .kids-hero, .quiz-other, .coloring-print-btn { display: none !important; }
+}
+
+/* ---------- Rides board ---------- */
+.rides-page { max-width: 980px; margin-inline: auto; }
+.rides-page .card { width: 100%; }
+.rides-intro { display: flex; gap: 18px; align-items: flex-start; }
+.rides-intro h2 { margin: 0 0 6px; }
+.rides-intro p { color: var(--muted); }
+.rides-state { text-align: center; }
+.rides-state h2 { margin: 0 0 8px; }
+.rides-state p { max-width: 36em; margin-inline: auto !important; color: var(--muted); }
+.rides-state .button { margin-top: 14px; }
+.rides-loading { color: var(--muted); }
+.rides-type { margin-bottom: 14px; }
+.rides-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 0 14px; }
+.rides-wide { grid-column: 1 / -1; }
+.rides-form .button { width: 100%; padding: 13px; font-size: 1.05rem; }
+.rides-status { margin-top: 10px !important; font-weight: 600; color: var(--accent-dark); }
+.rides-list-head { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; margin-bottom: 12px; }
+.rides-list-head h2 { margin: 0; }
+.rides-filter { display: flex; gap: 6px; }
+.chip-btn[aria-pressed="true"] { background: var(--navy); color: #fff; border-color: var(--navy); }
+.rides-list { display: grid; gap: 12px; }
+.ride-card { position: relative; padding: 16px 18px; border: 1px solid var(--border); border-inline-start: 5px solid var(--accent); border-radius: 14px; background: #fff; }
+.ride-card.ride-request { border-inline-start-color: var(--gold); }
+.ride-card p { margin: 2px 0 !important; }
+.ride-tag { display: inline-block; margin-bottom: 4px; padding: 2px 10px; border-radius: 999px; background: var(--accent-soft); color: var(--accent-dark); font-size: .8rem; font-weight: 700; }
+.ride-request .ride-tag { background: var(--gold-soft); color: #7a5a2e; }
+.ride-route { margin: 2px 0 4px; font-size: 1.25rem; }
+.ride-arrow { color: var(--gold); }
+.ride-when { color: var(--muted); font-weight: 500; }
+.ride-notes { color: var(--ink); }
+.ride-card .yz-remove { position: absolute; top: 10px; inset-inline-end: 10px; }
+.rides-empty { color: var(--muted); text-align: center; padding: 18px 0; }
+@media (max-width: 680px) { .rides-grid { grid-template-columns: 1fr; } .rides-intro { flex-direction: column; } }
