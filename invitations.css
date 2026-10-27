@@ -87,9 +87,10 @@ html[lang="yi"] .inv-tile-type { letter-spacing: 0; font-size: .9rem; }
 .inv-actions-row { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
 .inv-actions-row .button { padding: 10px 8px; font-size: .92rem; background: #fff; }
 .inv-actions-row .button:hover { background: var(--navy); color: #fff; }
-.inv-wa { background: #1f9d55; }
-.inv-wa:hover { background: #17834a; }
-.inv-wa svg { width: 22px; height: 22px; }
+.inv-share, .inv-rsvp { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.inv-share svg, .inv-rsvp svg { width: 20px; height: 20px; flex: none; }
+.inv-rsvp { background: var(--accent); }
+.inv-rsvp:hover { background: var(--navy); color: #fff; }
 .inv-linkbox { padding: 12px 14px; border: 1px solid var(--border); border-radius: 12px; background: #fff; }
 .inv-linkrow { display: flex; gap: 8px; }
 .inv-linkrow input { flex: 1; min-width: 0; padding: 9px 11px; border: 1px solid #cfc6b6; border-radius: 9px; font: inherit; font-size: 14px; color: var(--muted); background: var(--cream); }
@@ -129,7 +130,7 @@ html[lang="yi"] .inv-tile-type { letter-spacing: 0; font-size: .9rem; }
 .inv-view-actions .button[hidden] { display: none; }
 .inv-view-actions .button-ghost { background: #fff; border-color: var(--border); }
 .inv-view-actions .button-ghost:hover { background: var(--navy); color: #fff; border-color: var(--navy); }
-.inv-view-actions #vRsvp { grid-column: 1 / -1; }
+.inv-view-actions .inv-rsvp { grid-column: span 1; }
 .inv-view-secondary { display: flex; flex-wrap: wrap; gap: 8px 22px; margin: 16px 0 0; }
 .inv-make { margin-top: 26px; padding: 18px 20px; border-radius: var(--radius); background: var(--navy); color: rgba(255,255,255,.85); }
 .inv-make p { margin: 0 0 12px; }
@@ -180,3 +181,4 @@ html[lang="yi"] .inv-tile-type { letter-spacing: 0; font-size: .9rem; }
   body.printing-invite .invite-print img { width: 5in; height: 7in; display: block; }
   .inv-page .inv-intro, .inv-page .inv-gallery-wrap, .inv-form, .inv-actions { display: none !important; }
 }
+.inv-view-status { text-align: start; margin-top: 10px; }

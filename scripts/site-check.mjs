@@ -4,7 +4,7 @@ import vm from 'node:vm';
 
 const root = path.resolve(import.meta.dirname, '..');
 const htmlFiles = fs.readdirSync(root).filter((file) => file.endsWith('.html')).sort();
-const jsFiles = ['site.js', 'member-auth.js', 'photo-editor.js', 'widgets.js', 'invitations.js', 'pwa.js', 'share-zmanim.js', 'shabbos.js', 'yahrzeit.js', 'kids.js', 'rides.js', 'sw.js'];
+const jsFiles = ['site.js', 'member-auth.js', 'photo-editor.js', 'widgets.js', 'invitations.js', 'pwa.js', 'share-zmanim.js', 'shabbos.js', 'yahrzeit.js', 'kids.js', 'rides.js', 'hilula.js', 'sw.js'];
 const failures = [];
 let inlineScriptCount = 0;
 

@@ -77,17 +77,16 @@
     chips.replaceChildren(...state.specials.map((s) => el('li', 'sb-chip', yi() ? (s.hebrew || s.title) : s.title)));
     chips.hidden = !state.specials.length;
     $('sbFriLabel').textContent = state.fri ? ' · ' + (yi() ? 'ערב שבת ' : 'Fri. ') + civil(state.fri, false).replace(/,? \d{4}$/, '') : '';
-    $('sbWhatsApp').href = 'https://wa.me/?text=' + encodeURIComponent(whatsappText());
   }
 
   function siteBase() {
     if (/^https:$/.test(location.protocol) && !/^(localhost|127\.)/.test(location.hostname)) return location.origin + location.pathname.replace(/[^/]*$/, '');
     return 'https://david7578433-bit.github.io/khaso/';
   }
-  function whatsappText() {
+  function shareBody() {
     const lines = [];
-    if (yi()) lines.push('*שבת קודש' + (state.parshaHe ? ' ' + state.parshaHe : '') + '*');
-    else lines.push('*Shabbos' + (state.parshaEn ? ' ' + parshaName(state.parshaEn) : '') + '*');
+    if (yi()) lines.push('שבת קודש' + (state.parshaHe ? ' ' + state.parshaHe : ''));
+    else lines.push('Shabbos' + (state.parshaEn ? ' ' + parshaName(state.parshaEn) : ''));
     if (state.heDate || state.sat) lines.push([state.heDate, state.sat ? civil(state.sat, false) : ''].filter(Boolean).join(' · '));
     lines.push('');
     PLACES.forEach((p, i) => {
@@ -99,9 +98,15 @@
         : p.en + ': candles ' + w.candles + ' · havdalah ' + w.havdalah + ' · R"T ' + tam);
     });
     lines.push('');
-    lines.push((yi() ? 'זמני שבת און דברי תורה: ' : 'Shabbos zmanim & Divrei Torah: ') + siteBase() + 'shabbos.html');
+    lines.push(yi() ? 'זמני שבת און דברי תורה:' : 'Shabbos zmanim & Divrei Torah:');
     return lines.join('\n');
   }
+  function shareUrl() { return siteBase() + 'shabbos.html'; }
+  (function wireShare() {
+    const sh = $('sbShare'), cp = $('sbCopy');
+    if (sh) sh.addEventListener('click', () => { if (window.KashoShare) window.KashoShare.share({ title: document.title, text: shareBody(), url: shareUrl() }); });
+    if (cp) cp.addEventListener('click', () => { if (window.KashoShare) window.KashoShare.copyWithNote(shareBody() + '\n' + shareUrl(), 'Times copied — paste them in any message.', 'די זמנים זענען קאפירט.'); });
+  })();
 
   // ---------- Tables ----------
   function renderTimes() {

@@ -251,3 +251,51 @@
     }
   }
 })();
+
+
+// Neutral sharing (no social-media apps): the phone's own share sheet when it has one,
+// otherwise the text/link is copied to the clipboard and a short note confirms it.
+(function () {
+  if (window.KashoShare) return;
+  const yi = () => document.documentElement.lang === 'yi';
+  async function copy(text) {
+    try { if (navigator.clipboard && window.isSecureContext) { await navigator.clipboard.writeText(text); return true; } } catch (_) {}
+    const ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', ''); ta.style.position = 'fixed'; ta.style.top = '0'; ta.style.opacity = '0';
+    document.body.appendChild(ta); ta.select();
+    let ok = false; try { ok = document.execCommand('copy'); } catch (_) {}
+    ta.remove(); return ok;
+  }
+  let toastEl = null, toastTimer = 0;
+  function toast(en, yiText) {
+    if (!toastEl) {
+      toastEl = document.createElement('div');
+      toastEl.className = 'k-toast'; toastEl.setAttribute('role', 'status'); toastEl.setAttribute('aria-live', 'polite');
+      document.body.appendChild(toastEl);
+    }
+    toastEl.textContent = yi() ? (yiText || en) : en;
+    toastEl.classList.add('is-on');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toastEl.classList.remove('is-on'), 2600);
+  }
+  // share({ title, text, url }) -> 'shared' | 'aborted' | 'copied' | 'failed'
+  async function share(opts) {
+    const o = opts || {};
+    if (navigator.share) {
+      const data = {}; if (o.title) data.title = o.title; if (o.text) data.text = o.text; if (o.url) data.url = o.url;
+      try { await navigator.share(data); return 'shared'; }
+      catch (err) { if (err && err.name === 'AbortError') return 'aborted'; }
+    }
+    const ok = await copy([o.text, o.url].filter(Boolean).join('\n'));
+    if (ok) toast('Copied — paste it in any message.', 'קאפירט — לייגט עס אריין אין סיי וועלכע מעסעדזש.');
+    else toast('Could not copy — please copy the page address.', 'עס האט נישט געקענט קאפירן — קאפירט דעם אדרעס.');
+    return ok ? 'copied' : 'failed';
+  }
+  async function copyWithNote(text, en, yiText) {
+    const ok = await copy(text);
+    if (ok) toast(en || 'Copied.', yiText || 'קאפירט.');
+    else toast('Could not copy — please copy the page address.', 'עס האט נישט געקענט קאפירן — קאפירט דעם אדרעס.');
+    return ok;
+  }
+  window.KashoShare = { share, copy, copyWithNote, toast };
+})();

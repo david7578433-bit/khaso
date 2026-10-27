@@ -807,11 +807,15 @@
     const head = yi ? 'איר זענט הערצליך איינגעלאדן! ' : 'You’re invited! ';
     return head + summary(data) + (when ? '\n' + when : '') + (place(data) ? '\n' + place(data) : '') + '\n\n' + (yi ? 'די הזמנה: ' : 'Invitation: ') + link;
   }
-  function rsvpUrl(data) {
-    const digits = phoneDigits(data.r); if (!digits) return '';
+  // RSVP goes straight to the host's phone: a call (tel:) or a text message (sms:).
+  // `r` is the host phone field; older invite links carried the same number there, so they keep working.
+  function rsvpMessage(data) {
     const yi = data.l !== 'en';
-    const msg = (yi ? 'מזל טוב! איך בין מקבל די הזמנה צו ' : 'Mazel tov! Replying to your invitation for ') + summary(data) + (yi ? ' — אי״ה וועלן מיר קומען.' : ' — we hope to be there, b’ezras Hashem.');
-    return 'https://wa.me/' + digits + '?text=' + encodeURIComponent(msg);
+    return (yi ? 'מזל טוב! איך בין מקבל די הזמנה צו ' : 'Mazel tov! Replying to your invitation for ') + summary(data) + (yi ? ' — אי״ה וועלן מיר קומען.' : ' — we hope to be there, b’ezras Hashem.');
+  }
+  function rsvpLinks(data) {
+    const digits = phoneDigits(data.r); if (!digits) return null;
+    return { call: 'tel:+' + digits, text: 'sms:+' + digits + '?&body=' + encodeURIComponent(rsvpMessage(data)) };
   }
 
   // ---------------------------------------------------------------- shared UI bits
@@ -1015,9 +1019,16 @@
       const ok = await copyText(link);
       if (ok) flash(status, 'Link copied — paste it anywhere.', 'דער לינק איז קאפירט.'); else { $('#invLink').select(); flash(status, 'Select the link and copy it.', 'קאפירט דעם לינק.'); }
     }));
-    $('#btnWa').addEventListener('click', (e) => busy(e.currentTarget, async () => {
+    $('#btnShare').addEventListener('click', (e) => busy(e.currentTarget, async () => {
       const link = await refreshLink();
-      window.open('https://wa.me/?text=' + encodeURIComponent(shareText(state, link)), '_blank', 'noopener');
+      const text = shareText(state, link);
+      if (navigator.share) {
+        try { await navigator.share({ title: summary(state), text }); return; }
+        catch (err) { if (err && err.name === 'AbortError') return; }
+      }
+      const ok = await copyText(text);
+      if (ok) flash(status, 'Invitation text and link copied — paste it in any message.', 'די הזמנה מיטן לינק איז קאפירט — לייגט עס אריין אין סיי וועלכע מעסעדזש.');
+      else { $('#invLink').select(); flash(status, 'Select the link and copy it.', 'קאפירט דעם לינק.'); }
     }));
     const shareBtn = $('#btnShareImg');
     if (navigator.canShare && navigator.share) {
@@ -1091,10 +1102,26 @@
     const maps = mapsUrl(data), waze = wazeUrl(data);
     if (maps) $('#vMaps').href = maps; else $('#vMaps').hidden = true;
     if (waze) $('#vWaze').href = waze; else $('#vWaze').hidden = true;
-    const rs = rsvpUrl(data);
-    if (rs) { $('#vRsvp').href = rs; $('#vRsvp').hidden = false; }
+    const rs = rsvpLinks(data);
+    if (rs) {
+      $('#vRsvpCall').href = rs.call; $('#vRsvpCall').hidden = false;
+      $('#vRsvpText').href = rs.text; $('#vRsvpText').hidden = false;
+    }
     $('#vPng').addEventListener('click', async (e) => { e.currentTarget.disabled = true; try { saveBlob(await pngBlob(data), fileBase(data) + '.png'); } finally { e.currentTarget.disabled = false; } });
-    $('#vShare').href = 'https://wa.me/?text=' + encodeURIComponent(shareText(data, link));
+    const vStatus = $('#vStatus');
+    $('#vShare').addEventListener('click', async () => {
+      const text = shareText(data, link);
+      if (navigator.share) {
+        try { await navigator.share({ title: summary(data), text }); return; }
+        catch (err) { if (err && err.name === 'AbortError') return; }
+      }
+      const ok = await copyText(text);
+      flash(vStatus, ok ? 'Invitation text and link copied — paste it in any message.' : 'Could not copy — please copy the page address.', ok ? 'די הזמנה מיטן לינק איז קאפירט.' : 'עס האט נישט געקענט קאפירן.');
+    });
+    $('#vCopy').addEventListener('click', async () => {
+      const ok = await copyText(link);
+      flash(vStatus, ok ? 'Link copied — paste it anywhere.' : 'Could not copy — please copy the page address.', ok ? 'דער לינק איז קאפירט.' : 'עס האט נישט געקענט קאפירן.');
+    });
     $('#vMake').href = 'invitations.html#make=' + designById(data.d).id + '&t=' + data.t;
   }
 

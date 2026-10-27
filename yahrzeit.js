@@ -15,6 +15,13 @@
   const YI_MONTHS = ['יאנואר', 'פעברואר', 'מערץ', 'אפריל', 'מאי', 'יוני', 'יולי', 'אויגוסט', 'סעפטעמבער', 'אקטאבער', 'נאוועמבער', 'דעצעמבער'];
   const yi = () => document.documentElement.lang === 'yi';
   const $ = (id) => document.getElementById(id);
+  let lastShare = null;
+  document.addEventListener('click', (e) => {
+    const t = e.target.closest && e.target.closest('#yzShare, #yzCopy');
+    if (!t || !lastShare || !window.KashoShare) return;
+    if (t.id === 'yzShare') window.KashoShare.share(lastShare);
+    else window.KashoShare.copyWithNote(lastShare.text + '\n' + lastShare.url, 'Dates copied — paste them in any message.', 'די דאטעס זענען קאפירט.');
+  });
   let H = null;           // hebcal library
   let current = null;     // the entry being shown
 
@@ -193,7 +200,7 @@
     if (hasAlt) note.textContent = yi()
       ? 'די פטירה איז געווען אין אדר פון א פשוט׳ע יאר. אין א שנה מעוברת ווערן געוויזן אדר א׳ און אדר ב׳ — די מנהגים זענען פארשידן (אסאך האלטן ביידע). פרעגט אייער רב.'
       : 'The passing was in Adar of a regular year. In leap years both Adar I and Adar II are shown — customs differ (many keep both). Ask your Rav.';
-    $('yzWhatsApp').href = 'https://wa.me/?text=' + encodeURIComponent(shareText(entry, deathHd, years));
+    lastShare = { title: (yi() ? 'יארצייט' : 'Yahrzeit') + (entry.name ? ' — ' + entry.name : ''), text: shareText(entry, deathHd, years), url: siteBase() + 'yahrzeit.html' };
     $('yzSavedMsg').hidden = true;
     updateSaveButton();
   }
@@ -204,7 +211,7 @@
   }
   function shareText(entry, deathHd, years) {
     const lines = [];
-    lines.push('*' + (yi() ? 'יארצייט' : 'Yahrzeit') + (entry.name ? ' — ' + entry.name : '') + '*');
+    lines.push((yi() ? 'יארצייט' : 'Yahrzeit') + (entry.name ? ' — ' + entry.name : ''));
     lines.push(hebLabel(deathHd));
     lines.push('');
     years.slice(0, 5).forEach((y) => {
@@ -212,7 +219,7 @@
       if (y.alt) lines.push('   + ' + hebLabel(y.alt.hd) + ' — ' + civil(y.alt.date, { short: true }));
     });
     lines.push('');
-    lines.push((yi() ? 'יארצייט קאלענדאר: ' : 'Yahrzeit calendar: ') + siteBase() + 'yahrzeit.html');
+    lines.push(yi() ? 'יארצייט קאלענדאר:' : 'Yahrzeit calendar:');
     return lines.join('\n');
   }
 

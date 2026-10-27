@@ -1,6 +1,6 @@
 // "Share today's zmanim": draws a card image (Hebrew + English date, parsha, the day's zmanim for the
 // chosen place, the Kasho logo and the site address) and shares it with the Web Share API, or offers
-// a download plus a WhatsApp text message. Everything happens in the browser; nothing is uploaded.
+// a download plus copy-text / copy-link buttons. Everything happens in the browser; nothing is uploaded.
 (function () {
   const CANON = 'https://david7578433-bit.github.io/khaso/';
   const ROWS = [
@@ -211,7 +211,7 @@
   function shareText(state, heb) {
     const lines = [];
     const lang = yi() ? 'yi' : 'en';
-    lines.push(lang === 'yi' ? '*זמני היום · ' + (state.placeYi || state.placeEn) + '*' : "*Today's Zmanim · " + state.placeEn + '*');
+    lines.push(lang === 'yi' ? 'זמני היום · ' + (state.placeYi || state.placeEn) : "Today's Zmanim · " + state.placeEn);
     lines.push(civil(state.date, lang) + (heb && heb.he ? ' · ' + heb.he : ''));
     if (heb && (heb.parshaEn || heb.parshaHe)) lines.push(lang === 'yi' ? (heb.parshaHe || '') : heb.parshaEn.replace(/^Parashat\s+/, 'Parshas '));
     lines.push('');
@@ -241,11 +241,11 @@
       '<div class="zshare-preview"><div class="zshare-loading">' + L('Preparing the card…', 'מען גרייט צו דעם קארטל…') + '</div><img alt="" hidden></div>' +
       '<div class="zshare-actions">' +
       '<button type="button" class="button button-gold zshare-native" hidden>' + L('Share image', 'שיקט דאס בילד') + '</button>' +
-      '<a class="button zshare-wa" target="_blank" rel="noopener">' + L('Send on WhatsApp', 'שיקט אויף וואטסאפ') + '</a>' +
       '<a class="button button-ghost zshare-download" download>' + L('Download image', 'דאונלאוד דאס בילד') + '</a>' +
       '<button type="button" class="button button-ghost zshare-copy">' + L('Copy text', 'קאפירט טעקסט') + '</button>' +
+      '<button type="button" class="button button-ghost zshare-copylink">' + L('Copy link', 'קאפירט דעם לינק') + '</button>' +
       '</div>' +
-      '<p class="zshare-hint" data-hint>' + L('Tip: download the image, then attach it in WhatsApp. The WhatsApp button sends the times as text with the site link.', 'טיפ: דאונלאוד דאס בילד און שיקט עס אין וואטסאפ. דער וואטסאפ קנעפל שיקט די זמנים אלס טעקסט מיט דעם לינק.') + '</p>' +
+      '<p class="zshare-hint" data-hint>' + L('Tip: download the image and attach it to any message, or copy the times as text with the site link.', 'טיפ: דאונלאוד דאס בילד און לייגט עס צו צו סיי וועלכע מעסעדזש, אדער קאפירט די זמנים אלס טעקסט מיטן לינק.') + '</p>' +
       '</div>';
     document.body.appendChild(dialog);
     dialog.querySelectorAll('[data-close]').forEach((el) => el.addEventListener('click', closeDialog));
@@ -255,6 +255,15 @@
       try {
         await navigator.share({ files: [current.file], title: T("Today's zmanim", 'זמני היום'), text: T("Today's zmanim — ", 'זמני היום — ') + siteBase() + 'zmanim.html' });
       } catch (_) {}
+    });
+    dialog.querySelector('.zshare-copylink').addEventListener('click', async (event) => {
+      const button = event.currentTarget;
+      const link = siteBase() + 'zmanim.html';
+      let ok = false;
+      if (window.KashoShare) ok = await window.KashoShare.copy(link);
+      else { try { await navigator.clipboard.writeText(link); ok = true; } catch (_) {} }
+      const old = button.innerHTML; button.innerHTML = ok ? L('Copied ✓', 'קאפירט ✓') : L('Copy failed', 'נישט קאפירט');
+      setTimeout(() => { button.innerHTML = old; }, 1800);
     });
     dialog.querySelector('.zshare-copy').addEventListener('click', async (event) => {
       if (!current) return;
@@ -301,7 +310,6 @@
     img.src = url; img.alt = T("Today's zmanim card for ", 'זמנים קארטל פאר ') + (yi() ? (state.placeYi || state.placeEn) : state.placeEn);
     img.hidden = false; loading.hidden = true;
     const dl = dialog.querySelector('.zshare-download'); dl.href = url; dl.setAttribute('download', name);
-    dialog.querySelector('.zshare-wa').href = 'https://wa.me/?text=' + encodeURIComponent(text);
     const canShareFiles = !!(navigator.canShare && navigator.share && (() => { try { return navigator.canShare({ files: [file] }); } catch (_) { return false; } })());
     dialog.querySelector('.zshare-native').hidden = !canShareFiles;
     dialog.querySelector('[data-hint]').hidden = canShareFiles;

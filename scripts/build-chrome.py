@@ -8,7 +8,7 @@ admin.html is skipped on purpose (it has its own layout and does not load site.j
 import html, pathlib, re, sys
 
 ROOT = pathlib.Path(__file__).resolve().parent.parent
-ASSET_VERSION = "20261027-3"
+ASSET_VERSION = "20261027-5"
 SKIP = {"admin.html"}
 BARE = {"offline.html"}     # service-worker offline fallback: no chrome
 FLOATING = {"ages.html"}          # full-screen chat app: menu button only, no page band/footer
@@ -34,6 +34,7 @@ NAV = [
     ("invitations.html", "Invitations", "הזמנות", None),
     ("yeshiva.html", "Yeshiva", "ישיבה", None),
     (None, "More", "מער", [
+        ("hilula.html", "Shabbos Hilula 5787", "שבת הילולא תשפ״ז"),
         ("yahrzeit.html", "Yahrzeit calendar", "יארצייט קאלענדאר"),
         ("kids.html", "Kids' corner", "קינדער ווינקל"),
         ("rides.html", "Rides board", "רייד ברעט"),
@@ -77,8 +78,9 @@ SUBTITLE = {
     "recordings.html": ("Divrei Kodesh and recordings", "דברות קודש און רעקארדירונגען"),
     "business.html": ("Businesses in our community", "געשעפטן פון אונדזער קהילה"),
     "ages-hub.html": ("Members area for each year", "מעמבערס טייל פאר יעדן יארגאנג"),
-    "invitations.html": ("Beautiful invitations for every simcha — share on WhatsApp or print", "שיינע הזמנות פאר יעדע שמחה — שיקט אויף וואטסאפ אדער דרוקט"),
+    "invitations.html": ("Beautiful invitations for every simcha — share or print", "שיינע הזמנות פאר יעדע שמחה — שיקט אדער דרוקט"),
     "shabbos.html": ("Parsha, Shabbos times and Divrei Torah for this week", "פרשה, זמני שבת און דברי תורה פאר די וואך"),
+    "hilula.html": ("Parshas Ki Sisa · 20 Adar I 5787 · Gathering of all Kasho talmidim &amp; chassidim", "פרשת כי תשא · כ׳ אדר א׳ תשפ״ז · התאחדות כלל תלמידי וחסידי קאשוי"),
     "yahrzeit.html": ("Find the yahrzeit for the next 10 years and add reminders to your calendar", "געפינט דעם יארצייט פאר די קומענדיגע 10 יאר און לייגט צו דערמאנונגען אין אייער קאלענדאר"),
     "kids.html": ("This week's parsha quiz and coloring pages to print", "א פרשה קוויז פאר די וואך און בילדער צו פארבן"),
     "rides.html": ("Find or offer a ride between our communities", "געפינט אדער באט אן א רייד צווישן אונדזערע קהילות"),
@@ -90,7 +92,8 @@ FOOTER_LINKS = [
     ("news.html", "News", "נייעס"), ("simchas.html", "Simchas", "שמחות"),
     ("invitations.html", "Simcha invitations", "הזמנות"),
     ("editorial.html", "Submit news", "שיקט אריין"), ("yeshiva.html", "Yeshiva", "ישיבה"),
-    ("shabbos.html", "Shabbos", "שבת קודש"), ("zmanim.html", "Zmanim", "זמנים"),
+    ("shabbos.html", "Shabbos", "שבת קודש"), ("hilula.html", "Shabbos Hilula 5787", "שבת הילולא תשפ״ז"),
+    ("zmanim.html", "Zmanim", "זמנים"),
     ("yahrzeit.html", "Yahrzeit calendar", "יארצייט קאלענדאר"), ("kids.html", "Kids' corner", "קינדער ווינקל"),
     ("rides.html", "Rides board", "רייד ברעט"), ("pictures.html", "Pictures", "בילדער"),
     ("recordings.html", "Recordings", "רעקארדירונגען"), ("business.html", "Business", "געשעפטן"),
@@ -129,13 +132,15 @@ SEO = {
     "yeshiva.html": ("Kasho Yeshiva Ktana, Yeshiva Gedola & Camp · ישיבת קאשוי",
                      "The Kasho (Kashau, קאשוי) yeshivos: Yeshiva Ktana and Yeshiva Gedola in Brooklyn, and the camp."),
     "zmanim.html": ("Today's Zmanim — Williamsburg, Monsey, Kiryas Joel · זמנים | Kasho קאשוי",
-                    "Today's zmanim (halachic times) for Williamsburg, Monsey, Kiryas Joel and more — or your exact location. Print or share today's zmanim card on WhatsApp."),
+                    "Today's zmanim (halachic times) for Williamsburg, Monsey, Kiryas Joel and more — or your exact location. Print or share today's zmanim card from your phone."),
     "shabbos.html": ("Shabbos Times & This Week's Parsha · זמני שבת | Kasho קאשוי",
                      "This week's parsha, candle lighting, havdalah and Rabbeinu Tam for Williamsburg, Monsey and Kiryas Joel, Shabbos zmanim and the Divrei Torah of the week — Kasho (קאשוי)."),
+    "hilula.html": ("Shabbos Hilula Kadisha 5787 · שבת הילולא קדישא תשפ״ז | Kasho קאשוי",
+                    "Shabbos Hilula Kadisha, Parshas Ki Sisa, 20 Adar I 5787 (כ׳ אדר א׳ תשפ״ז) — gathering of all Kasho talmidim and chassidim (התאחדות כלל תלמידי וחסידי קאשוי). The poster, Shabbos times for Williamsburg, Monsey and Kiryas Joel, and add to calendar."),
     "yahrzeit.html": ("Yahrzeit Calendar — Find the Yahrzeit Date · יארצייט | Kasho קאשוי",
                       "Find the yahrzeit for the next 10 years from the English or Hebrew date of passing (Adar I/II handled), with the evening it begins and calendar reminders. Private — nothing is sent anywhere."),
     "invitations.html": ("Simcha Invitations · הזמנות — Free Chasuna, Vort & Bar Mitzvah Invitations | Kasho",
-                         "Make a beautiful simcha invitation in a minute — chasuna, vort, bar mitzvah, bris, kiddush, upsherin, sheva brachos, siyum. Yiddish or English, download or share on WhatsApp. Free, from the Kasho (קאשוי) community site."),
+                         "Make a beautiful simcha invitation in a minute — chasuna, vort, bar mitzvah, bris, kiddush, upsherin, sheva brachos, siyum. Yiddish or English, download, print or share from your phone. Free, from the Kasho (קאשוי) community site."),
     "pictures.html": ("Kasho Photo Albums · בילדער | קאשוי",
                       "Photo albums from the Kasho (Kashau, קאשוי) community, yeshivos and events."),
     "gallery.html": ("Photo Gallery · בילדער | Kasho קאשוי",
@@ -155,7 +160,7 @@ SEO = {
 NOINDEX = {"ages.html", "ages-hub.html", "thread.html", "phone-book.html", "age-photos.html", "community.html",
            "coming-soon.html", "offline.html", "admin.html", "invite.html"}
 SITEMAP_PRIORITY = {"index.html": "1.0", "zmanim.html": "0.9", "shabbos.html": "0.9", "invitations.html": "0.9",
-                    "yahrzeit.html": "0.8", "botei-medrash.html": "0.8", "kids.html": "0.7"}
+                    "yahrzeit.html": "0.8", "hilula.html": "0.8", "botei-medrash.html": "0.8", "kids.html": "0.7"}
 
 CHEVRON = '<svg class="chev" viewBox="0 0 12 12" aria-hidden="true"><path d="M3 4.5 6 7.5 9 4.5" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"/></svg>'
 
@@ -389,7 +394,7 @@ def process(path):
         text = text.replace("</head>", FONT_LINKS + "\n</head>", 1)
     text = re.sub(r'href="style\.css(?:\?v=[^"]*)?"', f'href="style.css?v={ASSET_VERSION}"', text)
     text = re.sub(r'src="site\.js(?:\?v=[^"]*)?"', f'src="site.js?v={ASSET_VERSION}"', text)
-    for asset in ("widgets.js", "share-zmanim.js", "yahrzeit.js", "shabbos.js", "kids.js", "rides.js"):
+    for asset in ("widgets.js", "share-zmanim.js", "yahrzeit.js", "shabbos.js", "kids.js", "rides.js", "hilula.js"):
         text = re.sub(rf'src="{re.escape(asset)}(?:\?v=[^"]*)?"', f'src="{asset}?v={ASSET_VERSION}"', text)
     text = text.replace('content="https://david7578433-bit.github.io/khaso/logo.png"', 'content="https://david7578433-bit.github.io/khaso/og-card.png"')
     if 'property="og:image:width"' not in text and "og-card.png" in text:
