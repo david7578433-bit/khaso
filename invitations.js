@@ -326,6 +326,13 @@
       name: { en: s.en, yi: s.yi }, bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, foil: s.f,
       fy: fs.fy, fe: fs.fe, by: fs.by, be: fs.be, frame: 'scene' });
   });
+  const SCENES_V2 = [{"k": "babyrattle", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "navy", "f": "silver", "fs": "soft", "en": "Silver Rattle on Blue Blanket", "yi": "זילבערנע קלאפער אויף בלויע דעקל", "o": 0, "r": [0.252, 0.238, 0.505, 0.536]}, {"k": "babybottle", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "blue", "f": "blue", "fs": "soft", "en": "Bottle & Knit Hat", "yi": "פלעשל מיט געשטריקט היטל", "o": 0, "r": [0.204, 0.198, 0.591, 0.634]}, {"k": "bluballoons", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "blue", "f": "blue", "fs": "soft", "en": "Blue & White Balloons", "yi": "בלויע און ווייסע באלאנען", "o": 0, "r": [0.228, 0.337, 0.567, 0.524]}, {"k": "swaddle", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "white", "p": "navy", "f": "blue", "fs": "soft", "en": "Swaddle & Little Kippah", "yi": "וויקל מיט קליין יארמלקע", "o": 0, "r": [0.245, 0.209, 0.51, 0.568]}, {"k": "navyvelvet", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben", "general"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Navy Velvet & Ivory Arch", "yi": "בלויער סאמעט מיט עלפנביין בויגן", "o": 0, "r": [0.215, 0.25, 0.57, 0.565]}, {"k": "babyblue", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "blue", "f": "blue", "fs": "soft", "en": "Baby Blue Scallop & Hydrangea", "yi": "בלויע בלומען מיט וועלןראנד", "o": 0, "r": [0.225, 0.205, 0.55, 0.59]}, {"k": "navycard", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben", "barmitzvah", "general"], "c": "navy", "p": "dark", "f": "lightgold", "fs": "classic", "en": "Navy Card & Gold Seal", "yi": "בלויער קארטל מיט גאלדענעם זיגל", "o": 0, "r": [0.25, 0.213, 0.5, 0.574]}, {"k": "pearlsblue", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "blue", "f": "silver", "fs": "soft", "en": "Pearls & Blue Satin", "yi": "פערל מיט בלויע בלומען", "o": 0, "r": [0.204, 0.185, 0.592, 0.617]}, {"k": "archmarble", "t": "shalomzachor", "also": ["bris", "vachnacht", "pidyonhaben", "general"], "c": "white", "p": "navy", "f": "silver", "fs": "classic", "en": "White Arch on Marble", "yi": "ווייסער בויגן אויף מירמל", "o": 0, "r": [0.215, 0.27, 0.57, 0.566]}, {"k": "goldframe", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben", "barmitzvah", "general"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Gold Frame on Navy", "yi": "גאלדענע ראם אויף בלוי", "o": 0, "r": [0.231, 0.226, 0.542, 0.599]}, {"k": "chasunaivory", "t": "chasuna", "also": ["vort", "shevabrachos", "kiddush"], "c": "pink", "p": "navy", "f": "gold", "fs": "classic", "en": "Ivory & Peonies", "yi": "עלפנביין מיט פיוניעס", "o": 0, "r": [0.215, 0.231, 0.57, 0.538]}, {"k": "blackgold", "t": "barmitzvah", "also": ["chasuna", "vort", "siyum", "general"], "c": "black", "p": "dark", "f": "lightgold", "fs": "classic", "en": "Black Marble & Gold", "yi": "שווארצער מירמל מיט גאלד", "o": 0, "r": [0.226, 0.186, 0.556, 0.631]}, {"k": "burgundyseal", "t": "chasuna", "also": ["barmitzvah", "vort", "shevabrachos", "general"], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Burgundy Ribbon & Seal", "yi": "בורגונדי באנד מיט זיגל", "o": 0, "r": [0.201, 0.194, 0.596, 0.576]}, {"k": "greenlinen", "t": "chanukashabayis", "also": ["general", "siyum", "kiddush"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Sage Linen & Olive", "yi": "גרינער לייוונט מיט אליוו צווייג", "o": 0, "r": [0.215, 0.195, 0.57, 0.609]}, {"k": "seforim", "t": "siyum", "also": ["barmitzvah", "general"], "c": "cream", "p": "brown", "f": "gold", "fs": "classic", "en": "Before the Seforim Shelf", "yi": "פאר דער ספרים שאנק", "o": 0, "r": [0.22, 0.193, 0.56, 0.614]}, {"k": "blushkiddush", "t": "kiddush", "also": ["vort", "shevabrachos", "chasuna"], "c": "pink", "p": "rose", "f": "gold", "fs": "soft", "en": "Blush & Rose Gold", "yi": "ראזע מיט ראזגאלד", "o": 0, "r": [0.21, 0.177, 0.58, 0.647]}, {"k": "rusticwood", "t": "upsherin", "also": ["chanukashabayis", "general"], "c": "cream", "p": "brown", "f": "gold", "fs": "classic", "en": "Wheat on Warm Wood", "yi": "ווייץ אויף האלץ", "o": 0, "r": [0.2, 0.199, 0.592, 0.604]}, {"k": "whitemodern", "t": "general", "also": ["chasuna", "vort", "barmitzvah", "bris", "kiddush", "chanukashabayis"], "c": "white", "p": "navy", "f": "gold", "fs": "classic", "en": "Modern White & Gold Line", "yi": "ווייס מיט א גאלדענער ליניע", "o": 0, "r": [0.215, 0.209, 0.571, 0.591]}];
+  SCENES_V2.forEach((s) => {
+    const p = SCENE_PAL[s.p] || SCENE_PAL.navy, fs = FONTSETS[s.fs] || FONTSETS.classic;
+    DESIGNS.push({ id: 'scene-' + s.k, type: s.t, also: s.also || [], isNew: true, isV2: true, isScene: true, family: 'scene', scene: s, color: s.c, dark: s.p === 'dark',
+      name: { en: s.en, yi: s.yi }, bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, foil: s.f,
+      fy: fs.fy, fe: fs.fe, by: fs.by, be: fs.be, frame: 'scene' });
+  });
   FAMILY_NAMES.scene = { en: 'Photo scene', yi: 'פאטא סצענע' };
   const sceneImgs = {};
   function sceneSrc(key, small) { return 'images/inv-scenes/' + key + (small ? '-s' : '') + '.webp'; }
@@ -347,7 +354,8 @@
     lightgold: ['#b08537', 0, '#efd690', 0.4, '#fff3cc', 0.52, '#d9b366', 0.68, '#a07730', 1],
     rose: ['#874a40', 0, '#c98a7b', 0.35, '#f1cbbd', 0.5, '#b97a6b', 0.66, '#7a3f35', 1],
     blue: ['#1c3a6b', 0, '#3f6aa8', 0.35, '#8db0e0', 0.5, '#3b64a2', 0.66, '#1a3564', 1],
-    silver: ['#4d5463', 0, '#9aa3b1', 0.35, '#f2f4f7', 0.5, '#8c95a3', 0.66, '#454c5a', 1]
+    silver: ['#4d5463', 0, '#9aa3b1', 0.35, '#f2f4f7', 0.5, '#8c95a3', 0.66, '#454c5a', 1],
+    deepgold: ['#5a3f0e', 0, '#94702c', 0.3, '#c9a24f', 0.48, '#a07a31', 0.62, '#5e430f', 1]
   };
 
   // ---------------------------------------------------------------- Hebrew calendar (offline, via Intl)
@@ -457,6 +465,7 @@
       ? document.fonts.load(wt + ' 40px "' + fam + '"', 'אבג Abc').catch(() => null) : Promise.resolve());
     if (document.fonts && document.fonts.load) {
       loads.push(document.fonts.load('italic 500 40px "Cormorant Garamond"', 'Abc').catch(() => null));
+      if (design.be) loads.push(document.fonts.load('italic ' + design.be[1] + ' 40px "' + design.be[0] + '"', 'Abc').catch(() => null));
     }
     const timeout = new Promise((r) => setTimeout(r, 4000));
     fontReady[key] = Promise.race([Promise.all(loads), timeout]);
@@ -1318,25 +1327,30 @@
     const B = [];
     const t = (text, spec, size, color, gap, opts) => { if (text && String(text).trim()) B.push(Object.assign({ kind: 'text', text: String(text).trim(), spec, size, color, gap, maxW }, opts || {})); };
     t(w.open, body, 40, d.muted, 26, { italic: !yi });
-    t(titleText(data), disp, (yi ? 132 : 104) * (d.isScene ? 1.12 : 1), d.title, 18, { lh: 1.12, track: yi ? 0 : 6, foil: d.foil, dark: d.dark });
+    const v2 = !!d.isV2;
+    let ttl = titleText(data);
+    if (yi && (d.stack || v2) && !data.ti) { const ws = String(ttl).trim().split(/\s+/); if (ws.length === 2 || ws.length === 3) ttl = ws.length === 2 ? ws.join('\n') : ws[0] + '\n' + ws[1] + ' ' + ws[2]; }
+    const tsz = yi ? (v2 ? 230 : (d.isScene ? 215 : 172)) : (v2 ? 160 : (d.isScene ? 132 : 118)) * (d.escale || 1);
+    t(ttl, disp, tsz, d.title, 22, { lh: yi ? 1.0 : 1.08, track: yi ? 0 : (d.etrack !== undefined ? d.etrack : 6), foil: d.foil, dark: d.dark });
     B.push({ kind: 'div', h: 56, gap: 22 });
-    t(data.w || w.invite, body, 46, d.ink, 44, { maxW: Math.min(maxW, 1000), lh: 1.42 });
+    t(data.w || w.invite, body, d.isV2 ? 50 : 46, d.ink, 44, { maxW: Math.min(maxW, 1000), lh: 1.42 });
     if (data.p) {
       t(w.p, body, 36, d.muted, 4, { italic: !yi });
-      t(data.p, disp, yi ? 110 : 92, d.nm, type.two ? 14 : 40, { lh: 1.12 });
+      t(data.p, disp, yi ? 118 : 94, d.nm, type.two ? 14 : 40, { lh: 1.12 });
     }
     if (type.two && data.s) {
       if (data.p) t(w.c, body, yi ? 44 : 56, d.title, 14, { italic: !yi });
       t(w.s, body, 36, d.muted, 4, { italic: !yi });
-      t(data.s, disp, yi ? 110 : 92, d.nm, 40, { lh: 1.12 });
+      t(data.s, disp, yi ? 118 : 94, d.nm, 40, { lh: 1.12 });
     }
     B.push({ kind: 'div', h: 56, gap: 30 });
     const hd = data.hd || (hebrewParts(data.dt) || {})[lang];
     t(dayLine(data, lang), body, 44, d.ink, 10);
-    t(hd, disp, yi ? 72 : 62, d.title, 8, { track: 0 });
+    t(hd, SCRIPT_FONTS[disp[0]] ? [body[0], 600] : disp, yi ? 72 : 62, d.title, 8, { track: 0 });
     if (data.dt) t(civilLong(data.dt, yi ? 'yi' : 'en'), body, 36, d.muted, 18);
     t(timeLabel(data.tm, lang), body, 46, d.ink, 30, { weight: 700 });
-    t(data.v, disp, yi ? 64 : 56, d.nm, 8, { lh: 1.15 });
+    const plain = SCRIPT_FONTS[disp[0]] ? [body[0], 600] : disp;
+    t(data.v, plain, yi ? 64 : 56, d.nm, 8, { lh: 1.15 });
     t(data.a, body, 38, d.muted, 26);
     t(data.n, body, 38, d.ink, 30, { italic: !yi && !HE.test(data.n || ''), lh: 1.38, maxW: Math.min(maxW, 980) });
     if (data.h1 || data.h2) {
@@ -1374,7 +1388,7 @@
 
   function drawBlocks(ctx, B, d, box, divStyle) {
     let s = 1, total = measure(ctx, B, s);
-    if (total < box.h * 0.8) { s = Math.min(d.isScene ? 1.3 : 1.2, (box.h * 0.86) / total); total = measure(ctx, B, s); }
+    if (total < box.h * 0.8) { s = Math.min(d.isScene ? 1.3 : (d.isV2 ? 1.45 : 1.2), (box.h * (d.isV2 ? 0.93 : 0.86)) / total); total = measure(ctx, B, s); }
     for (let i = 0; i < 12 && total > box.h; i++) { s *= Math.max(0.8, (box.h / total) * 0.99); total = measure(ctx, B, s); }
     let y = box.y + Math.max(0, (box.h - total) / 2);
     const cx = box.x + box.w / 2;
@@ -2347,8 +2361,476 @@
   };
   Object.assign(FRAMES, MORE_FRAMES);
 
-  function paint(ctx, data, img) {
+
+  // ================================================================ Printed classics (Nov 2026, v2)
+  // Typography-led cards the way frum printers print them: a plain stock, a big heavy Hebrew title, thin foil rules,
+  // a die-cut card shape or a small ornament. Style ideas only (see the research notes); every line is drawn here.
+  const K_SURF = { navygold: '#e6dfd1', navysilver: '#d8dce2', midnight: '#ddd5c4', denimgold: '#ebe4d6', blackgold: '#d6cfc2',
+    burgundygold: '#e6dccf', emeraldgold: '#e3ded0', purplegold: '#e2dbe4', charcoalcopper: '#dcd4cb', powderblue: '#2b4163',
+    skywhite: '#304a6d', whiteblue: '#22375a', creamnavy: '#24344f', silvergrey: '#40454f', ivorygold: '#2e3d4f',
+    creamburgundy: '#5b1c2c', blushsilver: '#b79692', ivorysage: '#5c6d55', whitesilver: '#7f8794', tealsand: '#1f4d4a', navywhite: '#1d2f42',
+    blushgold: '#c5a29a', ivorynavy: '#1e2d47' };
+  function kSurface(ctx, d) { // fabric / linen the card lies on
+    const c = d.surf || '#2e3d4f';
+    const g = ctx.createRadialGradient(W * 0.45, H * 0.4, 100, W / 2, H / 2, H * 0.8);
+    g.addColorStop(0, mix(c, '#ffffff', 0.12)); g.addColorStop(1, mix(c, '#000000', 0.22));
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    ctx.save(); ctx.globalAlpha = 0.05; ctx.strokeStyle = '#ffffff'; ctx.lineWidth = 1;
+    for (let x = 0; x < W; x += 6) { ctx.beginPath(); ctx.moveTo(x, 0); ctx.lineTo(x, H); ctx.stroke(); }
+    ctx.globalAlpha = 0.04; ctx.strokeStyle = '#000000';
+    for (let y = 0; y < H; y += 6) { ctx.beginPath(); ctx.moveTo(0, y); ctx.lineTo(W, y); ctx.stroke(); }
+    ctx.restore();
+  }
+  // the card face: soft gradient + fine paper grain, clipped to `path`
+  function kFace(ctx, d, path, shadow) {
+    if (shadow) { ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.38)'; ctx.shadowBlur = 46; ctx.shadowOffsetY = 22; ctx.fillStyle = d.bg[0]; ctx.beginPath(); path(ctx); ctx.fill(); ctx.restore(); }
+    ctx.save(); ctx.beginPath(); path(ctx); ctx.clip();
+    const g = ctx.createLinearGradient(0, 0, W * 0.35, H); g.addColorStop(0, d.bg[0]); g.addColorStop(1, d.bg[1]);
+    ctx.fillStyle = g; ctx.fillRect(0, 0, W, H);
+    grain(ctx, d.dark ? '#ffffff' : '#6b5a40', d.dark ? 0.025 : 0.035, 3500, 7);
+    ctx.restore();
+  }
+  const kFull = () => (ctx) => ctx.rect(0, 0, W, H);
+  function kRect(ctx, x, y, w, h) { ctx.rect(x, y, w, h); }
+  function kFoil(ctx, d, x0, y0, x1, y1) { return metal(ctx, d.line, x0, y0, x1, y1); }
+  function kRule(ctx, d, inset, lw, r) { ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = lw; ctx.beginPath();
+    if (r) roundRectPath(ctx, inset, inset, W - inset * 2, H - inset * 2, r); else ctx.rect(inset, inset, W - inset * 2, H - inset * 2); ctx.stroke(); ctx.restore(); }
+  function kDiamond(ctx, cx, cy, r, fill) { ctx.save(); ctx.fillStyle = fill; ctx.beginPath(); ctx.moveTo(cx, cy - r); ctx.lineTo(cx + r * 0.62, cy); ctx.lineTo(cx, cy + r); ctx.lineTo(cx - r * 0.62, cy); ctx.closePath(); ctx.fill(); ctx.restore(); }
+  // a symmetric scroll flourish, centred on (cx, cy), `w` wide; flip = -1 draws it upside down
+  function kFlourish(ctx, cx, cy, w, color, flip) {
+    ctx.save(); ctx.translate(cx, cy); ctx.scale(1, flip || 1); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineCap = 'round';
+    [-1, 1].forEach((s) => {
+      ctx.save(); ctx.scale(s, 1);
+      ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(18, 0); ctx.bezierCurveTo(w * 0.16, -w * 0.09, w * 0.3, w * 0.07, w * 0.42, -w * 0.02); ctx.stroke();
+      ctx.lineWidth = 3; ctx.beginPath(); spiral(ctx, w * 0.42 + w * 0.03, -w * 0.035, w * 0.04, 1.2, Math.PI, 1); ctx.stroke();
+      ctx.lineWidth = 2.6; ctx.beginPath(); ctx.moveTo(w * 0.1, -w * 0.035); ctx.bezierCurveTo(w * 0.14, -w * 0.12, w * 0.24, -w * 0.12, w * 0.24, -w * 0.07); ctx.stroke();
+      ctx.beginPath(); spiral(ctx, w * 0.215, -w * 0.075, w * 0.025, 1, 0, -1); ctx.stroke();
+      ctx.lineWidth = 2.2; ctx.beginPath(); ctx.moveTo(w * 0.2, w * 0.03); ctx.bezierCurveTo(w * 0.27, w * 0.08, w * 0.34, w * 0.06, w * 0.36, w * 0.02); ctx.stroke();
+      leaf(ctx, w * 0.3, -w * 0.06, w * 0.06, -0.9, color, true);
+      ctx.beginPath(); ctx.arc(w * 0.5, -w * 0.02, 4.5, 0, TAU); ctx.fill();
+      ctx.restore();
+    });
+    ctx.beginPath(); ctx.moveTo(0, -20); ctx.quadraticCurveTo(10, -6, 0, 18); ctx.quadraticCurveTo(-10, -6, 0, -20); ctx.fill();
+    ctx.beginPath(); ctx.arc(0, -32, 5.5, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  const kBox = (x, y, w, h, div) => ({ x, y, w, h, bsd: [x + w - 20, y - 50], div: div || 'diamond' });
+
+  // 1 · thick-and-thin double rule, little diamonds at the corners
+  FRAMES.kDouble = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    kRule(ctx, d, 62, 9); kRule(ctx, d, 86, 2.4);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    [[86, 86], [W - 86, 86], [86, H - 86], [W - 86, H - 86]].forEach(([x, y]) => kDiamond(ctx, x, y, 20, f));
+    return kBox(170, 220, W - 340, H - 400, 'diamond');
+  };
+  // 2 · hairline frame with scroll corners and a crest flourish on top
+  FRAMES.kCorners = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    kRule(ctx, d, 74, 2.4);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    [[1, 1], [-1, 1], [1, -1], [-1, -1]].forEach(([sx, sy]) => cornerScroll(ctx, sx > 0 ? 96 : W - 96, sy > 0 ? 96 : H - 96, sx, sy, 150, f, 4));
+    kFlourish(ctx, W / 2, 150, 420, f, 1);
+    return kBox(180, 270, W - 360, H - 460, 'flourish');
+  };
+  // 3 · arched card lying on fabric
+  FRAMES.kArch = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 150, y = 120, w = W - 300, h = H - 240, r = w / 2;
+    const arch = (ix) => () => { ctx.moveTo(x + ix, y + h - ix); ctx.lineTo(x + ix, y + r); ctx.arc(W / 2, y + r, r - ix, Math.PI, 0); ctx.lineTo(x + w - ix, y + h - ix); ctx.closePath(); };
+    kFace(ctx, d, arch(0), true);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 6; ctx.beginPath(); arch(38)(); ctx.stroke(); ctx.lineWidth = 2; ctx.beginPath(); arch(56)(); ctx.stroke(); ctx.restore();
+    kDiamond(ctx, W / 2, y + 100, 18, f);
+    return kBox(x + 120, y + 330, w - 240, h - 430, 'dot');
+  };
+  // 4 · scalloped die-cut card on linen
+  FRAMES.kScallop = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 130, y = 120, w = W - 260, h = H - 240, r = 26;
+    const path = () => {
+      const nx = Math.round(w / (r * 2)), ny = Math.round(h / (r * 2)), sx = w / nx, sy = h / ny;
+      ctx.moveTo(x, y);
+      for (let i = 0; i < nx; i++) ctx.arc(x + sx * (i + 0.5), y, sx / 2, Math.PI, 0, false);
+      for (let i = 0; i < ny; i++) ctx.arc(x + w, y + sy * (i + 0.5), sy / 2, -Math.PI / 2, Math.PI / 2, false);
+      for (let i = nx - 1; i >= 0; i--) ctx.arc(x + sx * (i + 0.5), y + h, sx / 2, 0, Math.PI, false);
+      for (let i = ny - 1; i >= 0; i--) ctx.arc(x, y + sy * (i + 0.5), sy / 2, Math.PI / 2, Math.PI * 1.5, false);
+      ctx.closePath();
+    };
+    kFace(ctx, d, path, true);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 2.6; ctx.beginPath(); ctx.rect(x + 50, y + 50, w - 100, h - 100); ctx.stroke();
+    ctx.setLineDash([2, 10]); ctx.lineWidth = 3; ctx.lineCap = 'round'; ctx.beginPath(); ctx.rect(x + 68, y + 68, w - 136, h - 136); ctx.stroke(); ctx.restore();
+    return kBox(x + 140, y + 200, w - 280, h - 330, 'star');
+  };
+  // 5 · coloured bands top and bottom with a foil edge
+  FRAMES.kBands = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const band = d.dark ? mix(d.bg[0], '#000000', 0.35) : mix(d.nm, d.title, 0.2), bh = 150;
+    ctx.save(); ctx.fillStyle = band; ctx.fillRect(0, 0, W, bh); ctx.fillRect(0, H - bh, W, bh);
+    const f = kFoil(ctx, d, 0, 0, W, 0);
+    ctx.fillStyle = f; ctx.fillRect(0, bh, W, 8); ctx.fillRect(0, H - bh - 8, W, 8);
+    ctx.fillRect(0, bh + 20, W, 2.5); ctx.fillRect(0, H - bh - 22, W, 2.5);
+    ctx.restore();
+    kDiamond(ctx, W / 2, bh + 4, 22, kFoil(ctx, d, 0, 0, W, H)); kDiamond(ctx, W / 2, H - bh - 4, 22, kFoil(ctx, d, 0, 0, W, H));
+    return kBox(160, bh + 130, W - 320, H - bh * 2 - 230, 'deco');
+  };
+  // 6 · passe-partout: a contrasting mat around the printed panel
+  FRAMES.kPanel = function (ctx, d) {
+    const mat = d.dark ? mix(d.ink, '#ffffff', 0.35) : mix(d.nm, '#000000', 0.08);
+    ctx.save(); ctx.fillStyle = mat; ctx.fillRect(0, 0, W, H); grain(ctx, d.dark ? '#000000' : '#ffffff', 0.04, 2500, 3); ctx.restore();
+    const ins = 92;
+    kFace(ctx, d, () => ctx.rect(ins, ins, W - ins * 2, H - ins * 2));
+    kRule(ctx, d, ins + 28, 3); kRule(ctx, d, ins + 40, 1.2);
+    return kBox(ins + 110, ins + 150, W - (ins + 110) * 2, H - (ins * 2 + 260), 'rosette');
+  };
+  // 7 · beaded border (pearl dots) between two hairlines
+  FRAMES.kBeaded = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    kRule(ctx, d, 58, 2); kRule(ctx, d, 104, 2);
+    const f = kFoil(ctx, d, 0, 0, W, H), ins = 81, step = 24;
+    ctx.save(); ctx.fillStyle = f;
+    for (let x = ins; x <= W - ins + 1; x += (W - ins * 2) / Math.round((W - ins * 2) / step)) { [ins, H - ins].forEach((y) => { ctx.beginPath(); ctx.arc(x, y, 6, 0, TAU); ctx.fill(); }); }
+    for (let y = ins; y <= H - ins + 1; y += (H - ins * 2) / Math.round((H - ins * 2) / step)) { [ins, W - ins].forEach((x) => { ctx.beginPath(); ctx.arc(x, y, 6, 0, TAU); ctx.fill(); }); }
+    ctx.restore();
+    return kBox(190, 240, W - 380, H - 440, 'dot');
+  };
+  // 8 · art-deco stepped corners
+  FRAMES.kDeco = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = f; ctx.lineJoin = 'miter';
+    [[70, 4], [92, 1.6], [108, 1.6]].forEach(([i, lw], k) => {
+      const c = 60 - k * 12; ctx.lineWidth = lw; ctx.beginPath();
+      ctx.moveTo(i + c, i); ctx.lineTo(W - i - c, i); ctx.lineTo(W - i - c, i + c); ctx.lineTo(W - i, i + c);
+      ctx.lineTo(W - i, H - i - c); ctx.lineTo(W - i - c, H - i - c); ctx.lineTo(W - i - c, H - i); ctx.lineTo(i + c, H - i);
+      ctx.lineTo(i + c, H - i - c); ctx.lineTo(i, H - i - c); ctx.lineTo(i, i + c); ctx.lineTo(i + c, i + c); ctx.closePath(); ctx.stroke();
+    });
+    // fan at the top
+    ctx.lineWidth = 2.4; const cx = W / 2, cy = 190;
+    for (let a = 0; a <= 12; a++) { const t = Math.PI + (a / 12) * Math.PI; ctx.beginPath(); ctx.moveTo(cx, cy); ctx.lineTo(cx + Math.cos(t) * 90, cy + Math.sin(t) * 90); ctx.stroke(); }
+    ctx.beginPath(); ctx.arc(cx, cy, 96, Math.PI, 0); ctx.stroke(); ctx.beginPath(); ctx.moveTo(cx - 160, cy + 2); ctx.lineTo(cx + 160, cy + 2); ctx.stroke();
+    ctx.restore();
+    return kBox(190, 300, W - 380, H - 480, 'deco');
+  };
+  // 9 · oval cartouche
+  FRAMES.kOval = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const f = kFoil(ctx, d, 0, 0, W, H), cx = W / 2, cy = H / 2, rx = 640, ry = 960;
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 6; ctx.beginPath(); ctx.ellipse(cx, cy, rx, ry, 0, 0, TAU); ctx.stroke();
+    ctx.lineWidth = 1.8; ctx.beginPath(); ctx.ellipse(cx, cy, rx - 22, ry - 22, 0, 0, TAU); ctx.stroke(); ctx.restore();
+    kFlourish(ctx, cx, cy - ry - 2, 380, f, 1); kFlourish(ctx, cx, cy + ry + 2, 380, f, -1);
+    return kBox(cx - 470, 420, 940, H - 840, 'sparkle');
+  };
+  // 10 · marble stock with a gold frame
+  FRAMES.kMarble = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const r = rng(41); ctx.save(); ctx.lineCap = 'round';
+    for (let i = 0; i < 16; i++) {
+      const x0 = r() * W * 1.2 - W * 0.1, y0 = r() * H, len = 500 + r() * 900, a = -0.6 + r() * 0.5;
+      ctx.strokeStyle = d.dark ? 'rgba(255,255,255,' + (0.05 + r() * 0.07) + ')' : 'rgba(90,90,100,' + (0.06 + r() * 0.09) + ')';
+      ctx.lineWidth = 1 + r() * 3.5; ctx.beginPath(); ctx.moveTo(x0, y0);
+      ctx.bezierCurveTo(x0 + Math.cos(a) * len * 0.3 + r() * 120, y0 + Math.sin(a) * len * 0.3 - 80, x0 + Math.cos(a) * len * 0.7 - r() * 120, y0 + Math.sin(a) * len * 0.7 + 80, x0 + Math.cos(a) * len, y0 + Math.sin(a) * len);
+      ctx.stroke();
+    }
+    ctx.restore();
+    kRule(ctx, d, 70, 5); kRule(ctx, d, 88, 1.6);
+    return kBox(180, 230, W - 360, H - 420, 'flourish');
+  };
+  // 11 · watercolour wash edges, no frame
+  FRAMES.kWash = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const r = rng(17), c = mix(d.line, d.nm, 0.25);
+    ctx.save();
+    [[0, 1], [H, -1]].forEach(([y0, dir]) => {
+      const g = ctx.createLinearGradient(0, y0, 0, y0 + dir * 520); g.addColorStop(0, hexA(c, 0.2)); g.addColorStop(0.55, hexA(c, 0.06)); g.addColorStop(1, hexA(c, 0));
+      ctx.fillStyle = g; ctx.fillRect(0, Math.min(y0, y0 + dir * 520), W, 520);
+      for (let i = 0; i < 9; i++) {
+        const x = r() * W, y = y0 + dir * (r() * 260), rad = 260 + r() * 300;
+        const gg = ctx.createRadialGradient(x, y, 0, x, y, rad); gg.addColorStop(0, hexA(c, 0.07)); gg.addColorStop(1, hexA(c, 0));
+        ctx.fillStyle = gg; ctx.fillRect(x - rad, y - rad, rad * 2, rad * 2);
+      }
+    });
+    ctx.restore();
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(W / 2 - 120, 170); ctx.lineTo(W / 2 + 120, 170); ctx.stroke(); ctx.restore();
+    kDiamond(ctx, W / 2, 170, 14, f);
+    return kBox(170, 260, W - 340, H - 450, 'leaf');
+  };
+  // 12 · ticket shape: inverted round corners, card on fabric
+  FRAMES.kTicket = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 140, y = 130, w = W - 280, h = H - 260;
+    const path = (ins, rr) => () => { const X = x + ins, Y = y + ins, Wd = w - ins * 2, Hd = h - ins * 2, R = rr;
+      ctx.moveTo(X + R, Y); ctx.lineTo(X + Wd - R, Y); ctx.arc(X + Wd, Y, R, Math.PI, Math.PI / 2, true); ctx.lineTo(X + Wd, Y + Hd - R);
+      ctx.arc(X + Wd, Y + Hd, R, -Math.PI / 2, -Math.PI, true); ctx.lineTo(X + R, Y + Hd); ctx.arc(X, Y + Hd, R, 0, -Math.PI / 2, true);
+      ctx.lineTo(X, Y + R); ctx.arc(X, Y, R, Math.PI / 2, 0, true); ctx.closePath(); };
+    kFace(ctx, d, path(0, 90), true);
+    ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = 4; ctx.beginPath(); path(40, 70)(); ctx.stroke(); ctx.lineWidth = 1.5; ctx.beginPath(); path(56, 62)(); ctx.stroke(); ctx.restore();
+    return kBox(x + 130, y + 210, w - 260, h - 360, 'star');
+  };
+  // 13 · minimal with a laurel crest on top
+  FRAMES.kCrest = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    kRule(ctx, d, 54, 1.6);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    laurel(ctx, W / 2, 200, 82, f);
+    magen(ctx, W / 2, 196, 34, f, 3);
+    return kBox(170, 340, W - 340, H - 500, 'leaf');
+  };
+  // 14 · layered cards: a tinted back card turned a little behind the printed card
+  FRAMES.kLayer = function (ctx, d) {
+    kSurface(ctx, d);
+    ctx.save(); ctx.translate(W / 2, H / 2); ctx.rotate(-0.045); ctx.shadowColor = 'rgba(0,0,0,0.3)'; ctx.shadowBlur = 30; ctx.shadowOffsetY = 14;
+    ctx.fillStyle = d.dark ? mix(d.line, '#000000', 0.15) : mix(d.title, '#ffffff', 0.55); ctx.fillRect(-W / 2 + 120, -H / 2 + 110, W - 240, H - 220); ctx.restore();
+    const x = 165, y = 150, w = W - 330, h = H - 300;
+    kFace(ctx, d, () => ctx.rect(x, y, w, h), true);
+    ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = 3; ctx.strokeRect(x + 34, y + 34, w - 68, h - 68); ctx.restore();
+    return kBox(x + 110, y + 170, w - 220, h - 290, 'diamond');
+  };
+  // 15 · open flourishes top and bottom (the classic heimish header ornament)
+  FRAMES.kFlourish = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    kFlourish(ctx, W / 2, 175, 640, f, 1); kFlourish(ctx, W / 2, H - 175, 640, f, -1);
+    kRule(ctx, d, 46, 1.4);
+    return kBox(170, 290, W - 340, H - 560, 'flourish');
+  };
+  // 16 · tone-on-tone lattice stock with a plain framed panel
+  FRAMES.kLattice = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    ctx.save(); ctx.strokeStyle = d.dark ? 'rgba(255,255,255,0.07)' : hexA(d.line, 0.22); ctx.lineWidth = 2;
+    const s = 70;
+    for (let y = -s; y < H + s; y += s) for (let x = -s; x < W + s; x += s) { const ox = ((y / s) % 2) * s / 2; ctx.beginPath(); ctx.moveTo(x + ox, y - s / 2); ctx.lineTo(x + ox + s / 2, y); ctx.lineTo(x + ox, y + s / 2); ctx.lineTo(x + ox - s / 2, y); ctx.closePath(); ctx.stroke(); }
+    ctx.restore();
+    const ins = 120;
+    kFace(ctx, d, () => roundRectPath(ctx, ins, ins, W - ins * 2, H - ins * 2, 30));
+    ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = 4; ctx.beginPath(); roundRectPath(ctx, ins, ins, W - ins * 2, H - ins * 2, 30); ctx.stroke();
+    ctx.lineWidth = 1.5; ctx.beginPath(); roundRectPath(ctx, ins + 18, ins + 18, W - ins * 2 - 36, H - ins * 2 - 36, 20); ctx.stroke(); ctx.restore();
+    return kBox(ins + 100, ins + 140, W - (ins + 100) * 2, H - (ins * 2 + 240), 'rosette');
+  };
+  // 17 · wide bevelled foil frame, like a gilt picture frame
+  FRAMES.kGilt = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const b = 64, m = 40;
+    ctx.save();
+    const sides = [[m, m, W - m, m, W - m - b, m + b, m + b, m + b, 0, m, 0, m + b], [W - m, m, W - m, H - m, W - m - b, H - m - b, W - m - b, m + b, W - m, 0, W - m - b, 0],
+      [W - m, H - m, m, H - m, m + b, H - m - b, W - m - b, H - m - b, 0, H - m, 0, H - m - b], [m, H - m, m, m, m + b, m + b, m + b, H - m - b, m, 0, m + b, 0]];
+    sides.forEach((p) => { const g = ctx.createLinearGradient(p[8], p[9], p[10], p[11]);
+      const c = d.line; g.addColorStop(0, mix(c, '#000000', 0.35)); g.addColorStop(0.35, mix(c, '#ffffff', 0.5)); g.addColorStop(0.6, c); g.addColorStop(1, mix(c, '#000000', 0.25));
+      ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(p[0], p[1]); ctx.lineTo(p[2], p[3]); ctx.lineTo(p[4], p[5]); ctx.lineTo(p[6], p[7]); ctx.closePath(); ctx.fill(); });
+    ctx.strokeStyle = mix(d.line, '#000000', 0.4); ctx.lineWidth = 2; ctx.strokeRect(m, m, W - m * 2, H - m * 2); ctx.strokeRect(m + b, m + b, W - (m + b) * 2, H - (m + b) * 2);
+    ctx.fillStyle = mix(d.line, '#ffffff', 0.3);
+    const ins = m + b + 18; for (let x = ins; x < W - ins; x += 20) { ctx.beginPath(); ctx.arc(x, ins, 3.5, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(x, H - ins, 3.5, 0, TAU); ctx.fill(); }
+    for (let y = ins; y < H - ins; y += 20) { ctx.beginPath(); ctx.arc(ins, y, 3.5, 0, TAU); ctx.fill(); ctx.beginPath(); ctx.arc(W - ins, y, 3.5, 0, TAU); ctx.fill(); }
+    ctx.restore();
+    return kBox(220, 280, W - 440, H - 500, 'diamond');
+  };
+  // 18 · a deckled, torn-edge card on fabric with a ribbon band
+  FRAMES.kRibbon = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 150, y = 130, w = W - 300, h = H - 260, r = rng(5);
+    const path = () => { ctx.moveTo(x, y); for (let i = 0; i <= 60; i++) ctx.lineTo(x + w * i / 60, y + (r() - 0.5) * 7);
+      for (let i = 0; i <= 80; i++) ctx.lineTo(x + w + (r() - 0.5) * 7, y + h * i / 80); for (let i = 60; i >= 0; i--) ctx.lineTo(x + w * i / 60, y + h + (r() - 0.5) * 7);
+      for (let i = 80; i >= 0; i--) ctx.lineTo(x + (r() - 0.5) * 7, y + h * i / 80); ctx.closePath(); };
+    kFace(ctx, d, path, true);
+    // satin ribbon across the lower third
+    const ry = y + h - 300, rc = d.dark ? mix(d.line, '#ffffff', 0.1) : mix(d.title, d.nm, 0.4);
+    ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.25)'; ctx.shadowBlur = 12; ctx.shadowOffsetY = 5;
+    const g = ctx.createLinearGradient(0, ry, 0, ry + 46); g.addColorStop(0, mix(rc, '#ffffff', 0.25)); g.addColorStop(0.5, rc); g.addColorStop(1, mix(rc, '#000000', 0.2));
+    ctx.fillStyle = g; ctx.fillRect(0, ry, W, 46); ctx.restore();
+    ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = 2; ctx.strokeRect(x + 46, y + 46, w - 92, h - 92); ctx.restore();
+    return kBox(x + 120, y + 180, w - 240, ry - y - 220, 'dot');
+  };
+
+
+  // 19 · parchment scroll with rolled ends
+  FRAMES.kScroll = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 190, w = W - 380, y0 = 230, y1 = H - 230, rr = 62;
+    kFace(ctx, d, () => ctx.rect(x, y0, w, y1 - y0), true);
+    ctx.save(); const sh = ctx.createLinearGradient(0, y0, 0, y0 + 120); sh.addColorStop(0, 'rgba(60,40,10,0.18)'); sh.addColorStop(1, 'rgba(60,40,10,0)');
+    ctx.fillStyle = sh; ctx.fillRect(x, y0, w, 120); const sh2 = ctx.createLinearGradient(0, y1, 0, y1 - 120); sh2.addColorStop(0, 'rgba(60,40,10,0.18)'); sh2.addColorStop(1, 'rgba(60,40,10,0)'); ctx.fillStyle = sh2; ctx.fillRect(x, y1 - 120, w, 120); ctx.restore();
+    [y0, y1].forEach((cy) => {
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.35)'; ctx.shadowBlur = 24; ctx.shadowOffsetY = 12;
+      const g = ctx.createLinearGradient(0, cy - rr, 0, cy + rr); const c0 = d.dark ? d.bg[1] : d.bg[0];
+      g.addColorStop(0, mix(c0, '#000000', 0.25)); g.addColorStop(0.35, mix(c0, '#ffffff', 0.3)); g.addColorStop(0.7, c0); g.addColorStop(1, mix(c0, '#000000', 0.35));
+      ctx.fillStyle = g; ctx.beginPath(); roundRectPath(ctx, x - 40, cy - rr, w + 80, rr * 2, rr); ctx.fill(); ctx.restore();
+      ctx.save(); [x - 40, x + w + 40].forEach((ex) => { const eg = ctx.createRadialGradient(ex, cy, 4, ex, cy, rr); eg.addColorStop(0, mix(d.line, '#ffffff', 0.4)); eg.addColorStop(1, mix(d.line, '#000000', 0.3));
+        ctx.fillStyle = eg; ctx.beginPath(); ctx.ellipse(ex, cy, 26, rr, 0, 0, TAU); ctx.fill(); }); ctx.restore();
+    });
+    ctx.save(); ctx.strokeStyle = kFoil(ctx, d, 0, 0, W, H); ctx.lineWidth = 2.4; ctx.strokeRect(x + 50, y0 + 110, w - 100, y1 - y0 - 220); ctx.restore();
+    return kBox(x + 110, y0 + 200, w - 220, y1 - y0 - 370, 'flourish');
+  };
+  // 20 · classical columns with a pediment arch (architectural frame)
+  FRAMES.kColumns = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const f = kFoil(ctx, d, 0, 0, W, H), cw = 70, lx = 110, rx = W - 110 - cw, top = 330, bot = H - 140;
+    ctx.save(); ctx.strokeStyle = f; ctx.fillStyle = f; ctx.lineWidth = 3;
+    [lx, rx].forEach((cx) => {
+      ctx.strokeRect(cx, top, cw, bot - top);
+      for (let k = 1; k < 4; k++) { ctx.beginPath(); ctx.moveTo(cx + cw * k / 4, top + 40); ctx.lineTo(cx + cw * k / 4, bot - 40); ctx.stroke(); }
+      ctx.fillRect(cx - 18, top - 26, cw + 36, 14); ctx.fillRect(cx - 12, top - 12, cw + 24, 8);
+      ctx.fillRect(cx - 18, bot + 12, cw + 36, 14); ctx.fillRect(cx - 12, bot + 4, cw + 24, 8);
+    });
+    ctx.lineWidth = 5; ctx.beginPath(); ctx.moveTo(lx - 18, top - 26); ctx.lineTo(lx - 18, top - 60); ctx.arc(W / 2, top - 60, (rx + cw + 18 - (lx - 18)) / 2, Math.PI, 0); ctx.lineTo(rx + cw + 18, top - 26); ctx.stroke();
+    ctx.lineWidth = 2; const R = (rx + cw + 18 - (lx - 18)) / 2; ctx.beginPath(); ctx.arc(W / 2, top - 60, R - 22, Math.PI, 0); ctx.stroke();
+    ctx.fillRect(lx - 30, bot + 26, rx + cw + 60 - lx, 10);
+    ctx.restore();
+    kDiamond(ctx, W / 2, top - 60 - R + 50, 20, f);
+    return kBox(lx + cw + 50, top + 10, rx - lx - cw - 100, bot - top - 60, 'diamond');
+  };
+  // 21 · honeycomb (hexagon) line border
+  FRAMES.kHex = function (ctx, d) {
+    kFace(ctx, d, kFull());
+    const f = kFoil(ctx, d, 0, 0, W, H), s = 34, hw = Math.sqrt(3) * s;
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 2.2;
+    const hex = (cx, cy) => { ctx.beginPath(); for (let k = 0; k < 6; k++) { const a = Math.PI / 6 + k * Math.PI / 3; const px = cx + Math.cos(a) * s, py = cy + Math.sin(a) * s; if (k) ctx.lineTo(px, py); else ctx.moveTo(px, py); } ctx.closePath(); ctx.stroke(); };
+    for (let row = 0; row * s * 1.5 < H + s; row++) { const cy = row * s * 1.5; const off = (row % 2) * hw / 2;
+      for (let cx = -hw + off; cx < W + hw; cx += hw) { const inner = cx > 150 && cx < W - 150 && cy > 150 && cy < H - 150; if (!inner) hex(cx, cy); } }
+    ctx.restore();
+    const ins = 150;
+    ctx.save(); ctx.fillStyle = d.bg[0]; ctx.fillRect(ins - 20, ins - 20, W - (ins - 20) * 2, H - (ins - 20) * 2); ctx.restore();
+    kRule(ctx, d, ins - 20, 4); kRule(ctx, d, ins - 4, 1.4);
+    return kBox(ins + 70, ins + 120, W - (ins + 70) * 2, H - (ins * 2 + 210), 'dot');
+  };
+  // 22 · hanging tag: clipped corners, eyelet and a ribbon loop
+  FRAMES.kTag = function (ctx, d) {
+    kSurface(ctx, d);
+    const x = 170, y = 200, w = W - 340, h = H - 300, c = 190;
+    const path = () => { ctx.moveTo(x + c, y); ctx.lineTo(x + w - c, y); ctx.lineTo(x + w, y + c); ctx.lineTo(x + w, y + h); ctx.lineTo(x, y + h); ctx.lineTo(x, y + c); ctx.closePath(); };
+    kFace(ctx, d, path, true);
+    const f = kFoil(ctx, d, 0, 0, W, H);
+    ctx.save(); ctx.strokeStyle = f; ctx.lineWidth = 3; ctx.beginPath();
+    const i = 40; ctx.moveTo(x + c + i * 0.4, y + i); ctx.lineTo(x + w - c - i * 0.4, y + i); ctx.lineTo(x + w - i, y + c + i * 0.4); ctx.lineTo(x + w - i, y + h - i); ctx.lineTo(x + i, y + h - i); ctx.lineTo(x + i, y + c + i * 0.4); ctx.closePath(); ctx.stroke(); ctx.restore();
+    // eyelet + string
+    ctx.save(); ctx.fillStyle = kSurfaceTone(d); ctx.beginPath(); ctx.arc(W / 2, y + 110, 26, 0, TAU); ctx.fill();
+    ctx.strokeStyle = f; ctx.lineWidth = 8; ctx.beginPath(); ctx.arc(W / 2, y + 110, 30, 0, TAU); ctx.stroke();
+    ctx.strokeStyle = d.dark ? mix(d.line, '#ffffff', 0.2) : mix(d.title, d.nm, 0.3); ctx.lineWidth = 7; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(W / 2 - 8, y + 96); ctx.bezierCurveTo(W / 2 - 60, y - 40, W / 2 - 280, y - 120, W / 2 - 420, -20); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(W / 2 + 8, y + 96); ctx.bezierCurveTo(W / 2 + 70, y - 50, W / 2 + 260, y - 130, W / 2 + 380, -20); ctx.stroke();
+    ctx.restore();
+    return kBox(x + 120, y + 230, w - 240, h - 330, 'star');
+  };
+  function kSurfaceTone(d) { return d.surf || '#2e3d4f'; }
+
+  // the v2 collection: every layout × the stocks that suit each simcha
+  const K_LAYOUTS = [
+    ['kDouble', 'Double Rule', 'דאפלטע ליניע', 'kHeim'], ['kArch', 'Arched Card', 'בויגן קארטל', 'kHeim', 1], ['kCorners', 'Scroll Corners', 'ווינקל צירונג', 'kNoto'],
+    ['kScallop', 'Scalloped Edge', 'וועלן ראנד', 'kSuez'], ['kFlourish', 'Classic Flourish', 'קלאסישע צירונג', 'kHeim', 1], ['kBeaded', 'Pearl Border', 'פערל ראנד', 'kDavid'],
+    ['kTicket', 'Die-cut Card', 'אויסגעשניטן קארטל', 'kNoto'], ['kGilt', 'Gilt Frame', 'גאלדענע ראם', 'kHeim'], ['kPanel', 'Matted Panel', 'פאנעל', 'kScript'],
+    ['kOval', 'Oval Cartouche', 'אוואלע ראם', 'kSuez', 1], ['kMarble', 'Marble & Gold', 'מירמל מיט גאלד', 'kNoto'], ['kBands', 'Foil Bands', 'פאסן', 'kBlock'],
+    ['kLayer', 'Layered Card', 'צוויי שיכטן', 'kHeim'], ['kCrest', 'Laurel Crest', 'קראנץ', 'kMiriam'], ['kDeco', 'Art Deco', 'ארט דעקא', 'kSuez'],
+    ['kWash', 'Watercolour Edge', 'וואסערפארב', 'kDavid', 1], ['kLattice', 'Lattice Stock', 'גיטער', 'kNoto'], ['kRibbon', 'Ribbon & Deckle', 'בענדל', 'kScript', 1],
+    ['kScroll', 'Parchment Scroll', 'מגילה', 'kHeim', 1], ['kColumns', 'Columns & Arch', 'זיילן', 'kNoto'], ['kHex', 'Honeycomb Border', 'האניק ראם', 'kBlock'], ['kTag', 'Hanging Tag', 'הענגל קארטל', 'kSuez', 1]
+  ];
+  Object.assign(PALETTES, {
+    blushgold: { name: { en: 'Blush & Gold', yi: 'ראזע מיט גאלד' }, color: 'pink',
+      bg: ['#fcf3f0', '#f3e1dc'], ink: '#4a3436', title: '#9b6a55', nm: '#4b2b33', muted: '#8a7174', line: '#c19a62' },
+    ivorynavy: { name: { en: 'Ivory & Navy', yi: 'עלפנביין מיט בלוי' }, color: 'cream',
+      bg: ['#fdfaf2', '#f2ebdc'], ink: '#1d2a40', title: '#1f3558', nm: '#14223a', muted: '#636a75', line: '#a98c58' }
+  });
+  Object.assign(FONTSETS, {
+    kHeim:   { fy: ['Frank Ruhl Libre', 900], fe: ['Playfair Display', 700], by: ['Frank Ruhl Libre', 500], be: ['EB Garamond', 500] },
+    kSuez:   { fy: ['Suez One', 400], fe: ['Cinzel', 700], by: ['Noto Serif Hebrew', 500], be: ['Cormorant Garamond', 500] },
+    kNoto:   { fy: ['Noto Serif Hebrew', 900], fe: ['Playfair Display', 700], by: ['Noto Serif Hebrew', 500], be: ['EB Garamond', 500] },
+    kBlock:  { fy: ['Heebo', 900], fe: ['Bona Nova', 700], by: ['Assistant', 500], be: ['EB Garamond', 500] },
+    kDavid:  { fy: ['David Libre', 700], fe: ['Cormorant Garamond', 700], by: ['David Libre', 400], be: ['Cormorant Garamond', 500] },
+    kScript: { fy: ['Frank Ruhl Libre', 900], fe: ['Great Vibes', 400], by: ['Frank Ruhl Libre', 500], be: ['Cormorant Garamond', 500], etrack: 0, escale: 1.3 },
+    kMiriam: { fy: ['Miriam Libre', 700], fe: ['Cinzel', 700], by: ['Miriam Libre', 400], be: ['EB Garamond', 500] }
+  });
+  // which stocks each simcha gets (boys: navy / silver / baby blue / gold first)
+  const K_GROUPS = {
+    boy:   { types: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'], pals: ['ivorynavy', 'navygold', 'powderblue', 'navysilver', 'whiteblue', 'midnight', 'creamnavy', 'skywhite', 'silvergrey', 'denimgold', 'whitesilver', 'ivorygold'] },
+    wed:   { types: ['chasuna', 'vort', 'shevabrachos'], pals: ['ivorygold', 'navygold', 'blackgold', 'creamburgundy', 'whitesilver', 'burgundygold', 'ivorysage', 'blushgold', 'emeraldgold', 'ivorynavy', 'creamnavy', 'blushsilver'] },
+    bm:    { types: ['barmitzvah', 'siyum'], pals: ['navygold', 'blackgold', 'ivorynavy', 'burgundygold', 'emeraldgold', 'ivorygold', 'midnight', 'charcoalcopper', 'creamnavy', 'navysilver', 'whitesilver', 'purplegold'] },
+    girl:  { types: ['kiddush'], pals: ['blushgold', 'blushsilver', 'ivorygold', 'whitesilver', 'ivorysage', 'creamburgundy', 'tealsand', 'skywhite', 'purplegold', 'ivorynavy', 'emeraldgold', 'navygold'] },
+    home:  { types: ['chanukashabayis', 'upsherin', 'general'], pals: ['ivorygold', 'navygold', 'ivorysage', 'emeraldgold', 'ivorynavy', 'tealsand', 'creamnavy', 'blackgold', 'whiteblue', 'burgundygold', 'charcoalcopper', 'powderblue'] }
+  };
+  const K_FAVS = { kArch: 1, kDouble: 1, kGilt: 1, kScroll: 1, kFlourish: 1 };   // the looks David picked (Nov 1, first row)
+  const K_WEAK = { kBands: 1, kHex: 1, kLattice: 1, kWash: 1, kPanel: 1, kCrest: 1 };  // built (links work) but not listed
+  const K_DESIGNS = [];
+  (function buildClassics() {
+    const byId = {};
+    const per = 4;   // stocks per layout per group → 22 × 4 = 88 per simcha
+    Object.keys(K_GROUPS).forEach((gk, gi) => {
+      const G = K_GROUPS[gk];
+      K_LAYOUTS.forEach((Ly, li) => {
+        const n = K_FAVS[Ly[0]] ? 8 : per;
+        for (let j = 0; j < n; j++) {
+          let pk = G.pals[(li * 5 + j * 7 + gi) % G.pals.length];
+          if (Ly[0] === 'kWash') for (let s = 1; PALETTES[pk].dark && s < G.pals.length; s++) pk = G.pals[(li * 5 + j * 7 + gi + s) % G.pals.length];
+          const id = 'pc-' + Ly[0].slice(1).toLowerCase() + '-' + pk;
+          let d = byId[id];
+          if (!d) {
+            const p = PALETTES[pk], fs = FONTSETS[Ly[3]];
+            const solid = !p.dark && ((li + j) % 2 === 0);      // half the light cards: a solid dark title; the other half deep gold foil
+            d = Object.assign({ id, type: G.types[0], also: [], isNew: true, isV2: true, family: Ly[0], frame: Ly[0], palette: pk, color: p.color, dark: !!p.dark,
+              name: { en: Ly[1] + ' · ' + p.name.en, yi: Ly[2] + ' · ' + p.name.yi }, bg: p.bg, ink: p.ink, title: solid ? p.nm : p.title, nm: p.nm, muted: p.muted, line: p.line,
+              foil: p.dark ? (/silver|white/.test(pk) || pk === 'navysilver' ? 'silver' : 'lightgold') : (solid ? null : (/blush/.test(pk) ? 'rose' : (/silver|blue|sky|grey/.test(pk) ? 'blue' : 'deepgold'))),
+              surf: K_SURF[pk], stack: !!Ly[4], round: j * 100 + li }, fs);
+            if (pk === 'navysilver') d.foil = 'silver';
+            if (K_FAVS[Ly[0]] && !p.dark) { d.title = p.title; d.foil = /blush/.test(pk) ? 'rose' : 'gold'; }   // the big 3D gold-foil title David liked
+            if (K_FAVS[Ly[0]]) d.stack = true;
+            byId[id] = d; K_DESIGNS.push(d);
+          }
+          G.types.forEach((t) => { if (t !== d.type && !d.also.includes(t)) d.also.push(t); });
+        }
+      });
+    });
+    K_DESIGNS.sort((a, b) => a.round - b.round);
+    K_DESIGNS.forEach((d) => DESIGNS.push(d));
+    K_LAYOUTS.forEach((Ly) => { FAMILY_NAMES[Ly[0]] = { en: Ly[1], yi: Ly[2] }; });
+  })();
+
+  // ---- retired from the gallery (Nov 1 2026): the illustrated / clip-art designs. Their ids still resolve, so links already shared keep opening.
+  const RETIRED_FAMILY = /^(b[A-Z]|bris[A-Z]|vn[A-Z]|sz[A-Z]|ph[A-Z]|up[A-Z]|chb[A-Z]|siy[A-Z]|bm[A-Z]|kd[A-Z]|ch[A-Z]|vt[A-Z]|sb[A-Z])/;
+  const RETIRED_IDS = { 'scene-sky': 1, 'scene-nursery': 1 };
+  DESIGNS.forEach((d) => { const f = d.family || d.frame || ''; if (RETIRED_FAMILY.test(f) || RETIRED_IDS[d.id] || f === 'yerushalayim' || f === 'kosel' || K_WEAK[f]) d.retired = true; });
+
+  // ---- font picker (title font + text font), per card language
+  const FONT_PICK = {
+    title: {
+      yi: [['frank', 'Frank Ruhl', ['Frank Ruhl Libre', 900]], ['suez', 'Suez', ['Suez One', 400]], ['notoserif', 'Noto Serif', ['Noto Serif Hebrew', 900]],
+        ['david', 'David', ['David Libre', 700]], ['miriam', 'Miriam', ['Miriam Libre', 700]], ['bellefair', 'Bellefair', ['Bellefair', 400]],
+        ['heebo', 'Heebo', ['Heebo', 900]], ['rubik', 'Rubik', ['Rubik', 800]], ['secular', 'Secular', ['Secular One', 400]],
+        ['karantina', 'Karantina', ['Karantina', 700]], ['rashi', 'רש״י', ['Noto Rashi Hebrew', 500]], ['amatic', 'Amatic', ['Amatic SC', 700]]],
+      en: [['cinzel', 'Cinzel', ['Cinzel', 700]], ['playfair', 'Playfair Display', ['Playfair Display', 700]], ['cormorant', 'Cormorant Garamond', ['Cormorant Garamond', 700]],
+        ['ebgaramond', 'EB Garamond', ['EB Garamond', 600]], ['marcellus', 'Marcellus', ['Marcellus', 400]], ['italiana', 'Italiana', ['Italiana', 400]],
+        ['bonanova', 'Bona Nova', ['Bona Nova', 700]], ['greatvibes', 'Great Vibes (script)', ['Great Vibes', 400]], ['parisienne', 'Parisienne (script)', ['Parisienne', 400]],
+        ['pinyon', 'Pinyon Script', ['Pinyon Script', 400]]]
+    },
+    body: {
+      yi: [['frank', 'Frank Ruhl', ['Frank Ruhl Libre', 500]], ['notoserif', 'Noto Serif', ['Noto Serif Hebrew', 500]], ['david', 'David', ['David Libre', 400]],
+        ['miriam', 'Miriam', ['Miriam Libre', 400]], ['bellefair', 'Bellefair', ['Bellefair', 400]], ['assistant', 'Assistant', ['Assistant', 500]], ['heebo', 'Heebo', ['Heebo', 400]]],
+      en: [['cormorant', 'Cormorant Garamond', ['Cormorant Garamond', 500]], ['ebgaramond', 'EB Garamond', ['EB Garamond', 500]], ['playfair', 'Playfair Display', ['Playfair Display', 400]],
+        ['marcellus', 'Marcellus', ['Marcellus', 400]], ['assistant', 'Assistant', ['Assistant', 500]], ['heebo', 'Heebo', ['Heebo', 400]]]
+    }
+  };
+  const SCRIPT_FONTS = { 'Great Vibes': 1, 'Parisienne': 1, 'Pinyon Script': 1 };
+  function pickFont(kind, lang, key) { const l = FONT_PICK[kind][lang === 'en' ? 'en' : 'yi']; const f = key && l.find((x) => x[0] === key); return f ? f[2] : null; }
+  // the design as drawn for this invitation: the chosen fonts replace the design's own
+  function effDesign(data) {
     const d = designById(data.d);
+    const lang = data.l === 'en' ? 'en' : 'yi';
+    const t = pickFont('title', lang, data.ft), b = pickFont('body', lang, data.fb);
+    if (!t && !b) return d;
+    const o = Object.assign({}, d, { id: d.id + '|' + (data.ft || '') + '|' + (data.fb || '') });
+    if (t) { if (lang === 'en') { o.fe = t; o.etrack = SCRIPT_FONTS[t[0]] ? 0 : undefined; o.escale = SCRIPT_FONTS[t[0]] ? 1.3 : 1; } else o.fy = t; }
+    if (b) { if (lang === 'en') o.be = b; else o.by = b; }
+    return o;
+  }
+
+  // photo scenes: a printed card's title is big and solid, stacked like the printers set it
+  DESIGNS.filter((d) => d.isScene && d.isV2).forEach((d, i) => { const fs = FONTSETS[['kHeim', 'kNoto', 'kSuez', 'kHeim'][i % 4]]; d.fy = fs.fy; d.fe = fs.fe; d.by = fs.by; d.be = fs.be; });
+  const V2_SCENE_GOLD = [];
+  DESIGNS.forEach((d, i) => { if (d.isScene) { d.stack = true; if (!d.dark && (d.isV2 || (i % 3) !== 2 || !/^(gold|rose)$/.test(d.foil || ''))) { d.title = d.nm; d.foil = null; } } });
+  DESIGNS.filter((d) => d.isScene && d.isV2 && !d.dark).forEach((d, i) => { if (i % 2) { d.foil = 'deepgold'; d.title = '#8a6526'; } });
+  // only the v2 collection (and new photo scenes) carry the "New" badge now
+  DESIGNS.forEach((d) => { if (!d.isV2) d.isNew = false; });
+
+  function paint(ctx, data, img) {
+    const d = effDesign(data);
     ctx.save();
     const box = FRAMES[d.frame](ctx, d, data, img);
     ctx.restore();
@@ -2362,7 +2844,7 @@
 
   // Renders the card into `canvas` at `scale` (1 = 1500×2100). Resolves when drawn.
   async function render(canvas, data, scale) {
-    const d = designById(data.d);
+    const d = effDesign(data);
     scale = scale || 1;
     const [, img] = await Promise.all([ensureFonts(d), d.scene ? loadScene(d.scene.k, scale < 0.3) : null]);
     canvas.width = Math.round(W * scale); canvas.height = Math.round(H * scale);
@@ -2374,7 +2856,7 @@
   }
 
   // ---------------------------------------------------------------- link encoding
-  const KEYS = ['t', 'd', 'l', 'p', 's', 'm', 'h1', 'h2', 'dt', 'hd', 'pr', 'tm', 'v', 'a', 'n', 'r', 'w', 'ti'];
+  const KEYS = ['t', 'd', 'l', 'p', 's', 'm', 'h1', 'h2', 'dt', 'hd', 'pr', 'tm', 'v', 'a', 'n', 'r', 'w', 'ti', 'ft', 'fb'];
   function clean(data) {
     const out = {};
     KEYS.forEach((k) => { const v = data[k]; if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.join(''))) return; out[k] = typeof v === 'string' ? v.slice(0, 600) : v; });
@@ -2641,10 +3123,10 @@
     let state = null;
     try { state = JSON.parse(localStorage.getItem(DRAFT) || 'null'); } catch (_) {}
     const fromSample = (d, t, l) => Object.assign(sample({ id: d, type: t }, l), { ps: 1, sm: 1 });
-    if (!state || typeof state !== 'object') state = fromSample('royal', 'chasuna', 'yi');
+    if (!state || typeof state !== 'object') state = fromSample((K_DESIGNS.find((d) => d.type === 'chasuna') || { id: 'royal' }).id, 'chasuna', 'yi');
     if (state.ps === undefined) state.ps = 1;
     // While the form still holds the sample wording, switching design/simcha/language swaps in matching samples.
-    const reSample = () => { if (state.sm) state = fromSample(state.d, state.t, state.l === 'en' ? 'en' : 'yi'); };
+    const reSample = () => { if (state.sm) { const f = { ft: state.ft, fb: state.fb }; state = Object.assign(fromSample(state.d, state.t, state.l === 'en' ? 'en' : 'yi'), f); } };
 
     const m = /^#make=([a-z][a-z-]*)(?:&t=([a-z]+))?/.exec(location.hash);
     if (m) { const d = designById(m[1]); state.d = d.id; state.t = (m[2] && TYPES[m[2]]) ? m[2] : d.type; reSample(); }
@@ -2653,7 +3135,7 @@
     const fan = $('#invHeroFan');
     if (fan) {
       const heroLang = siteLang() === 'en' ? 'en' : 'yi';
-      const picks = [['scene-sky', 'bris'], ['scene-velvet', 'chasuna'], ['scene-navygold', 'barmitzvah']];
+      const picks = [['scene-briscream', 'bris'], ['scene-velvet', 'chasuna'], ['scene-navygold', 'barmitzvah']];
       $$('canvas', fan).forEach((c, i) => { const d = designById(picks[i][0]); render(c, Object.assign(sample(d, heroLang), { t: picks[i][1] }), 0.24).catch(() => {}); });
     }
     // gallery — ~160 designs: filter by simcha / colour / search, rendered lazily as tiles scroll into view, "show more" pages
@@ -2704,11 +3186,18 @@
     if (gallery) {
       gallery.innerHTML = '';
       // order: one of each new family first, then the originals, then the rest
-      const scenes = DESIGNS.filter((d) => d.isScene);
-      const fresh = DESIGNS.filter((d) => d.isNew && !d.isScene), orig = DESIGNS.filter((d) => !d.isNew);
-      const firstRound = []; const seen = {};
-      fresh.forEach((d) => { if (!seen[d.family]) { seen[d.family] = 1; firstRound.push(d); } });
-      const order = scenes.concat(firstRound, orig, fresh.filter((d) => firstRound.indexOf(d) < 0));
+      // order (Nov 2026 v2): the printed classics lead (one of each layout), then the photo scenes, then the rest; retired designs are not listed
+      const live = DESIGNS.filter((d) => !d.retired);
+      const v2 = live.filter((d) => d.isV2 && !d.isScene);
+      const scenesNew = live.filter((d) => d.isScene && d.isV2), scenesOld = live.filter((d) => d.isScene && !d.isV2);
+      // the looks David picked lead: new photo cards alternating with the arch / double-rule / gilt / scroll cards
+      const favs = v2.filter((d) => K_FAVS[d.family]), others = v2.filter((d) => !K_FAVS[d.family]);
+      const lead = []; const sN = scenesNew.concat(scenesOld), fv = favs.slice();
+      while (sN.length) { lead.push(sN.shift()); if (fv.length) lead.push(fv.shift()); if (fv.length && lead.length % 3 === 2) lead.push(fv.shift()); }
+      const mixIn = fv.splice(0); const sc = []; const ot = others.slice();
+      while (ot.length) mixIn.push(ot.shift());
+      while (fv.length || ot.length) { if (fv.length) mixIn.push(fv.shift()); if (ot.length) mixIn.push(ot.shift()); if (ot.length && mixIn.length % 5 === 4) mixIn.push(ot.shift()); if (sc.length && mixIn.length % 6 === 0) mixIn.push(sc.shift()); }
+      const order = lead.concat(mixIn, sc, live.filter((d) => !d.isV2 && !d.isScene));
       order.forEach((d, idx) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-tile' + (d.isScene ? ' inv-tile-scene' : ''); b.dataset.design = d.id; b.dataset.type = d.type; b.dataset.idx = String(idx);
         const types = [d.type].concat(d.also || []); b.dataset.types = types.join(' ');
@@ -2757,7 +3246,7 @@
     const sw = $('#invSwatches');
     function drawSwatches() {
       const cur = designById(state.d); const fam = cur.family || cur.frame;
-      const list = DESIGNS.filter((d) => (d.family || d.frame) === fam);
+      const list = DESIGNS.filter((d) => (d.family || d.frame) === fam && (!d.retired || d.id === state.d));
       sw.innerHTML = '';
       list.forEach((d) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-swatch'; b.dataset.design = d.id;
@@ -2793,10 +3282,26 @@
       const isYi = state.l !== 'en';
       ['fP', 'fS', 'fM', 'fH1', 'fH2', 'fVenue', 'fNote', 'fTitle', 'fWording', 'fHd'].forEach((id) => { const el = document.getElementById(id); if (el) el.dir = 'auto'; });
       root.dataset.cardLang = isYi ? 'yi' : 'en';
+      fontSelects();
       $('#invSampleNote').hidden = !state.sm;
       hebHint();
     }
 
+    // font picker: the heading font and the text font, listed for the card's language ("Design font" keeps the design's own)
+    function fontSelects() {
+      const lang = state.l === 'en' ? 'en' : 'yi';
+      [['fFontT', 'title', 'ft'], ['fFontB', 'body', 'fb']].forEach(([id, kind, key]) => {
+        const sel = document.getElementById(id); if (!sel) return;
+        if (sel.dataset.forLang !== lang) {
+          sel.innerHTML = '';
+          const o0 = document.createElement('option'); o0.value = ''; o0.textContent = lang === 'en' ? 'Design font' : 'פונעם דיזיין'; sel.appendChild(o0);
+          FONT_PICK[kind][lang].forEach(([k, label, spec]) => { const o = document.createElement('option'); o.value = k; o.textContent = label; o.style.fontFamily = '"' + spec[0] + '"'; sel.appendChild(o); });
+          sel.dataset.forLang = lang;
+        }
+        const ok = pickFont(kind, lang, state[key]);
+        sel.value = ok ? state[key] : '';
+      });
+    }
     function hebHint() {
       const hp = hebrewParts(state.dt);
       const hint = $('#hdAuto');
@@ -2840,11 +3345,13 @@
       if (e.target.id === 'fType') { state.t = e.target.value; reSample(); syncForm(); update(); parsha(); }
       if (e.target.name === 'cardLang') { state.l = e.target.value; reSample(); syncForm(); update(); parsha(); }
       if (e.target.id === 'fParsha') { state.ps = e.target.checked ? 1 : 0; parsha(); }
+      if (e.target.id === 'fFontT') { state.ft = e.target.value; update(); }
+      if (e.target.id === 'fFontB') { state.fb = e.target.value; update(); }
       if (e.target.id === 'fDate') { hebHint(); parsha(); }
     });
     $('#btnResetWording').addEventListener('click', () => { state.w = ''; state.ti = ''; syncForm(); update(); });
     $('#btnClear').addEventListener('click', () => {
-      const keep = { d: state.d, t: state.t, l: state.l, ps: state.ps, sm: 0 };
+      const keep = { d: state.d, t: state.t, l: state.l, ps: state.ps, ft: state.ft, fb: state.fb, sm: 0 };
       state = keep; syncForm(); update();
       flash(status, 'Cleared — start fresh.', 'אויסגעמעקט.');
     });

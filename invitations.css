@@ -257,3 +257,8 @@ html.env-lock, html.env-lock body { overflow: hidden; }
 .inv-countdown[hidden] { display: none; }
 .inv-countdown b { font-variant-numeric: tabular-nums; }
 .inv-mazel { border-color: #d9bd83; color: #6d4f16; }
+
+/* font picker (Nov 2026) */
+.inv-fonts .inv-font-row { display: grid; grid-template-columns: auto 1fr; gap: 8px 10px; align-items: center; }
+.inv-fonts .inv-font-row label { margin: 0; font-size: 0.92em; }
+.inv-fonts select { width: 100%; min-width: 0; font-size: 1rem; padding: 8px 10px; border: 1px solid #cfc6b6; border-radius: 10px; background: #fff; }
