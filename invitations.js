@@ -265,6 +265,33 @@
   ].forEach((f) => { f.xf = [['Suez One', 400], ['Frank Ruhl Libre', 700], ['Frank Ruhl Libre', 500]]; FAMILIES.push(f); });
   // the starry design suits every boy simcha
   FAMILIES.forEach((f) => { if (f.frame === 'starlight') ['vachnacht', 'shalomzachor', 'pidyonhaben'].forEach((t) => { if (!f.tags.includes(t)) f.tags.push(t); }); });
+  // ---- part 2 (Nov 2026): a family of new drawings for every other simcha
+  const XF = [['Suez One', 400], ['Frank Ruhl Libre', 700], ['Frank Ruhl Libre', 500]];
+  [
+    { frame: 'upAlefBeis', name: { en: 'Aleph-Beis Blocks', yi: 'אלף בית קלעצלעך' }, tags: ['upsherin'], fonts: ['bold', 'modern'], palettes: ['powderblue', 'creamnavy', 'tealsand', 'whiteblue', 'ivorygold', 'slateblue'] },
+    { frame: 'upScissors', name: { en: 'First Haircut', yi: 'ערשטע שערן' }, tags: ['upsherin'], fonts: ['bold', 'classic'], palettes: ['navygold', 'ivorygold', 'powderblue', 'denimgold', 'tealsand'] },
+    { frame: 'upTzitzis', name: { en: 'First Tzitzis', yi: 'ערשטע ציצית' }, tags: ['upsherin'], fonts: ['scribe', 'bold'], palettes: ['ivorygold', 'slateblue', 'navygold', 'creamnavy', 'whitesilver'] },
+    { frame: 'upHoney', name: { en: 'Honey & Letters', yi: 'האניג און אותיות' }, tags: ['upsherin'], fonts: ['modern', 'bold'], palettes: ['ivorygold', 'tealsand', 'powderblue', 'creamnavy', 'whiteblue'] },
+    { frame: 'chbDoor', name: { en: 'Doorway & Mezuzah', yi: 'טיר מיט מזוזה' }, tags: ['chanukashabayis'], fonts: ['classic', 'scribe'], palettes: ['ivorygold', 'navygold', 'tealsand', 'emeraldgold', 'creamburgundy', 'slateblue'] },
+    { frame: 'chbKey', name: { en: 'Golden Key', yi: 'גאלדענער שליסל' }, tags: ['chanukashabayis'], fonts: ['classic', 'bold'], palettes: ['navygold', 'blackgold', 'ivorygold', 'emeraldgold', 'burgundygold'] },
+    { frame: 'chbHouse', name: { en: 'Our New Home', yi: 'אונזער נייע היים' }, tags: ['chanukashabayis'], fonts: ['bold', 'modern'], palettes: ['midnight', 'navygold', 'ivorygold', 'tealsand', 'creamnavy'] },
+    { frame: 'chbMezuzah', name: { en: 'Mezuzah', yi: 'מזוזה' }, tags: ['chanukashabayis'], fonts: ['scribe', 'classic'], palettes: ['ivorysage', 'ivorygold', 'navysilver', 'whitesilver', 'charcoalcopper'] },
+    { frame: 'siyStack', name: { en: 'Stack of Seforim', yi: 'ספרים' }, tags: ['siyum'], fonts: ['classic', 'scribe'], palettes: ['ivorygold', 'navygold', 'burgundygold', 'creamburgundy', 'emeraldgold', 'blackgold'] },
+    { frame: 'siyGemara', name: { en: 'Open Gemara', yi: 'אפענע גמרא' }, tags: ['siyum'], fonts: ['scribe', 'classic'], palettes: ['ivorygold', 'creamnavy', 'tealsand', 'navygold', 'whitesilver'] },
+    { frame: 'siyQuill', name: { en: 'Quill & Scroll', yi: 'פעדער און מגילה' }, tags: ['siyum'], fonts: ['classic', 'soft'], palettes: ['navygold', 'ivorygold', 'emeraldgold', 'creamburgundy', 'charcoalcopper'] },
+    { frame: 'bmTefillin', name: { en: 'Tefillin', yi: 'תפילין' }, tags: ['barmitzvah'], fonts: ['classic', 'bold'], palettes: ['ivorygold', 'navygold', 'whitesilver', 'creamnavy', 'tealsand'] },
+    { frame: 'bmKotel', name: { en: 'The Kosel', yi: 'דער כותל' }, tags: ['barmitzvah'], fonts: ['bold', 'classic'], palettes: ['ivorygold', 'creamnavy', 'skywhite', 'navygold', 'whitesilver'] },
+    { frame: 'bmRimonim', name: { en: 'Keser Torah', yi: 'כתר תורה' }, tags: ['barmitzvah', 'siyum'], fonts: ['classic', 'scribe'], palettes: ['navygold', 'blackgold', 'burgundygold', 'ivorygold', 'purplegold'] },
+    { frame: 'kdBlossom', name: { en: 'Blossom Branch', yi: 'בליענדיגע צווייג' }, tags: ['kiddush'], fonts: ['soft', 'classic'], palettes: ['blushsilver', 'ivorysage', 'whitesilver', 'ivorygold', 'skywhite'] },
+    { frame: 'kdLace', name: { en: 'Lace & Blossoms', yi: 'שפיץ מיט בלומען' }, tags: ['kiddush'], fonts: ['soft', 'modern'], palettes: ['blushsilver', 'ivorygold', 'whitesilver', 'ivorysage', 'tealsand'] },
+    { frame: 'chChuppah', name: { en: 'Chuppah', yi: 'חופה' }, tags: ['chasuna'], fonts: ['classic', 'soft'], palettes: ['ivorygold', 'navygold', 'blushsilver', 'emeraldgold', 'whitesilver', 'creamburgundy'] },
+    { frame: 'vtPlate', name: { en: 'Breaking the Plate', yi: 'צעבראכענע טעלער' }, tags: ['vort'], fonts: ['bold', 'classic'], palettes: ['ivorygold', 'navygold', 'creamburgundy', 'blushsilver', 'tealsand'] },
+    { frame: 'sbSeven', name: { en: 'Seven Lights', yi: 'זיבן ליכט' }, tags: ['shevabrachos'], fonts: ['classic', 'soft'], palettes: ['midnight', 'navygold', 'burgundygold', 'purplegold', 'emeraldgold'] }
+  ].forEach((f) => { f.xf = XF; FAMILIES.push(f); });
+  // the boy-simcha layouts without a boy-only emblem suit the other family simchas too (the default wording still rotates through the boy ones)
+  ['bKesuba', 'bDeco', 'bDamask', 'bJerusalem', 'bRimon', 'bModern', 'bTile'].forEach((k) => { const f = FAMILIES.find((x) => x.frame === k); if (!f) return;
+    f.rotate = f.tags.slice(); f.tags = f.tags.concat(['upsherin', 'barmitzvah', 'chanukashabayis', 'siyum', 'general']); });
+  ['bClouds', 'bLace'].forEach((k) => { const f = FAMILIES.find((x) => x.frame === k); if (f) { f.rotate = f.tags.slice(); f.tags = f.tags.concat(['upsherin']); } });
   // A little more reach for the original nine in the gallery filters (their drawings are unchanged).
   const ORIGINAL_EXTRA = { royal: { color: 'navy', also: ['barmitzvah', 'vort', 'general'] }, ivory: { color: 'cream', also: ['chasuna', 'kiddush'] }, arch: { color: 'green', also: ['siyum', 'chanukashabayis'] },
     sky: { color: 'blue', also: ['upsherin', 'kiddush'] }, pearl: { color: 'pink', also: ['vort', 'shevabrachos'] }, garden: { color: 'green', also: ['chanukashabayis', 'kiddush'] },
@@ -275,7 +302,8 @@
     FAMILIES.forEach((f) => f.palettes.forEach((pk, i) => {
       const p = PALETTES[pk];
       const fs = FONTSETS[f.fonts[i % f.fonts.length]];
-      const type = (p.prefer && f.tags.includes(p.prefer)) ? p.prefer : (f.rotate ? f.tags[i % f.tags.length] : f.tags[0]);
+      const rot = Array.isArray(f.rotate) ? f.rotate : (f.rotate ? f.tags : null);
+      const type = (p.prefer && f.tags.includes(p.prefer)) ? p.prefer : (rot ? rot[i % rot.length] : f.tags[0]);
       made.push({ round: i, d: Object.assign({
         id: f.frame + '-' + pk, type, also: f.tags.filter((t) => t !== type), isNew: true, family: f.frame, palette: pk, color: p.color, dark: !!p.dark,
         name: { en: f.name.en + ' · ' + p.name.en, yi: f.name.yi + ' · ' + p.name.yi },
@@ -1950,6 +1978,374 @@
     }
   };
   Object.assign(FRAMES, BOY_FRAMES);
+
+  // ================================================================ more simchas (Nov 2026, part 2) — all drawn here in code
+  function letterTile(ctx, x, y, s, ch, d, rot, hue) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(rot || 0);
+    const base = hue || d.line;
+    const g = ctx.createLinearGradient(-s / 2, -s / 2, s / 2, s / 2); g.addColorStop(0, mix(base, '#ffffff', 0.35)); g.addColorStop(1, mix(base, '#000000', 0.12));
+    ctx.fillStyle = g; ctx.beginPath(); roundRectPath(ctx, -s / 2, -s / 2, s, s, s * 0.14); ctx.fill();
+    ctx.strokeStyle = 'rgba(255,255,255,0.65)'; ctx.lineWidth = Math.max(2, s * 0.03); ctx.beginPath(); roundRectPath(ctx, -s * 0.42, -s * 0.42, s * 0.84, s * 0.84, s * 0.1); ctx.stroke();
+    font(ctx, ['Suez One', 400], s * 0.62); ctx.fillStyle = '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+    ctx.fillText(ch, 0, s * 0.04); ctx.restore();
+  }
+  function scissors(ctx, cx, cy, s, d) {
+    ctx.save(); ctx.translate(cx, cy); ctx.strokeStyle = d.line; ctx.fillStyle = metal(ctx, d.line, -s / 2, 0, s / 2, 0); ctx.lineWidth = Math.max(2.4, s * 0.025);
+    [-1, 1].forEach((sd) => {
+      ctx.save(); ctx.rotate(sd * 0.32);
+      ctx.beginPath(); ctx.moveTo(-s * 0.03, 0); ctx.lineTo(0, -s * 0.62); ctx.quadraticCurveTo(s * 0.05, -s * 0.3, s * 0.035, 0); ctx.closePath(); ctx.fill();
+      ctx.beginPath(); ctx.moveTo(0, s * 0.02); ctx.lineTo(0, s * 0.18); ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(0, s * 0.32, s * 0.1, s * 0.14, 0, 0, TAU); ctx.lineWidth = Math.max(4, s * 0.04); ctx.stroke();
+      ctx.restore();
+    });
+    ctx.fillStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.beginPath(); ctx.arc(0, 0, s * 0.03, 0, TAU); ctx.fill(); ctx.stroke();
+    ctx.restore();
+  }
+  // a small tallis katan with tzitzis
+  function tzitzis(ctx, cx, top, s, d) {
+    const w = s * 0.7, h = s;
+    ctx.save(); ctx.fillStyle = d.dark ? '#f6f1e6' : '#ffffff'; ctx.strokeStyle = d.line; ctx.lineWidth = Math.max(2.4, s * 0.012);
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, top); ctx.lineTo(cx - w * 0.14, top); ctx.quadraticCurveTo(cx, top + h * 0.16, cx + w * 0.14, top); ctx.lineTo(cx + w / 2, top); ctx.lineTo(cx + w / 2, top + h * 0.8); ctx.lineTo(cx - w / 2, top + h * 0.8); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = d.dark ? '#22314f' : d.title; ctx.lineWidth = Math.max(3, s * 0.03);
+    [0.56, 0.64].forEach((t) => { ctx.beginPath(); ctx.moveTo(cx - w / 2 + 4, top + h * t); ctx.lineTo(cx + w / 2 - 4, top + h * t); ctx.stroke(); });
+    ctx.strokeStyle = d.dark ? '#f6f1e6' : mix(d.line, '#ffffff', 0.2); ctx.lineWidth = Math.max(1.6, s * 0.008);
+    [[cx - w / 2 + 10, top + h * 0.8], [cx + w / 2 - 10, top + h * 0.8]].forEach(([x, y]) => { for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.moveTo(x, y); ctx.quadraticCurveTo(x + k * 4, y + h * 0.12, x + k * 6, y + h * 0.24); ctx.stroke(); } });
+    ctx.restore();
+  }
+  function honeyJar(ctx, cx, by, s, d) {
+    ctx.save();
+    const hg = ctx.createLinearGradient(cx - s * 0.3, 0, cx + s * 0.3, 0); hg.addColorStop(0, '#c9861f'); hg.addColorStop(0.5, '#f2c25a'); hg.addColorStop(1, '#b8741a');
+    ctx.fillStyle = hg; ctx.strokeStyle = d.line; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.24, by - s * 0.62); ctx.quadraticCurveTo(cx - s * 0.36, by - s * 0.3, cx - s * 0.26, by); ctx.lineTo(cx + s * 0.26, by); ctx.quadraticCurveTo(cx + s * 0.36, by - s * 0.3, cx + s * 0.24, by - s * 0.62); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.fillStyle = d.line; ctx.fillRect(cx - s * 0.27, by - s * 0.74, s * 0.54, s * 0.12);
+    ctx.fillStyle = '#f2c25a'; ctx.beginPath(); ctx.moveTo(cx - s * 0.2, by - s * 0.62); ctx.quadraticCurveTo(cx - s * 0.16, by - s * 0.45, cx - s * 0.12, by - s * 0.62); ctx.quadraticCurveTo(cx - s * 0.05, by - s * 0.4, cx + s * 0.04, by - s * 0.62); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.85)'; font(ctx, ['Suez One', 400], s * 0.2); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.fillText('דבש', cx, by - s * 0.3);
+    ctx.restore();
+  }
+  // an arched doorway with a mezuzah on the right post
+  function doorway(ctx, cx, by, s, d) {
+    const w = s * 0.56, h = s, c = d.line;
+    ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = Math.max(3, s * 0.012);
+    ctx.fillStyle = hexA(c, d.dark ? 0.2 : 0.14);
+    ctx.beginPath(); archPath(ctx, cx - w / 2 - s * 0.06, by - h + w / 2 + s * 0.06, w + s * 0.12, by, 'round'); ctx.stroke();
+    ctx.beginPath(); archPath(ctx, cx - w / 2, by - h + w / 2 + s * 0.08, w, by, 'round'); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, by - h + s * 0.09); ctx.lineTo(cx, by); ctx.stroke();
+    [-1, 1].forEach((sd) => { ctx.beginPath(); roundRectPath(ctx, cx + sd * w * 0.27 - w * 0.17, by - h * 0.62, w * 0.34, h * 0.22, 6); ctx.stroke(); ctx.beginPath(); roundRectPath(ctx, cx + sd * w * 0.27 - w * 0.17, by - h * 0.32, w * 0.34, h * 0.24, 6); ctx.stroke(); });
+    ctx.fillStyle = c; ctx.beginPath(); ctx.arc(cx + w * 0.08, by - h * 0.38, s * 0.016, 0, TAU); ctx.fill();
+    ctx.fillRect(cx - w / 2 - s * 0.1, by - 6, w + s * 0.2, 8);
+    mezuzah(ctx, cx + w / 2 + s * 0.03, by - h * 0.62, s * 0.2, d);
+    ctx.restore();
+  }
+  function mezuzah(ctx, x, y, s, d) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.38);
+    ctx.fillStyle = metal(ctx, d.line, -s * 0.12, 0, s * 0.12, 0); ctx.beginPath(); roundRectPath(ctx, -s * 0.11, -s / 2, s * 0.22, s, s * 0.08); ctx.fill();
+    ctx.strokeStyle = mix(d.line, '#000000', 0.35); ctx.lineWidth = Math.max(1.5, s * 0.02); ctx.stroke();
+    font(ctx, ['Frank Ruhl Libre', 900], s * 0.2); ctx.fillStyle = mix(d.line, '#000000', 0.5); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.fillText('ש', 0, -s * 0.22);
+    ctx.restore();
+  }
+  function bigKey(ctx, cx, cy, s, d) {
+    ctx.save(); ctx.translate(cx, cy); ctx.rotate(-0.12);
+    const g = metal(ctx, d.line, -s / 2, -s * 0.1, s / 2, s * 0.1);
+    ctx.fillStyle = g; ctx.strokeStyle = g; ctx.lineWidth = s * 0.05;
+    ctx.beginPath(); ctx.arc(-s * 0.32, 0, s * 0.15, 0, TAU); ctx.stroke();
+    ctx.save(); ctx.fillStyle = g; magenFill(ctx, -s * 0.32, 0, s * 0.09); ctx.restore();
+    [0, 1, 2, 3].forEach((k) => { const a = k * Math.PI / 2 + Math.PI / 4; ctx.beginPath(); ctx.arc(-s * 0.32 + Math.cos(a) * s * 0.19, Math.sin(a) * s * 0.19, s * 0.035, 0, TAU); ctx.fill(); });
+    ctx.fillRect(-s * 0.17, -s * 0.025, s * 0.62, s * 0.05);
+    ctx.fillRect(s * 0.3, s * 0.02, s * 0.05, s * 0.1); ctx.fillRect(s * 0.38, s * 0.02, s * 0.06, s * 0.14);
+    [-0.1, -0.04].forEach((o) => { ctx.beginPath(); ctx.ellipse(s * o, 0, s * 0.015, s * 0.05, 0, 0, TAU); ctx.fill(); });
+    ctx.restore();
+  }
+  function house(ctx, cx, by, s, d) {
+    const w = s * 0.8, c = d.line;
+    ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = Math.max(3, s * 0.012); ctx.lineJoin = 'round';
+    ctx.fillStyle = d.dark ? hexA(c, 0.12) : hexA(c, 0.08);
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, by); ctx.lineTo(cx - w / 2, by - s * 0.5); ctx.lineTo(cx, by - s * 0.9); ctx.lineTo(cx + w / 2, by - s * 0.5); ctx.lineTo(cx + w / 2, by); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - w / 2 - s * 0.06, by - s * 0.46); ctx.lineTo(cx, by - s * 0.95); ctx.lineTo(cx + w / 2 + s * 0.06, by - s * 0.46); ctx.stroke();
+    ctx.fillRect(cx + w * 0.22, by - s * 0.86, s * 0.08, s * 0.2);
+    const win = (x, y) => { ctx.save(); ctx.fillStyle = 'rgba(255,214,120,0.85)'; ctx.fillRect(x, y, s * 0.14, s * 0.14); ctx.restore(); ctx.strokeRect(x, y, s * 0.14, s * 0.14); ctx.beginPath(); ctx.moveTo(x + s * 0.07, y); ctx.lineTo(x + s * 0.07, y + s * 0.14); ctx.moveTo(x, y + s * 0.07); ctx.lineTo(x + s * 0.14, y + s * 0.07); ctx.stroke(); };
+    win(cx - w * 0.38, by - s * 0.4); win(cx + w * 0.38 - s * 0.14, by - s * 0.4);
+    ctx.beginPath(); archPath(ctx, cx - s * 0.08, by - s * 0.24, s * 0.16, by, 'round'); ctx.stroke();
+    ctx.restore();
+    magen(ctx, cx, by - s * 0.66, s * 0.07, c, 2.2);
+    mezuzah(ctx, cx + s * 0.13, by - s * 0.2, s * 0.1, d);
+  }
+  function bookStack(ctx, cx, by, s, d) {
+    const cols = d.dark ? ['#f0e6cf', '#d8c7a0', '#efe2c0', '#e3d3ac', '#f5ecd8'] : [d.title, mix(d.title, '#000000', 0.2), mix(d.line, '#000000', 0.15), mix(d.title, '#ffffff', 0.15), mix(d.nm, '#ffffff', 0.1)];
+    const gold = d.dark ? mix(d.line, '#000000', 0.3) : (d.line);
+    let y = by; const r = rng(29);
+    for (let i = 0; i < 5; i++) {
+      const h = s * (0.13 + r() * 0.04), w = s * (0.92 - i * 0.07 + r() * 0.05), x = cx - w / 2 + (r() - 0.5) * s * 0.06;
+      ctx.save(); ctx.fillStyle = cols[i % cols.length]; ctx.beginPath(); roundRectPath(ctx, x, y - h, w, h, 6); ctx.fill();
+      ctx.fillStyle = gold; ctx.fillRect(x + w * 0.08, y - h + 3, w * 0.03, h - 6); ctx.fillRect(x + w * 0.89, y - h + 3, w * 0.03, h - 6);
+      ctx.fillRect(x + w * 0.3, y - h * 0.62, w * 0.4, h * 0.24);
+      ctx.restore(); y -= h + 2;
+    }
+    return y;
+  }
+  function gemaraPage(ctx, cx, cy, w, h, d) {
+    ctx.save();
+    const pg = d.dark ? '#f6ecd4' : '#fffaf0';
+    ctx.fillStyle = pg; ctx.strokeStyle = d.line; ctx.lineWidth = 2.4;
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, cy - h / 2 + 12); ctx.quadraticCurveTo(cx - w / 4, cy - h / 2 - 10, cx, cy - h / 2 + 8); ctx.quadraticCurveTo(cx + w / 4, cy - h / 2 - 10, cx + w / 2, cy - h / 2 + 12);
+    ctx.lineTo(cx + w / 2, cy + h / 2); ctx.quadraticCurveTo(cx + w / 4, cy + h / 2 - 18, cx, cy + h / 2); ctx.quadraticCurveTo(cx - w / 4, cy + h / 2 - 18, cx - w / 2, cy + h / 2); ctx.closePath(); ctx.fill(); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx, cy - h / 2 + 8); ctx.lineTo(cx, cy + h / 2); ctx.stroke();
+    ctx.strokeStyle = 'rgba(60,45,30,0.5)';
+    [-1, 1].forEach((sd) => {
+      const px = cx + sd * w / 4, pw = w / 2 - 40;
+      for (let k = 0; k < 12; k++) { const y = cy - h / 2 + 34 + k * (h - 70) / 12; const inner = k > 2 && k < 9; ctx.lineWidth = inner ? 3 : 1.6;
+        const ww = inner ? pw * 0.46 : pw * 0.86; ctx.beginPath(); ctx.moveTo(px - ww / 2, y); ctx.lineTo(px + ww / 2, y); ctx.stroke();
+        if (inner) { ctx.lineWidth = 1.4; [-1, 1].forEach((q) => { ctx.beginPath(); ctx.moveTo(px + q * pw * 0.27, y); ctx.lineTo(px + q * pw * 0.43, y); ctx.stroke(); }); } }
+    });
+    ctx.restore();
+  }
+  function quill(ctx, x, y, s, d) {
+    ctx.save(); ctx.translate(x, y); ctx.rotate(-0.55);
+    ctx.fillStyle = hexA(d.line, 0.85); ctx.beginPath(); ctx.moveTo(0, 0); ctx.quadraticCurveTo(-s * 0.16, -s * 0.5, 0, -s); ctx.quadraticCurveTo(s * 0.16, -s * 0.5, 0, 0); ctx.fill();
+    ctx.strokeStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(0, -s * 0.95); ctx.stroke();
+    for (let k = 1; k < 9; k++) { ctx.beginPath(); ctx.moveTo(0, -s * k * 0.1); ctx.lineTo(-s * 0.08, -s * (k * 0.1 + 0.06)); ctx.moveTo(0, -s * k * 0.1); ctx.lineTo(s * 0.08, -s * (k * 0.1 + 0.06)); ctx.stroke(); }
+    ctx.restore();
+  }
+  function tefillin(ctx, cx, by, s, d) {
+    // the shel rosh: a square bayis on a square base, gold shin, the strap looping down from the back
+    ctx.save();
+    const blk = '#151515', side = '#262626', top = '#3b3b3b', w = s * 0.42, dx = s * 0.16, dy = s * 0.11;
+    const bx = cx - w / 2, baseY = by, baseH = s * 0.07, cubeY = baseY - baseH - w;
+    ctx.strokeStyle = blk; ctx.lineWidth = s * 0.035; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(cx + w / 2 + dx * 0.6, baseY - baseH * 0.5); ctx.bezierCurveTo(cx + s * 0.75, baseY + s * 0.05, cx + s * 0.85, baseY - s * 0.45, cx + s * 0.55, baseY - s * 0.42);
+    ctx.bezierCurveTo(cx + s * 0.35, baseY - s * 0.4, cx + s * 0.45, baseY + s * 0.12, cx + s * 0.95, baseY + s * 0.08); ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, baseY - baseH * 0.5); ctx.bezierCurveTo(cx - s * 0.7, baseY, cx - s * 0.75, baseY - s * 0.3, cx - s * 0.95, baseY - s * 0.05); ctx.stroke();
+    // base (titura), only a little wider than the bayis
+    const tw = w * 1.22, tx = cx - tw / 2;
+    ctx.fillStyle = blk; ctx.fillRect(tx, baseY - baseH, tw, baseH);
+    ctx.fillStyle = top; ctx.beginPath(); ctx.moveTo(tx, baseY - baseH); ctx.lineTo(tx + dx, baseY - baseH - dy); ctx.lineTo(tx + tw + dx, baseY - baseH - dy); ctx.lineTo(tx + tw, baseY - baseH); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = side; ctx.beginPath(); ctx.moveTo(tx + tw, baseY - baseH); ctx.lineTo(tx + tw + dx, baseY - baseH - dy); ctx.lineTo(tx + tw + dx, baseY - dy); ctx.lineTo(tx + tw, baseY); ctx.closePath(); ctx.fill();
+    // bayis
+    const by0 = cubeY - dy * 0.3;
+    ctx.fillStyle = blk; ctx.fillRect(bx, by0, w, w);
+    ctx.fillStyle = side; ctx.beginPath(); ctx.moveTo(bx + w, by0); ctx.lineTo(bx + w + dx, by0 - dy); ctx.lineTo(bx + w + dx, by0 + w - dy); ctx.lineTo(bx + w, by0 + w); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = top; ctx.beginPath(); ctx.moveTo(bx, by0); ctx.lineTo(bx + dx, by0 - dy); ctx.lineTo(bx + w + dx, by0 - dy); ctx.lineTo(bx + w, by0); ctx.closePath(); ctx.fill();
+    ctx.strokeStyle = '#4a4a4a'; ctx.lineWidth = 1.5; [0.25, 0.5, 0.75].forEach((t) => { ctx.beginPath(); ctx.moveTo(bx + w * t, by0); ctx.lineTo(bx + w * t, by0 + w); ctx.stroke(); });
+    font(ctx, ['Frank Ruhl Libre', 900], w * 0.62); ctx.fillStyle = '#e2c47c'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl'; ctx.fillText('ש', bx + w / 2, by0 + w * 0.52);
+    ctx.restore();
+  }
+  function kotel(ctx, d, yTop, h) {
+    ctx.save();
+    const stone = d.dark ? '#cbbd9c' : '#e7dcc3', edge = d.dark ? '#8f8263' : '#b9a986';
+    const r = rng(13); const rows = 5, rh = h / rows;
+    for (let i = 0; i < rows; i++) {
+      let x = -(r() * 160), y = yTop + i * rh;
+      while (x < W) { const w = 180 + r() * 160; ctx.fillStyle = mix(stone, '#ffffff', r() * 0.25); ctx.fillRect(x + 3, y + 3, w - 6, rh - 6); ctx.strokeStyle = edge; ctx.lineWidth = 2; ctx.strokeRect(x + 3, y + 3, w - 6, rh - 6);
+        ctx.strokeStyle = hexA(edge, 0.6); ctx.lineWidth = 1.2; ctx.strokeRect(x + 14, y + 14, w - 28, rh - 28);
+        if (r() < 0.22) { ctx.save(); ctx.fillStyle = '#fffdf6'; ctx.translate(x + w * 0.9, y + rh * 0.5); ctx.rotate((r() - 0.5) * 0.8); ctx.fillRect(-8, -5, 16, 10); ctx.restore(); }
+        if (r() < 0.12) { leaf(ctx, x + w, y + 4, 34, -0.8, '#6f8f5a', true); leaf(ctx, x + w, y + 4, 28, -2.2, '#6f8f5a', true); }
+        x += w; }
+    }
+    ctx.restore();
+  }
+  function rimonim(ctx, cx, by, s, d) {
+    const g = metal(ctx, d.line, cx - s * 0.2, 0, cx + s * 0.2, 0);
+    ctx.save(); ctx.fillStyle = g; ctx.strokeStyle = g; ctx.lineWidth = Math.max(2, s * 0.03);
+    ctx.fillRect(cx - s * 0.03, by - s * 0.5, s * 0.06, s * 0.5);
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.16, by - s * 0.5); ctx.quadraticCurveTo(cx - s * 0.22, by - s * 0.85, cx, by - s); ctx.quadraticCurveTo(cx + s * 0.22, by - s * 0.85, cx + s * 0.16, by - s * 0.5); ctx.closePath(); ctx.fill();
+    [-0.12, 0, 0.12].forEach((o) => { ctx.beginPath(); ctx.arc(cx + o * s, by - s * 0.46, s * 0.025, 0, TAU); ctx.fill(); });
+    ctx.beginPath(); ctx.arc(cx, by - s * 1.04, s * 0.04, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  function blossomBranch(ctx, x, y, len, angle, d, seed) {
+    const r = rng(seed || 3), pet = petalsOf(d);
+    ctx.save(); ctx.translate(x, y); ctx.rotate(angle); ctx.strokeStyle = d.dark ? mix(d.line, '#000', 0.2) : '#7a5c46'; ctx.lineWidth = 5; ctx.lineCap = 'round';
+    ctx.beginPath(); ctx.moveTo(0, 0); ctx.bezierCurveTo(len * 0.3, -len * 0.08, len * 0.6, len * 0.06, len, -len * 0.02); ctx.stroke();
+    for (let i = 1; i < 8; i++) { const t = i / 8, bx = len * t, by2 = Math.sin(t * 3) * len * 0.03; const side = i % 2 ? -1 : 1;
+      ctx.lineWidth = 2.5; ctx.beginPath(); ctx.moveTo(bx, by2); ctx.lineTo(bx + 20, by2 + side * 34); ctx.stroke();
+      const fx = bx + 20, fy = by2 + side * 34, fr = 16 + r() * 10, col = 'rgba(' + pet[i % pet.length] + ',0.92)';
+      ctx.save(); ctx.fillStyle = col; for (let k = 0; k < 5; k++) { const a = k * TAU / 5 + r(); ctx.beginPath(); ctx.ellipse(fx + Math.cos(a) * fr * 0.6, fy + Math.sin(a) * fr * 0.6, fr * 0.55, fr * 0.4, a, 0, TAU); ctx.fill(); }
+      ctx.fillStyle = d.dark ? d.line : '#c99a3a'; ctx.beginPath(); ctx.arc(fx, fy, fr * 0.22, 0, TAU); ctx.fill(); ctx.restore(); }
+    ctx.restore();
+  }
+  function chuppah(ctx, cx, by, s, d) {
+    const w = s * 1.2, c = d.line, top = by - s;
+    ctx.save(); ctx.strokeStyle = c; ctx.lineWidth = Math.max(3, s * 0.014); ctx.lineCap = 'round';
+    [-1, 1].forEach((sd) => { ctx.beginPath(); ctx.moveTo(cx + sd * w * 0.46, top + s * 0.08); ctx.lineTo(cx + sd * w * 0.46, by); ctx.stroke(); ctx.fillStyle = c; ctx.beginPath(); ctx.arc(cx + sd * w * 0.46, top + s * 0.05, s * 0.025, 0, TAU); ctx.fill(); });
+    ctx.fillStyle = hexA(c, d.dark ? 0.22 : 0.14);
+    ctx.beginPath(); ctx.moveTo(cx - w * 0.52, top + s * 0.12); ctx.quadraticCurveTo(cx, top - s * 0.12, cx + w * 0.52, top + s * 0.12);
+    const n = 8; for (let i = n; i > 0; i--) { const x0 = cx - w * 0.52 + i * w * 1.04 / n; ctx.quadraticCurveTo(x0 - w * 0.065, top + s * 0.24, x0 - w * 0.13, top + s * 0.12); }
+    ctx.closePath(); ctx.fill(); ctx.stroke();
+    magen(ctx, cx, top + s * 0.06, s * 0.05, c, 2);
+    [-1, 1].forEach((sd) => { ctx.beginPath(); ctx.moveTo(cx + sd * w * 0.46, top + s * 0.2); ctx.quadraticCurveTo(cx + sd * w * 0.3, top + s * 0.5, cx + sd * w * 0.46, top + s * 0.75); ctx.globalAlpha = 0.5; ctx.stroke(); ctx.globalAlpha = 1;
+      for (let k = 0; k < 4; k++) { const t = k / 3, yy = top + s * (0.25 + t * 0.45); rosette(ctx, cx + sd * (w * 0.38 + Math.sin(t * 3) * 10), yy, s * 0.03, 5, c, true); } });
+    ctx.restore();
+  }
+  function brokenPlate(ctx, cx, cy, r, d) {
+    ctx.save();
+    const shards = [[-0.2, 1.3, -14, -6], [1.3, 2.6, 10, -12], [2.6, 4.2, 12, 10], [4.2, 6.08, -10, 12]];
+    shards.forEach(([a0, a1, dx, dy]) => {
+      ctx.save(); ctx.translate(dx, dy); ctx.beginPath(); ctx.moveTo(cx + Math.cos((a0 + a1) / 2) * r * 0.08, cy + Math.sin((a0 + a1) / 2) * r * 0.08); ctx.arc(cx, cy, r, a0, a1); ctx.closePath();
+      ctx.fillStyle = d.dark ? '#f4efe6' : '#ffffff'; ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.stroke();
+      ctx.beginPath(); ctx.arc(cx, cy, r * 0.82, a0 + 0.05, a1 - 0.05); ctx.lineWidth = 2; ctx.stroke();
+      ctx.restore();
+    });
+    ctx.restore();
+  }
+  function sevenLights(ctx, cx, cy, rad, d) {
+    for (let i = 0; i < 7; i++) { const a = Math.PI + (i + 1) * Math.PI / 8, x = cx + Math.cos(a) * rad, y = cy + Math.sin(a) * rad * 0.5;
+      candle(ctx, x, y + 80, 70, 22, d); }
+  }
+
+  const MORE_FRAMES = {
+    // ---- Upsherin
+    upAlefBeis(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.line, 0.03, 1800, 101);
+      rectStroke(ctx, 54, 3, d.line, 26); rectStroke(ctx, 72, 1.2, d.line, 18);
+      const hues = [d.title, d.line, mix(d.title, '#c9861f', 0.5), mix(d.line, '#2c7a6f', 0.5)];
+      [['א', -190, 290, -0.12], ['ב', -64, 270, 0.06], ['ג', 64, 285, -0.05], ['ד', 190, 268, 0.1]].forEach(([ch, o, y, rot], i) => letterTile(ctx, W / 2 - o * 1.2, y, 150, ch, d, rot, hues[i]));
+      const lt = 'אבגדהוזחטיכלמנסעפצקרשת'.split('');
+      ctx.save(); font(ctx, ['Suez One', 400], 40); ctx.fillStyle = hexA(d.line, 0.55); ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+      lt.forEach((ch, i) => { ctx.fillText(ch, W - 140 - i * ((W - 280) / 21), H - 120); });
+      ctx.restore();
+      return { x: 230, y: 400, w: W - 460, h: H - 400 - 230, bsd: [W - 140, 140], div: 'dot' };
+    },
+    upScissors(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      bandBorder(ctx, d, 52, 112, 'diamond', 'magen');
+      scissors(ctx, W / 2, 300, 230, d);
+      [-1, 1].forEach((sd) => { sparkle(ctx, W / 2 + sd * 170, 250, 16, d.line); sparkle(ctx, W / 2 + sd * 240, 320, 9, d.line); });
+      return { x: 240, y: 470, w: W - 480, h: H - 470 - 210, bsd: [W - 190, 190], div: 'sparkle' };
+    },
+    upTzitzis(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.line, 0.03, 1800, 103);
+      rectStroke(ctx, 60, 2.6, d.line); rectStroke(ctx, 80, 1.2, d.line);
+      [[80, 80], [W - 80, 80], [80, H - 80], [W - 80, H - 80]].forEach(([x, y]) => magen(ctx, x, y, 22, d.line, 2.2));
+      tzitzis(ctx, W / 2, 130, 270, d);
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 700], 36); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('תורה צוה לנו משה', W / 2, 495); ctx.restore();
+      return { x: 230, y: 530, w: W - 460, h: H - 530 - 200, bsd: [W - 170, 160], div: 'diamond' };
+    },
+    upHoney(ctx, d) {
+      bgFill(ctx, d);
+      lattice(ctx, d, 'dots', d.dark ? 0.3 : 0.35, 58);
+      ctx.save(); ctx.fillStyle = d.dark ? mix(d.bg[0], '#000', 0.1) : '#fffdf7'; ctx.beginPath(); roundRectPath(ctx, 110, 110, W - 220, H - 220, 40); ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.stroke(); ctx.restore();
+      honeyJar(ctx, W / 2 - 150, 430, 240, d);
+      letterTile(ctx, W / 2 + 70, 360, 90, 'א', d, -0.1, '#d79a2b'); letterTile(ctx, W / 2 + 180, 395, 90, 'ב', d, 0.12, d.title);
+      return { x: 230, y: 500, w: W - 460, h: H - 500 - 210, bsd: [W - 190, 180], div: 'dot' };
+    },
+    // ---- Chanukas Habayis
+    chbDoor(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.line, 0.03, 1800, 107);
+      rectStroke(ctx, 50, 3.4, d.line); rectStroke(ctx, 68, 1.2, d.line);
+      cornerScroll(ctx, 88, 88, 1, 1, 110, d.line, 2.4); cornerScroll(ctx, W - 88, 88, -1, 1, 110, d.line, 2.4); cornerScroll(ctx, 88, H - 88, 1, -1, 110, d.line, 2.4); cornerScroll(ctx, W - 88, H - 88, -1, -1, 110, d.line, 2.4);
+      doorway(ctx, W / 2, 500, 360, d);
+      return { x: 240, y: 550, w: W - 480, h: H - 550 - 200, bsd: [W - 180, 170], div: 'flourish' };
+    },
+    chbKey(ctx, d) {
+      bgFill(ctx, d);
+      bandBorder(ctx, d, 54, 120, 'quatre', 'rosette');
+      bigKey(ctx, W / 2, 300, 420, d);
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 700], 34); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('בית נאמן בישראל', W / 2, 420); ctx.restore();
+      return { x: 250, y: 470, w: W - 500, h: H - 470 - 230, bsd: [W - 200, 200], div: 'diamond' };
+    },
+    chbHouse(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      rectStroke(ctx, 70, 2.4, d.line, 30);
+      starField(ctx, d, 40, 109, [180, 520, W - 360, H - 700]);
+      house(ctx, W / 2, 470, 330, d);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(300, 472); ctx.lineTo(W - 300, 472); ctx.stroke(); ctx.restore();
+      return { x: 230, y: 530, w: W - 460, h: H - 530 - 210, bsd: [W - 150, 150], div: 'star' };
+    },
+    chbMezuzah(ctx, d) {
+      bgFill(ctx, d);
+      const g = metal(ctx, d.line, 0, 0, W, 0);
+      ctx.save(); ctx.fillStyle = hexA(d.line, d.dark ? 0.2 : 0.14); ctx.fillRect(0, 0, 150, H); ctx.fillRect(W - 150, 0, 150, H); ctx.restore();
+      ctx.save(); ctx.strokeStyle = g; ctx.lineWidth = 4; ctx.beginPath(); ctx.moveTo(150, 0); ctx.lineTo(150, H); ctx.moveTo(W - 150, 0); ctx.lineTo(W - 150, H); ctx.stroke(); ctx.restore();
+      for (let y = 120; y < H; y += 220) { magen(ctx, 75, y, 26, d.line, 2); magen(ctx, W - 75, y + 110, 26, d.line, 2); }
+      mezuzah(ctx, W / 2, 290, 300, d);
+      [-1, 1].forEach((sd) => { leaf(ctx, W / 2 + sd * 70, 330, 90, sd > 0 ? -0.5 : Math.PI + 0.5, d.line, true); leaf(ctx, W / 2 + sd * 80, 270, 70, sd > 0 ? -1 : Math.PI + 1, d.line, true); });
+      return { x: 240, y: 480, w: W - 480, h: H - 480 - 170, bsd: [W - 220, 120], div: 'leaf' };
+    },
+    // ---- Siyum
+    siyStack(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.line, 0.03, 1800, 113);
+      rectStroke(ctx, 52, 4, d.line); rectStroke(ctx, 72, 1.4, d.line);
+      const top = bookStack(ctx, W / 2, 470, 340, d);
+      keser(ctx, W / 2, top - 14, 120, metal(ctx, d.line, W / 2 - 60, top - 80, W / 2 + 60, top));
+      return { x: 230, y: 520, w: W - 460, h: H - 520 - 210, bsd: [W - 180, 170], div: 'flourish' };
+    },
+    siyGemara(ctx, d) {
+      bgFill(ctx, d);
+      bandBorder(ctx, d, 54, 116, 'leaf', 'rosette');
+      gemaraPage(ctx, W / 2, 310, 520, 280, d);
+      return { x: 250, y: 500, w: W - 500, h: H - 500 - 230, bsd: [W - 190, 190], div: 'diamond' };
+    },
+    siyQuill(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.beginPath(); roundRectPath(ctx, 80, 80, W - 160, H - 160, 50); ctx.stroke(); ctx.lineWidth = 1.2; ctx.beginPath(); roundRectPath(ctx, 100, 100, W - 200, H - 200, 36); ctx.stroke(); ctx.restore();
+      torahScroll(ctx, W / 2 - 40, 300, 200, 150, d);
+      quill(ctx, W / 2 + 190, 420, 260, d);
+      ctx.save(); ctx.fillStyle = d.dark ? '#111' : '#222'; ctx.beginPath(); ctx.ellipse(W / 2 + 205, 425, 38, 14, 0, 0, TAU); ctx.fill(); ctx.fillRect(W / 2 + 170, 425, 70, 40); ctx.restore();
+      return { x: 230, y: 520, w: W - 460, h: H - 520 - 200, bsd: [W - 170, 160], div: 'dot' };
+    },
+    // ---- Bar Mitzvah
+    bmTefillin(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 127);
+      rectStroke(ctx, 50, 3, d.line); rectStroke(ctx, 120, 3, d.line);
+      for (let x = 120; x < W - 100; x += 68) { magen(ctx, x, 85, 14, d.line, 1.6); magen(ctx, x, H - 85, 14, d.line, 1.6); }
+      for (let y = 160; y < H - 100; y += 68) { magen(ctx, 85, y, 14, d.line, 1.6); magen(ctx, W - 85, y, 14, d.line, 1.6); }
+      if (!d.dark) glowAt(ctx, W / 2, 330, 260, d.line, 0.12);
+      tefillin(ctx, W / 2, 450, 330, d);
+      return { x: 240, y: 510, w: W - 480, h: H - 510 - 220, bsd: [W - 190, 190], div: 'star' };
+    },
+    bmKotel(ctx, d) {
+      bgFill(ctx, d);
+      kotel(ctx, d, H - 420, 420);
+      ctx.save(); const fade = ctx.createLinearGradient(0, H - 440, 0, H - 300); fade.addColorStop(0, d.bg[1]); fade.addColorStop(1, hexA(d.bg[1], 0)); ctx.fillStyle = fade; ctx.fillRect(0, H - 440, W, 140); ctx.restore();
+      rectStroke(ctx, 50, 3, d.line);
+      keser(ctx, W / 2, 290, 140, metal(ctx, d.line, W / 2 - 80, 200, W / 2 + 80, 300));
+      return { x: 230, y: 360, w: W - 460, h: H - 360 - 500, bsd: [W - 150, 140], div: 'diamond' };
+    },
+    bmRimonim(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 131);
+      bandBorder(ctx, d, 56, 120, 'magen', 'magen');
+      rimonim(ctx, W / 2 - 200, 440, 230, d); rimonim(ctx, W / 2 + 200, 440, 230, d);
+      keser(ctx, W / 2, 400, 200, metal(ctx, d.line, W / 2 - 100, 280, W / 2 + 100, 400));
+      return { x: 250, y: 510, w: W - 500, h: H - 510 - 230, bsd: [W - 200, 200], div: 'flourish' };
+    },
+    // ---- Kiddush (a girl)
+    kdBlossom(ctx, d) {
+      bgFill(ctx, d);
+      rectStroke(ctx, 70, 1.8, d.line, 20);
+      blossomBranch(ctx, 40, 230, 620, 0.1, d, 5); blossomBranch(ctx, W - 40, H - 240, 620, Math.PI + 0.1, d, 9);
+      return { x: 230, y: 420, w: W - 460, h: H - 420 - 380, bsd: [W - 160, 150], div: 'leaf' };
+    },
+    kdLace(ctx, d) {
+      bgFill(ctx, d);
+      ctx.save(); ctx.fillStyle = hexA(d.line, 0.35);
+      for (let x = 30; x < W; x += 60) { ctx.beginPath(); ctx.arc(x, 40, 26, 0, Math.PI); ctx.fill(); ctx.beginPath(); ctx.arc(x, H - 40, 26, Math.PI, TAU); ctx.fill(); }
+      ctx.restore();
+      rectStroke(ctx, 100, 2, d.line, 14);
+      blossomBranch(ctx, W / 2 - 300, 300, 600, 0, d, 21);
+      return { x: 230, y: 430, w: W - 460, h: H - 430 - 220, bsd: [W - 170, 170], div: 'rosette' };
+    },
+    // ---- Chasuna / Vort / Sheva Brachos
+    chChuppah(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 137);
+      rectStroke(ctx, 54, 3.2, d.line); rectStroke(ctx, 72, 1.2, d.line);
+      chuppah(ctx, W / 2, 520, 400, d);
+      return { x: 240, y: 560, w: W - 480, h: H - 560 - 210, bsd: [W - 180, 170], div: 'flourish' };
+    },
+    vtPlate(ctx, d) {
+      bgFill(ctx, d);
+      bandBorder(ctx, d, 54, 114, 'wave', 'rosette');
+      brokenPlate(ctx, W / 2, 300, 140, d);
+      ctx.save(); font(ctx, ['Suez One', 400], 46); ctx.fillStyle = d.title; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('מזל טוב', W / 2, 500); ctx.restore();
+      return { x: 250, y: 540, w: W - 500, h: H - 540 - 220, bsd: [W - 190, 190], div: 'diamond' };
+    },
+    sbSeven(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      starField(ctx, d, 60, 141, [180, 480, W - 360, H - 660]);
+      rectStroke(ctx, 56, 2.6, d.line, 24);
+      sevenLights(ctx, W / 2, 380, 330, d);
+      return { x: 230, y: 520, w: W - 460, h: H - 520 - 210, bsd: [W - 150, 140], div: 'sparkle' };
+    }
+  };
+  Object.assign(FRAMES, MORE_FRAMES);
 
   function paint(ctx, data, img) {
     const d = designById(data.d);
