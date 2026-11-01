@@ -177,6 +177,26 @@
       bg: ['#ffffff', '#f1f4f8'], ink: '#1b2d3e', title: '#1b2d3e', nm: '#122233', muted: '#5b6b7c', line: '#2d4a6b',
       petals: ['70,100,140', '160,180,205', '120,145,180'] }
   };
+  // ---- extra palettes for the boy simchas (Nov 2026)
+  Object.assign(PALETTES, {
+    powderblue:  { name: { en: 'Powder Blue', yi: 'לייכט בלוי' }, color: 'blue',
+      bg: ['#f5f9fd', '#e0ebf6'], ink: '#1f3550', title: '#335f93', nm: '#172e49', muted: '#62788f', line: '#8eaed2',
+      petals: ['160,190,225', '200,218,238', '130,165,205'] },
+    navysilver:  { name: { en: 'Navy & Silver', yi: 'בלוי מיט זילבער' }, color: 'navy', dark: true,
+      bg: ['#0e1a2e', '#1c2f4d'], ink: '#e6ecf3', title: '#d3dbe6', nm: '#f6f8fb', muted: '#a9b6c6', line: '#b9c4d2' },
+    midnight:    { name: { en: 'Midnight & Gold', yi: 'נאכט בלוי מיט גאלד' }, color: 'navy', dark: true,
+      bg: ['#070d1f', '#18234a'], ink: '#efe6cf', title: '#e9c97a', nm: '#fff4da', muted: '#c4b998', line: '#d9b866' },
+    slateblue:   { name: { en: 'Slate Blue', yi: 'שיפער בלוי' }, color: 'blue',
+      bg: ['#f5f7f9', '#e0e6ee'], ink: '#273340', title: '#46678a', nm: '#1d2b39', muted: '#6c7a88', line: '#8299b3' },
+    denimgold:   { name: { en: 'Denim & Gold', yi: 'דזשינס בלוי מיט גאלד' }, color: 'blue', dark: true,
+      bg: ['#203f63', '#2f5a87'], ink: '#f1ead8', title: '#efd18c', nm: '#fff6df', muted: '#d2c6a6', line: '#e0c27a' },
+    creamnavy:   { name: { en: 'Cream & Navy', yi: 'קרעם מיט בלוי' }, color: 'cream',
+      bg: ['#fbf7ee', '#efe5d1'], ink: '#1d2b42', title: '#24406a', nm: '#152238', muted: '#6d6a64', line: '#b39459' },
+    whiteblue:   { name: { en: 'White & Royal Blue', yi: 'ווייס מיט קעניגליך בלוי' }, color: 'white',
+      bg: ['#ffffff', '#eef3f9'], ink: '#1d3048', title: '#2c5c97', nm: '#132640', muted: '#5f7186', line: '#4d7db6' },
+    silvergrey:  { name: { en: 'Silver Grey', yi: 'זילבער גרוי' }, color: 'white',
+      bg: ['#fafafa', '#e6e8ec'], ink: '#2b2f37', title: '#59606e', nm: '#1f232a', muted: '#7d838e', line: '#9097a4' }
+  });
   const COLORS = { navy: { en: 'Navy', yi: 'בלוי' }, black: { en: 'Black', yi: 'שווארץ' }, burgundy: { en: 'Burgundy', yi: 'בורגונדי' }, green: { en: 'Green', yi: 'גרין' },
     pink: { en: 'Blush', yi: 'ראזע' }, blue: { en: 'Light blue', yi: 'הימל בלוי' }, white: { en: 'White', yi: 'ווייס' }, cream: { en: 'Cream', yi: 'קרעם' },
     purple: { en: 'Purple', yi: 'לילא' }, teal: { en: 'Teal', yi: 'טערקיז' } };
@@ -216,6 +236,35 @@
     { frame: 'ornate', name: { en: 'Ornate Border', yi: 'באצירטע ראם' }, tags: ['shevabrachos', 'chasuna', 'siyum'], fonts: ['classic'], palettes: ['navygold', 'emeraldgold', 'blackgold', 'purplegold', 'charcoalcopper'] },
     { frame: 'classic', name: { en: 'Classic Corners', yi: 'קלאסיש' }, tags: ['general', 'barmitzvah', 'bris', 'siyum'], fonts: ['classic'], palettes: ['ivorygold', 'creamburgundy', 'blushsilver', 'whitesilver', 'tealsand'] }
   ];
+  // ---- Boy simchas (Nov 2026): Bris, Vach Nacht, Shalom Zachor, Pidyon Haben. rotate = the default wording cycles through the tags.
+  const BOY = ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'];
+  [
+    { frame: 'bKesuba', name: { en: 'Kesuba Arch', yi: 'כתובה בויגן' }, tags: BOY, rotate: true, fonts: ['classic', 'scribe'], palettes: ['navygold', 'ivorygold', 'creamnavy', 'denimgold', 'whitesilver'] },
+    { frame: 'bLace', name: { en: 'Papercut Doves', yi: 'אויסגעשניטענע טייבעלעך' }, tags: BOY, rotate: true, fonts: ['soft', 'classic'], palettes: ['skywhite', 'navywhite', 'powderblue', 'creamnavy', 'slateblue'] },
+    { frame: 'bDeco', name: { en: 'Art Deco Star', yi: 'ארט דעקא שטערן' }, tags: BOY, rotate: true, fonts: ['classic', 'bold'], palettes: ['navygold', 'blackgold', 'midnight', 'navysilver', 'ivorygold'] },
+    { frame: 'bTile', name: { en: 'Lantern Window', yi: 'לאמטערן פענסטער' }, tags: BOY, rotate: true, fonts: ['classic', 'scribe'], palettes: ['tealsand', 'navygold', 'ivorygold', 'powderblue', 'denimgold'] },
+    { frame: 'bDamask', name: { en: 'Damask Laurel', yi: 'דאמאסק קראנץ' }, tags: BOY, rotate: true, fonts: ['soft', 'classic'], palettes: ['navysilver', 'ivorygold', 'slateblue', 'emeraldgold', 'whiteblue'] },
+    { frame: 'bModern', name: { en: 'Modern Band', yi: 'מאדערן' }, tags: BOY, rotate: true, fonts: ['modern', 'bold'], palettes: ['whiteblue', 'navywhite', 'midnight', 'slateblue', 'powderblue'] },
+    { frame: 'bStars', name: { en: 'Count the Stars', yi: 'ספור הכוכבים' }, tags: ['vachnacht', 'bris', 'shalomzachor'], rotate: true, fonts: ['classic', 'soft'], palettes: ['midnight', 'navygold', 'powderblue', 'purplegold', 'skywhite'] },
+    { frame: 'bJerusalem', name: { en: 'Yerushalayim Stars', yi: 'ירושלים שטערן' }, tags: BOY, rotate: true, fonts: ['bold', 'classic'], palettes: ['ivorygold', 'creamnavy', 'navygold', 'tealsand', 'silvergrey'] },
+    { frame: 'bRimon', name: { en: 'Pomegranates', yi: 'רימונים' }, tags: BOY, rotate: true, fonts: ['classic', 'scribe'], palettes: ['ivorygold', 'emeraldgold', 'creamnavy', 'whitesilver', 'burgundygold'] },
+    { frame: 'bClouds', name: { en: 'Soft Clouds', yi: 'ווייכע וואלקנס' }, tags: BOY, rotate: true, fonts: ['soft', 'modern'], palettes: ['powderblue', 'skywhite', 'whiteblue', 'navysilver', 'slateblue'] },
+    { frame: 'brisKisei', name: { en: 'Kisei shel Eliyahu', yi: 'כסא של אליהו' }, tags: ['bris'], fonts: ['classic', 'scribe', 'bold'], palettes: ['navygold', 'ivorygold', 'denimgold', 'whiteblue', 'blackgold', 'creamnavy'] },
+    { frame: 'brisKiseiArch', name: { en: 'Kisei Eliyahu Arch', yi: 'כסא אליהו בויגן' }, tags: ['bris'], fonts: ['soft', 'classic'], palettes: ['powderblue', 'ivorygold', 'navysilver', 'tealsand', 'silvergrey'] },
+    { frame: 'brisTorah', name: { en: 'Torah Scroll', yi: 'ספר תורה' }, tags: ['bris', 'pidyonhaben', 'shalomzachor'], fonts: ['scribe', 'classic'], palettes: ['ivorygold', 'navygold', 'creamnavy', 'emeraldgold', 'whitesilver'] },
+    { frame: 'vnCandles', name: { en: 'Vach Nacht Candles', yi: 'וואך נאכט ליכט' }, tags: ['vachnacht'], fonts: ['classic', 'bold'], palettes: ['midnight', 'navygold', 'blackgold', 'purplegold', 'denimgold', 'navysilver'] },
+    { frame: 'vnShir', name: { en: 'Shir Hamaalos', yi: 'שיר המעלות' }, tags: ['vachnacht', 'bris'], fonts: ['scribe', 'classic'], palettes: ['ivorygold', 'powderblue', 'navygold', 'creamnavy', 'whiteblue'] },
+    { frame: 'vnLanterns', name: { en: 'Night Lanterns', yi: 'נאכט לאמטערנס' }, tags: ['vachnacht', 'shalomzachor'], fonts: ['classic', 'soft'], palettes: ['midnight', 'navysilver', 'denimgold', 'blackgold', 'emeraldgold'] },
+    { frame: 'vnSiddur', name: { en: 'Krias Shema', yi: 'קריאת שמע' }, tags: ['vachnacht'], fonts: ['scribe', 'bold'], palettes: ['ivorygold', 'navygold', 'slateblue', 'creamnavy', 'whitesilver'] },
+    { frame: 'szShabbos', name: { en: 'Shabbos Licht', yi: 'שבת ליכט' }, tags: ['shalomzachor', 'kiddush'], fonts: ['classic', 'soft'], palettes: ['navygold', 'ivorygold', 'midnight', 'creamburgundy', 'whitesilver', 'blushsilver'] },
+    { frame: 'szArbes', name: { en: 'Arbes', yi: 'ארבעס' }, tags: ['shalomzachor'], fonts: ['bold', 'modern'], palettes: ['creamnavy', 'ivorygold', 'powderblue', 'tealsand', 'whiteblue'] },
+    { frame: 'szWindow', name: { en: 'Friday Night Window', yi: 'פרייטאג צו נאכט' }, tags: ['shalomzachor', 'vachnacht'], fonts: ['classic', 'scribe'], palettes: ['ivorygold', 'creamnavy', 'silvergrey', 'tealsand', 'slateblue'] },
+    { frame: 'phCoins', name: { en: 'Five Shekalim', yi: 'חמשה סלעים' }, tags: ['pidyonhaben'], fonts: ['classic', 'scribe'], palettes: ['whitesilver', 'navysilver', 'ivorygold', 'blackgold', 'silvergrey'] },
+    { frame: 'phTray', name: { en: 'Silver Tray', yi: 'זילבערנע טאץ' }, tags: ['pidyonhaben'], fonts: ['soft', 'classic'], palettes: ['navygold', 'creamnavy', 'whitesilver', 'emeraldgold', 'charcoalcopper'] },
+    { frame: 'phCrown', name: { en: 'Crown & Coins', yi: 'כתר מיט מטבעות' }, tags: ['pidyonhaben'], fonts: ['bold', 'classic'], palettes: ['navysilver', 'ivorygold', 'whiteblue', 'burgundygold', 'slateblue'] }
+  ].forEach((f) => { f.xf = [['Suez One', 400], ['Frank Ruhl Libre', 700], ['Frank Ruhl Libre', 500]]; FAMILIES.push(f); });
+  // the starry design suits every boy simcha
+  FAMILIES.forEach((f) => { if (f.frame === 'starlight') ['vachnacht', 'shalomzachor', 'pidyonhaben'].forEach((t) => { if (!f.tags.includes(t)) f.tags.push(t); }); });
   // A little more reach for the original nine in the gallery filters (their drawings are unchanged).
   const ORIGINAL_EXTRA = { royal: { color: 'navy', also: ['barmitzvah', 'vort', 'general'] }, ivory: { color: 'cream', also: ['chasuna', 'kiddush'] }, arch: { color: 'green', also: ['siyum', 'chanukashabayis'] },
     sky: { color: 'blue', also: ['upsherin', 'kiddush'] }, pearl: { color: 'pink', also: ['vort', 'shevabrachos'] }, garden: { color: 'green', also: ['chanukashabayis', 'kiddush'] },
@@ -226,11 +275,11 @@
     FAMILIES.forEach((f) => f.palettes.forEach((pk, i) => {
       const p = PALETTES[pk];
       const fs = FONTSETS[f.fonts[i % f.fonts.length]];
-      const type = (p.prefer && f.tags.includes(p.prefer)) ? p.prefer : f.tags[0];
+      const type = (p.prefer && f.tags.includes(p.prefer)) ? p.prefer : (f.rotate ? f.tags[i % f.tags.length] : f.tags[0]);
       made.push({ round: i, d: Object.assign({
         id: f.frame + '-' + pk, type, also: f.tags.filter((t) => t !== type), isNew: true, family: f.frame, palette: pk, color: p.color, dark: !!p.dark,
         name: { en: f.name.en + ' · ' + p.name.en, yi: f.name.yi + ' · ' + p.name.yi },
-        bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, petals: p.petals, frame: f.frame
+        bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, petals: p.petals, frame: f.frame, xf: f.xf
       }, fs) });
     }));
     // interleave families so the first screen of the gallery shows variety
@@ -375,7 +424,7 @@
   function ensureFonts(design) {
     const key = design.id;
     if (fontReady[key]) return fontReady[key];
-    const specs = [design.fy, design.fe, design.by, design.be];
+    const specs = [design.fy, design.fe, design.by, design.be].concat(design.xf || []);
     const loads = specs.map(([fam, wt]) => (document.fonts && document.fonts.load)
       ? document.fonts.load(wt + ' 40px "' + fam + '"', 'אבג Abc').catch(() => null) : Promise.resolve());
     if (document.fonts && document.fonts.load) {
@@ -1335,6 +1384,573 @@
     });
   }
 
+  // ================================================================ boy-simcha designs (Nov 2026)
+  // Bris · Vach Nacht · Shalom Zachor · Pidyon Haben. Styles researched as ideas only; every ornament here is drawn in code.
+  const TAU = Math.PI * 2;
+  function glowAt(ctx, x, y, r, color, a) {
+    const g = ctx.createRadialGradient(x, y, 1, x, y, r); g.addColorStop(0, hexA(color, a)); g.addColorStop(1, hexA(color, 0));
+    ctx.save(); ctx.fillStyle = g; ctx.fillRect(x - r, y - r, r * 2, r * 2); ctx.restore();
+  }
+  function bgGrad(ctx, d) { const g = ctx.createLinearGradient(0, 0, W * 0.3, H); g.addColorStop(0, d.bg[0]); g.addColorStop(1, d.bg[1]); return g; }
+  function softOf(d, a) { return hexA(d.line, a); }
+  function flame(ctx, x, y, s, d) {
+    glowAt(ctx, x, y - s * 0.6, s * 3.4, '#ffd27a', d.dark ? 0.42 : 0.26);
+    ctx.save();
+    const g = ctx.createLinearGradient(x, y - s * 1.7, x, y); g.addColorStop(0, '#fff7da'); g.addColorStop(0.45, '#ffd062'); g.addColorStop(1, '#e5832a');
+    ctx.fillStyle = g; ctx.beginPath(); ctx.moveTo(x, y - s * 1.75);
+    ctx.bezierCurveTo(x + s * 0.6, y - s * 0.95, x + s * 0.52, y - s * 0.05, x, y);
+    ctx.bezierCurveTo(x - s * 0.52, y - s * 0.05, x - s * 0.6, y - s * 0.95, x, y - s * 1.75); ctx.fill();
+    ctx.fillStyle = 'rgba(255,255,255,0.75)'; ctx.beginPath(); ctx.ellipse(x, y - s * 0.42, s * 0.14, s * 0.3, 0, 0, TAU); ctx.fill();
+    ctx.restore();
+  }
+  function candle(ctx, x, by, h, w, d) {
+    ctx.save();
+    const c = d.dark ? '#f3ead6' : '#fffaf0';
+    const g = ctx.createLinearGradient(x - w / 2, 0, x + w / 2, 0); g.addColorStop(0, mix(c, '#7a6a55', 0.25)); g.addColorStop(0.42, c); g.addColorStop(1, mix(c, '#7a6a55', 0.35));
+    ctx.fillStyle = g; ctx.strokeStyle = hexA(d.line, 0.9); ctx.lineWidth = 2;
+    ctx.beginPath(); roundRectPath(ctx, x - w / 2, by - h, w, h, Math.min(6, w * 0.2)); ctx.fill(); ctx.stroke();
+    ctx.strokeStyle = '#3b2c20'; ctx.lineWidth = Math.max(2, w * 0.08); ctx.beginPath(); ctx.moveTo(x, by - h); ctx.lineTo(x, by - h - w * 0.35); ctx.stroke();
+    ctx.restore();
+    flame(ctx, x, by - h - w * 0.2, w * 0.8, d);
+  }
+  // an ornate candlestick of height s, foot at (x, by); returns the y of the cup top
+  function candlestick(ctx, x, by, s, d) {
+    ctx.save(); ctx.fillStyle = metal(ctx, d.line, x - s * 0.3, 0, x + s * 0.3, 0);
+    ctx.beginPath(); ctx.moveTo(x - s * 0.3, by); ctx.quadraticCurveTo(x - s * 0.06, by - s * 0.04, x - s * 0.05, by - s * 0.2); ctx.lineTo(x + s * 0.05, by - s * 0.2);
+    ctx.quadraticCurveTo(x + s * 0.06, by - s * 0.04, x + s * 0.3, by); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x, by, s * 0.3, s * 0.045, 0, 0, TAU); ctx.fill();
+    ctx.fillRect(x - s * 0.035, by - s * 0.86, s * 0.07, s * 0.68);
+    [0.3, 0.52, 0.74].forEach((t, i) => { ctx.beginPath(); ctx.ellipse(x, by - s * t, s * (i === 1 ? 0.1 : 0.075), s * 0.04, 0, 0, TAU); ctx.fill(); });
+    ctx.beginPath(); ctx.moveTo(x - s * 0.17, by - s); ctx.lineTo(x + s * 0.17, by - s); ctx.lineTo(x + s * 0.07, by - s * 0.86); ctx.lineTo(x - s * 0.07, by - s * 0.86); ctx.closePath(); ctx.fill();
+    ctx.restore();
+    return by - s;
+  }
+  function kosCup(ctx, x, by, s, d) {
+    ctx.save(); ctx.fillStyle = metal(ctx, d.line, x - s * 0.3, 0, x + s * 0.3, 0);
+    ctx.beginPath(); ctx.ellipse(x, by, s * 0.24, s * 0.05, 0, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - s * 0.22, by); ctx.quadraticCurveTo(x - s * 0.04, by - s * 0.06, x - s * 0.04, by - s * 0.3); ctx.lineTo(x + s * 0.04, by - s * 0.3); ctx.quadraticCurveTo(x + s * 0.04, by - s * 0.06, x + s * 0.22, by); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.ellipse(x, by - s * 0.32, s * 0.08, s * 0.035, 0, 0, TAU); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(x - s * 0.3, by - s); ctx.bezierCurveTo(x - s * 0.3, by - s * 0.55, x - s * 0.12, by - s * 0.36, x, by - s * 0.36);
+    ctx.bezierCurveTo(x + s * 0.12, by - s * 0.36, x + s * 0.3, by - s * 0.55, x + s * 0.3, by - s); ctx.closePath(); ctx.fill();
+    ctx.fillStyle = d.dark ? 'rgba(0,0,0,0.25)' : 'rgba(255,255,255,0.45)'; magenFill(ctx, x, by - s * 0.68, s * 0.12);
+    ctx.restore();
+  }
+  // Kisei shel Eliyahu: a high-backed carved chair, s tall, feet at by
+  function kisei(ctx, cx, by, s, d) {
+    const c = d.line, w = s * 0.62, seatY = by - s * 0.4, topY = by - s;
+    ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = hexA(c, d.dark ? 0.16 : 0.12); ctx.lineWidth = Math.max(2.4, s * 0.012); ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+    const bx = w * 0.4;
+    ctx.beginPath(); ctx.moveTo(cx - bx, seatY); ctx.lineTo(cx - bx, topY + s * 0.2);
+    ctx.quadraticCurveTo(cx - bx, topY + s * 0.07, cx - bx * 0.55, topY + s * 0.08);
+    ctx.quadraticCurveTo(cx, topY - s * 0.04, cx + bx * 0.55, topY + s * 0.08);
+    ctx.quadraticCurveTo(cx + bx, topY + s * 0.07, cx + bx, topY + s * 0.2); ctx.lineTo(cx + bx, seatY); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // carved inner panel with a star
+    ctx.beginPath(); roundRectPath(ctx, cx - bx * 0.68, topY + s * 0.16, bx * 1.36, s * 0.34, s * 0.04); ctx.stroke();
+    magen(ctx, cx, topY + s * 0.33, s * 0.08, c, Math.max(2, s * 0.008));
+    // finials
+    ctx.fillStyle = c;
+    [[cx - bx, topY + s * 0.16], [cx + bx, topY + s * 0.16]].forEach(([x, y]) => { ctx.beginPath(); ctx.arc(x, y - s * 0.035, s * 0.028, 0, TAU); ctx.fill(); });
+    // arms with scrolled ends
+    [-1, 1].forEach((sd) => {
+      ctx.beginPath(); ctx.moveTo(cx + sd * bx, seatY - s * 0.2);
+      ctx.quadraticCurveTo(cx + sd * w * 0.62, seatY - s * 0.24, cx + sd * w * 0.62, seatY - s * 0.13); ctx.stroke();
+      ctx.beginPath(); spiral(ctx, cx + sd * w * 0.6, seatY - s * 0.1, s * 0.035, 1, sd > 0 ? Math.PI : 0, sd); ctx.stroke();
+      ctx.beginPath(); ctx.moveTo(cx + sd * w * 0.58, seatY - s * 0.08); ctx.lineTo(cx + sd * w * 0.56, seatY); ctx.stroke();
+    });
+    // seat (cushioned)
+    ctx.fillStyle = hexA(c, d.dark ? 0.28 : 0.2);
+    ctx.beginPath(); ctx.moveTo(cx - w * 0.62, seatY); ctx.quadraticCurveTo(cx, seatY - s * 0.05, cx + w * 0.62, seatY); ctx.lineTo(cx + w * 0.55, seatY + s * 0.07); ctx.lineTo(cx - w * 0.55, seatY + s * 0.07); ctx.closePath(); ctx.fill(); ctx.stroke();
+    // apron scallop
+    ctx.beginPath(); ctx.moveTo(cx - w * 0.5, seatY + s * 0.07);
+    for (let i = 0; i < 4; i++) { const x0 = cx - w * 0.5 + i * w * 0.25; ctx.quadraticCurveTo(x0 + w * 0.125, seatY + s * 0.15, x0 + w * 0.25, seatY + s * 0.07); }
+    ctx.stroke();
+    // legs (gently curved) + stretcher
+    [-1, 1].forEach((sd) => {
+      const x = cx + sd * w * 0.48;
+      ctx.beginPath(); ctx.moveTo(x, seatY + s * 0.07); ctx.quadraticCurveTo(x + sd * s * 0.05, by - s * 0.18, x + sd * s * 0.015, by); ctx.stroke();
+      ctx.fillStyle = c; ctx.beginPath(); ctx.ellipse(x + sd * s * 0.015, by, s * 0.03, s * 0.012, 0, 0, TAU); ctx.fill();
+    });
+    ctx.beginPath(); ctx.moveTo(cx - w * 0.44, by - s * 0.12); ctx.lineTo(cx + w * 0.44, by - s * 0.12); ctx.stroke();
+    ctx.restore();
+  }
+  function coin(ctx, x, y, r, d, i) {
+    const base = d.coin || d.line;
+    ctx.save();
+    const g = ctx.createRadialGradient(x - r * 0.35, y - r * 0.4, r * 0.1, x, y, r);
+    g.addColorStop(0, mix(base, '#ffffff', 0.7)); g.addColorStop(0.55, mix(base, '#ffffff', 0.2)); g.addColorStop(1, mix(base, '#000000', 0.35));
+    ctx.fillStyle = g; ctx.beginPath(); ctx.arc(x, y, r, 0, TAU); ctx.fill();
+    ctx.strokeStyle = mix(base, '#000000', 0.4); ctx.lineWidth = Math.max(1.5, r * 0.05); ctx.stroke();
+    ctx.beginPath(); ctx.arc(x, y, r * 0.8, 0, TAU); ctx.stroke();
+    // little dotted rim
+    ctx.fillStyle = mix(base, '#000000', 0.35);
+    for (let k = 0; k < 24; k++) { const a = k * TAU / 24; ctx.beginPath(); ctx.arc(x + Math.cos(a) * r * 0.9, y + Math.sin(a) * r * 0.9, r * 0.025, 0, TAU); ctx.fill(); }
+    if (i % 2) { ctx.save(); ctx.globalAlpha = 0.75; magen(ctx, x, y, r * 0.42, mix(base, '#000000', 0.45), Math.max(1.5, r * 0.06)); ctx.restore(); }
+    else rimon(ctx, x, y + r * 0.08, r * 0.36, mix(base, '#000000', 0.45), false);
+    ctx.restore();
+  }
+  function coinArc(ctx, cx, cy, r, d) {
+    for (let i = 0; i < 5; i++) { const k = i - 2; coin(ctx, cx + k * r * 2.3, cy + Math.abs(k) * Math.abs(k) * r * 0.22, r, d, i); }
+  }
+  // a pomegranate, r = body radius
+  function rimon(ctx, x, y, r, color, filled) {
+    ctx.save(); ctx.strokeStyle = color; ctx.fillStyle = color; ctx.lineWidth = Math.max(1.6, r * 0.09); ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(x - r * 0.28, y - r * 0.92);
+    ctx.bezierCurveTo(x - r * 1.2, y - r * 0.75, x - r * 1.15, y + r, x, y + r);
+    ctx.bezierCurveTo(x + r * 1.15, y + r, x + r * 1.2, y - r * 0.75, x + r * 0.28, y - r * 0.92); ctx.closePath();
+    if (filled) { ctx.globalAlpha = 0.85; ctx.fill(); ctx.globalAlpha = 1; } else ctx.stroke();
+    ctx.beginPath(); ctx.moveTo(x - r * 0.3, y - r * 0.9); ctx.lineTo(x - r * 0.42, y - r * 1.35); ctx.lineTo(x - r * 0.14, y - r * 1.08); ctx.lineTo(x, y - r * 1.42);
+    ctx.lineTo(x + r * 0.14, y - r * 1.08); ctx.lineTo(x + r * 0.42, y - r * 1.35); ctx.lineTo(x + r * 0.3, y - r * 0.9); filled ? ctx.fill() : ctx.stroke();
+    ctx.restore();
+  }
+  // an open Torah scroll on its two rollers
+  function torahScroll(ctx, cx, cy, w, h, d) {
+    const c = d.line;
+    ctx.save(); ctx.lineJoin = 'round';
+    const parch = d.dark ? '#f6ecd4' : mix(d.bg[0], '#f1e2bd', 0.55);
+    ctx.fillStyle = parch; ctx.strokeStyle = hexA(c, 0.9); ctx.lineWidth = 2;
+    ctx.fillRect(cx - w / 2, cy - h / 2, w, h); ctx.strokeRect(cx - w / 2, cy - h / 2, w, h);
+    ctx.strokeStyle = 'rgba(60,45,30,0.55)'; ctx.lineWidth = Math.max(1.2, h * 0.012);
+    [-1, 1].forEach((sd) => { const x0 = cx + sd * w * 0.25; for (let k = 0; k < 9; k++) { const y = cy - h * 0.36 + k * h * 0.09; const ww = w * (k === 4 ? 0.2 : 0.36); ctx.beginPath(); ctx.moveTo(x0 - ww / 2, y); ctx.lineTo(x0 + ww / 2, y); ctx.stroke(); } });
+    [-1, 1].forEach((sd) => {
+      const x = cx + sd * (w / 2 + w * 0.06);
+      ctx.fillStyle = metal(ctx, c, x - w * 0.05, 0, x + w * 0.05, 0);
+      ctx.fillRect(x - w * 0.022, cy - h / 2 - h * 0.32, w * 0.044, h * 1.64);
+      const g = ctx.createLinearGradient(x - w * 0.07, 0, x + w * 0.07, 0); g.addColorStop(0, mix(parch, '#6b5a40', 0.4)); g.addColorStop(0.5, parch); g.addColorStop(1, mix(parch, '#6b5a40', 0.45));
+      ctx.fillStyle = g; ctx.beginPath(); roundRectPath(ctx, x - w * 0.07, cy - h / 2 - h * 0.04, w * 0.14, h * 1.08, w * 0.05); ctx.fill(); ctx.strokeStyle = hexA(c, 0.8); ctx.stroke();
+      ctx.fillStyle = metal(ctx, c, x - w * 0.08, 0, x + w * 0.08, 0);
+      [cy - h / 2 - h * 0.1, cy + h / 2 + h * 0.1].forEach((y) => { ctx.beginPath(); ctx.ellipse(x, y, w * 0.085, h * 0.03, 0, 0, TAU); ctx.fill(); });
+      ctx.beginPath(); ctx.arc(x, cy - h / 2 - h * 0.34, w * 0.032, 0, TAU); ctx.fill();
+      ctx.beginPath(); ctx.arc(x, cy + h / 2 + h * 0.33, w * 0.03, 0, TAU); ctx.fill();
+    });
+    ctx.restore();
+  }
+  // a hanging lantern (oil lamp) with a flame; hook at (cx, top), s tall
+  function lantern(ctx, cx, top, s, d) {
+    const c = d.line;
+    ctx.save(); ctx.strokeStyle = c; ctx.fillStyle = c; ctx.lineWidth = Math.max(2, s * 0.012); ctx.lineJoin = 'round';
+    ctx.beginPath(); ctx.moveTo(cx, top); ctx.lineTo(cx, top + s * 0.18); ctx.stroke();
+    ctx.beginPath(); ctx.arc(cx, top + s * 0.2, s * 0.025, 0, TAU); ctx.stroke();
+    const y0 = top + s * 0.24, y1 = y0 + s * 0.12, y2 = y1 + s * 0.42, y3 = y2 + s * 0.12;
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.06, y0); ctx.lineTo(cx + s * 0.06, y0); ctx.lineTo(cx + s * 0.2, y1); ctx.lineTo(cx - s * 0.2, y1); ctx.closePath(); ctx.fill();
+    ctx.save(); ctx.fillStyle = hexA('#ffd98a', d.dark ? 0.22 : 0.18);
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.18, y1); ctx.lineTo(cx + s * 0.18, y1); ctx.lineTo(cx + s * 0.15, y2); ctx.lineTo(cx - s * 0.15, y2); ctx.closePath(); ctx.fill(); ctx.stroke(); ctx.restore();
+    [-0.06, 0.06].forEach((o) => { ctx.beginPath(); ctx.moveTo(cx + o * s, y1); ctx.lineTo(cx + o * s * 0.85, y2); ctx.stroke(); });
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.15, y2); ctx.lineTo(cx + s * 0.15, y2); ctx.lineTo(cx + s * 0.05, y3); ctx.lineTo(cx - s * 0.05, y3); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.arc(cx, y3 + s * 0.025, s * 0.025, 0, TAU); ctx.fill();
+    ctx.restore();
+    flame(ctx, cx, y2 - s * 0.06, s * 0.08, d);
+  }
+  function dove(ctx, x, y, s, dir, color) {
+    ctx.save(); ctx.translate(x, y); ctx.scale(dir * s / 100, s / 100); ctx.fillStyle = color;
+    ctx.beginPath(); ctx.moveTo(60, -8); ctx.quadraticCurveTo(70, -22, 82, -14); ctx.lineTo(94, -10); ctx.lineTo(82, -6);
+    ctx.quadraticCurveTo(76, 18, 40, 22); ctx.lineTo(-30, 30); ctx.lineTo(-58, 46); ctx.lineTo(-48, 24); ctx.lineTo(-62, 20); ctx.quadraticCurveTo(-10, 10, 20, 0); ctx.closePath(); ctx.fill();
+    ctx.beginPath(); ctx.moveTo(30, 2); ctx.quadraticCurveTo(0, -40, -40, -62); ctx.quadraticCurveTo(-6, -58, 22, -30); ctx.quadraticCurveTo(40, -14, 46, 0); ctx.closePath(); ctx.globalAlpha = 0.85; ctx.fill();
+    ctx.restore();
+  }
+  function laurel(ctx, cx, cy, r, color) {
+    ctx.save(); ctx.strokeStyle = color; ctx.lineWidth = Math.max(2, r * 0.02);
+    [-1, 1].forEach((sd) => {
+      ctx.beginPath(); ctx.arc(cx, cy, r, Math.PI / 2 + sd * 0.35, Math.PI / 2 + sd * 2.45, sd < 0); ctx.stroke();
+      for (let k = 0; k < 9; k++) {
+        const a = Math.PI / 2 + sd * (0.5 + k * 0.23), x = cx + Math.cos(a) * r, y = cy + Math.sin(a) * r;
+        const tang = a + sd * Math.PI / 2;
+        leaf(ctx, x, y, r * 0.3, tang - sd * 0.6, color, true); leaf(ctx, x, y, r * 0.26, tang + sd * 0.55 + Math.PI, color, true);
+      }
+    });
+    ctx.restore();
+  }
+  // a bowl of arbes (chickpeas)
+  function arbesBowl(ctx, cx, by, s, d) {
+    const c = d.line;
+    ctx.save();
+    const pea = d.dark ? '#e9cf98' : '#e6c98e', r = rng(91);
+    for (let i = 0; i < 60; i++) {
+      const t = r(), u = r(); const x = cx + (t - 0.5) * s * 0.9 * (1 - u * 0.5), y = by - s * 0.42 - u * s * 0.2 * (1 - Math.abs(t - 0.5) * 1.6);
+      ctx.fillStyle = pea; ctx.strokeStyle = 'rgba(120,90,40,0.6)'; ctx.lineWidth = 1.4;
+      ctx.beginPath(); ctx.arc(x, y, s * 0.035, 0, TAU); ctx.fill(); ctx.stroke();
+    }
+    ctx.fillStyle = metal(ctx, c, cx - s * 0.5, 0, cx + s * 0.5, 0);
+    ctx.beginPath(); ctx.moveTo(cx - s * 0.5, by - s * 0.42); ctx.quadraticCurveTo(cx - s * 0.46, by - s * 0.08, cx - s * 0.16, by - s * 0.06);
+    ctx.lineTo(cx + s * 0.16, by - s * 0.06); ctx.quadraticCurveTo(cx + s * 0.46, by - s * 0.08, cx + s * 0.5, by - s * 0.42); ctx.closePath(); ctx.fill();
+    ctx.fillRect(cx - s * 0.18, by - s * 0.07, s * 0.36, s * 0.07);
+    ctx.fillStyle = d.dark ? 'rgba(0,0,0,0.22)' : 'rgba(255,255,255,0.4)';
+    for (let k = -2; k <= 2; k++) { ctx.beginPath(); ctx.arc(cx + k * s * 0.15, by - s * 0.25, s * 0.025, 0, TAU); ctx.fill(); }
+    ctx.restore();
+  }
+  // a band of repeated ornaments between two ruled lines at insets a (outer) and b (inner)
+  function motifAt(ctx, motif, x, y, s, horiz, i, d) {
+    ctx.save(); ctx.translate(x, y); if (!horiz) ctx.rotate(Math.PI / 2);
+    if (motif === 'zigzag') { ctx.beginPath(); ctx.moveTo(-s * 1.1, -s * 0.45); ctx.lineTo(0, s * 0.45); ctx.lineTo(s * 1.1, -s * 0.45); ctx.stroke(); ctx.beginPath(); ctx.arc(0, -s * 0.3, s * 0.12, 0, TAU); ctx.fill(); }
+    else if (motif === 'magen') { magen(ctx, 0, 0, s * 0.72, d.line, Math.max(1.6, s * 0.08)); }
+    else if (motif === 'quatre') { rosette(ctx, 0, 0, s * 0.62, 4, d.line, i % 2 === 0); }
+    else if (motif === 'wave') { ctx.beginPath(); ctx.moveTo(-s * 1.1, 0); ctx.bezierCurveTo(-s * 0.55, -s * 0.9, s * 0.55, s * 0.9, s * 1.1, 0); ctx.stroke(); ctx.beginPath(); ctx.arc(-s * 0.45, s * 0.35, s * 0.1, 0, TAU); ctx.arc(s * 0.45, -s * 0.35, s * 0.1, 0, TAU); ctx.fill(); }
+    else if (motif === 'rimon') { if (i % 2) rimon(ctx, 0, s * 0.18, s * 0.42, d.line, true); else { ctx.beginPath(); ctx.arc(0, 0, s * 0.12, 0, TAU); ctx.fill(); } }
+    else if (motif === 'leaf') { leaf(ctx, -s * 0.9, 0, s * 0.95, -0.35, d.line, true); leaf(ctx, -s * 0.9, 0, s * 0.95, 0.35, d.line, true); }
+    else { // diamond + dot
+      ctx.beginPath(); ctx.moveTo(0, -s * 0.6); ctx.lineTo(s * 0.45, 0); ctx.lineTo(0, s * 0.6); ctx.lineTo(-s * 0.45, 0); ctx.closePath(); i % 2 ? ctx.stroke() : ctx.fill();
+      ctx.beginPath(); ctx.arc(s * 1.1, 0, s * 0.1, 0, TAU); ctx.fill();
+    }
+    ctx.restore();
+  }
+  function bandBorder(ctx, d, a, b, motif, corner) {
+    rectStroke(ctx, a, 3, d.line); rectStroke(ctx, b, 2.4, d.line);
+    const m = (a + b) / 2, s = (b - a) / 2 - 6, step = s * 2.2, bw = b - a;
+    ctx.save(); ctx.strokeStyle = d.line; ctx.fillStyle = d.line; ctx.lineWidth = Math.max(1.8, s * 0.09); ctx.lineCap = 'round';
+    [[a + bw, m, W - a - bw, m, 1], [a + bw, H - m, W - a - bw, H - m, 1], [m, a + bw, m, H - a - bw, 0], [W - m, a + bw, W - m, H - a - bw, 0]].forEach(([x0, y0, x1, y1, horiz]) => {
+      const len = horiz ? x1 - x0 : y1 - y0, n = Math.floor(len / step), start = (len - n * step) / 2;
+      for (let i = 0; i < n; i++) { const t = start + step * (i + 0.5); motifAt(ctx, motif, horiz ? x0 + t : x0, horiz ? y0 : y0 + t, s, !!horiz, i, d); }
+    });
+    ctx.restore();
+    [[a, a], [W - b, a], [a, H - b], [W - b, H - b]].forEach(([x, y]) => {
+      ctx.save(); ctx.fillStyle = bgGrad(ctx, d); ctx.fillRect(x, y, bw, bw); ctx.strokeStyle = d.line; ctx.lineWidth = 2.4; ctx.strokeRect(x, y, bw, bw);
+      const cx = x + bw / 2, cy = y + bw / 2;
+      if (corner === 'magen') magen(ctx, cx, cy, bw * 0.3, d.line, 2.2);
+      else if (corner === 'rimon') rimon(ctx, cx, cy + bw * 0.06, bw * 0.2, d.line, true);
+      else rosette(ctx, cx, cy, bw * 0.3, 8, d.line, false);
+      ctx.restore();
+    });
+  }
+  // rectangle with an arched top; the arch springs at y and rises w/2 above it
+  function archPath(ctx, x, y, w, yb, kind) {
+    const r = w / 2;
+    ctx.moveTo(x, yb); ctx.lineTo(x, y);
+    if (kind === 'ogee') {
+      ctx.bezierCurveTo(x, y - r * 0.75, x + r * 0.62, y - r * 0.62, x + r, y - r * 1.05);
+      ctx.bezierCurveTo(x + r * 1.38, y - r * 0.62, x + w, y - r * 0.75, x + w, y);
+    } else if (kind === 'pointed') {
+      ctx.quadraticCurveTo(x, y - r * 0.85, x + r, y - r * 1.1); ctx.quadraticCurveTo(x + w, y - r * 0.85, x + w, y);
+    } else ctx.arc(x + r, y, r, Math.PI, 0);
+    ctx.lineTo(x + w, yb); ctx.closePath();
+  }
+  function lattice(ctx, d, kind, alpha, step) {
+    ctx.save(); ctx.globalAlpha = alpha; ctx.strokeStyle = d.line; ctx.fillStyle = d.line; ctx.lineWidth = 2;
+    for (let y = 0, row = 0; y < H + step; y += step * 0.87, row++) {
+      for (let x = (row % 2) * step / 2; x < W + step; x += step) {
+        if (kind === 'magen') magen(ctx, x, y, step * 0.3, d.line, 1.8);
+        else if (kind === 'dots') { ctx.beginPath(); ctx.arc(x, y, step * 0.07, 0, TAU); ctx.fill(); }
+        else if (kind === 'quatre') rosette(ctx, x, y, step * 0.3, 4, d.line, false);
+        else { ctx.beginPath(); ctx.moveTo(x, y - step * 0.42); ctx.lineTo(x + step * 0.5, y); ctx.lineTo(x, y + step * 0.42); ctx.lineTo(x - step * 0.5, y); ctx.closePath(); ctx.stroke(); }
+      }
+    }
+    ctx.restore();
+  }
+  function starField(ctx, d, n, seed, keepOut) {
+    const r = rng(seed);
+    for (let i = 0; i < n; i++) {
+      const x = r() * W, y = r() * H;
+      if (keepOut && x > keepOut[0] && x < keepOut[0] + keepOut[2] && y > keepOut[1] && y < keepOut[1] + keepOut[3]) continue;
+      const big = r() < 0.08;
+      ctx.save(); ctx.globalAlpha = 0.35 + r() * 0.55;
+      if (big) sparkle(ctx, x, y, 8 + r() * 10, d.line); else { ctx.fillStyle = d.line; ctx.beginPath(); ctx.arc(x, y, 1.4 + r() * 2.4, 0, TAU); ctx.fill(); }
+      ctx.restore();
+    }
+  }
+  function cloud(ctx, x, y, s, color) {
+    ctx.save(); ctx.fillStyle = color; ctx.beginPath();
+    [[0, 0, 1], [-0.9, 0.25, 0.7], [0.95, 0.2, 0.75], [-0.4, -0.45, 0.65], [0.45, -0.4, 0.6]].forEach(([dx, dy, rr]) => { ctx.moveTo(x + dx * s + rr * s, y + dy * s); ctx.arc(x + dx * s, y + dy * s, rr * s, 0, TAU); });
+    ctx.fill(); ctx.restore();
+  }
+  function textOnLine(ctx, text, x0, y0, len, angle, size, spec, color) {
+    ctx.save(); ctx.translate(x0, y0); ctx.rotate(angle); font(ctx, spec, size); ctx.fillStyle = color; ctx.textBaseline = 'middle'; ctx.textAlign = 'center'; ctx.direction = 'rtl';
+    let t = text; while (ctx.measureText(t).width > len && t.length > 4) t = t.slice(0, t.lastIndexOf(' '));
+    ctx.fillText(t, len / 2, 0); ctx.restore();
+  }
+  const SHIR = 'שיר למעלות אשא עיני אל ההרים מאין יבא עזרי · עזרי מעם ה׳ עשה שמים וארץ · אל יתן למוט רגלך אל ינום שמרך · הנה לא ינום ולא יישן שומר ישראל · ה׳ שמרך ה׳ צלך על יד ימינך · יומם השמש לא יככה וירח בלילה · ה׳ ישמרך מכל רע ישמר את נפשך · ה׳ ישמר צאתך ובואך מעתה ועד עולם';
+  function mazelBanner(ctx, cx, cy, w, d) {
+    ctx.save(); ctx.fillStyle = d.dark ? hexA(d.line, 0.9) : d.title; ctx.strokeStyle = d.line; ctx.lineWidth = 2;
+    const h = w * 0.16;
+    [-1, 1].forEach((sd) => { ctx.beginPath(); ctx.moveTo(cx + sd * w * 0.42, cy - h * 0.25); ctx.lineTo(cx + sd * w * 0.62, cy - h * 0.25); ctx.lineTo(cx + sd * w * 0.55, cy + h * 0.25); ctx.lineTo(cx + sd * w * 0.62, cy + h * 0.75); ctx.lineTo(cx + sd * w * 0.42, cy + h * 0.75); ctx.closePath(); ctx.globalAlpha = 0.7; ctx.fill(); ctx.globalAlpha = 1; });
+    ctx.beginPath(); ctx.moveTo(cx - w / 2, cy - h / 2); ctx.quadraticCurveTo(cx, cy - h * 0.9, cx + w / 2, cy - h / 2); ctx.lineTo(cx + w / 2, cy + h / 2); ctx.quadraticCurveTo(cx, cy + h * 0.1, cx - w / 2, cy + h / 2); ctx.closePath(); ctx.fill();
+    font(ctx, ['Suez One', 400], h * 0.62); ctx.fillStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.textAlign = 'center'; ctx.textBaseline = 'middle'; ctx.direction = 'rtl';
+    ctx.fillText('מזל טוב', cx, cy - h * 0.18);
+    ctx.restore();
+  }
+
+  const BOY_FRAMES = {
+    // kesuba-style arched window with columns, patterned surround
+    bKesuba(ctx, d) {
+      bgFill(ctx, d); lattice(ctx, d, 'diamond', d.dark ? 0.16 : 0.2, 74);
+      const x = 190, w = W - 380, y = 720, yb = H - 150;
+      ctx.save(); ctx.beginPath(); archPath(ctx, x, y, w, yb, 'round'); ctx.fillStyle = bgGrad(ctx, d); ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.beginPath(); archPath(ctx, x + 26, y, w - 52, yb - 26, 'round'); ctx.strokeStyle = d.line; ctx.lineWidth = 1.6; ctx.stroke(); ctx.restore();
+      rectStroke(ctx, 48, 3, d.line); rectStroke(ctx, 62, 1.2, d.line);
+      [x, x + w].forEach((cx) => {
+        ctx.save(); ctx.fillStyle = d.line;
+        ctx.fillRect(cx - 26, y - 6, 52, 18); ctx.fillRect(cx - 22, yb - 20, 44, 20);
+        ctx.globalAlpha = 0.85; ctx.fillRect(cx - 14, y + 12, 28, yb - y - 32);
+        ctx.globalAlpha = 1; ctx.strokeStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.lineWidth = 2;
+        [-6, 0, 6].forEach((o) => { ctx.beginPath(); ctx.moveTo(cx + o, y + 22); ctx.lineTo(cx + o, yb - 30); ctx.stroke(); });
+        ctx.restore();
+      });
+      keser(ctx, W / 2, 300, 150, metal(ctx, d.line, W / 2 - 80, 200, W / 2 + 80, 300));
+      [-1, 1].forEach((sd) => { sparkle(ctx, W / 2 + sd * 150, 260, 12, d.line); sparkle(ctx, W / 2 + sd * 220, 300, 7, d.line); });
+      return { x: 280, y: 400, w: W - 560, h: yb - 400 - 90, bsd: [W - 150, 112], div: 'diamond' };
+    },
+    // papercut: a solid lace band with cut-out scallops and holes, doves at the top
+    bLace(ctx, d) {
+      bgFill(ctx, d);
+      const a = 60, b = 168, col = d.dark ? d.line : d.title;
+      ctx.save(); ctx.fillStyle = hexA(col, d.dark ? 0.85 : 0.9); ctx.beginPath(); ctx.rect(a, a, W - 2 * a, H - 2 * a); ctx.rect(b, b, W - 2 * b, H - 2 * b); ctx.fill('evenodd'); ctx.restore();
+      ctx.save(); ctx.fillStyle = bgGrad(ctx, d);
+      const holes = (x0, y0, x1, y1) => { const horiz = y0 === y1, len = horiz ? x1 - x0 : y1 - y0, n = Math.floor(len / 54);
+        for (let i = 0; i <= n; i++) { const t = i * len / n, x = horiz ? x0 + t : x0, y = horiz ? y0 : y0 + t;
+          ctx.beginPath(); ctx.arc(x, y, i % 2 ? 9 : 14, 0, TAU); ctx.fill(); } };
+      const m1 = a + 34, m2 = b - 30;
+      [[m1, m1, W - m1, m1], [m1, H - m1, W - m1, H - m1], [m1, m1, m1, H - m1], [W - m1, m1, W - m1, H - m1]].forEach((r) => holes.apply(null, r));
+      const scal = (x0, y0, x1, y1, inward) => { const horiz = y0 === y1, len = horiz ? x1 - x0 : y1 - y0, n = Math.floor(len / 46);
+        for (let i = 0; i < n; i++) { const t = (i + 0.5) * len / n, x = horiz ? x0 + t : x0, y = horiz ? y0 : y0 + t; ctx.beginPath(); ctx.arc(x, y, 17, 0, TAU); ctx.fill(); } };
+      [[b, b, W - b, b], [b, H - b, W - b, H - b], [b, b, b, H - b], [W - b, b, W - b, H - b]].forEach((r) => scal.apply(null, r));
+      [[m2, m2], [W - m2, m2], [m2, H - m2], [W - m2, H - m2]].forEach(([x, y]) => { magenFill(ctx, x, y, 22); });
+      ctx.restore();
+      dove(ctx, W / 2 - 150, 300, 120, 1, col); dove(ctx, W / 2 + 150, 300, 120, -1, col);
+      magen(ctx, W / 2, 248, 34, col, 3);
+      return { x: 250, y: 400, w: W - 500, h: H - 400 - 250, bsd: [W - 250, 250], div: 'leaf' };
+    },
+    // art-deco: stepped corners, fan rays, magen medallion
+    bDeco(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 77);
+      const g = metal(ctx, d.line, 0, 0, W, H);
+      ctx.save(); ctx.strokeStyle = g; ctx.lineWidth = 5;
+      const st = (k) => { const i = 60 + k * 26, c = 70 + k * 30; ctx.beginPath(); ctx.moveTo(i + c, i); ctx.lineTo(W - i - c, i); ctx.lineTo(W - i - c, i + 16); ctx.lineTo(W - i - 16, i + 16); ctx.lineTo(W - i - 16, i + c); ctx.lineTo(W - i, i + c);
+        ctx.lineTo(W - i, H - i - c); ctx.lineTo(W - i - 16, H - i - c); ctx.lineTo(W - i - 16, H - i - 16); ctx.lineTo(W - i - c, H - i - 16); ctx.lineTo(W - i - c, H - i); ctx.lineTo(i + c, H - i); ctx.lineTo(i + c, H - i - 16); ctx.lineTo(i + 16, H - i - 16); ctx.lineTo(i + 16, H - i - c); ctx.lineTo(i, H - i - c);
+        ctx.lineTo(i, i + c); ctx.lineTo(i + 16, i + c); ctx.lineTo(i + 16, i + 16); ctx.lineTo(i + c, i + 16); ctx.closePath(); ctx.stroke(); };
+      st(0); ctx.lineWidth = 2; st(1);
+      ctx.restore();
+      // fan rays behind the medallion
+      ctx.save(); ctx.strokeStyle = hexA(d.line, 0.55); ctx.lineWidth = 2;
+      for (let k = 0; k <= 16; k++) { const a = Math.PI + k * Math.PI / 16; ctx.beginPath(); ctx.moveTo(W / 2 + Math.cos(a) * 110, 330 + Math.sin(a) * 110); ctx.lineTo(W / 2 + Math.cos(a) * 250, 330 + Math.sin(a) * 250); ctx.stroke(); }
+      ctx.restore();
+      ctx.save(); ctx.fillStyle = bgGrad(ctx, d); ctx.beginPath(); ctx.arc(W / 2, 290, 90, 0, TAU); ctx.fill(); ctx.strokeStyle = g; ctx.lineWidth = 5; ctx.stroke(); ctx.lineWidth = 1.6; ctx.beginPath(); ctx.arc(W / 2, 290, 74, 0, TAU); ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.fillStyle = g; magenFill(ctx, W / 2, 290, 50); ctx.restore();
+      ctx.save(); ctx.strokeStyle = g; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(300, 330); ctx.lineTo(W / 2 - 260, 330); ctx.moveTo(W / 2 + 260, 330); ctx.lineTo(W - 300, 330); ctx.stroke(); ctx.restore();
+      return { x: 240, y: 430, w: W - 480, h: H - 430 - 230, bsd: [W - 230, 220], div: 'deco' };
+    },
+    // Moorish keyhole window with a tiled surround and a lantern
+    bTile(ctx, d) {
+      bgFill(ctx, d);
+      lattice(ctx, d, 'quatre', d.dark ? 0.22 : 0.26, 96);
+      const x = 170, w = W - 340, y = 760, yb = H - 130;
+      ctx.save(); ctx.beginPath(); archPath(ctx, x, y, w, yb, 'ogee'); ctx.fillStyle = bgGrad(ctx, d); ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 5; ctx.stroke();
+      ctx.beginPath(); archPath(ctx, x + 22, y + 4, w - 44, yb - 22, 'ogee'); ctx.lineWidth = 1.6; ctx.stroke(); ctx.restore();
+      rectStroke(ctx, 40, 3, d.line);
+      lantern(ctx, W / 2, y - w / 2 * 1.05 + 30, 300, d);
+      return { x: 260, y: 470, w: W - 520, h: yb - 470 - 80, bsd: [W - 120, 110], div: 'rosette' };
+    },
+    // damask-like pattern ground with a calm central panel and a laurel crest
+    bDamask(ctx, d) {
+      bgFill(ctx, d);
+      ctx.save(); ctx.fillStyle = hexA(d.line, d.dark ? 0.14 : 0.16);
+      for (let y = 0, row = 0; y < H + 120; y += 120, row++) for (let x = (row % 2) * 85; x < W + 170; x += 170) {
+        rosette(ctx, x, y, 34, 6, hexA(d.line, d.dark ? 0.3 : 0.32), false);
+        ctx.beginPath(); ctx.arc(x, y, 6, 0, TAU); ctx.fill();
+        leaf(ctx, x, y + 40, 26, Math.PI / 2, hexA(d.line, 0.25), true); leaf(ctx, x, y - 40, 26, -Math.PI / 2, hexA(d.line, 0.25), true);
+      }
+      ctx.restore();
+      const px = 140, py = 140;
+      ctx.save(); ctx.shadowColor = 'rgba(0,0,0,0.18)'; ctx.shadowBlur = 30; ctx.fillStyle = d.dark ? mix(d.bg[0], '#000000', 0.15) : '#fffdf8';
+      ctx.beginPath(); roundRectPath(ctx, px, py, W - 2 * px, H - 2 * py, 18); ctx.fill(); ctx.restore();
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.beginPath(); roundRectPath(ctx, px + 24, py + 24, W - 2 * px - 48, H - 2 * py - 48, 10); ctx.stroke();
+      ctx.lineWidth = 1.2; ctx.beginPath(); roundRectPath(ctx, px + 36, py + 36, W - 2 * px - 72, H - 2 * py - 72, 6); ctx.stroke(); ctx.restore();
+      laurel(ctx, W / 2, 330, 92, d.line); magen(ctx, W / 2, 322, 40, d.line, 3);
+      return { x: 260, y: 470, w: W - 520, h: H - 470 - 260, bsd: [W - 250, 250], div: 'leaf' };
+    },
+    // modern: a deep colour band across the top with stars, clean type below
+    bModern(ctx, d) {
+      const band = d.dark ? mix(d.bg[1], '#ffffff', 0.08) : d.title;
+      ctx.fillStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.fillRect(0, 0, W, H);
+      if (!d.dark) bgFill(ctx, d);
+      ctx.save(); ctx.fillStyle = band; ctx.beginPath(); ctx.moveTo(0, 0); ctx.lineTo(W, 0); ctx.lineTo(W, 380); ctx.quadraticCurveTo(W / 2, 470, 0, 380); ctx.closePath(); ctx.fill(); ctx.restore();
+      const onBand = d.dark ? d.line : '#ffffff';
+      const r = rng(5); ctx.save();
+      for (let i = 0; i < 40; i++) { ctx.globalAlpha = 0.25 + r() * 0.5; const x = r() * W, y = 30 + r() * 320; if (Math.abs(x - W / 2) < 170 && y > 120) continue; ctx.fillStyle = onBand; ctx.beginPath(); ctx.arc(x, y, 2 + r() * 3, 0, TAU); ctx.fill(); }
+      ctx.restore();
+      ctx.save(); ctx.fillStyle = d.dark ? d.bg[0] : '#ffffff'; ctx.beginPath(); ctx.arc(W / 2, 330, 110, 0, TAU); ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 4; ctx.stroke(); ctx.restore();
+      magen(ctx, W / 2, 330, 58, d.dark ? d.line : d.title, 5);
+      ctx.save(); ctx.fillStyle = d.dark ? d.line : d.title; ctx.fillRect(W / 2 - 120, H - 110, 240, 6); ctx.restore();
+      return { x: 200, y: 500, w: W - 400, h: H - 500 - 190, bsd: [W - 110, 60], div: 'dot' };
+    },
+    // constellation: a starry night (or day) sky, "count the stars" crest
+    bStars(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      starField(ctx, d, 260, 17, [200, 360, W - 400, H - 560]);
+      rectStroke(ctx, 70, 2, d.line);
+      ctx.save(); ctx.strokeStyle = hexA(d.line, 0.6); ctx.lineWidth = 1.6;
+      const pts = [[W / 2 - 300, 300], [W / 2 - 170, 220], [W / 2, 170], [W / 2 + 170, 220], [W / 2 + 300, 300]];
+      ctx.beginPath(); pts.forEach(([x, y], i) => i ? ctx.lineTo(x, y) : ctx.moveTo(x, y)); ctx.stroke(); ctx.restore();
+      pts.forEach(([x, y], i) => { glowAt(ctx, x, y, 50, d.line, 0.35); sparkle(ctx, x, y, i === 2 ? 34 : 18, d.line); });
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 500], 38); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('הבט נא השמימה וספור הכוכבים', W / 2, 360); ctx.restore();
+      return { x: 230, y: 420, w: W - 460, h: H - 420 - 210, bsd: [W - 150, 150], div: 'sparkle' };
+    },
+    // Yerushalayim skyline along the foot, a band of stars border
+    bJerusalem(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.dark ? '#ffffff' : d.line, 0.035, 2600, 23);
+      bandBorder(ctx, d, 50, 118, 'magen', 'rosette');
+      skyline(ctx, d, H - 150, 230);
+      keser(ctx, W / 2, 300, 140, metal(ctx, d.line, W / 2 - 80, 200, W / 2 + 80, 300));
+      return { x: 240, y: 380, w: W - 480, h: H - 380 - 420, bsd: [W - 200, 200], div: 'star' };
+    },
+    // pomegranates: kesuba band of pomegranates, a trio as the crest
+    bRimon(ctx, d) {
+      bgFill(ctx, d);
+      bandBorder(ctx, d, 56, 140, 'rimon', 'rimon');
+      rimon(ctx, W / 2, 285, 48, d.line, true); rimon(ctx, W / 2 - 110, 305, 34, d.line, false); rimon(ctx, W / 2 + 110, 305, 34, d.line, false);
+      [-1, 1].forEach((sd) => { leaf(ctx, W / 2 + sd * 165, 318, 70, sd > 0 ? -0.15 : Math.PI + 0.15, d.line, true); });
+      return { x: 250, y: 400, w: W - 500, h: H - 400 - 240, bsd: [W - 230, 230], div: 'diamond' };
+    },
+    // soft watercolour clouds in the corners, a fine gold line
+    bClouds(ctx, d) {
+      bgFill(ctx, d);
+      const cc = d.dark ? 'rgba(255,255,255,0.07)' : hexA(mix(d.line, '#ffffff', 0.3), 0.22);
+      [[150, 170, 120], [330, 120, 80], [W - 170, 200, 110], [W - 360, 110, 70], [140, H - 160, 120], [W - 150, H - 190, 130], [W - 380, H - 110, 80]].forEach(([x, y, s]) => { cloud(ctx, x, y, s, cc); cloud(ctx, x + 20, y + 10, s * 0.7, cc); });
+      rectStroke(ctx, 96, 2, d.line, 24);
+      starField(ctx, d, 26, 61, [180, 180, W - 360, H - 360]);
+      ctx.save(); ctx.fillStyle = hexA(d.line, 0.9);
+      [[-60, 260, 18], [0, 220, 30], [60, 260, 18]].forEach(([o, y, s]) => { magenFill(ctx, W / 2 + o, y, s); });
+      ctx.restore();
+      return { x: 230, y: 330, w: W - 460, h: H - 330 - 230, bsd: [W - 190, 180], div: 'sparkle' };
+    },
+    // ---- Bris: Kisei shel Eliyahu
+    brisKisei(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2200, 31);
+      bandBorder(ctx, d, 54, 120, 'diamond', 'magen');
+      glowAt(ctx, W / 2, 300, 230, d.line, d.dark ? 0.2 : 0.14);
+      kisei(ctx, W / 2, 470, 360, d);
+      return { x: 240, y: 520, w: W - 480, h: H - 520 - 220, bsd: [W - 200, 200], div: 'flourish' };
+    },
+    brisKiseiArch(ctx, d) {
+      bgFill(ctx, d);
+      lattice(ctx, d, 'dots', d.dark ? 0.35 : 0.4, 60);
+      const x = 150, w = W - 300, y = 700, yb = H - 120;
+      ctx.save(); ctx.beginPath(); archPath(ctx, x, y, w, yb, 'pointed'); ctx.fillStyle = bgGrad(ctx, d); ctx.fill(); ctx.strokeStyle = d.line; ctx.lineWidth = 4; ctx.stroke();
+      ctx.beginPath(); archPath(ctx, x + 18, y + 4, w - 36, yb - 18, 'pointed'); ctx.lineWidth = 1.5; ctx.stroke(); ctx.restore();
+      kisei(ctx, W / 2, 560, 330, d);
+      return { x: 250, y: 600, w: W - 500, h: yb - 600 - 70, bsd: [W - 110, 90], div: 'diamond' };
+    },
+    // ---- Torah scroll — "le-Torah, le-chuppah u-le-ma'asim tovim"
+    brisTorah(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2200, 37);
+      rectStroke(ctx, 56, 4, d.line); rectStroke(ctx, 76, 1.4, d.line);
+      cornerScroll(ctx, 96, 96, 1, 1, 120, d.line, 2.6); cornerScroll(ctx, W - 96, 96, -1, 1, 120, d.line, 2.6);
+      cornerScroll(ctx, 96, H - 96, 1, -1, 120, d.line, 2.6); cornerScroll(ctx, W - 96, H - 96, -1, -1, 120, d.line, 2.6);
+      torahScroll(ctx, W / 2, 300, 230, 170, d);
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 700], 36); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('לתורה לחופה ולמעשים טובים', W / 2, 500); ctx.restore();
+      return { x: 230, y: 540, w: W - 460, h: H - 540 - 210, bsd: [W - 200, 170], div: 'flourish' };
+    },
+    // ---- Vach Nacht: two tall candles in the night
+    vnCandles(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      starField(ctx, d, 110, 71, [200, 150, W - 400, H - 300]);
+      rectStroke(ctx, 52, 3, d.line); rectStroke(ctx, 70, 1.2, d.line);
+      glowAt(ctx, W / 2, 250, 300, '#ffcf70', d.dark ? 0.22 : 0.14);
+      [-1, 1].forEach((sd) => { const top = candlestick(ctx, W / 2 + sd * 110, 470, 170, d); candle(ctx, W / 2 + sd * 110, top, 150, 36, d); });
+      return { x: 230, y: 520, w: W - 460, h: H - 520 - 210, bsd: [W - 170, 160], div: 'star' };
+    },
+    // Shir Hamaalos written around the border, a candle at the top
+    vnShir(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 53);
+      rectStroke(ctx, 46, 2.6, d.line); rectStroke(ctx, 116, 2.6, d.line);
+      const spec = ['Frank Ruhl Libre', 500], sz = 34, c = d.dark ? d.line : d.title;
+      const parts = SHIR.split(' · ');
+      const top = parts.slice(0, 2).join(' · '), right = parts.slice(2, 4).join(' · '), bottom = parts.slice(4, 6).join(' · '), left = parts.slice(6).join(' · ');
+      textOnLine(ctx, top, 130, 81, W - 260, 0, sz, spec, c);
+      textOnLine(ctx, right, W - 81, 130, H - 260, Math.PI / 2, sz, spec, c);
+      textOnLine(ctx, bottom, 130, H - 81, W - 260, 0, sz, spec, c);
+      textOnLine(ctx, left, 81, H - 130, H - 260, -Math.PI / 2, sz, spec, c);
+      [[81, 81], [W - 81, 81], [81, H - 81], [W - 81, H - 81]].forEach(([x, y]) => { magen(ctx, x, y, 22, d.line, 2.2); });
+      ctx.save(); font(ctx, ['Suez One', 400], 64); ctx.fillStyle = c; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('שיר המעלות', W / 2, 270); ctx.restore();
+      divider(ctx, 'star', W / 2, 320, 360, d.line);
+      return { x: 230, y: 380, w: W - 460, h: H - 380 - 220, bsd: [W - 200, 190], div: 'star' };
+    },
+    // three lanterns hanging from the top edge
+    vnLanterns(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      starField(ctx, d, 70, 83, [180, 520, W - 360, H - 700]);
+      rectStroke(ctx, 60, 2.4, d.line, 30);
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 2; ctx.beginPath(); ctx.moveTo(60, 120); ctx.quadraticCurveTo(W / 2, 220, W - 60, 120); ctx.stroke(); ctx.restore();
+      lantern(ctx, W / 2, 168, 320, d); lantern(ctx, W / 2 - 300, 142, 230, d); lantern(ctx, W / 2 + 300, 142, 230, d);
+      return { x: 230, y: 540, w: W - 460, h: H - 540 - 200, bsd: [W - 120, 210], div: 'sparkle' };
+    },
+    // an open siddur with a candle — Krias Shema by the baby
+    vnSiddur(ctx, d) {
+      bgFill(ctx, d); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 59);
+      bandBorder(ctx, d, 58, 122, 'wave', 'magen');
+      const cx = W / 2, cy = 330, c = d.line;
+      ctx.save(); const pg = d.dark ? '#f5ecd6' : '#fffaf0';
+      [-1, 1].forEach((sd) => { ctx.fillStyle = pg; ctx.strokeStyle = c; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(cx, cy - 70); ctx.quadraticCurveTo(cx + sd * 90, cy - 100, cx + sd * 190, cy - 80); ctx.lineTo(cx + sd * 190, cy + 60); ctx.quadraticCurveTo(cx + sd * 90, cy + 40, cx, cy + 70); ctx.closePath(); ctx.fill(); ctx.stroke();
+        ctx.strokeStyle = 'rgba(70,55,35,0.45)'; ctx.lineWidth = 2; for (let k = 0; k < 6; k++) { const y = cy - 50 + k * 20; ctx.beginPath(); ctx.moveTo(cx + sd * 30, y); ctx.lineTo(cx + sd * 160, y - 8); ctx.stroke(); } });
+      ctx.fillStyle = c; ctx.beginPath(); ctx.moveTo(cx - 200, cy + 64); ctx.quadraticCurveTo(cx - 90, cy + 50, cx, cy + 84); ctx.quadraticCurveTo(cx + 90, cy + 50, cx + 200, cy + 64); ctx.lineTo(cx + 200, cy + 76); ctx.quadraticCurveTo(cx + 90, cy + 62, cx, cy + 96); ctx.quadraticCurveTo(cx - 90, cy + 62, cx - 200, cy + 76); ctx.closePath(); ctx.fill();
+      ctx.restore();
+      candle(ctx, cx + 300, 420, 150, 32, d); candle(ctx, cx - 300, 420, 150, 32, d);
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 700], 38); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('שמע ישראל', cx, 490); ctx.restore();
+      return { x: 240, y: 540, w: W - 480, h: H - 540 - 210, bsd: [W - 200, 190], div: 'dot' };
+    },
+    // ---- Shalom Zachor / Kiddush: Shabbos candlesticks with the becher
+    szShabbos(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 67);
+      rectStroke(ctx, 50, 3.4, d.line); rectStroke(ctx, 66, 1.2, d.line);
+      [[66, 66], [W - 66, 66], [66, H - 66], [W - 66, H - 66]].forEach(([x, y]) => { ctx.save(); ctx.fillStyle = d.line; ctx.beginPath(); ctx.arc(x, y, 12, 0, TAU); ctx.fill(); ctx.restore(); });
+      glowAt(ctx, W / 2, 260, 300, '#ffcf70', d.dark ? 0.18 : 0.12);
+      [-1, 1].forEach((sd) => { const top = candlestick(ctx, W / 2 + sd * 190, 470, 190, d); candle(ctx, W / 2 + sd * 190, top, 120, 32, d); });
+      kosCup(ctx, W / 2, 470, 190, d);
+      return { x: 230, y: 530, w: W - 460, h: H - 530 - 200, bsd: [W - 160, 150], div: 'flourish' };
+    },
+    // a bowl of arbes, cheerful dotted border
+    szArbes(ctx, d) {
+      bgFill(ctx, d);
+      bandBorder(ctx, d, 52, 112, 'quatre', 'rosette');
+      arbesBowl(ctx, W / 2, 420, 300, d);
+      mazelBanner(ctx, W / 2, 470, 460, d);
+      return { x: 240, y: 560, w: W - 480, h: H - 560 - 200, bsd: [W - 190, 190], div: 'rosette' };
+    },
+    // Friday night through an arched window: two candles and stars
+    szWindow(ctx, d) {
+      bgFill(ctx, d);
+      const x = 120, w = W - 240, y = 640, yb = H - 110;
+      ctx.save(); ctx.fillStyle = hexA(d.line, d.dark ? 0.12 : 0.1); ctx.fillRect(0, 0, W, H); ctx.restore();
+      ctx.save(); ctx.beginPath(); archPath(ctx, x, y, w, yb, 'round'); ctx.clip();
+      const sky = ctx.createLinearGradient(0, 0, 0, 900); sky.addColorStop(0, d.dark ? '#0a1430' : '#1d3157'); sky.addColorStop(1, d.dark ? '#1c2a52' : '#3a5a8c');
+      ctx.fillStyle = sky; ctx.fillRect(0, 0, W, 900);
+      const r = rng(7); for (let i = 0; i < 70; i++) { ctx.fillStyle = 'rgba(255,240,200,' + (0.4 + r() * 0.6) + ')'; ctx.beginPath(); ctx.arc(x + r() * w, 100 + r() * 400, 1.5 + r() * 2.5, 0, TAU); ctx.fill(); }
+      ctx.fillStyle = bgGrad(ctx, d); ctx.fillRect(0, 560, W, H);
+      ctx.restore();
+      ctx.save(); ctx.beginPath(); archPath(ctx, x, y, w, yb, 'round'); ctx.strokeStyle = d.line; ctx.lineWidth = 5; ctx.stroke(); ctx.restore();
+      ctx.save(); ctx.strokeStyle = d.line; ctx.lineWidth = 3; ctx.beginPath(); ctx.moveTo(x, 560); ctx.lineTo(x + w, 560); ctx.stroke(); ctx.beginPath(); ctx.moveTo(W / 2, 560); ctx.lineTo(W / 2, y - w / 2 + 6); ctx.stroke(); ctx.restore();
+      const lt = { line: '#e6cf8f', dark: true, bg: d.bg };
+      [-1, 1].forEach((sd) => { const top = candlestick(ctx, W / 2 + sd * 200, 556, 150, lt); candle(ctx, W / 2 + sd * 200, top, 110, 28, lt); });
+      return { x: 230, y: 620, w: W - 460, h: yb - 620 - 60, bsd: [W - 90, 80], div: 'star' };
+    },
+    // ---- Pidyon Haben: five silver coins
+    phCoins(ctx, d) {
+      bgFill(ctx, d, 'radial'); grain(ctx, d.dark ? '#ffffff' : d.line, 0.03, 2000, 97);
+      rectStroke(ctx, 52, 4, d.line); rectStroke(ctx, 72, 1.4, d.line);
+      [[72, 72], [W - 72, 72], [72, H - 72], [W - 72, H - 72]].forEach(([x, y]) => rosette(ctx, x, y, 34, 8, d.line, false));
+      coinArc(ctx, W / 2, 290, 62, Object.assign({}, d, { coin: '#c9ced6' }));
+      ctx.save(); font(ctx, ['Frank Ruhl Libre', 700], 36); ctx.fillStyle = d.muted; ctx.textAlign = 'center'; ctx.direction = 'rtl'; ctx.fillText('חמשת סלעים', W / 2, 420); ctx.restore();
+      return { x: 240, y: 470, w: W - 480, h: H - 470 - 220, bsd: [W - 200, 170], div: 'diamond' };
+    },
+    // silver tray with the coins, deco frame
+    phTray(ctx, d) {
+      bgFill(ctx, d);
+      const g = metal(ctx, d.line, 0, 0, W, 0);
+      ctx.save(); ctx.strokeStyle = g; ctx.lineWidth = 6; ctx.beginPath(); roundRectPath(ctx, 60, 60, W - 120, H - 120, 60); ctx.stroke(); ctx.lineWidth = 2; ctx.beginPath(); roundRectPath(ctx, 86, 86, W - 172, H - 172, 44); ctx.stroke(); ctx.restore();
+      ctx.save(); const tg = ctx.createLinearGradient(W / 2 - 260, 0, W / 2 + 260, 0); tg.addColorStop(0, '#8d949e'); tg.addColorStop(0.35, '#eef0f3'); tg.addColorStop(0.6, '#b9bec6'); tg.addColorStop(1, '#7d838c');
+      ctx.fillStyle = tg; ctx.beginPath(); ctx.ellipse(W / 2, 360, 270, 70, 0, 0, TAU); ctx.fill(); ctx.strokeStyle = '#6f757e'; ctx.lineWidth = 2; ctx.stroke();
+      ctx.beginPath(); ctx.ellipse(W / 2, 352, 220, 50, 0, 0, TAU); ctx.stroke(); ctx.restore();
+      const sd = Object.assign({}, d, { coin: '#cfd3da' });
+      [[-130, 330], [-65, 312], [0, 336], [65, 312], [130, 330]].forEach(([o, y], i) => coin(ctx, W / 2 + o, y - 30, 46, sd, i));
+      return { x: 240, y: 480, w: W - 480, h: H - 480 - 230, bsd: [W - 200, 190], div: 'deco' };
+    },
+    // coins along the foot, crown at the top
+    phCrown(ctx, d) {
+      bgFill(ctx, d, 'radial');
+      bandBorder(ctx, d, 54, 118, 'zigzag', 'rosette');
+      keser(ctx, W / 2, 300, 150, metal(ctx, d.line, W / 2 - 80, 200, W / 2 + 80, 300));
+      coinArc(ctx, W / 2, H - 260, 42, Object.assign({}, d, { coin: '#c9ced6' }));
+      return { x: 250, y: 380, w: W - 500, h: H - 380 - 400, bsd: [W - 200, 190], div: 'star' };
+    }
+  };
+  Object.assign(FRAMES, BOY_FRAMES);
+
   function paint(ctx, data, img) {
     const d = designById(data.d);
     ctx.save();
@@ -1650,23 +2266,27 @@
     const gf = { type: 'all', color: 'all', q: '', limit: PAGE };
     const tiles = [];
     const drawQueue = []; let gDrawing = false;
+    // a design that suits several simchas is shown (and opened) with the wording of the simcha being filtered
+    const typeOf = (t) => (gf.type !== 'all' && TYPES[gf.type] && t.types.includes(gf.type)) ? gf.type : t.d.type;
+    const keyOf = (t) => sampleLang + '|' + typeOf(t);
     async function pump() {
       if (gDrawing) return; gDrawing = true;
       while (drawQueue.length) {
         const t = drawQueue.shift();
-        if (t.drawn === sampleLang || t.el.hidden) continue;
-        const lang = sampleLang;
-        try { await render(t.cv, sample(t.d, lang), 0.24); t.drawn = lang; } catch (_) {}
+        if (t.drawn === keyOf(t) || t.el.hidden) continue;
+        const lang = sampleLang, ty = typeOf(t), key = keyOf(t);
+        try { await render(t.cv, sample({ id: t.d.id, type: ty }, lang), 0.24); t.drawn = key; } catch (_) {}
+        if (t.tyEl && t.tyEl.dataset.t !== ty) { t.tyEl.dataset.t = ty; both(t.tyEl, TYPES[ty].label.en, TYPES[ty].label.yi); }
         await new Promise((r) => setTimeout(r, 0));
       }
       gDrawing = false;
     }
     const io = ('IntersectionObserver' in window) ? new IntersectionObserver((entries) => {
-      entries.forEach((e) => { if (e.isIntersecting) { const t = tiles[+e.target.dataset.idx]; if (t && t.drawn !== sampleLang && !drawQueue.includes(t)) drawQueue.push(t); } });
+      entries.forEach((e) => { if (e.isIntersecting) { const t = tiles[+e.target.dataset.idx]; if (t && t.drawn !== keyOf(t) && !drawQueue.includes(t)) drawQueue.push(t); } });
       pump();
     }, { rootMargin: '400px 0px' }) : null;
     function queueVisible() {
-      tiles.forEach((t) => { if (!t.el.hidden && t.drawn !== sampleLang) { if (io) { io.unobserve(t.el); io.observe(t.el); } else if (!drawQueue.includes(t)) drawQueue.push(t); } });
+      tiles.forEach((t) => { if (!t.el.hidden && t.drawn !== keyOf(t)) { if (io) { io.unobserve(t.el); io.observe(t.el); } else if (!drawQueue.includes(t)) drawQueue.push(t); } });
       pump();
     }
     const norm = (x) => String(x || '').toLowerCase().replace(/[\u0591-\u05C7]/g, '');
@@ -1704,14 +2324,15 @@
         cap.append(ty, nm, go); b.append(cv, cap);
         if (d.isNew) { const nb = document.createElement('span'); nb.className = 'inv-tile-new'; both(nb, 'New', 'נייע'); b.appendChild(nb); }
         b.addEventListener('click', () => {
-          state.d = d.id; state.t = d.type; if (state.sm) { state.l = sampleLang; reSample(); } syncForm(); update(); parsha();
-          history.replaceState(null, '', '#make=' + d.id);
+          const ty = typeOf(tiles[idx]);
+          state.d = d.id; state.t = ty; if (state.sm) { state.l = sampleLang; reSample(); } syncForm(); update(); parsha();
+          history.replaceState(null, '', '#make=' + d.id + (ty !== d.type ? '&t=' + ty : ''));
           $('#invEditorTop').scrollIntoView({ behavior: 'smooth', block: 'start' });
           setTimeout(() => { const f = $('#fP'); if (f && !f.closest('[hidden]')) f.focus({ preventScroll: true }); }, 500);
         });
         const fam = FAMILY_NAMES[d.family] || { en: '', yi: '' }; const col = COLORS[d.color] || { en: '', yi: '' };
         const text = norm([d.id, d.name.en, d.name.yi, fam.en, fam.yi, col.en, col.yi].concat(types.map((k) => TYPES[k].label.en + ' ' + TYPES[k].label.yi)).join(' '));
-        tiles.push({ el: b, cv, d, types, text, drawn: null });
+        tiles.push({ el: b, cv, d, types, text, drawn: null, tyEl: ty });
         gallery.appendChild(b);
         if (io) io.observe(b);
       });
