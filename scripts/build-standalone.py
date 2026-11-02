@@ -209,7 +209,7 @@ GENERATED = {"favicon.png", "apple-touch-icon.png", "og.jpg", "icon-192.png", "i
 
 JS_PATCHES = [  # (pattern, replacement, note) applied to the COPIED scripts only, never the repo
     (r"(\|\s*)Kasho(['\"`])", lambda m: m.group(1) + SITE_NAME_EN.replace("'", "\\'") + m.group(2), "page title suffix"),
-    (r"(['\"`])Kasho-Invitation", lambda m: m.group(1) + SLUG.rstrip("s") + "-Invitation" if SLUG.endswith("Invitations") else m.group(1) + SLUG, "download file name"),
+    (r"(['\"`])Kasho-Invitation", lambda m: m.group(1) + (SLUG[:-1] if SLUG.endswith("Invitations") else SLUG + "-Invitation"), "download file name"),
     (r"PRODID:-//Kasho Community//", lambda m: "PRODID:-//" + re.sub(r"[/\\]", "-", SITE_NAME_EN) + "//", "calendar PRODID"),
     (r"@kasho-invitations", lambda m: "@" + SLUG.lower(), "calendar UID host"),
     (r"(['\"`/])invitations\.html", lambda m: m.group(1) + "index.html", "maker page link -> index.html"),

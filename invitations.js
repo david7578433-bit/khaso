@@ -25,6 +25,13 @@
       two: true, hosts2: true, fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, s: { en: 'Kallah’s name', yi: 'נאמען פון דער כלה' }, h1: { en: 'Chosson’s parents', yi: 'עלטערן פונעם חתן' }, h2: { en: 'Kallah’s parents', yi: 'עלטערן פון דער כלה' } },
       hours: 3
     },
+    bavarfan: {
+      label: { en: 'Bavarfan · Aufruf', yi: 'באווארפן' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'באווארפן', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בקידוש לכבוד עליית בננו החתן נ״י לתורה, לרגל נישואיו בשעטומ״צ', p: 'החתן', hosts: 'ההורים המאושרים' },
+      en: { open: 'With gratitude to Hashem', title: 'Aufruf', invite: 'Please join us for a kiddush in honor of the aufruf of our son, the chosson, before his wedding', p: 'The Chosson', hosts: 'With joy, his parents' },
+      fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, h1: { en: 'Parents', yi: 'עלטערן' } },
+      hours: 3
+    },
     barmitzvah: {
       label: { en: 'Bar Mitzvah', yi: 'בר מצוה' },
       yi: { open: 'בשבח והודיה להשי״ת', title: 'שמחת בר מצוה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לסעודת מצוה לרגל הכנס בננו היקר לעול המצוות', p: '', hosts: 'ההורים המאושרים' },
@@ -2742,7 +2749,7 @@
   // which stocks each simcha gets (boys: navy / silver / baby blue / gold first)
   const K_GROUPS = {
     boy:   { types: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'], pals: ['ivorynavy', 'navygold', 'powderblue', 'navysilver', 'whiteblue', 'midnight', 'creamnavy', 'skywhite', 'silvergrey', 'denimgold', 'whitesilver', 'ivorygold'] },
-    wed:   { types: ['chasuna', 'vort', 'shevabrachos'], pals: ['ivorygold', 'navygold', 'blackgold', 'creamburgundy', 'whitesilver', 'burgundygold', 'ivorysage', 'blushgold', 'emeraldgold', 'ivorynavy', 'creamnavy', 'blushsilver'] },
+    wed:   { types: ['chasuna', 'vort', 'bavarfan', 'shevabrachos'], pals: ['ivorygold', 'navygold', 'blackgold', 'creamburgundy', 'whitesilver', 'burgundygold', 'ivorysage', 'blushgold', 'emeraldgold', 'ivorynavy', 'creamnavy', 'blushsilver'] },
     bm:    { types: ['barmitzvah', 'siyum'], pals: ['navygold', 'blackgold', 'ivorynavy', 'burgundygold', 'emeraldgold', 'ivorygold', 'midnight', 'charcoalcopper', 'creamnavy', 'navysilver', 'whitesilver', 'purplegold'] },
     girl:  { types: ['kiddush'], pals: ['blushgold', 'blushsilver', 'ivorygold', 'whitesilver', 'ivorysage', 'creamburgundy', 'tealsand', 'skywhite', 'purplegold', 'ivorynavy', 'emeraldgold', 'navygold'] },
     home:  { types: ['chanukashabayis', 'upsherin', 'general'], pals: ['ivorygold', 'navygold', 'ivorysage', 'emeraldgold', 'ivorynavy', 'tealsand', 'creamnavy', 'blackgold', 'whiteblue', 'burgundygold', 'charcoalcopper', 'powderblue'] }
@@ -3100,6 +3107,7 @@
     const S = {
       chasuna: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', s: yi ? 'חיה מרים' : 'Chaya Miriam', h1: yi ? 'ר׳ יעקב כהן' : 'Mr. & Mrs. Yaakov Cohen', h2: yi ? 'ר׳ דוד לוי' : 'Mr. & Mrs. Dovid Levy' },
       vort: { p: yi ? 'משה אהרן' : 'Moshe Aharon', s: yi ? 'רחל לאה' : 'Rochel Leah', h1: yi ? 'ר׳ יצחק גרין' : 'Mr. & Mrs. Yitzchok Green', h2: yi ? 'ר׳ שלמה ווייס' : 'Mr. & Mrs. Shlomo Weiss' },
+      bavarfan: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', h1: yi ? 'ר׳ יעקב כהן' : 'Mr. & Mrs. Yaakov Cohen', tm: '11:30' },
       barmitzvah: { p: yi ? 'מנחם מענדל' : 'Menachem Mendel', h1: yi ? 'ר׳ אברהם שווארץ' : 'Mr. & Mrs. Avrohom Schwartz' },
       bris: { h1: yi ? 'ר׳ יוסף קליין' : 'Mr. & Mrs. Yosef Klein', tm: '08:30' },
       kiddush: { h1: yi ? 'ר׳ חיים בערגער' : 'Mr. & Mrs. Chaim Berger', tm: '11:30' },
@@ -3117,6 +3125,7 @@
 
   // ---------------------------------------------------------------- editor page
   const DRAFT = 'kasho-invite-draft-v1';
+  const KFLOW = { on: false };
   function initEditor() {
     const root = $('#invEditor'); if (!root) return;
     const canvas = $('#invCanvas'); const status = $('#invStatus');
@@ -3136,7 +3145,8 @@
     if (fan) {
       const heroLang = siteLang() === 'en' ? 'en' : 'yi';
       const picks = [['scene-briscream', 'bris'], ['scene-velvet', 'chasuna'], ['scene-navygold', 'barmitzvah']];
-      $$('canvas', fan).forEach((c, i) => { const d = designById(picks[i][0]); render(c, Object.assign(sample(d, heroLang), { t: picks[i][1] }), 0.24).catch(() => {}); });
+      KFLOW.drawFan = (lang) => $$('canvas', fan).forEach((c, i) => { const d = designById(picks[i][0]); render(c, Object.assign(sample(d, lang), { t: picks[i][1] }), 0.24).catch(() => {}); });
+      KFLOW.drawFan(heroLang);
     }
     // gallery — ~160 designs: filter by simcha / colour / search, rendered lazily as tiles scroll into view, "show more" pages
     const gallery = $('#invGallery'); let sampleLang = 'yi';
@@ -3145,7 +3155,13 @@
     const tiles = [];
     const drawQueue = []; let gDrawing = false;
     // a design that suits several simchas is shown (and opened) with the wording of the simcha being filtered
-    const typeOf = (t) => (gf.type !== 'all' && TYPES[gf.type] && t.types.includes(gf.type)) ? gf.type : t.d.type;
+    // occasion groups (the home page's tiles): a group filter matches any of its simchas
+    const OCC_GROUPS = { boy: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'], other: ['siyum', 'chanukashabayis', 'general'] };
+    const inFilter = (types, f) => f === 'all' || (OCC_GROUPS[f] ? OCC_GROUPS[f].some((x) => types.includes(x)) : types.includes(f));
+    const typeOf = (t) => {
+      if (OCC_GROUPS[gf.type]) { const g = OCC_GROUPS[gf.type]; return g.includes(t.d.type) ? t.d.type : (g.find((x) => t.types.includes(x)) || t.d.type); }
+      return (gf.type !== 'all' && TYPES[gf.type] && t.types.includes(gf.type)) ? gf.type : t.d.type;
+    };
     const keyOf = (t) => sampleLang + '|' + typeOf(t);
     async function pump() {
       if (gDrawing) return; gDrawing = true;
@@ -3173,7 +3189,7 @@
       let match = 0, shown = 0;
       tiles.forEach((t) => {
         const d = t.d;
-        const ok = (gf.type === 'all' || (gf.type === 'scene' ? !!d.isScene : t.types.includes(gf.type))) && (gf.color === 'all' || d.color === gf.color) && (!q || t.text.includes(q));
+        const ok = (gf.type === 'scene' ? !!d.isScene : inFilter(t.types, gf.type)) && (gf.color === 'all' || d.color === gf.color) && (!q || t.text.includes(q));
         if (ok) match++;
         t.el.hidden = !(ok && shown < gf.limit);
         if (ok && shown < gf.limit) shown++;
@@ -3211,8 +3227,9 @@
         b.addEventListener('click', () => {
           const ty = typeOf(tiles[idx]);
           state.d = d.id; state.t = ty; if (state.sm) { state.l = sampleLang; reSample(); } syncForm(); update(); parsha();
-          history.replaceState(null, '', '#make=' + d.id + (ty !== d.type ? '&t=' + ty : ''));
-          $('#invEditorTop').scrollIntoView({ behavior: 'smooth', block: 'start' });
+          const h = '#make=' + d.id + (ty !== d.type ? '&t=' + ty : '');
+          if (KFLOW.on) { history.pushState({ v: 'edit' }, '', h); KFLOW.show('edit'); }
+          else { history.replaceState(null, '', h); $('#invEditorTop').scrollIntoView({ behavior: 'smooth', block: 'start' }); }
           setTimeout(() => { const f = $('#fP'); if (f && !f.closest('[hidden]')) f.focus({ preventScroll: true }); }, 500);
         });
         const fam = FAMILY_NAMES[d.family] || { en: '', yi: '' }; const col = COLORS[d.color] || { en: '', yi: '' };
@@ -3240,13 +3257,28 @@
       const search = $('#invSearch'); let st = null;
       if (search) search.addEventListener('input', () => { clearTimeout(st); st = setTimeout(() => { gf.q = search.value; gf.limit = PAGE; applyFilter(); }, 150); });
       const more = $('#invMore'); if (more) more.addEventListener('click', () => { gf.limit += PAGE; applyFilter(); });
+      KFLOW.order = order;
+      KFLOW.setType = (f) => {
+        gf.type = f || 'all'; gf.limit = PAGE;
+        $$('[data-filter]').forEach((x) => x.setAttribute('aria-pressed', String(x.dataset.filter === gf.type)));
+        applyFilter();
+      };
+      KFLOW.getType = () => gf.type;
+      KFLOW.count = (f) => tiles.filter((t) => inFilter(t.types, f)).length;
+      KFLOW.first = (f, n) => tiles.filter((t) => inFilter(t.types, f)).slice(0, n || 1).map((t) => t.d);
+      KFLOW.sampleLang = () => sampleLang;
+      KFLOW.curType = () => state.t;
+      KFLOW.curDesign = () => designById(state.d);
+      KFLOW.drawSample = (cv, d, f, lang) => render(cv, sample({ id: d.id, type: (OCC_GROUPS[f] ? (OCC_GROUPS[f].includes(d.type) ? d.type : OCC_GROUPS[f][0]) : (TYPES[f] && f !== d.type && [d.type].concat(d.also || []).includes(f) ? f : d.type)) }, lang), 0.24);
     }
 
     // colour variants of the chosen design (same frame, other palettes) + type select
     const sw = $('#invSwatches');
     function drawSwatches() {
       const cur = designById(state.d); const fam = cur.family || cur.frame;
-      const list = DESIGNS.filter((d) => (d.family || d.frame) === fam && (!d.retired || d.id === state.d));
+      let list = DESIGNS.filter((d) => (d.family || d.frame) === fam && (!d.retired || d.id === state.d));
+      // photo cards: only the ones that suit this simcha, a short row (not every photo on the site)
+      if (cur.isScene) { list = list.filter((d) => d.id === state.d || [d.type].concat(d.also || []).includes(state.t)); const i = list.findIndex((d) => d.id === state.d); if (list.length > 14) list = list.slice(0, 13).concat(i >= 13 ? [list[i]] : [list[13]]); }
       sw.innerHTML = '';
       list.forEach((d) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-swatch'; b.dataset.design = d.id;
@@ -3257,7 +3289,7 @@
         b.addEventListener('click', () => { state.d = d.id; syncForm(); update(); });
         sw.appendChild(b);
       });
-      const all = document.createElement('a'); all.className = 'inv-swatch-all'; all.href = '#galleryHeading'; both(all, 'All designs ↑', 'אלע דיזיינס ↑');
+      const all = document.createElement('a'); all.className = 'inv-swatch-all'; all.href = KFLOW.on ? '#simcha=' + (KFLOW.occOf ? KFLOW.occOf(state.t) : 'all') : '#galleryHeading'; both(all, 'All designs ↑', 'אלע דיזיינס ↑');
       sw.appendChild(all);
     }
     const typeSel = $('#fType');
@@ -3539,8 +3571,126 @@
   const KIT = { W, H, HE, FOIL, FONTSETS, loadScene, sceneSrc, divider, cornerScroll, rectStroke, magen, keser, sparkle, rosette, leaf, wrapLines, font, dirOf,
     hebrewParts, civilLong, dayLine, timeLabel, titleText, words, saveBlob, buildPdf, jpegOf, canvasBlob, fileBase, streamBytes, b64url, unb64url, summary,
     eventTimes, mazelMessage, countdown, openEnvelope, phoneDigits, rsvpLinks, mapsUrl, wazeUrl, googleCalUrl, icsText, copyText, flash, both, qrPanel, ensureFonts };
+  // Bavarfan (aufruf, Nov 2026): every wedding-family design also suits it
+  DESIGNS.forEach((d) => { const ty = [d.type].concat(d.also || []); if (!ty.includes('bavarfan') && (ty.includes('chasuna') || ty.includes('vort'))) { d.also = (d.also || []).slice(); d.also.push('bavarfan'); } });
+
   window.KashoInvites = { TYPES, DESIGNS, SCENES, pdfLetterBlob, KIT, render, encode, decode, hebrewParts, gematria, icsText, googleCalUrl, pdfBlob, pngBlob, sample, designById, viewUrl };
 
-  function start() { initEditor(); initView(); }
+
+  // ---------------------------------------------------------------- flow: home → simcha → design (Nov 2026)
+  function initFlow() {
+    const main = $('#main.inv-flow'); const home = $('#invHome');
+    if (!main || !home || !KFLOW.setType) return;
+    KFLOW.on = true;
+    const OCC = [
+      { k: 'boy', f: 'boy', en: 'It’s a Boy', yi: 'א אינגל', sen: 'Bris · Vach Nacht · Shalom Zachor · Pidyon Haben', syi: 'ברית · וואך נאכט · שלום זכר · פדיון הבן', subs: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'] },
+      { k: 'girl', f: 'kiddush', en: 'It’s a Girl', yi: 'א מיידל', sen: 'Kiddush', syi: 'קידוש' },
+      { k: 'upsherin', f: 'upsherin', en: 'Upsherin', yi: TYPES.upsherin.label.yi, sen: 'The first haircut', syi: 'די ערשטע שערן' },
+      { k: 'barmitzvah', f: 'barmitzvah', en: 'Bar Mitzvah', yi: 'בר מצוה', sen: 'Seudas mitzvah', syi: 'סעודת מצוה' },
+      { k: 'tenoyim', f: 'vort', en: 'Tenoyim · Vort', yi: 'תנאים · ווארט', sen: 'The engagement', syi: 'שמחת התנאים' },
+      { k: 'bavarfan', f: 'bavarfan', en: 'Bavarfan', yi: 'באווארפן', sen: 'Aufruf kiddush', syi: 'קידוש לכבוד דעם חתן' },
+      { k: 'wedding', f: 'chasuna', en: 'Wedding', yi: 'חתונה', sen: 'Chasuna', syi: 'שמחת הנישואין' },
+      { k: 'shevabrachos', f: 'shevabrachos', en: 'Sheva Brachos', yi: 'שבע ברכות', sen: 'For the chosson & kallah', syi: 'לכבוד חתן וכלה' },
+      { k: 'other', f: 'other', en: 'More simchas', yi: 'נאך שמחות', sen: 'Siyum · Chanukas Habayis · any simcha', syi: 'סיום · חנוכת הבית · יעדע שמחה', subs: ['siyum', 'chanukashabayis', 'general'] },
+      { k: 'all', f: 'all', en: 'All designs', yi: 'אלע דיזיינס', sen: 'Every card, every simcha', syi: 'אלע קארטלעך' }
+    ];
+    const byK = {}; OCC.forEach((o) => { byK[o.k] = o; });
+    const occOf = (t) => { const o = OCC.find((x) => x.f === t || (x.subs && x.subs.includes(t))); return o ? o.k : 'all'; };
+    KFLOW.occOf = occOf;
+    const pageLang = () => (siteLang() === 'en' ? 'en' : 'yi');
+    const n = (x) => x.toLocaleString('en-US');
+
+    // home tiles — a real card from the simcha's own designs, drawn when it scrolls into view
+    const occBox = $('#invOcc'); const drawn = new Map();
+    // each tile gets its own look: a photo card nobody else used yet, else a layout nobody else used
+    const usedD = new Set(), usedFam = new Set();
+    const PREF = { boy: 'scene-babyrattle', girl: 'scene-blushkiddush', barmitzvah: 'scene-blackgold', wedding: 'scene-chasunaivory', all: 'scene-navyvelvet' };
+    function pickFor(o) {
+      const c = KFLOW.first(o.f, 400);
+      const ok = (d) => d && !usedD.has(d.id);
+      let d = c.find((x) => x.id === PREF[o.k] && ok(x)) || c.find((x) => x.isScene && x.isV2 && ok(x)) || c.find((x) => x.isScene && ok(x)) || c.find((x) => ok(x) && !usedFam.has(x.family)) || c.find(ok) || c[0];
+      if (d) { usedD.add(d.id); usedFam.add(d.family); }
+      return d;
+    }
+    const tileCanvas = [];
+    OCC.forEach((o, i) => {
+      const a = document.createElement('a'); a.className = 'inv-occ-tile' + (o.k === 'boy' ? ' inv-occ-lead' : ''); a.href = '#simcha=' + o.k;
+      const fig = document.createElement('span'); fig.className = 'inv-occ-fig';
+      const cv = document.createElement('canvas'); cv.width = 360; cv.height = 504; cv.setAttribute('aria-hidden', 'true'); fig.appendChild(cv);
+      const nm = document.createElement('span'); nm.className = 'inv-occ-name'; both(nm, o.en, o.yi);
+      const sb = document.createElement('span'); sb.className = 'inv-occ-sub'; both(sb, o.sen, o.syi);
+      const ct = document.createElement('span'); ct.className = 'inv-occ-count'; const c = KFLOW.count(o.f); both(ct, n(c) + ' designs', n(c) + ' דיזיינס');
+      a.append(fig, nm, sb, ct); occBox.appendChild(a);
+      // the tile shows the 1st (boy: a photo card) design; 'all' shows a different one so tiles don't repeat
+      tileCanvas.push({ cv, d: pickFor(o), o });
+    });
+    function drawTiles() {
+      const lang = pageLang();
+      tileCanvas.forEach((t) => { if (!t.d || drawn.get(t.cv) === lang) return; drawn.set(t.cv, lang); KFLOW.drawSample(t.cv, t.d, t.o.f, lang).catch(() => {}); });
+    }
+
+    // browse header: occasion strip + sub-chips
+    const strip = $('#invOccStrip');
+    OCC.forEach((o) => { const a = document.createElement('a'); a.className = 'inv-chip'; a.href = '#simcha=' + o.k; a.dataset.occ = o.k; both(a, o.en, o.yi); strip.appendChild(a); });
+    const subBox = $('#invSubChips');
+    function browse(k, sub) {
+      const o = byK[k] || byK.all;
+      $$('a', strip).forEach((a) => a.setAttribute('aria-current', String(a.dataset.occ === o.k)));
+      both($('#invBrowseTitle'), o.en, o.yi); both($('#invBrowseSub'), o.sen, o.syi);
+      subBox.innerHTML = ''; subBox.hidden = !o.subs;
+      if (o.subs) {
+        [o.f].concat(o.subs).forEach((f) => {
+          const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-chip';
+          if (f === o.f) both(b, 'All · ' + n(KFLOW.count(f)), 'אלע · ' + n(KFLOW.count(f)));
+          else both(b, TYPES[f].label.en + ' · ' + n(KFLOW.count(f)), TYPES[f].label.yi + ' · ' + n(KFLOW.count(f)));
+          b.setAttribute('aria-pressed', String(f === (sub || o.f)));
+          b.addEventListener('click', () => { history.replaceState({ v: 'browse' }, '', '#simcha=' + o.k + (f !== o.f ? '&t=' + f : '')); browse(o.k, f === o.f ? null : f); });
+          subBox.appendChild(b);
+        });
+      }
+      const f = sub && TYPES[sub] ? sub : o.f;
+      if (KFLOW.getType() !== f) KFLOW.setType(f);
+    }
+
+    // views
+    const dock = $('#invDock');
+    function show(v) {
+      main.dataset.view = v;
+      document.documentElement.dataset.invView = v;
+      if (dock) dock.hidden = v !== 'edit';
+      if (v === 'edit') { const d = KFLOW.curDesign(); const t = KFLOW.curType(); both($('#invEditName'), TYPES[t].label.en + ' · ' + d.name.en, TYPES[t].label.yi + ' · ' + d.name.yi); }
+      if (v === 'home') drawTiles();
+      window.scrollTo(0, 0);
+    }
+    KFLOW.show = show;
+    function route() {
+      const h = location.hash;
+      let m;
+      if (!h || h === '#' || h === '#top' || h === '#home') return show('home');
+      if (h === '#occasions' || h === '#how') { show('home'); const el = document.getElementById(h.slice(1)); if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); return; }
+      if ((m = /^#simcha=([a-z]+)(?:&t=([a-z]+))?/.exec(h))) { browse(m[1], m[2]); return show('browse'); }
+      if (h === '#galleryHeading') { browse(occOf(KFLOW.curType())); return show('browse'); }
+      if (/^#make=/.test(h) || h === '#invEditorTop' || h === '#invPreview') return show('edit');
+      if (h === '#studio') { show('edit'); const st = $('#studio'); if (st) setTimeout(() => st.scrollIntoView({ block: 'start' }), 30); }
+    }
+    window.addEventListener('popstate', route);
+    window.addEventListener('hashchange', route);
+    $('#invBack').addEventListener('click', () => {
+      if (history.state && history.state.v === 'edit' && history.length > 1) history.back();
+      else location.hash = '#simcha=' + occOf(KFLOW.curType());
+    });
+    $$('[data-go-home]').forEach((a) => a.addEventListener('click', (e) => { e.preventDefault(); history.pushState({ v: 'home' }, '', location.pathname + location.search); route(); }));
+    // the dock (phone) taps the real buttons
+    $$('[data-proxy]').forEach((b) => b.addEventListener('click', () => { const t = document.getElementById(b.dataset.proxy); if (t) t.click(); }));
+    // phone: the preview stays on top, the buttons go under the form (the dock carries the main three)
+    const acts = $('.inv-actions'), form = $('.inv-form'), sticky = $('.inv-preview-sticky');
+    const mq = window.matchMedia('(max-width: 860px)');
+    const placeActs = () => { if (!acts || !form || !sticky) return; if (mq.matches) { if (acts.parentNode !== form.parentNode) form.after(acts); acts.classList.add('inv-actions-after'); } else if (acts.parentNode !== sticky) { sticky.appendChild(acts); acts.classList.remove('inv-actions-after'); } };
+    placeActs(); if (mq.addEventListener) mq.addEventListener('change', placeActs);
+    // language switch redraws the home tiles in the page's language
+    new MutationObserver(() => { if (main.dataset.view === 'home') { drawTiles(); if (KFLOW.drawFan) KFLOW.drawFan(pageLang()); } }).observe(document.documentElement, { attributes: true, attributeFilter: ['lang'] });
+    route();
+  }
+  function start() { initEditor(); initFlow(); initView(); }
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', start); else start();
 })();
