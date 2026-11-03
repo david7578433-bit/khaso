@@ -102,6 +102,83 @@
       fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
       hours: 3
     },
+    lchaim: {
+      label: { en: 'L’chaim', yi: 'לחיים' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'לחיים', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחת הלחיים לרגל התקשרות צאצאינו היקרים', p: 'החתן', c: 'עב״ג', s: 'הכלה', hosts: 'המשפחות המאושרות' },
+      en: { open: 'With gratitude to Hashem', title: 'L’chaim', invite: 'Please join us for a l’chaim celebrating the engagement of our dear children', p: 'The Chosson', c: '&', s: 'The Kallah', hosts: 'With joy, the families' },
+      two: true, hosts2: true, fields: { p: { en: 'Chosson’s name', yi: 'נאמען פונעם חתן' }, s: { en: 'Kallah’s name', yi: 'נאמען פון דער כלה' }, h1: { en: 'Chosson’s parents', yi: 'עלטערן פונעם חתן' }, h2: { en: 'Kallah’s parents', yi: 'עלטערן פון דער כלה' } },
+      hours: 3
+    },
+    melavemalka: {
+      label: { en: 'Melave Malka · Kumzits', yi: 'מלוה מלכה · קומזיץ' },
+      yi: { open: 'בשבח והודיה להשי״ת', title: 'מלוה מלכה', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בסעודת מלוה מלכה ובקומזיץ בשירה ובשמחה', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Melave Malka', invite: 'Please join us for a melave malka and kumzits with song and simcha', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3
+    },
+    roshhashana: {
+      label: { en: 'Rosh Hashana', yi: 'ראש השנה' },
+      yi: { open: 'לשנה טובה תכתבו ותחתמו', title: 'שנה טובה ומתוקה', invite: 'מיר ווינטשן אייך און אייער גאנצע משפחה א כתיבה וחתימה טובה, א גוט און א זיס יאר', p: '', hosts: 'בברכת כתיבה וחתימה טובה' },
+      en: { open: 'B’ezras Hashem', title: 'Shana Tova', invite: 'Wishing you and your family a kesiva vachasima tova — a good and sweet new year', p: '', hosts: 'With warm wishes' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'From', yi: 'פון' } },
+      hours: 3, yomtov: true
+    },
+    sukkos: {
+      label: { en: 'Sukkos', yi: 'סוכות' },
+      yi: { open: 'ושמחת בחגך והיית אך שמח', title: 'שמחת בית השואבה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחת בית השואבה בסוכתנו, בשירה ובשמחה', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Simchas Beis Hashoeva', invite: 'Please join us for a simchas beis hashoeva in our sukkah, with song and simcha', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
+    simchastorah: {
+      label: { en: 'Simchas Torah', yi: 'שמחת תורה' },
+      yi: { open: 'שישו ושמחו בשמחת תורה', title: 'שמחת תורה', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בשמחת ההקפות ובקידוש לכבוד שמחת תורה', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Simchas Torah', invite: 'Please join us for hakafos and a kiddush in honor of Simchas Torah', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
+    chanuka: {
+      label: { en: 'Chanuka', yi: 'חנוכה' },
+      yi: { open: 'בימים ההם בזמן הזה', title: 'חנוכה שמח', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בהדלקת נר חנוכה ובמסיבת חנוכה בשמחה', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Chanukah', invite: 'Please join us for the menorah lighting and a Chanukah gathering', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
+    tubishvat: {
+      label: { en: 'Tu Bishvat', yi: 'ט״ו בשבט' },
+      yi: { open: 'ראש השנה לאילנות', title: 'ט״ו בשבט', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לטיש לכבוד ראש השנה לאילנות, מיט די פירות פון ארץ ישראל', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Tu Bishvat', invite: 'Please join us for a Tu Bishvat tish with the fruits of Eretz Yisroel', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
+    purim: {
+      label: { en: 'Purim', yi: 'פורים' },
+      yi: { open: 'ליהודים היתה אורה ושמחה', title: 'סעודת פורים', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בסעודת פורים בשמחה ובטוב לבב', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Purim Seudah', invite: 'Please join us for the Purim seudah, with joy and a glad heart', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 4, yomtov: true
+    },
+    pesach: {
+      label: { en: 'Pesach', yi: 'פסח' },
+      yi: { open: 'זמן חרותנו', title: 'חג כשר ושמח', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להסב עמנו לסדר של פסח', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Chag Kasher Vesameach', invite: 'Please join us at our Pesach seder', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 4, yomtov: true
+    },
+    lagbaomer: {
+      label: { en: 'Lag Baomer', yi: 'ל״ג בעומר' },
+      yi: { open: 'בר יוחאי נמשחת אשריך', title: 'ל״ג בעומר', invite: 'הננו מתכבדים להזמין את כבודו להשתתף בהדלקה לכבוד הילולא דרשב״י זי״ע', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Lag Baomer', invite: 'Please join us for the bonfire lighting in honor of the hilula of Rabbi Shimon bar Yochai', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
+    shavuos: {
+      label: { en: 'Shavuos', yi: 'שבועות' },
+      yi: { open: 'זמן מתן תורתנו', title: 'חג השבועות', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו לקידוש לכבוד חג השבועות, זמן מתן תורתנו', p: '', hosts: 'המזמינים' },
+      en: { open: 'B’ezras Hashem', title: 'Shavuos', invite: 'Please join us for a kiddush in honor of Shavuos, zman matan Toraseinu', p: '', hosts: 'Hosted by' },
+      fields: { p: { en: 'Name line (optional)', yi: 'נאמען שורה (אויב מ׳וויל)' }, h1: { en: 'Hosts', yi: 'המזמינים' } },
+      hours: 3, yomtov: true
+    },
     general: {
       label: { en: 'Other simcha', yi: 'אנדערע שמחה' },
       yi: { open: 'בשבח והודיה להשי״ת', title: 'הזמנה', invite: 'הננו מתכבדים להזמין את כבודו ואת בני ביתו להשתתף בשמחתנו', p: '', hosts: 'המזמינים' },
@@ -339,6 +416,20 @@
     DESIGNS.push({ id: 'scene-' + s.k, type: s.t, also: s.also || [], isNew: true, isV2: true, isScene: true, family: 'scene', scene: s, color: s.c, dark: s.p === 'dark',
       name: { en: s.en, yi: s.yi }, bg: p.bg, ink: p.ink, title: p.title, nm: p.nm, muted: p.muted, line: p.line, foil: s.f,
       fy: fs.fy, fe: fs.fe, by: fs.by, be: fs.be, frame: 'scene' });
+  });
+
+  // ---- photo cards v5 (Nov 3 2026): a standing printed card photographed with the simcha's or yom tov's own props; each photo comes in two typographic looks
+  const SCENES_V5 = /*V5:start*/[{"k": "tallis", "t": "barmitzvah", "also": ["general"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Tallis & Seforim", "yi": "טלית און ספרים", "o": 0, "r": [0.261, 0.22, 0.474, 0.484]}, {"k": "bechertorah", "t": "barmitzvah", "also": ["siyum", "general"], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Silver Becher & Leather Books", "yi": "זילבערנער בעכער מיט ספרים", "o": 0, "r": [0.272, 0.218, 0.458, 0.466]}, {"k": "satinbris", "t": "bris", "also": ["vachnacht", "shalomzachor", "pidyonhaben"], "c": "blue", "p": "navy", "f": "gold", "fs": "soft", "en": "Satin Pillow & Silver Cup", "yi": "אטלעס קישן מיט זילבערנעם בעכער", "o": 0, "r": [0.239, 0.197, 0.52, 0.551]}, {"k": "vachcandle", "t": "vachnacht", "also": ["bris", "shalomzachor"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Vach Nacht Candlelight", "yi": "וואך נאכט ליכט", "o": 0, "r": [0.261, 0.245, 0.48, 0.484]}, {"k": "arbes", "t": "shalomzachor", "also": ["bris", "vachnacht"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Arbes & Navy Linen", "yi": "ארבעס אויף בלויע ליינען", "o": 0, "r": [0.274, 0.259, 0.452, 0.467]}, {"k": "pidyontray", "t": "pidyonhaben", "also": ["bris"], "c": "white", "p": "navy", "f": "gold", "fs": "classic", "en": "Silver Tray & Five Coins", "yi": "זילבערנע טאץ מיט פינף מטבעות", "o": 0, "r": [0.252, 0.222, 0.496, 0.513]}, {"k": "chalaka", "t": "upsherin", "also": ["general"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Chalaka · Scissors & Honey Cake", "yi": "חלאקה · שערל מיט האניק לעקעך", "o": 0, "r": [0.261, 0.23, 0.48, 0.47]}, {"k": "peonykiddush", "t": "kiddush", "also": ["general", "shevabrachos"], "c": "pink", "p": "burg", "f": "gold", "fs": "soft", "en": "Blush Peonies & Sponge Cake", "yi": "ראזעווע בלומען מיט לעקעך", "o": 0, "r": [0.254, 0.239, 0.489, 0.499]}, {"k": "lchaim", "t": "lchaim", "also": ["vort", "general"], "c": "black", "p": "navy", "f": "gold", "fs": "classic", "en": "L'chaim · Crystal Decanter", "yi": "לחיים · קריסטאל פלאש", "o": 0, "r": [0.25, 0.241, 0.498, 0.507]}, {"k": "whiteroses", "t": "chasuna", "also": ["vort", "shevabrachos", "general"], "c": "white", "p": "navy", "f": "gold", "fs": "classic", "en": "White Roses & Lanterns", "yi": "ווייסע רויזן מיט לאמטערן", "o": 0, "r": [0.259, 0.239, 0.485, 0.487]}, {"k": "orchidgold", "t": "chasuna", "also": ["vort", "general"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Orchids & Gold Candles", "yi": "ארכידעען מיט גאלדענע ליכט", "o": 0, "r": [0.289, 0.278, 0.417, 0.446]}, {"k": "sheva", "t": "shevabrachos", "also": ["chasuna", "general"], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Wine & Seven Candles", "yi": "וויין מיט זיבן ליכט", "o": 0, "r": [0.281, 0.284, 0.434, 0.436]}, {"k": "gemaras", "t": "siyum", "also": ["barmitzvah", "general"], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Siyum · Gemara Stack", "yi": "סיום · גמרות", "o": 0, "r": [0.265, 0.221, 0.469, 0.486]}, {"k": "breadsalt", "t": "chanukashabayis", "also": ["general"], "c": "cream", "p": "green", "f": "gold", "fs": "classic", "en": "Bread, Salt & a New Key", "yi": "ברויט, זאלץ מיט א נייעם שליסל", "o": 0, "r": [0.246, 0.229, 0.509, 0.513]}, {"k": "havdala", "t": "melavemalka", "also": ["general"], "c": "black", "p": "burg", "f": "gold", "fs": "classic", "en": "Melave Malka · Havdala Set", "yi": "מלוה מלכה · הבדלה", "o": 0, "r": [0.254, 0.242, 0.494, 0.503]}, {"k": "shofar", "t": "roshhashana", "also": [], "c": "cream", "p": "burg", "f": "gold", "fs": "classic", "en": "Shofar, Pomegranates & Honey", "yi": "שופר, רימונים און האניק", "o": 0, "r": [0.272, 0.232, 0.456, 0.471]}, {"k": "applehoney", "t": "roshhashana", "also": [], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Apples & Honey · Dark Wood", "yi": "עפל און האניק", "o": 0, "r": [0.228, 0.211, 0.539, 0.542]}, {"k": "esrog", "t": "sukkos", "also": ["simchastorah"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Esrog & Lulav", "yi": "אתרוג און לולב", "o": 0, "r": [0.259, 0.237, 0.482, 0.509]}, {"k": "sukkahwine", "t": "sukkos", "also": ["simchastorah", "general"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "In the Sukkah · Wine & Fruit", "yi": "אין סוכה · וויין מיט פירות", "o": 0, "r": [0.256, 0.237, 0.483, 0.479]}, {"k": "torahcrown", "t": "simchastorah", "also": ["sukkos", "siyum"], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Silver Crown on Red Velvet", "yi": "זילבערנע כתר אויף רויטן סאמעט", "o": 0, "r": [0.252, 0.213, 0.498, 0.518]}, {"k": "menorahsilver", "t": "chanuka", "also": [], "c": "blue", "p": "navy", "f": "gold", "fs": "classic", "en": "Silver Menorah · Olive Oil", "yi": "זילבערנע מנורה · בוימל", "o": 0, "r": [0.279, 0.266, 0.439, 0.454]}, {"k": "menorahbrass", "t": "chanuka", "also": [], "c": "black", "p": "navy", "f": "gold", "fs": "classic", "en": "Brass Menorah Glow", "yi": "מעשענע מנורה", "o": 0, "r": [0.267, 0.295, 0.346, 0.357]}, {"k": "mishloach", "t": "purim", "also": [], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Mishloach Manos Basket", "yi": "משלוח מנות קארב", "o": 0, "r": [0.256, 0.225, 0.487, 0.512]}, {"k": "purimmask", "t": "purim", "also": [], "c": "black", "p": "burg", "f": "gold", "fs": "classic", "en": "Gold Mask & Hamantaschen", "yi": "גאלדענע מאסקע מיט המן טאשן", "o": 0, "r": [0.244, 0.189, 0.502, 0.521]}, {"k": "matzah", "t": "pesach", "also": [], "c": "white", "p": "navy", "f": "gold", "fs": "classic", "en": "Shmura Matzah & Silver Cup", "yi": "שמורה מצה מיט זילבערנעם בעכער", "o": 0, "r": [0.254, 0.267, 0.487, 0.499]}, {"k": "pesachwine", "t": "pesach", "also": [], "c": "cream", "p": "burg", "f": "gold", "fs": "classic", "en": "Pesach Wine & Matzah · Stone", "yi": "פסח וויין מיט מצה", "o": 0, "r": [0.25, 0.233, 0.502, 0.512]}, {"k": "shavuosflowers", "t": "shavuos", "also": [], "c": "green", "p": "green", "f": "gold", "fs": "soft", "en": "White Flowers & Cheesecake", "yi": "ווייסע בלומען מיט קעז קוכן", "o": 0, "r": [0.257, 0.225, 0.487, 0.486]}, {"k": "wheat", "t": "shavuos", "also": [], "c": "cream", "p": "green", "f": "gold", "fs": "classic", "en": "Wheat & Greenery", "yi": "ווייץ און גרינס", "o": 0, "r": [0.278, 0.258, 0.447, 0.462]}, {"k": "bonfire", "t": "lagbaomer", "also": [], "c": "black", "p": "brown", "f": "gold", "fs": "bold", "en": "Lag Baomer · Bonfire Glow", "yi": "ל״ג בעומר · פייער", "o": 0, "r": [0.278, 0.236, 0.447, 0.468]}, {"k": "tubishvat", "t": "tubishvat", "also": [], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Tu Bishvat · Fruits of Eretz Yisroel", "yi": "ט״ו בשבט · פירות", "o": 0, "r": [0.248, 0.233, 0.507, 0.524]}, {"k": "shabbos", "t": "general", "also": ["kiddush", "shevabrachos"], "c": "cream", "p": "navy", "f": "gold", "fs": "classic", "en": "Shabbos Candles & Challah", "yi": "שבת ליכט מיט חלה", "o": 0, "r": [0.292, 0.3, 0.423, 0.442]}, {"k": "bavarfan", "t": "bavarfan", "also": ["kiddush", "general"], "c": "cream", "p": "navy", "f": "gold", "fs": "classic", "en": "Aufruf · Candy & Silver", "yi": "באווארפן · צוקערלעך", "o": 0, "r": [0.257, 0.221, 0.483, 0.505]}, {"k": "purimgold", "t": "purim", "also": [], "c": "cream", "p": "burg", "f": "gold", "fs": "classic", "en": "Purim · Wine & Gold Ribbon", "yi": "פורים · וויין מיט גאלדענע באנד", "o": 0, "r": [0.265, 0.278, 0.471, 0.493]}, {"k": "chanukasnow", "t": "chanuka", "also": [], "c": "blue", "p": "navy", "f": "gold", "fs": "classic", "en": "Chanuka · Window & Doughnuts", "yi": "חנוכה · פענסטער מיט פאנטשקעס", "o": 0, "r": [0.267, 0.259, 0.471, 0.478]}, {"k": "sukkoslantern", "t": "sukkos", "also": ["simchastorah"], "c": "green", "p": "green", "f": "gold", "fs": "classic", "en": "Sukkah Lanterns & Esrog Box", "yi": "סוכה לאמטערן מיט אתרוג קעסטל", "o": 0, "r": [0.274, 0.241, 0.456, 0.467]}, {"k": "pesachgold", "t": "pesach", "also": [], "c": "burgundy", "p": "burg", "f": "gold", "fs": "classic", "en": "Seder Night · Crystal & Gold", "yi": "סדר נאכט · קריסטאל מיט גאלד", "o": 0, "r": [0.25, 0.25, 0.5, 0.505]}, {"k": "rhwhite", "t": "roshhashana", "also": [], "c": "white", "p": "burg", "f": "gold", "fs": "soft", "en": "Pomegranates & White Linen", "yi": "רימונים אויף ווייסע ליינען", "o": 0, "r": [0.263, 0.224, 0.476, 0.486]}, {"k": "shavuosdairy", "t": "shavuos", "also": [], "c": "white", "p": "navy", "f": "gold", "fs": "soft", "en": "Shavuos · Milk & Blintzes", "yi": "שבועות · מילך מיט בלינצעס", "o": 0, "r": [0.272, 0.247, 0.467, 0.48]}, {"k": "kumzits", "t": "melavemalka", "also": ["lagbaomer", "general"], "c": "black", "p": "brown", "f": "gold", "fs": "classic", "en": "Kumzits · Guitar & Candlelight", "yi": "קומזיץ · גיטאר מיט ליכט", "o": 0, "r": [0.301, 0.293, 0.399, 0.401]}, {"k": "tefillinbag", "t": "barmitzvah", "also": ["general"], "c": "navy", "p": "navy", "f": "gold", "fs": "classic", "en": "Velvet Bag & Silver Becher · Marble", "yi": "סאמעטענע זעקל מיט בעכער", "o": 0, "r": [0.276, 0.266, 0.449, 0.453]}]/*V5:end*/;
+  const V5_LOOKS = [{ x: 'a', fs: 'kHeim', foil: 'deepgold' }, { x: 'b', fs: 'kNoto', foil: null }];
+  const YOMTOV = ['roshhashana', 'sukkos', 'simchastorah', 'chanuka', 'tubishvat', 'purim', 'pesach', 'lagbaomer', 'shavuos'];
+  SCENES_V5.forEach((s, si) => {
+    const p = SCENE_PAL[s.p] || SCENE_PAL.navy;
+    V5_LOOKS.forEach((lk, li) => {
+      const fs = FONTSETS[lk.fs] || FONTSETS.classic;
+      DESIGNS.push({ id: 'scene-' + s.k + (li ? '-' + lk.x : ''), type: s.t, also: s.also || [], isNew: true, isV2: true, isV5: true, v5look: li, isScene: true, family: 'scene', scene: s, color: s.c, dark: false,
+        name: { en: s.en + (li ? ' · II' : ''), yi: s.yi + (li ? ' · ב' : '') }, bg: p.bg, ink: p.ink, title: lk.foil ? '#8a6526' : p.nm, nm: p.nm, muted: p.muted, line: p.line, foil: lk.foil,
+        fy: fs.fy, fe: fs.fe, by: fs.by, be: fs.be, frame: 'scene' });
+    });
   });
   FAMILY_NAMES.scene = { en: 'Photo scene', yi: 'פאטא סצענע' };
   const sceneImgs = {};
@@ -2801,7 +2892,11 @@
       yi: [['frank', 'Frank Ruhl', ['Frank Ruhl Libre', 900]], ['suez', 'Suez', ['Suez One', 400]], ['notoserif', 'Noto Serif', ['Noto Serif Hebrew', 900]],
         ['david', 'David', ['David Libre', 700]], ['miriam', 'Miriam', ['Miriam Libre', 700]], ['bellefair', 'Bellefair', ['Bellefair', 400]],
         ['heebo', 'Heebo', ['Heebo', 900]], ['rubik', 'Rubik', ['Rubik', 800]], ['secular', 'Secular', ['Secular One', 400]],
-        ['karantina', 'Karantina', ['Karantina', 700]], ['rashi', 'רש״י', ['Noto Rashi Hebrew', 500]], ['amatic', 'Amatic', ['Amatic SC', 700]]],
+        ['karantina', 'Karantina', ['Karantina', 700]], ['rashi', 'רש״י', ['Noto Rashi Hebrew', 500]], ['amatic', 'Amatic', ['Amatic SC', 700]],
+        ['stamash', 'סת״ם אשכנז', ['Stam Ashkenaz', 400]], ['stamsef', 'סת״ם ספרד', ['Stam Sefarad', 400]], ['keter', 'Keter', ['Keter YG', 700]],
+        ['hadasim', 'Hadasim', ['Hadasim', 700]], ['shofar', 'Shofar', ['Shofar', 700]], ['simpleclm', 'Simple', ['Simple CLM', 700]], ['ezra', 'Ezra', ['Ezra SIL', 400]],
+        ['alef', 'Alef', ['Alef', 700]], ['bonanovah', 'Bona Nova', ['Bona Nova', 700]], ['notosans', 'Noto Sans', ['Noto Sans Hebrew', 900]],
+        ['plex', 'IBM Plex', ['IBM Plex Sans Hebrew', 700]], ['varela', 'Varela Round', ['Varela Round', 400]], ['solitreo', 'Solitreo (כתב)', ['Solitreo', 400]], ['tinos', 'Tinos', ['Tinos', 700]]],
       en: [['cinzel', 'Cinzel', ['Cinzel', 700]], ['playfair', 'Playfair Display', ['Playfair Display', 700]], ['cormorant', 'Cormorant Garamond', ['Cormorant Garamond', 700]],
         ['ebgaramond', 'EB Garamond', ['EB Garamond', 600]], ['marcellus', 'Marcellus', ['Marcellus', 400]], ['italiana', 'Italiana', ['Italiana', 400]],
         ['bonanova', 'Bona Nova', ['Bona Nova', 700]], ['greatvibes', 'Great Vibes (script)', ['Great Vibes', 400]], ['parisienne', 'Parisienne (script)', ['Parisienne', 400]],
@@ -2809,7 +2904,9 @@
     },
     body: {
       yi: [['frank', 'Frank Ruhl', ['Frank Ruhl Libre', 500]], ['notoserif', 'Noto Serif', ['Noto Serif Hebrew', 500]], ['david', 'David', ['David Libre', 400]],
-        ['miriam', 'Miriam', ['Miriam Libre', 400]], ['bellefair', 'Bellefair', ['Bellefair', 400]], ['assistant', 'Assistant', ['Assistant', 500]], ['heebo', 'Heebo', ['Heebo', 400]]],
+        ['miriam', 'Miriam', ['Miriam Libre', 400]], ['bellefair', 'Bellefair', ['Bellefair', 400]], ['assistant', 'Assistant', ['Assistant', 500]], ['heebo', 'Heebo', ['Heebo', 400]],
+        ['keter', 'Keter', ['Keter YG', 500]], ['hadasim', 'Hadasim', ['Hadasim', 400]], ['shofar', 'Shofar', ['Shofar', 400]], ['ezra', 'Ezra', ['Ezra SIL', 400]], ['alef', 'Alef', ['Alef', 400]],
+        ['notosans', 'Noto Sans', ['Noto Sans Hebrew', 400]], ['plex', 'IBM Plex', ['IBM Plex Sans Hebrew', 400]], ['rubik', 'Rubik', ['Rubik', 400]], ['tinos', 'Tinos', ['Tinos', 400]], ['rashi', 'רש״י', ['Noto Rashi Hebrew', 500]]],
       en: [['cormorant', 'Cormorant Garamond', ['Cormorant Garamond', 500]], ['ebgaramond', 'EB Garamond', ['EB Garamond', 500]], ['playfair', 'Playfair Display', ['Playfair Display', 400]],
         ['marcellus', 'Marcellus', ['Marcellus', 400]], ['assistant', 'Assistant', ['Assistant', 500]], ['heebo', 'Heebo', ['Heebo', 400]]]
     }
@@ -2829,12 +2926,18 @@
   }
 
   // photo scenes: a printed card's title is big and solid, stacked like the printers set it
-  DESIGNS.filter((d) => d.isScene && d.isV2).forEach((d, i) => { const fs = FONTSETS[['kHeim', 'kNoto', 'kSuez', 'kHeim'][i % 4]]; d.fy = fs.fy; d.fe = fs.fe; d.by = fs.by; d.be = fs.be; });
+  DESIGNS.filter((d) => d.isScene && d.isV2 && !d.isV5).forEach((d, i) => { const fs = FONTSETS[['kHeim', 'kNoto', 'kSuez', 'kHeim'][i % 4]]; d.fy = fs.fy; d.fe = fs.fe; d.by = fs.by; d.be = fs.be; });
   const V2_SCENE_GOLD = [];
-  DESIGNS.forEach((d, i) => { if (d.isScene) { d.stack = true; if (!d.dark && (d.isV2 || (i % 3) !== 2 || !/^(gold|rose)$/.test(d.foil || ''))) { d.title = d.nm; d.foil = null; } } });
-  DESIGNS.filter((d) => d.isScene && d.isV2 && !d.dark).forEach((d, i) => { if (i % 2) { d.foil = 'deepgold'; d.title = '#8a6526'; } });
+  DESIGNS.forEach((d, i) => { if (d.isScene) { d.stack = true; if (!d.isV5 && !d.dark && (d.isV2 || (i % 3) !== 2 || !/^(gold|rose)$/.test(d.foil || ''))) { d.title = d.nm; d.foil = null; } } });
+  DESIGNS.filter((d) => d.isScene && d.isV2 && !d.isV5 && !d.dark).forEach((d, i) => { if (i % 2) { d.foil = 'deepgold'; d.title = '#8a6526'; } });
   // only the v2 collection (and new photo scenes) carry the "New" badge now
   DESIGNS.forEach((d) => { if (!d.isV2) d.isNew = false; });
+  // v5: every vort design also serves a l'chaim; the typographic printed classics (no simcha motif) also serve the yomim tovim and melave malka
+  DESIGNS.forEach((d) => { if (!d.isV5 && [d.type].concat(d.also || []).includes('vort')) d.also = (d.also || []).concat('lchaim'); });
+  (function () {
+    const pool = DESIGNS.filter((d) => !d.retired && d.isV2 && !d.isScene && K_FAVS[d.family] && [d.type].concat(d.also || []).includes('general'));
+    YOMTOV.concat(['melavemalka']).forEach((ty, j) => { pool.forEach((d, i) => { if ((i + j) % 3 === 0) d.also = (d.also || []).concat(ty); }); });
+  })();
 
   function paint(ctx, data, img) {
     const d = effDesign(data);
@@ -3118,6 +3221,17 @@
       shevabrachos: { p: yi ? 'שמואל יוסף' : 'Shmuel Yosef', s: yi ? 'חיה מרים' : 'Chaya Miriam', h1: yi ? 'משפחת רוזנבערג' : 'The Rosenberg Family' },
       siyum: { m: yi ? 'ברכות' : 'Brachos', p: yi ? 'ר׳ נפתלי הערץ' : 'Reb Naftali Hertz', h1: yi ? 'משפחת דייטש' : 'The Deutsch Family', tm: '20:00' },
       chanukashabayis: { h1: yi ? 'משפחת גאלדבערגער' : 'The Goldberger Family', tm: '20:00' },
+      lchaim: { p: yi ? 'אליעזר' : 'Eliezer', s: yi ? 'שרה' : 'Sara', h1: yi ? 'ר׳ בנימין ברוין' : 'Mr. & Mrs. Binyomin Braun', h2: yi ? 'ר׳ זאב פישער' : 'Mr. & Mrs. Zev Fischer', tm: '20:30' },
+      melavemalka: { h1: yi ? 'משפחת שטערן' : 'The Stern Family', tm: '21:30', dt: todayISO(7, 6) },
+      roshhashana: { h1: yi ? 'משפחת ווייס' : 'The Weiss Family', dt: '2027-09-30', tm: '' },
+      sukkos: { h1: yi ? 'משפחת גרינוואלד' : 'The Grunwald Family', dt: '2027-10-19', tm: '20:30' },
+      simchastorah: { h1: yi ? 'משפחת לאנדא' : 'The Landau Family', dt: '2027-10-24', tm: '12:00' },
+      chanuka: { h1: yi ? 'משפחת ראזענבוים' : 'The Rosenbaum Family', dt: '2026-12-06', tm: '18:30' },
+      tubishvat: { h1: yi ? 'משפחת קרויס' : 'The Kraus Family', dt: '2027-01-23', tm: '20:00' },
+      purim: { h1: yi ? 'משפחת הערשקאוויטש' : 'The Herskovitz Family', dt: '2027-03-23', tm: '16:00' },
+      pesach: { h1: yi ? 'משפחת טייטלבוים' : 'The Teitelbaum Family', dt: '2027-04-22', tm: '20:00' },
+      lagbaomer: { h1: yi ? 'משפחת גוטמאן' : 'The Gutman Family', dt: '2027-05-25', tm: '20:30' },
+      shavuos: { h1: yi ? 'משפחת מאשקאוויטש' : 'The Moskowitz Family', dt: '2027-06-11', tm: '12:00' },
       general: { h1: yi ? 'משפחת פרידמאן' : 'The Friedman Family' }
     };
     return Object.assign(base, S[design.type] || {});
@@ -3144,7 +3258,7 @@
     const fan = $('#invHeroFan');
     if (fan) {
       const heroLang = siteLang() === 'en' ? 'en' : 'yi';
-      const picks = [['scene-briscream', 'bris'], ['scene-velvet', 'chasuna'], ['scene-navygold', 'barmitzvah']];
+      const picks = [['scene-shofar', 'roshhashana'], ['scene-whiteroses', 'chasuna'], ['scene-tallis', 'barmitzvah']];
       KFLOW.drawFan = (lang) => $$('canvas', fan).forEach((c, i) => { const d = designById(picks[i][0]); render(c, Object.assign(sample(d, lang), { t: picks[i][1] }), 0.24).catch(() => {}); });
       KFLOW.drawFan(heroLang);
     }
@@ -3156,7 +3270,7 @@
     const drawQueue = []; let gDrawing = false;
     // a design that suits several simchas is shown (and opened) with the wording of the simcha being filtered
     // occasion groups (the home page's tiles): a group filter matches any of its simchas
-    const OCC_GROUPS = { boy: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'], other: ['siyum', 'chanukashabayis', 'general'] };
+    const OCC_GROUPS = { boy: ['bris', 'vachnacht', 'shalomzachor', 'pidyonhaben'], engaged: ['vort', 'lchaim'], other: ['siyum', 'chanukashabayis', 'melavemalka', 'general'], yomtov: YOMTOV };
     const inFilter = (types, f) => f === 'all' || (OCC_GROUPS[f] ? OCC_GROUPS[f].some((x) => types.includes(x)) : types.includes(f));
     const typeOf = (t) => {
       if (OCC_GROUPS[gf.type]) { const g = OCC_GROUPS[gf.type]; return g.includes(t.d.type) ? t.d.type : (g.find((x) => t.types.includes(x)) || t.d.type); }
@@ -3213,7 +3327,10 @@
       const mixIn = fv.splice(0); const sc = []; const ot = others.slice();
       while (ot.length) mixIn.push(ot.shift());
       while (fv.length || ot.length) { if (fv.length) mixIn.push(fv.shift()); if (ot.length) mixIn.push(ot.shift()); if (ot.length && mixIn.length % 5 === 4) mixIn.push(ot.shift()); if (sc.length && mixIn.length % 6 === 0) mixIn.push(sc.shift()); }
-      const order = lead.concat(mixIn, sc, live.filter((d) => !d.isV2 && !d.isScene));
+      const v5 = live.filter((d) => d.isV5); const v5set = new Set(v5);
+      const byT = {}; v5.forEach((d) => { (byT[d.type] = byT[d.type] || []).push(d); });
+      const v5lead = []; let v5more = true; while (v5more) { v5more = false; Object.keys(byT).forEach((k) => { if (byT[k].length) { v5lead.push(byT[k].shift()); v5more = true; } }); }
+      const order = v5lead.concat(lead.concat(mixIn, sc, live.filter((d) => !d.isV2 && !d.isScene)).filter((d) => !v5set.has(d)));
       order.forEach((d, idx) => {
         const b = document.createElement('button'); b.type = 'button'; b.className = 'inv-tile' + (d.isScene ? ' inv-tile-scene' : ''); b.dataset.design = d.id; b.dataset.type = d.type; b.dataset.idx = String(idx);
         const types = [d.type].concat(d.also || []); b.dataset.types = types.join(' ');
@@ -3587,11 +3704,12 @@
       { k: 'girl', f: 'kiddush', en: 'It’s a Girl', yi: 'א מיידל', sen: 'Kiddush', syi: 'קידוש' },
       { k: 'upsherin', f: 'upsherin', en: 'Upsherin', yi: TYPES.upsherin.label.yi, sen: 'The first haircut', syi: 'די ערשטע שערן' },
       { k: 'barmitzvah', f: 'barmitzvah', en: 'Bar Mitzvah', yi: 'בר מצוה', sen: 'Seudas mitzvah', syi: 'סעודת מצוה' },
-      { k: 'tenoyim', f: 'vort', en: 'Tenoyim · Vort', yi: 'תנאים · ווארט', sen: 'The engagement', syi: 'שמחת התנאים' },
+      { k: 'tenoyim', f: 'engaged', subs: ['vort', 'lchaim'], en: 'Vort · L’chaim', yi: 'ווארט · לחיים', sen: 'Tenoyim · Vort · L’chaim', syi: 'תנאים · ווארט · לחיים' },
       { k: 'bavarfan', f: 'bavarfan', en: 'Bavarfan', yi: 'באווארפן', sen: 'Aufruf kiddush', syi: 'קידוש לכבוד דעם חתן' },
       { k: 'wedding', f: 'chasuna', en: 'Wedding', yi: 'חתונה', sen: 'Chasuna', syi: 'שמחת הנישואין' },
       { k: 'shevabrachos', f: 'shevabrachos', en: 'Sheva Brachos', yi: 'שבע ברכות', sen: 'For the chosson & kallah', syi: 'לכבוד חתן וכלה' },
-      { k: 'other', f: 'other', en: 'More simchas', yi: 'נאך שמחות', sen: 'Siyum · Chanukas Habayis · any simcha', syi: 'סיום · חנוכת הבית · יעדע שמחה', subs: ['siyum', 'chanukashabayis', 'general'] },
+      { k: 'yomtov', f: 'yomtov', en: 'Yom Tov', yi: 'יום טוב', sen: 'Rosh Hashana · Sukkos · Chanuka · Purim · Pesach · Shavuos · more', syi: 'ראש השנה · סוכות · חנוכה · פורים · פסח · שבועות · מער', subs: YOMTOV },
+      { k: 'other', f: 'other', en: 'More simchas', yi: 'נאך שמחות', sen: 'Siyum · Chanukas Habayis · Melave Malka · any simcha', syi: 'סיום · חנוכת הבית · מלוה מלכה · יעדע שמחה', subs: ['siyum', 'chanukashabayis', 'melavemalka', 'general'] },
       { k: 'all', f: 'all', en: 'All designs', yi: 'אלע דיזיינס', sen: 'Every card, every simcha', syi: 'אלע קארטלעך' }
     ];
     const byK = {}; OCC.forEach((o) => { byK[o.k] = o; });
@@ -3604,7 +3722,7 @@
     const occBox = $('#invOcc'); const drawn = new Map();
     // each tile gets its own look: a photo card nobody else used yet, else a layout nobody else used
     const usedD = new Set(), usedFam = new Set();
-    const PREF = { boy: 'scene-babyrattle', girl: 'scene-blushkiddush', barmitzvah: 'scene-blackgold', wedding: 'scene-chasunaivory', all: 'scene-navyvelvet' };
+    const PREF = { boy: 'scene-satinbris', girl: 'scene-peonykiddush', upsherin: 'scene-chalaka', barmitzvah: 'scene-tallis', tenoyim: 'scene-lchaim', bavarfan: 'scene-bavarfan', wedding: 'scene-whiteroses', shevabrachos: 'scene-sheva', yomtov: 'scene-esrog', other: 'scene-gemaras', all: 'scene-matzah' };
     function pickFor(o) {
       const c = KFLOW.first(o.f, 400);
       const ok = (d) => d && !usedD.has(d.id);
@@ -3614,6 +3732,7 @@
     }
     const tileCanvas = [];
     OCC.forEach((o, i) => {
+      if (o.k === 'all') return;
       const a = document.createElement('a'); a.className = 'inv-occ-tile' + (o.k === 'boy' ? ' inv-occ-lead' : ''); a.href = '#simcha=' + o.k;
       const fig = document.createElement('span'); fig.className = 'inv-occ-fig';
       const cv = document.createElement('canvas'); cv.width = 360; cv.height = 504; cv.setAttribute('aria-hidden', 'true'); fig.appendChild(cv);
@@ -3624,6 +3743,22 @@
       // the tile shows the 1st (boy: a photo card) design; 'all' shows a different one so tiles don't repeat
       tileCanvas.push({ cv, d: pickFor(o), o });
     });
+    // v5: a row of yom tov tiles, each showing its own photo card
+    const ytBox = $('#invOccYt');
+    if (ytBox) YOMTOV.forEach((ty) => {
+      const d = DESIGNS.find((x) => x.isV5 && x.type === ty && !x.v5look); if (!d) return;
+      const a = document.createElement('a'); a.className = 'inv-occ-tile inv-yt-tile'; a.href = '#simcha=yomtov&t=' + ty;
+      const fig = document.createElement('span'); fig.className = 'inv-occ-fig';
+      const cv = document.createElement('canvas'); cv.width = 360; cv.height = 504; cv.setAttribute('aria-hidden', 'true'); fig.appendChild(cv);
+      const nm = document.createElement('span'); nm.className = 'inv-occ-name'; both(nm, TYPES[ty].label.en, TYPES[ty].label.yi);
+      const ct = document.createElement('span'); ct.className = 'inv-occ-count'; const c = KFLOW.count(ty); both(ct, n(c) + ' designs', n(c) + ' דיזיינס');
+      a.append(fig, nm, ct); ytBox.appendChild(a);
+      tileCanvas.push({ cv, d, o: { f: ty } });
+    });
+    const stDesigns = $('#invStatDesigns'); if (stDesigns) stDesigns.textContent = n(DESIGNS.filter((d) => !d.retired).length);
+    const stPhotos = $('#invStatPhotos'); if (stPhotos) stPhotos.textContent = n(DESIGNS.filter((d) => !d.retired && d.isScene).length);
+    const stTypes = $('#invStatTypes'); if (stTypes) stTypes.textContent = String(Object.keys(TYPES).length);
+    const stFonts = $('#invStatFonts'); if (stFonts) { const fs = new Set(); ['title', 'body'].forEach((k) => ['yi', 'en'].forEach((l) => FONT_PICK[k][l].forEach((f) => fs.add(f[2][0])))); stFonts.textContent = String(fs.size); }
     function drawTiles() {
       const lang = pageLang();
       tileCanvas.forEach((t) => { if (!t.d || drawn.get(t.cv) === lang) return; drawn.set(t.cv, lang); KFLOW.drawSample(t.cv, t.d, t.o.f, lang).catch(() => {}); });
@@ -3667,7 +3802,7 @@
       const h = location.hash;
       let m;
       if (!h || h === '#' || h === '#top' || h === '#home') return show('home');
-      if (h === '#occasions' || h === '#how') { show('home'); const el = document.getElementById(h.slice(1)); if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); return; }
+      if (h === '#occasions' || h === '#how' || h === '#yomtov') { show('home'); const el = document.getElementById(h.slice(1)); if (el) setTimeout(() => el.scrollIntoView({ behavior: 'smooth', block: 'start' }), 30); return; }
       if ((m = /^#simcha=([a-z]+)(?:&t=([a-z]+))?/.exec(h))) { browse(m[1], m[2]); return show('browse'); }
       if (h === '#galleryHeading') { browse(occOf(KFLOW.curType())); return show('browse'); }
       if (/^#make=/.test(h) || h === '#invEditorTop' || h === '#invPreview') return show('edit');

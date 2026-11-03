@@ -1,0 +1,11 @@
+/* Self-hosted free Hebrew fonts: Culmus (GPL-2 with font exception) and Ezra SIL (SIL OFL). Subset to Hebrew + Latin basics. */
+@font-face{font-family:'Stam Ashkenaz';src:url('fonts/stam-ashkenaz.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Stam Sefarad';src:url('fonts/stam-sefarad.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Keter YG';src:url('fonts/keter-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Keter YG';src:url('fonts/keter-medium.woff2') format('woff2');font-weight:500;font-style:normal;font-display:swap}
+@font-face{font-family:'Hadasim';src:url('fonts/hadasim-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Hadasim';src:url('fonts/hadasim.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Shofar';src:url('fonts/shofar-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Shofar';src:url('fonts/shofar.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
+@font-face{font-family:'Simple CLM';src:url('fonts/simple-bold.woff2') format('woff2');font-weight:700;font-style:normal;font-display:swap}
+@font-face{font-family:'Ezra SIL';src:url('fonts/ezra.woff2') format('woff2');font-weight:400;font-style:normal;font-display:swap}
