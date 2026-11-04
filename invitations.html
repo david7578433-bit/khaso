@@ -18,12 +18,14 @@
 <link rel="icon" type="image/png" href="favicon.png">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <link rel="stylesheet" href="style.css?v=20261027-7">
-<link rel="stylesheet" href="invitations.css?v=20261103-v5">
+<link rel="stylesheet" href="invitations.css?v=20261104-v6">
+<link rel="stylesheet" href="invitations-guide.css?v=20261104-v6">
 <link rel="stylesheet" href="studio.css?v=1">
 <link rel="stylesheet" href="fonts/hebrew-fonts.css?v=1">
 <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bellefair&family=Cinzel:wght@500;700&family=Cormorant+Garamond:ital,wght@0,500;0,700;1,500&family=David+Libre:wght@400;700&family=Frank+Ruhl+Libre:wght@500;700;900&family=Secular+One&family=Suez+One&family=Karantina:wght@700&family=Amatic+SC:wght@700&family=Rubik:wght@400;800&family=Bona+Nova:wght@700&family=Noto+Rashi+Hebrew:wght@500&family=Heebo:wght@400;800;900&family=Noto+Serif+Hebrew:wght@500;900&family=Miriam+Libre:wght@400;700&family=Assistant:wght@500;800&family=Playfair+Display:wght@400;700&family=EB+Garamond:ital,wght@0,500;0,600;1,500&family=Marcellus&family=Italiana&family=Great+Vibes&family=Parisienne&family=Pinyon+Script&family=Alef:wght@400;700&family=Noto+Sans+Hebrew:wght@400;900&family=IBM+Plex+Sans+Hebrew:wght@400;700&family=Varela+Round&family=Solitreo&family=Tinos:wght@400;700&display=swap">
 <script src="site.js?v=20261027-7" defer></script>
-<script src="invitations.js?v=20261103-v5" defer></script>
+<script src="invitations.js?v=20261104-v6" defer></script>
+<script src="invitations-guide.js?v=20261104-v6" defer></script>
 <script src="studio.js?v=1" defer></script>
 <script src="community-designs.js?v=1" defer></script>
 <!--site-head:start-->
@@ -167,6 +169,7 @@
       <form class="inv-form" onsubmit="return false" novalidate>
         <h2 id="editorHeading"><span data-lang="en">Your invitation</span><span data-lang="yi" hidden>אייער הזמנה</span></h2>
         <p class="inv-sample-note" id="invSampleNote" hidden><span data-lang="en">The names below are just a sample — type your own and the card changes as you type.</span><span data-lang="yi" hidden>די נעמען אונטן זענען נאר א ביישפיל — שרייבט אייערע און די הזמנה טוישט זיך גלייך.</span></p>
+        <div class="inv-mode" id="invMode" role="radiogroup" aria-label="How to fill in"><button type="button" class="inv-mode-btn" data-mode="guide" role="radio" aria-checked="true"><span data-lang="en">Step by step</span><span data-lang="yi" hidden>שריט נאך שריט</span></button><button type="button" class="inv-mode-btn" data-mode="quick" role="radio" aria-checked="false"><span data-lang="en">Quick edit</span><span data-lang="yi" hidden>שנעל טוישן</span></button></div>
         <fieldset class="inv-group">
           <legend><span data-lang="en">Design &amp; simcha</span><span data-lang="yi" hidden>דיזיין און שמחה</span></legend>
           <div class="inv-field"><label for="fType"><span class="lbl"><span data-lang="en">Simcha</span><span data-lang="yi" hidden>שמחה</span></span></label><select id="fType"></select></div>
@@ -178,13 +181,18 @@
             </div>
           </div>
         </fieldset>
+        <div class="inv-guide" id="invGuide" hidden></div>
         <fieldset class="inv-group">
           <legend><span data-lang="en">Names</span><span data-lang="yi" hidden>נעמען</span></legend>
           <div class="inv-field"><label for="fP"><span class="lbl"><span data-lang="en">Name</span><span data-lang="yi" hidden>נאמען</span></span></label><input id="fP" type="text" autocomplete="off"></div>
+          <div class="inv-field" id="rowPf"><label for="fPf"><span class="lbl"><span data-lang="en">Line under the name (optional)</span><span data-lang="yi" hidden>שורה אונטער׳ן נאמען (אויב מ׳וויל)</span></span></label><input id="fPf" type="text" autocomplete="off" dir="auto"><p class="inv-hint"><span data-lang="en">e.g. “son of Mr. &amp; Mrs. Moshe Weiss” or “<bdi>בן ר׳ משה ווייס הי״ו</bdi>”</span><span data-lang="yi" hidden>למשל “<bdi>בן ר׳ משה ווייס הי״ו</bdi>”</span></p></div>
           <div class="inv-field" id="rowS"><label for="fS"><span class="lbl"><span data-lang="en">Kallah’s name</span><span data-lang="yi" hidden>נאמען פון דער כלה</span></span></label><input id="fS" type="text" autocomplete="off"></div>
+          <div class="inv-field" id="rowSf"><label for="fSf"><span class="lbl"><span data-lang="en">Line under the kallah’s name (optional)</span><span data-lang="yi" hidden>שורה אונטער׳ן נאמען פון דער כלה (אויב מ׳וויל)</span></span></label><input id="fSf" type="text" autocomplete="off" dir="auto"><p class="inv-hint"><span data-lang="en">e.g. “daughter of …” or “<bdi>בת ר׳ … הי״ו</bdi>”</span><span data-lang="yi" hidden>למשל “<bdi>בת ר׳ … הי״ו</bdi>”</span></p></div>
           <div class="inv-field" id="rowM"><label for="fM"><span class="lbl"><span data-lang="en">Masechta</span><span data-lang="yi" hidden>מסכת</span></span></label><input id="fM" type="text" autocomplete="off"></div>
           <div class="inv-field"><label for="fH1"><span class="lbl"><span data-lang="en">Parents</span><span data-lang="yi" hidden>עלטערן</span></span></label><input id="fH1" type="text" autocomplete="off"><p class="inv-hint"><span data-lang="en">As it should appear, e.g. “Mr. &amp; Mrs. …” or “<bdi>ר׳ …</bdi>”</span><span data-lang="yi" hidden>ווי עס זאל שטיין, למשל "ר׳ ... "</span></p></div>
           <div class="inv-field" id="rowH2"><label for="fH2"><span class="lbl"><span data-lang="en">Kallah’s parents</span><span data-lang="yi" hidden>עלטערן פון דער כלה</span></span></label><input id="fH2" type="text" autocomplete="off"></div>
+          <div class="inv-field" id="rowG1"><label for="fG1"><span class="lbl"><span data-lang="en">Grandparents (optional)</span><span data-lang="yi" hidden>זיידעס (אויב מ׳וויל)</span></span></label><textarea id="fG1" rows="2" dir="auto"></textarea><p class="inv-hint"><span data-lang="en">Small line under the parents, e.g. “<bdi>בן ר׳ שמואל ווייס הי״ו · חתן ר׳ שלמה גאלד הי״ו</bdi>”</span><span data-lang="yi" hidden>א קליינע שורה אונטער די עלטערן</span></p></div>
+          <div class="inv-field" id="rowG2"><label for="fG2"><span class="lbl"><span data-lang="en">Kallah’s grandparents (optional)</span><span data-lang="yi" hidden>זיידעס פון דער כלה (אויב מ׳וויל)</span></span></label><textarea id="fG2" rows="2" dir="auto"></textarea><p class="inv-hint"><span data-lang="en">Under the kallah’s parents</span><span data-lang="yi" hidden>אונטער די עלטערן פון דער כלה</span></p></div>
         </fieldset>
         <fieldset class="inv-group">
           <legend><span data-lang="en">When</span><span data-lang="yi" hidden>ווען</span></legend>

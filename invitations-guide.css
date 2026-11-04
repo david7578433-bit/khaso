@@ -1,0 +1,56 @@
+/* Simcha Invitations — v6 "Step by step" form. Our own design, same palette as the editor. */
+.inv-mode { display: flex; gap: 0; margin: 0 0 16px; padding: 4px; border-radius: 999px; background: #efe8da; border: 1px solid var(--border, #e2d8c6); }
+.inv-mode-btn { flex: 1; padding: 11px 12px; border: 0; border-radius: 999px; background: transparent; color: var(--navy, #17283a); font: inherit; font-weight: 600; font-size: 1rem; cursor: pointer; }
+.inv-mode-btn.is-on { background: #17283a; color: #fff; box-shadow: 0 6px 16px -8px rgba(23, 40, 58, .6); }
+.inv-mode-btn:focus-visible { outline: 3px solid var(--gold, #c9a868); outline-offset: 2px; }
+.inv-form.is-guide [data-quick] { display: none; }
+.inv-guide { margin: 0 0 18px; }
+.ig-card { padding: 18px 20px 16px; border: 1px solid var(--border, #e2d8c6); border-radius: var(--radius, 16px); background: var(--paper, #fff); box-shadow: var(--shadow-sm, 0 2px 8px rgba(0,0,0,.05)); }
+.ig-top { margin-bottom: 10px; }
+.ig-dots { display: flex; gap: 6px; flex-wrap: wrap; margin-bottom: 10px; }
+.ig-dot { width: 30px; height: 30px; border-radius: 50%; border: 1px solid #cfc6b6; background: #fff; color: #7a6c55; font: inherit; font-size: .85rem; font-weight: 700; cursor: pointer; padding: 0; }
+.ig-dot.is-done { background: #f3ead6; border-color: #d9c49a; color: #6b5330; }
+.ig-dot.is-on { background: #17283a; border-color: #17283a; color: #fff; }
+.ig-count { margin: 0; color: var(--muted, #7a6c55); font-size: .88rem; font-weight: 600; letter-spacing: .02em; }
+.ig-title { margin: 2px 0 0; font-size: 1.35rem; color: var(--navy, #17283a); }
+.ig-opt { font-style: normal; font-size: .8rem; font-weight: 600; color: #8a7a5c; background: #f3ead6; padding: 2px 9px; border-radius: 999px; vertical-align: middle; }
+.ig-intro { margin: 4px 0 14px; padding: 10px 14px; border-radius: 10px; background: var(--gold-soft, #f7efdd); border: 1px solid #ead9bb; color: #6b5330; font-size: .95rem; line-height: 1.45; }
+.ig-sub { margin: 14px 0 6px; font-weight: 700; color: #6b5330; font-size: .95rem; }
+.ig-field { margin: 0 0 14px; }
+.ig-label { display: block; margin: 0 0 6px; font-weight: 600; color: var(--ink, #22262c); font-size: 1rem; }
+.ig-field input[type=text], .ig-field input[type=tel], .ig-field input[type=date], .ig-field input[type=time], .ig-field textarea, .ig-event input {
+  width: 100%; box-sizing: border-box; padding: 12px 13px; border: 1px solid #cfc6b6; border-radius: 10px; background: #fff; color: var(--ink, #22262c); font: inherit; font-size: 16px; }
+.ig-field textarea { resize: vertical; min-height: 54px; }
+.ig-field input::placeholder, .ig-field textarea::placeholder, .ig-event input::placeholder { color: #a39a8a; }
+.ig-field input:focus, .ig-field textarea:focus, .ig-event input:focus { outline: none; border-color: #17283a; box-shadow: 0 0 0 3px rgba(201, 168, 104, .35); }
+.ig-hint { margin: 5px 0 0; color: var(--muted, #7a6c55); font-size: .86rem; line-height: 1.4; }
+.ig-check { display: flex; align-items: flex-start; gap: 9px; margin: 2px 0 14px; font-size: .97rem; cursor: pointer; }
+.ig-check input, .ig-z input { width: 20px; height: 20px; margin: 1px 0 0; accent-color: #17283a; flex: none; }
+.ig-z { display: inline-flex; align-items: center; gap: 7px; margin: 7px 0 0; font-size: .88rem; color: #6b5330; cursor: pointer; }
+.ig-hd { margin: -4px 0 12px; padding: 9px 12px; border-radius: 10px; background: #f3ead6; color: #4d3c1c; font-weight: 600; }
+.ig-hd:empty { display: none; }
+.ig-more { margin: 0 0 12px; }
+.ig-more summary { cursor: pointer; color: var(--accent-dark, #8a6a2e); font-weight: 600; font-size: .92rem; margin-bottom: 8px; }
+.ig-times { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 0 12px; }
+.ig-events { margin-top: 8px; padding-top: 4px; border-top: 1px dashed #e2d8c6; }
+.ig-event { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin: 0 0 10px; padding: 10px; padding-inline-end: 40px; position: relative; border-radius: 12px; background: #faf6ee; border: 1px solid #eee3cf; }
+.ig-x { position: absolute; top: 8px; inset-inline-end: 8px; width: 28px; height: 28px; border-radius: 50%; border: 1px solid #d9cdb7; background: #fff; color: #7a6c55; font-size: 1.1rem; line-height: 1; cursor: pointer; padding: 0; }
+.ig-addrow { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 6px; }
+.ig-add { padding: 8px 14px; border-radius: 999px; border: 1px dashed #c9a868; background: #fffaf0; color: #6b5330; font: inherit; font-weight: 600; font-size: .9rem; cursor: pointer; }
+.ig-nav { display: flex; align-items: center; justify-content: space-between; gap: 10px; margin-top: 8px; padding-top: 12px; border-top: 1px solid #efe7d8; }
+.ig-back, .ig-skip { padding: 11px 14px; border: 0; background: none; color: var(--navy, #17283a); font: inherit; font-weight: 600; cursor: pointer; }
+.ig-skip { color: #8a7a5c; margin-inline-start: auto; }
+.ig-next { padding: 13px 24px; border-radius: 999px; border: 1px solid #17283a; background: #17283a; color: #fff; font: inherit; font-weight: 700; font-size: 1rem; cursor: pointer; box-shadow: 0 10px 24px -12px rgba(23, 40, 58, .6); }
+.ig-done { background: linear-gradient(180deg, #d6b26a, #b8914a); border-color: #a9833d; color: #1d1608; }
+.ig-next:focus-visible, .ig-back:focus-visible, .ig-dot:focus-visible, .ig-add:focus-visible { outline: 3px solid #c9a868; outline-offset: 2px; }
+.ig-peek { display: none; }
+@media (max-width: 860px) {
+  .ig-peek { display: block; margin-top: 12px; text-align: center; color: var(--accent-dark, #8a6a2e); font-weight: 600; font-size: .95rem; }
+}
+@media (max-width: 480px) {
+  .ig-card { padding: 16px 14px 14px; }
+  .ig-title { font-size: 1.22rem; }
+  .ig-event { grid-template-columns: 1fr; }
+  .ig-next { padding: 13px 20px; }
+}
+@media print { .inv-mode, .inv-guide { display: none !important; } }

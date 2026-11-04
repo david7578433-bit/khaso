@@ -28,6 +28,7 @@ PAGES = {"invitations.html": "index.html", "invite.html": "invite.html"}
 DROP_SCRIPTS = ("site.js", "pwa.js", "member-auth.js", "sw.js")      # parent-site only
 ALWAYS_DIRS = ("vendor", "images/inv-scenes", "fonts")
 OPTIONAL_FILES = ("invitations.js", "invitations.css", "studio.js", "studio.css", "community-designs.js")
+OPTIONAL_FILES += ("invitations-guide.js", "invitations-guide.css")   # v6 step-by-step form
 BASE_PATH = re.sub(r"^https?://[^/]+", "", BASE_URL).rstrip("/")         # "/simcha-invitations"
 YEAR = str(datetime.date.today().year)
 SLUG = re.sub(r"[^A-Za-z0-9]+", "-", SITE_NAME_EN).strip("-") or "Invitation"

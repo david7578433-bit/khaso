@@ -1435,11 +1435,13 @@
     if (data.p) {
       t(w.p, body, 36, d.muted, 4, { italic: !yi });
       t(data.p, disp, yi ? 118 : 94, d.nm, type.two ? 14 : 40, { lh: 1.12 });
+      if (data.pf) { B[B.length - 1].gap = 6; t(data.pf, body, 36, d.muted, type.two ? 16 : 40, { lh: 1.3 }); } // v6: "son of …" line under the name
     }
     if (type.two && data.s) {
       if (data.p) t(w.c, body, yi ? 44 : 56, d.title, 14, { italic: !yi });
       t(w.s, body, 36, d.muted, 4, { italic: !yi });
       t(data.s, disp, yi ? 118 : 94, d.nm, 40, { lh: 1.12 });
+      if (data.sf) { B[B.length - 1].gap = 6; t(data.sf, body, 36, d.muted, 40, { lh: 1.3 }); } // v6: "daughter of …" line under the 2nd name
     }
     B.push({ kind: 'div', h: 56, gap: 30 });
     const hd = data.hd || (hebrewParts(data.dt) || {})[lang];
@@ -1456,6 +1458,11 @@
       t(w.hosts, body, 34, d.muted, 10, { italic: !yi });
       if (type.hosts2 && data.h1 && data.h2) B.push({ kind: 'cols', a: data.h1, b: data.h2, spec: disp, size: yi ? 52 : 44, color: d.nm, gap: 0, maxW });
       else t(data.h1 || data.h2, disp, yi ? 52 : 44, d.nm, 0, { lh: 1.2 });
+      if (data.g1 || data.g2) { // v6: grandparents under the parents, small; one column per family when both families are shown
+        B[B.length - 1].gap = 12;
+        if (type.hosts2 && data.h1 && data.h2 && data.g1 && data.g2) B.push({ kind: 'cols', a: data.g1, b: data.g2, spec: body, size: yi ? 34 : 30, color: d.muted, gap: 0, maxW });
+        else t([data.g1, data.g2].filter(Boolean).join('\n'), body, yi ? 34 : 30, d.muted, 0, { lh: 1.32 });
+      }
     }
     return B;
   }
@@ -2967,6 +2974,7 @@
 
   // ---------------------------------------------------------------- link encoding
   const KEYS = ['t', 'd', 'l', 'p', 's', 'm', 'h1', 'h2', 'dt', 'hd', 'pr', 'tm', 'v', 'a', 'n', 'r', 'w', 'ti', 'ft', 'fb'];
+  KEYS.push('pf', 'sf', 'g1', 'g2'); // v6: name lines + grandparents travel in the link too
   function clean(data) {
     const out = {};
     KEYS.forEach((k) => { const v = data[k]; if (v === undefined || v === null || v === '' || (Array.isArray(v) && !v.join(''))) return; out[k] = typeof v === 'string' ? v.slice(0, 600) : v; });
@@ -3415,6 +3423,7 @@
     });
 
     const FIELDS = { fP: 'p', fS: 's', fM: 'm', fH1: 'h1', fH2: 'h2', fDate: 'dt', fHd: 'hd', fTime: 'tm', fVenue: 'v', fAddr: 'a', fNote: 'n', fRsvp: 'r', fTitle: 'ti', fWording: 'w' };
+    Object.assign(FIELDS, { fPf: 'pf', fSf: 'sf', fG1: 'g1', fG2: 'g2' }); // v6 quick-edit fields (step-by-step form writes them too)
 
     function syncForm() {
       const type = TYPES[state.t] || TYPES.general; const { w } = words(state);
